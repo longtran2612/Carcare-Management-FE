@@ -1,3 +1,4 @@
 import todoSlice from "./todoSlice";
+import authSlice from "./authSlice";
 
-export { todoSlice };
+export { todoSlice , authSlice };
