@@ -16,7 +16,7 @@ export default function LoginPage() {
   const onFinish = (values) => {
     console.log("Success:", values);
     axios
-      .post("http://localhost:7000/auth/login", values)
+      .post("http://localhost:8080/auth/login", values)
       .then((res) => {
         console.log(res.data);
        dispatch(setLogin(res.data))

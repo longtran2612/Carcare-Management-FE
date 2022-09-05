@@ -10,7 +10,7 @@ export default function RegistryPage() {
     const onFinish = (values) => {
         console.log("Success:", values);
         axios
-          .post("http://localhost:7000/auth/register", values)
+          .post("http://localhost:8080/auth/register", values)
           .then((res) => {
             console.log(res.data);
             router.push('/login')
