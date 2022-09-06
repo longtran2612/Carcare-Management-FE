@@ -1,32 +1,39 @@
 import Link from "next/link";
 import axios from "axios";
+import { useState } from "react";
 import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Col, Row } from "antd";
-import { Router ,useRouter } from "next/router";
-
+import { Form, Input, Button, Col, Row, message } from "antd";
+import { Router, useRouter } from "next/router";
+import { onRegister } from "api/authAPI";
 
 export default function RegistryPage() {
-    const router = useRouter()
-    const onFinish = (values) => {
-        console.log("Success:", values);
-        axios
-          .post("http://localhost:8080/auth/register", values)
-          .then((res) => {
-            console.log(res.data);
-            router.push('/login')
-    
-          })
-          .catch((err) => {
-            setError(true);
-          });
-      };
+  const router = useRouter();
+  const [error, setError] = useState(false);
+  const onFinish = (values) => {
+    onRegister(values)
+      .then((res) => {
+        console.log("res:", res);
+        if (res.status === 200) {
+          console.log(res.data);
+          router.push("/login");
+        } else {
+          if (res.status === 400) {
+            message.error(res.message);
+          }
+        }
+      })
+      .catch((err) => {
+        setError(err.message);
+        message.error(err.message);
+      });
+  };
   return (
     <>
       <Form className="registry-form p-5" onFinish={onFinish} layout="vertical">
         <h1 className="text-center">Đăng ký</h1>
         <Form.Item
           label="Email"
-          name="username"
+          name="email"
           rules={[
             {
               required: true,
@@ -35,6 +42,18 @@ export default function RegistryPage() {
           ]}
         >
           <Input placeholder="Nhập vào Email" />
+        </Form.Item>
+        <Form.Item
+          label="Họ tên"
+          name="fullname"
+          rules={[
+            {
+              required: true,
+              message: "Tên không được để trống!",
+            },
+          ]}
+        >
+          <Input placeholder="Nhập vào Tên" />
         </Form.Item>
 
         <Form.Item

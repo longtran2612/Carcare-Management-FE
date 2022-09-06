@@ -5,25 +5,34 @@ import { useDispatch } from "react-redux";
 import Link from "next/link";
 import { Typography } from "antd";
 import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Col, Row } from "antd";
-import { Router ,useRouter } from "next/router";
+import { Form, Input, Button, Col, Row, message } from "antd";
+import { Router, useRouter } from "next/router";
 import { setLogin } from "redux/slices/authSlice";
+import { login } from "api/authAPI";
+
 export default function LoginPage() {
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const onFinish = (values) => {
-    console.log("Success:", values);
-    axios
-      .post("http://localhost:8080/auth/login", values)
+    console.log("values:", values);
+    login(values)
       .then((res) => {
-        console.log(res.data);
-       dispatch(setLogin(res.data))
-       router.push('/')
+        console.log("res:", res);
+        if (res.status == 200) {
+          console.log(res.data);
+          dispatch(setLogin(res.data));
+          router.push("/");
+        } else {
+          if (res.status == 400) {
+            message.error(res.message);
+          }
+        }
       })
       .catch((err) => {
-        setError(true);
+        setError(err.message);
+        message.error(err.message);
       });
   };
 
