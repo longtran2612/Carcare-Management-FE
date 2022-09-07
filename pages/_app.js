@@ -1,4 +1,6 @@
 import "../styles/globals.css";
+import "../styles/style.scss"
+import 'antd/dist/antd.css';
 import { SessionProvider } from "next-auth/react";
 import store from "../redux/store";
 import { Provider } from "react-redux";
@@ -23,10 +25,10 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <SessionProvider session={session}>
         <Provider store={store}>
           <div className="body">
-            {/* <Header/> */}
+            <Header/>
             {/* <Loading /> */}
             <Component {...pageProps} />
-            {/* <Footer/> */}
+            <Footer/>
           </div>
         </Provider>
       </SessionProvider>

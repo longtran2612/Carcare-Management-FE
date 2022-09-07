@@ -9,6 +9,7 @@ import { Form, Input, Button, Col, Row, message } from "antd";
 import { Router, useRouter } from "next/router";
 import { setLogin } from "redux/slices/authSlice";
 import { login } from "api/authAPI";
+const { Title } = Typography;
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -38,49 +39,66 @@ export default function LoginPage() {
 
   return (
     <>
-      <Form className="login-form p-5" onFinish={onFinish} layout="vertical">
-        <h1 className="text-center">Đăng nhập</h1>
-        <Form.Item
-          label="Email"
-          name="username"
-          rules={[
-            {
-              required: true,
-              message: "Email không được để trống!",
-            },
-          ]}
-        >
-          <Input placeholder="Nhập vào Email" />
-        </Form.Item>
-
-        <Form.Item
-          label="Mật khẩu"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Mật khẩu không được để trống!",
-            },
-          ]}
-        >
-          <Input.Password placeholder="Nhập vào mật khẩu" />
-        </Form.Item>
-        <Form.Item className="text-center">
-          <Button
-            className="btn-login"
-            type="primary
-                            "
-            htmlType="submit"
-          >
+      <Row
+        justify="space-around"
+        align="middle"
+        style={{
+          height: "100vh",
+          textAlign: "center",
+        }}
+      >
+        <Col span={8} xs={18} sm={14} md={10} lg={8}>
+          <Title level={2} style={{ marginBottom: "20px" }}>
             Đăng nhập
-          </Button>
+          </Title>
+          <Form
+            name="basic"
+            labelCol={{ span: 4 }}
+            labelAlign="left"
+            size={"middle"}
+            wrapperCol={{ span: 20 }}
+            initialValues={{ remember: true }}
+            className="login-form p-5"
+            onFinish={onFinish}
+          >
+            <Form.Item
+              label="Email"
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: "Email không được để trống!",
+                },
+              ]}
+            >
+              <Input placeholder="Nhập vào Email" />
+            </Form.Item>
 
-          <p>
-            Chưa có tài khoản?<Link href="/registry"> Đăng ký</Link>
-          </p>
+            <Form.Item
+              label="Mật khẩu"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Mật khẩu không được để trống!",
+                },
+              ]}
+            >
+              <Input.Password placeholder="Nhập vào mật khẩu" />
+            </Form.Item>
+            <Form.Item className="text-center">
+              <Button
+                className="btn-login"
+                type="primary
+                            "
+                htmlType="submit"
+              >
+                Đăng nhập
+              </Button>
+            </Form.Item>
+          </Form>
+          Chưa có tài khoản?<Link href="/registry"> Đăng ký</Link>
           <hr></hr>
-        </Form.Item>
-        <Form.Item>
           <p className="text-center"> Hoặc đăng nhập bằng</p>
           <div className="logo_sign-up">
             {/* <a href={authLink.googleAuth}> */}
@@ -104,8 +122,8 @@ export default function LoginPage() {
             </div>
             {/* </a> */}
           </div>
-        </Form.Item>
-      </Form>
+        </Col>
+      </Row>
     </>
   );
 }

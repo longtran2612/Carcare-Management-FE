@@ -7,7 +7,7 @@ import {
   TwitterSquareFilled,
   GithubOutlined,
 } from "@ant-design/icons";
-import { Link } from "next/link";
+import Link  from "next/link";
 
 import logo from "public/images/logo.jpg";
 

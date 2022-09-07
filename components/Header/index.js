@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useSelector } from 'react-redux';
 import {
   InfoOutlined,
   CarOutlined,
@@ -7,7 +8,7 @@ import {
   LoginOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
-import { Link } from "next/link";
+import  Link  from "next/link";
 
 // import logo from "public/images/logo.jpg";
 // import './style.scss';
@@ -15,8 +16,10 @@ import { Link } from "next/link";
 
 const { SubMenu } = Menu;
 
-export default function Header () {
+const Header = () => {
   const [keyMenu, setKeyMenu] = useState(1);
+  const { isLogin } = useSelector((state) => state.authSlice.isLogin);
+
 
   const handleOnClick = (e) => {
     setKeyMenu(e.key);
@@ -37,6 +40,8 @@ export default function Header () {
         onClick={handleOnClick}
         selectedKeys={keyMenu}
       >
+    
+
         <Menu.Item key={1} icon={<HomeOutlined />}>
           <Link href="/">Trang chủ</Link>
         </Menu.Item>
@@ -53,9 +58,8 @@ export default function Header () {
           <Link href="/usermanual">Hướng dẫn</Link>
         </Menu.Item>
 
-        <Menu.Item style={{ width: 400 }}></Menu.Item>
 
-        {/* 
+        
         {isLogin ? (
             <SubMenu key="10_1" icon={<UserOutlined />} title="Cá nhân">
                 <Menu.Item key="10_1_2">
@@ -72,20 +76,22 @@ export default function Header () {
                     </Link>
                 </Menu.Item>
             </SubMenu>
-        ) : ( */}
+        ) : (
 
         <SubMenu key="11" icon={<LoginOutlined />} title="Đăng ký/Đăng nhập">
           <Menu.Item key="11_1">
             <Link href="/login">Đăng nhập</Link>
           </Menu.Item>
           <Menu.Item key="11_2">
-            <Link href="/register">Đăng ký</Link>
+            <Link href="/registry">Đăng ký</Link>
           </Menu.Item>
         </SubMenu>
 
-        {/* )} */}
+         )} 
       </Menu>
     </div>
   );
 }
+
+export default Header;
  

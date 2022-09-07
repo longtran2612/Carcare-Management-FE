@@ -1,0 +1,153 @@
+.adjust-video .ant-menu-item-group-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    max-width: 600px !important;
+    & > li {
+        width: 400px;
+    }
+}
+
+.adjust-video .ant-menu-item-selected {
+    background-color: #fff !important;
+}
+
+.header {
+    font-size: 30px;
+}
+
+.logo-style {
+    height: 80px;
+}
+
+.loginbutton{
+    justify-content: 'flex-end'
+}
+$text-color: #fff;
+$main-color: #4b91ff;
+$size-icon: 40px;
+$demesion-img: 300px;
+$black_text: #363636;
+
+.footer {
+    background-color: rgb(251, 251, 251);
+    clear: both;
+    position: relative;
+  
+    &_left {
+        padding: 1rem 3rem;
+        display: flex;
+        flex-flow: column wrap;
+
+        &-logo-page img {
+            max-width: 100%;
+            height: calc(#{$demesion-img} - 20px);
+            width: $demesion-img;
+            object-fit: contain;
+        }
+
+        &-intro {
+            color: $black_text;
+            font-size: 1.5rem;
+        }
+
+        &-contact {
+            margin-top: 2.6rem;
+            display: flex;
+            &--logo-branch {
+                width: $size-icon;
+                height: $size-icon;
+                background-color: $main-color;
+                display: flex;
+
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                color: $text-color;
+
+                border: 1px solid $main-color;
+                box-shadow: 0 8px 8px -4px lightblue;
+                transition: all 0.2s ease-in-out;
+            }
+
+            &--logo-branch ~ &--logo-branch {
+                margin-left: 30px;
+            }
+
+            &--logo-branch:hover {
+                background-color: #fff;
+                color: $main-color;
+            }
+        }
+    }
+
+    &_right {
+        padding: 1rem 3rem;
+
+        ul span {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        li {
+            font-size: 1.4rem;
+            list-style-type: none;
+            padding-top: 10px;
+        }
+        ul {
+            padding-inline-start: 0;
+        }
+        a {
+            color: $black_text;
+            transition: all 0.2s ease-in-out;
+        }
+
+        li a:hover {
+            margin-left: 5px;
+        }
+
+        &-copyright {
+            text-align: center;
+            padding: 3rem 0;
+            color: #666;
+        }
+    }
+}
+
+
+
+.login-form input {
+    background-color: rgb(170, 192, 240);
+
+}
+
+.block {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.8rem 5rem;
+
+    font-weight: 500;
+    margin: 1rem 0;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    // & > div {
+    //     flex-grow: 1;
+    // }
+}
+
+.block-google {
+    background-color: #d64937;
+    color: #ffffff;
+}
+
+.block-facebook {
+    background-color: #3a5794;
+    color: #ffffff;
+}
+
+.icon-login {
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
