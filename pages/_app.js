@@ -9,6 +9,7 @@ import Head from "next/head";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import Loading from "components/Loading";
+import SideBar from "components/SideBar";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   // const [loading, setLoading] = useState(false);
@@ -27,6 +28,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           <div className="body">
             <Header/>
             {/* <Loading /> */}
+            <SideBar/>
             <Component {...pageProps} />
             <Footer/>
           </div>

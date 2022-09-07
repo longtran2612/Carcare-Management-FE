@@ -46,17 +46,19 @@ const Header = () => {
           <Link href="/">Trang chủ</Link>
         </Menu.Item>
 
+        <Menu.Item key={4} icon={<InfoOutlined />}>
+          <Link href="/store">Cửa hàng</Link>
+        </Menu.Item>
+
         <Menu.Item key={2} icon={<CarOutlined />}>
-          <Link href="/thuexe">Thuê xe</Link>
+          <Link href="/service">Dịch vụ</Link>
         </Menu.Item>
 
         <Menu.Item key={3} icon={<CarFilled />}>
-          <Link href="/chothuexe">Cho thuê xe</Link>
+          <Link href="/customer">Khách hàng</Link>
         </Menu.Item>
 
-        <Menu.Item key={4} icon={<InfoOutlined />}>
-          <Link href="/usermanual">Hướng dẫn</Link>
-        </Menu.Item>
+       
 
 
         

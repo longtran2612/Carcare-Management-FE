@@ -21,12 +21,12 @@ export default function Footer() {
           <div className="footer_left">
             <Link href="/">
               <div className="footer_left-logo-page">
-                <img src={logo} alt="LV-OTO" />
+                <img src={logo} alt="VLCARSERVICE" />
               </div>
             </Link>
 
             <div className="footer_left-intro">
-              Website quản lý trung tâm chăm sóc xe
+              Website quản lý trung tâm chăm sóc xe VLCARSERVICE
             </div>
 
             <div className="footer_left-contact">
@@ -69,10 +69,10 @@ export default function Footer() {
                     <Link href="/">Trang chủ</Link>
                   </li>
                   <li className="footer_right-list">
-                    <Link href="/exams">Thuê xe</Link>
+                    <Link href="/service">Dịch vụ</Link>
                   </li>
                   <li className="footer_right-list">
-                    <Link href="/translate">Cho thuê xe</Link>
+                    <Link href="/customer">Khách hàng</Link>
                   </li>
                 </ul>
               </Col>
@@ -99,7 +99,7 @@ export default function Footer() {
             <Row gutter={[8, 8]}>
               <Col span={24}>
                 <div className="footer_right-copyright">
-                  © Copyright by VLOTO, 2022
+                  © Copyright by VLCARSERVICE, 2022
                 </div>
               </Col>
             </Row>
