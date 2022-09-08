@@ -41,11 +41,6 @@ import {
       getItem('Sản phẩm', 'product'),
       getItem('bảng giá', 'price'),
     ]),
-    getItem('Quản lý kho', 'quan-ly-kho', <InboxOutlined />, [
-      getItem('Phiếu nhập hàng', 'phieu-nhap-hang'),
-      getItem('Phiếu kiểm kê', 'phieu-kiem-ke'),
-      getItem('Lịch sử biến động kho', 'bien-dong-kho'),
-    ]),
     getItem('Quản lý khách hàng', 'customer', <UserOutlined />, [
       getItem('Nhóm khách hàng', 'customer-group'),
       getItem('Khách hàng', 'customer'),
