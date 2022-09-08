@@ -6,13 +6,8 @@ import store from "../redux/store";
 import { Provider } from "react-redux";
 import { Fragment } from "react";
 import Head from "next/head";
-import Header from "components/Header";
-import Footer from "components/Footer";
-import Loading from "components/Loading";
-import SideBar from "components/SideBar";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
-  // const [loading, setLoading] = useState(false);
   return (
     <Fragment>
       <Head>
@@ -26,11 +21,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <SessionProvider session={session}>
         <Provider store={store}>
           <div className="body">
-            <Header/>
-            {/* <Loading /> */}
-            <SideBar/>
             <Component {...pageProps} />
-            <Footer/>
           </div>
         </Provider>
       </SessionProvider>

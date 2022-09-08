@@ -2,6 +2,7 @@ import Img404 from "../public/images/404.png";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { Result, Button } from "antd";
 
 const NotFound = () => {
   const [count, setCount] = useState(30);
@@ -22,21 +23,18 @@ const NotFound = () => {
   }, []);
   return (
     <div className="container">
-      <div className="row">
-        <div className="col-md-12 d-flex justify-content-center">
-          <img src={Img404.src} />
-        </div>
-      </div>
-      <div
-        className="text-center"
-        style={{ fontStyle: "italic", color: "#6ec1b7" }}
-      >
-        <Link href="/">
-          <a>Quay lại trang chủ sau {count}s</a>
-        </Link>
-        <div>
-        </div>
-      </div>
+      
+      <Result
+        icon={<Img404 />}
+        status="404"
+        title="404"
+        subTitle="404 - Không tìm thấy trang"
+        extra={
+          <Link href="/">
+            <a>Quay lại trang chủ sau {count}s</a>
+          </Link>
+        }
+      />
     </div>
   );
 };
