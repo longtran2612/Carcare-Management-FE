@@ -3,13 +3,10 @@ import {
     UserOutlined, 
     TagsOutlined,
     ShoppingCartOutlined,
-    InboxOutlined
   } from '@ant-design/icons';
   import { Menu } from 'antd';
-  import Sider from 'antd/lib/layout/Sider';
   import { Typography } from 'antd';
   import React, { useState } from 'react';
-  import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
   import Link from 'next/link';
   const { Title } = Typography;
   import { useRouter } from 'next/router'
