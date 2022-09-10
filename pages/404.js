@@ -1,4 +1,3 @@
-import Img404 from "../public/images/404.png";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -25,7 +24,7 @@ const NotFound = () => {
     <div className="container">
       
       <Result
-        icon={<Img404 />}
+  
         status="404"
         title="404"
         subTitle="404 - Không tìm thấy trang"

@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { API_URL } from "./url";
 
 const axiosClient = () => {
-  const token = Cookies.get("token");
+  const token = Cookies.get("aceesToken");
 
   const axiosOptions = axios.create({
     baseURL: API_URL,

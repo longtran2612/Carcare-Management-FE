@@ -68,23 +68,22 @@ import {
     };
   
     const onSelect = (selected) => {
-        router.push(`/quan-ly/${selected.key}`)
+        router.push(`/${selected.key}`)
     }
   
     const onClick = (selected) => {
-      router.push(`/quan-ly/${selected.key}`)
+      router.push(`/${selected.key}`)
     }
   
     return (
       <div>
         <div className="logo">
-          <Title level={5}>Quản lý trung tâm chăm sóc xe</Title>
+          <Title level={5}>Dashboard</Title>
         </div>
         <Menu
           mode="inline"
           theme="dark"
           openKeys={openKeys}
-          onOpenChange={onOpenChange}
           items={items}
           onSelect={onSelect}
           onClick={onClick}

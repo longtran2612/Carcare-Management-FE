@@ -18,10 +18,19 @@ const authSlice = createSlice({
       Cookies.set("accessToken", action.payload.accessToken);
       Cookies.set("refreshToken", action.payload.refreshToken);
     },
+    setLogout(state,action) {
+      state.accessToken = "";
+      state.user = "";
+      state.refreshToken = "";
+      state.isLogin = false;
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+    }
   },
+  
 });
 
 const { reducer, actions } = authSlice;
 
-export const { setLogin } = actions;
+export const { setLogin ,setLogout } = actions;
 export default reducer;

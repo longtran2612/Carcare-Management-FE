@@ -11,7 +11,7 @@ import Link  from "next/link";
 
 import logo from "public/images/logo.jpg";
 
-export default function Footer() {
+const MyFooter =() => {
 
   return (
     <div className="footer">
@@ -110,4 +110,4 @@ export default function Footer() {
   );
 }
 
-;
+export default MyFooter;

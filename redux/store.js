@@ -1,7 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { todoSlice,authSlice } from "./slices";
+import { authSlice } from "./slices";
 
-const appReducers = combineReducers({ todoSlice,authSlice });
+const appReducers = combineReducers({ authSlice });
 
 const rootReducer = (state, action) => {
   if (action.type === "RESET_STATE") {

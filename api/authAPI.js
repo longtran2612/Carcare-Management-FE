@@ -15,10 +15,12 @@ const login = (data) => {
       throw err;
     });
 };
-const logout = async () => {
-  return (await axiosClient())({
+const logout = async (data) => {
+  console.log(data)
+  return axios({
     method: "POST",
-    url: API_URL + `/auth/signout`,
+    url: API_URL + `/auth/logout`,
+    data:data
   })
     .then((res) => {
       return res;
