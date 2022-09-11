@@ -11,6 +11,7 @@ import MyHeader from "components/Header";
 import SideBar from "components/SideBar";
 import MyContent from "components/Content";
 const { Content, Sider, Footer } = Layout;
+import ServicePage from "./service";
 
 const Home = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -33,7 +34,10 @@ const Home = () => {
       </Sider>
       <Layout className="site-layout">
         <MyHeader />
-
+        <Breadcrumb style={{ margin: '16px 15px' }}>
+          <Breadcrumb.Item>Trang chủ</Breadcrumb.Item>
+          <Breadcrumb.Item>Khách hàng</Breadcrumb.Item>
+        </Breadcrumb>
         <MyContent />
         {/* <Footer /> */}
         <Footer style={{ textAlign: "center" }}>

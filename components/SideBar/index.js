@@ -3,6 +3,10 @@ import {
     UserOutlined, 
     TagsOutlined,
     ShoppingCartOutlined,
+    ShopOutlined,
+    CarOutlined,
+    BorderOutlined,
+    DropboxOutlined 
   } from '@ant-design/icons';
   import { Menu } from 'antd';
   import { Typography } from 'antd';
@@ -23,26 +27,33 @@ import {
   }
   
   const items = [
-    getItem('Hóa đơn', 'order', <ShoppingCartOutlined />, [
+    getItem('Cửa hàng', 'store',<ShopOutlined />, [
+    ]),
+    getItem('Hóa đơn', 'order', <BorderOutlined />, [
       getItem('Tạo mới hóa đơn', 'order-create'),
       getItem('Danh sách hóa đơn', 'order-list')
     ]),
     
-    getItem('Dịch vụ', 'service', <TagsOutlined />, [
+    getItem('Dịch vụ', 'service', <CarOutlined />, [
       getItem('danh mục dịch vụ', 'service-category'),
       getItem('dịch vụ', 'service'),
       getItem('bảng giá', 'price'),
     ]),
-    getItem('Sản phẩm', 'product', <TagsOutlined />, [
+    getItem('Sản phẩm', 'product',<DropboxOutlined />, [
       getItem('danh mục sản phẩm', 'product-category'),
       getItem('Sản phẩm', 'product'),
       getItem('bảng giá', 'price'),
     ]),
-    getItem('Quản lý khách hàng', 'customer', <UserOutlined />, [
-      getItem('Nhóm khách hàng', 'customer-group'),
-      getItem('Khách hàng', 'customer'),
+    getItem('Quản lý xe', 'car', <CarOutlined />, [
+      getItem('Xe', 'car-model'),
+      getItem('Xe khách hàng', 'customer-car'),
     ]),
-    getItem('Quản lý trương trình khuyến mãi', 'promotion', <BarChartOutlined />, [
+    getItem('Quản lý người dùng', 'user', <UserOutlined />, [
+      getItem('Người dùng', 'user'),
+      getItem('Khách hàng', 'customer'),
+      getItem('Nhóm khách hàng', 'customer-group'),
+    ]),
+    getItem('Quản lý trương trình khuyến mãi', 'promotion', <TagsOutlined />, [
       getItem('Danh sách trương trình khuyến mãi', 'promotion')
     ]),
     getItem('Thống kê - Báo cáo', 'report', <BarChartOutlined />, [
@@ -53,7 +64,7 @@ import {
   
   const rootSubmenuKeys = ['order', 'service', 'product', 'customer', 'promotion','report'];
   
-  const SideNav = (props) => {
+  const SideBar = (props) => {
     const [openKeys, setOpenKeys] = useState();
     const router = useRouter()
   
@@ -92,4 +103,4 @@ import {
     );
   };
   
-  export default SideNav;
+  export default SideBar;

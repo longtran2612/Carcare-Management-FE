@@ -6,10 +6,11 @@ import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import { logout } from "api/authAPI";
 import ListForm from "components/ListForm";
+import Link from "next/link";
+import UserTable from "components/User/userTable";
+import UserPage from "components/User";
 
 const { Content } = Layout;
-
-
 
 const MyContent = (props) => {
   const [container, setContainer] = useState(null);
@@ -47,7 +48,7 @@ const MyContent = (props) => {
         <Row wrap={false} className="action">
           <Col flex="auto">
             <Breadcrumb>
-              <Breadcrumb.Item href="/quan-ly">
+              <Breadcrumb.Item href="/">
                 <HomeOutlined />
               </Breadcrumb.Item>
               {items}
@@ -72,14 +73,12 @@ const MyContent = (props) => {
       <Content
         className="site-layout-background"
         style={{
-          margin: "25px 16px",
+          margin: "5px 5px",
           padding: 24,
           minHeight: 280,
         }}
       >
-        {/* <Suspense fallback={<Loading />}> */}
-            <ListForm/>
-        {/* </Suspense> */}
+      <UserPage/>
       </Content>
     </div>
   );

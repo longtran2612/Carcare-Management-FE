@@ -1,7 +1,8 @@
 import React from 'react'
-
-export const User = () => {
+import UserTable from './userTable';
+ const UserPage = () => {
   return (
-    <div>User</div>
+    <UserTable/>
   )
 }
+export default UserPage;

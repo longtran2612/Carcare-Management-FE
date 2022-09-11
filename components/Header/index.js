@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import {
-  InfoOutlined,
+  ShopOutlined,
   CarOutlined,
   CarFilled,
   HomeOutlined,
   LoginOutlined,
   UserOutlined,
+  DropboxOutlined
 } from "@ant-design/icons";
 import { Button, Menu, message } from "antd";
 import Link from "next/link";
@@ -69,12 +70,16 @@ const MyHeader = () => {
           <Link href="/">Trang chủ</Link>
         </Menu.Item>
 
-        <Menu.Item key={4} icon={<InfoOutlined />}>
+        <Menu.Item key={4} icon={<ShopOutlined />}>
           <Link href="/store">Cửa hàng</Link>
         </Menu.Item>
 
         <Menu.Item key={2} icon={<CarOutlined />}>
           <Link href="/service">Dịch vụ</Link>
+        </Menu.Item>
+        
+        <Menu.Item key={2} icon={<DropboxOutlined />}>
+          <Link href="/car">Sản phẩm</Link>
         </Menu.Item>
 
         <Menu.Item key={3} icon={<CarFilled />}>
