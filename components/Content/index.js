@@ -7,7 +7,6 @@ import Loading from "components/Loading";
 import { logout } from "api/authAPI";
 import ListForm from "components/ListForm";
 import Link from "next/link";
-import UserTable from "components/User/userTable";
 import UserPage from "components/User";
 
 const { Content } = Layout;
