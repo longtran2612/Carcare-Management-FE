@@ -11,7 +11,7 @@ import UserPage from "components/User";
 
 const { Content } = Layout;
 
-const MyContent = (props) => {
+const MyContent = ({ keyMenu }) => {
   const [container, setContainer] = useState(null);
   const [breadcrumb, setBreadcrumb] = useState(false);
   const [breadcrumb_extras, setBreadcrumbExtras] = useState(null);
@@ -65,21 +65,33 @@ const MyContent = (props) => {
       </Affix>
     );
   };
+  console.log(keyMenu);
+  const renderViewByKey = () => {
+    switch (keyMenu) {
+      case "1":
+        return <div>1</div>;
+      case "sub1":
+        return <div>sub1</div>;
+      default:
+        break;
+    }
+  };
 
   return (
-    <div ref={setContainer}>
-      {breadcrumbComponent()}
-      <Content
-        className="site-layout-background"
-        style={{
-          margin: "5px 5px",
-          padding: 24,
-          minHeight: 280,
-        }}
-      >
-      <UserPage/>
-      </Content>
-    </div>
+    // <div ref={setContainer}>
+    //   {breadcrumbComponent()}
+    //   <Content
+    //     className="site-layout-background"
+    //     style={{
+    //       margin: "5px 5px",
+    //       padding: 24,
+    //       minHeight: 280,
+    //     }}
+    //   >
+    //   <UserPage/>
+    //   </Content>
+    // </div>
+    <>{renderViewByKey()}</>
   );
 };
 

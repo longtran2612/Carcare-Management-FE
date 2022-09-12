@@ -1,11 +1,11 @@
-import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu } from "antd";
+// import {
+//   DesktopOutlined,
+//   FileOutlined,
+//   PieChartOutlined,
+//   TeamOutlined,
+//   UserOutlined,
+// } from "@ant-design/icons";
+import { Breadcrumb, Layout } from "antd";
 import React, { useState } from "react";
 import MyHeader from "components/Header";
 import SideBar from "components/SideBar";
@@ -15,6 +15,7 @@ import ServicePage from "./service";
 
 const Home = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [key, setKey] = useState(1);
   return (
     <Layout
       style={{
@@ -30,15 +31,15 @@ const Home = () => {
           overflow: "auto",
         }}
       >
-        <SideBar collapsed={collapsed} />
+        <SideBar collapsed={collapsed} handleOpenKey={(key) => setKey(key)} />
       </Sider>
       <Layout className="site-layout">
         <MyHeader />
-        <Breadcrumb style={{ margin: '16px 15px' }}>
+        <Breadcrumb style={{ margin: "16px 15px" }}>
           <Breadcrumb.Item>Trang chủ</Breadcrumb.Item>
           <Breadcrumb.Item>Khách hàng</Breadcrumb.Item>
         </Breadcrumb>
-        <MyContent />
+        <MyContent keyMenu={key} />
         {/* <Footer /> */}
         <Footer style={{ textAlign: "center" }}>
           ©2022 Coppy right by VLCARSERVICE
