@@ -46,7 +46,7 @@ const items = [
     getItem("Xe", "car-model"),
     getItem("Xe khách hàng", "customer-car"),
   ]),
-  getItem("Quản lý người dùng", "6", <UserOutlined />, [
+  getItem("Quản lý người dùng", "user", <UserOutlined />, [
     getItem("Người dùng", "user"),
     getItem("Khách hàng", "customer"),
     getItem("Nhóm khách hàng", "customer-group"),

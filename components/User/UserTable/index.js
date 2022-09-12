@@ -2,7 +2,7 @@ import { Table } from 'antd';
 import React from 'react';
 const columns = [
   {
-    title: 'Name',
+    title: 'Tên',
     dataIndex: 'name',
     filters: [
       {
@@ -35,13 +35,25 @@ const columns = [
     sortDirections: ['descend'],
   },
   {
-    title: 'Age',
+    title: 'Số điện thoại',
+    dataIndex: 'phone',
+    defaultSortOrder: 'descend',
+    sorter: (a, b) => a.phone - b.phone,
+    
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
+
+  },
+  {
+    title: 'Tuổi',
     dataIndex: 'age',
     defaultSortOrder: 'descend',
     sorter: (a, b) => a.age - b.age,
   },
   {
-    title: 'Address',
+    title: 'Địa chỉ',
     dataIndex: 'address',
     filters: [
       {
@@ -55,53 +67,70 @@ const columns = [
     ],
     onFilter: (value, record) => record.address.indexOf(value) === 0,
   },
+
 ];
 const data = [
   {
     key: '1',
     name: 'John Brown',
+    phone: '012923232',
+    email: 'long@gmail.com',
     age: 32,
     address: 'New York No. 1 Lake Park',
   },
   {
     key: '2',
     name: 'Jim Green',
+    phone: '012923232',
+    email: 'long@gmail.com',
     age: 42,
     address: 'London No. 1 Lake Park',
   },
   {
     key: '3',
     name: 'Joe Black',
+    phone: '012923232',
+    email: 'long@gmail.com',
     age: 32,
     address: 'Sidney No. 1 Lake Park',
   },
   {
     key: '4',
     name: 'Jim Red',
+    phone: '012923232',
+    email: 'long@gmail.com',
     age: 32,
     address: 'London No. 2 Lake Park',
   },
   {
     key: '5',
     name: 'Jim Red',
+    phone: '012923232',
+    email: 'long@gmail.com',
     age: 32,
     address: 'London No. 2 Lake Park',
   },
   {
     key: '6',
     name: 'Jim Red',
+    phone: '012923232',
+    email: 'long@gmail.com',
     age: 32,
     address: 'London No. 2 Lake Park',
   },
   {
     key: '7',
     name: 'Jim Red',
+    phone: '012923232',
+    email: 'long@gmail.com',
     age: 32,
     address: 'London No. 2 Lake Park',
   },
   {
     key: '8',
     name: 'Jim Red',
+    phone: '012923232',
+    email: 'long@gmail.com',
     age: 32,
     address: 'London No. 2 Lake Park',
   },

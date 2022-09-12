@@ -1,19 +1,15 @@
 import { HomeOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
-import { lazy, Suspense } from "react";
 import { Breadcrumb, Layout, Affix, Space, Col, Row, Button, Spin } from "antd";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import { logout } from "api/authAPI";
-import ListForm from "components/ListForm";
-import Link from "next/link";
 import UserPage from "components/User";
-import  ServicePage  from "components/Service";
+import ServicePage from "components/Service";
 
 const { Content } = Layout;
 
 const MyContent = ({ keyMenu }) => {
-  const [container, setContainer] = useState(null);
   const [breadcrumb, setBreadcrumb] = useState(false);
   const [breadcrumb_extras, setBreadcrumbExtras] = useState(null);
   const router = useRouter();
@@ -71,10 +67,22 @@ const MyContent = ({ keyMenu }) => {
     switch (keyMenu) {
       case "1":
         return <UserPage />;
-      case "2":
+      case "service":
+        return <ServicePage />;
+      case "user":
+        return <UserPage />;
+      case "service-category":
         return <ServicePage />;
       case "service":
-          return <ServicePage />;
+        return <ServicePage />;
+      case "service":
+        return <ServicePage />;
+      case "service":
+        return <ServicePage />;
+      case "service":
+        return <ServicePage />;
+      case "service":
+        return <ServicePage />;
       default:
         break;
     }
@@ -94,7 +102,19 @@ const MyContent = ({ keyMenu }) => {
     //   <UserPage/>
     //   </Content>
     // </div>
-    <>{renderViewByKey()}</>
+    <>
+     <Content
+        className="site-layout-background"
+        style={{
+          margin: "5px 5px",
+          padding: 24,
+          minHeight: 280,
+        }}
+      >
+     {renderViewByKey()}
+    </Content>
+    
+    </>
   );
 };
 
