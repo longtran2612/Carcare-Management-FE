@@ -27,34 +27,34 @@ function getItem(label, key, icon, children, type) {
 
 const items = [
   getItem("Cửa hàng", "1", <ShopOutlined />),
-  getItem("Hóa đơn", "sub1", <BorderOutlined />, [
+  getItem("Hóa đơn", "2", <BorderOutlined />, [
     getItem("Tạo mới hóa đơn", "order-create"),
     getItem("Danh sách hóa đơn", "order-list"),
   ]),
 
-  getItem("Dịch vụ", "sub2", <CarOutlined />, [
+  getItem("Dịch vụ", "3", <CarOutlined />, [
     getItem("danh mục dịch vụ", "service-category"),
     getItem("dịch vụ", "service"),
     getItem("bảng giá", "priceService"),
   ]),
-  getItem("Sản phẩm", "sub3", <DropboxOutlined />, [
+  getItem("Sản phẩm", "4", <DropboxOutlined />, [
     getItem("danh mục sản phẩm", "product-category"),
     getItem("Sản phẩm", "product"),
     getItem("bảng giá", "priceProduct"),
   ]),
-  getItem("Quản lý xe", "sub4", <CarOutlined />, [
+  getItem("Quản lý xe", "5", <CarOutlined />, [
     getItem("Xe", "car-model"),
     getItem("Xe khách hàng", "customer-car"),
   ]),
-  getItem("Quản lý người dùng", "sub5", <UserOutlined />, [
+  getItem("Quản lý người dùng", "6", <UserOutlined />, [
     getItem("Người dùng", "user"),
     getItem("Khách hàng", "customer"),
     getItem("Nhóm khách hàng", "customer-group"),
   ]),
-  getItem("Quản lý trương trình khuyến mãi", "sub6", <TagsOutlined />, [
+  getItem("Quản lý trương trình khuyến mãi", "7", <TagsOutlined />, [
     getItem("Danh sách trương trình khuyến mãi", "promotion"),
   ]),
-  getItem("Thống kê - Báo cáo", "sub7", <BarChartOutlined />, [
+  getItem("Thống kê - Báo cáo", "8", <BarChartOutlined />, [
     getItem("Bán hàng - Trả hàng", "sell-report"),
     getItem("Lợi nhuận - Doanh thu", "income"),
   ]),

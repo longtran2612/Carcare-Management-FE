@@ -11,7 +11,6 @@ import MyHeader from "components/Header";
 import SideBar from "components/SideBar";
 import MyContent from "components/Content";
 const { Content, Sider, Footer } = Layout;
-import ServicePage from "./service";
 
 const Home = () => {
   const [collapsed, setCollapsed] = useState(false);

@@ -8,6 +8,7 @@ import { logout } from "api/authAPI";
 import ListForm from "components/ListForm";
 import Link from "next/link";
 import UserPage from "components/User";
+import  ServicePage  from "components/Service";
 
 const { Content } = Layout;
 
@@ -69,9 +70,11 @@ const MyContent = ({ keyMenu }) => {
   const renderViewByKey = () => {
     switch (keyMenu) {
       case "1":
-        return <div>1</div>;
-      case "sub1":
-        return <div>sub1</div>;
+        return <UserPage />;
+      case "2":
+        return <ServicePage />;
+      case "service":
+          return <ServicePage />;
       default:
         break;
     }
