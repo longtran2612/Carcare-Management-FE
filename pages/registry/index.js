@@ -53,16 +53,16 @@ export default function RegistryPage() {
             onFinish={onFinish}
           >
             <Form.Item
-              label="Email"
-              name="email"
+              label="Số điện thoại"
+              name="phone"
               rules={[
                 {
                   required: true,
-                  message: "Email không được để trống!",
+                  message: "Số điện thoại không được để trống!",
                 },
               ]}
             >
-              <Input placeholder="Nhập vào Email" />
+              <Input placeholder="Nhập vào Số điện thoại" />
             </Form.Item>
             <Form.Item
               label="Họ tên"

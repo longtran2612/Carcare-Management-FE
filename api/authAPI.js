@@ -39,8 +39,7 @@ const onRegister = (data) => {
     url: API_URL + `/auth/register`,
     data: {
       fullName: data.fullname,
-      email: data.email,
-      username: data.email,
+      username: data.phone,
       password: data.password
     },
   })
@@ -53,13 +52,15 @@ const onRegister = (data) => {
 };
 
 const loadUser = async () => {
-  let phone = Cookies.get("phone");
+  let username = Cookies.get("username");
+  console.log("username:", username);
   return (await axiosClient())({
     method: "GET",
-    url: API_URL + `/users/phone=${phone}`,
+    url: API_URL + `/users/phone=${username}`,
   })
     .then((res) => {
       return res;
+      console.log("res:", res);
     })
     .catch((err) => {
       throw err;

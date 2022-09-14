@@ -18,17 +18,26 @@ const Home = () => {
 
   
   const handleAuthentication = async () => {
-    const accessToken = Cookies.get("accessToken");
-    if (accessToken === null) {
+
+    let accessToken = Cookies.get("accessToken");
+    console.log(accessToken);
+    if (accessToken == null) {
       router.push("/login");
       return
     }
     try{
-      const res = await loadUser();
-      console.log(res);
-      if (res.data.status === "1") {
-        return
+     loadUser().then((res) => {
+      console.log("res:", res);
+      if (res.data.status == 1) {
+      } else {
+        if (res.status == 400) {
+          message.error(res.message);
+        }
       }
+    }
+
+        )
+     
     }catch(err){
       console.log(err)
 
