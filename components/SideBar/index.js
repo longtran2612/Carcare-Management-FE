@@ -49,7 +49,7 @@ const items = [
   getItem("Quản lý người dùng", "user", <UserOutlined />, [
     getItem("Người dùng", "user"),
     getItem("Khách hàng", "customer"),
-    getItem("Nhóm khách hàng", "customer-group"),
+    getItem("Nhóm người dùng", "customer-group"),
   ]),
   getItem("Quản lý trương trình khuyến mãi", "7", <TagsOutlined />, [
     getItem("Danh sách trương trình khuyến mãi", "promotion"),
@@ -72,21 +72,6 @@ const rootSubmenuKeys = [
 const SideBar = ({ handleOpenKey }) => {
   const router = useRouter();
 
-  // const onOpenChange = (keys) => {
-  //   const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
-
-  //   if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-  //     setOpenKeys(keys);
-  //   } else {
-  //     setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-  //   }
-  // };
-
-  // const onSelect = (selected) => {
-  //   router.push(`/${selected.key}`);
-  //   console.log(selected);
-  // };
-
   const onClick = ({ key }) => {
     handleOpenKey(key);
   };
@@ -99,9 +84,7 @@ const SideBar = ({ handleOpenKey }) => {
       <Menu
         mode="inline"
         theme="dark"
-        // openKeys={openKeys}
         items={items}
-        // onSelect={onSelect}
         onClick={onClick}
         defaultSelectedKeys={["1"]}
       />

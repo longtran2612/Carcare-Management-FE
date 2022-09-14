@@ -89,7 +89,8 @@ const MyHeader = () => {
         {isLogin ? (
           <SubMenu key="10_1" icon={<UserOutlined />} title="Cá nhân">
             <Menu.Item key="10_1_2">
-              <Button onClick={handleLogout()}>Đăng xuất</Button>
+              {/* <Link a>Đăng xuất</Button> */}
+              <Link href='/login' onClick={()=>handleLogout()}>Đăng xuất</Link>
             </Menu.Item>
           </SubMenu>
         ) : (

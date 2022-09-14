@@ -9,29 +9,35 @@ import { Form, Input, Button, Col, Row, message } from "antd";
 import { Router, useRouter } from "next/router";
 import { setLogin } from "redux/slices/authSlice";
 import { login } from "api/authAPI";
+import Loading from "components/Loading";
 const { Title } = Typography;
 
 export default function LoginPage() {
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
+  const[loading, setLoading] = useState(false);
+
   const router = useRouter();
 
   const onFinish = (values) => {
+    setLoading(true);
     console.log("values:", values);
     login(values)
       .then((res) => {
         console.log("res:", res);
-        if (res.status == 200) {
+        if (res.data.status == 1) {
           console.log(res.data);
-          dispatch(setLogin(res.data));
+          dispatch(setLogin(res.data.data));
           router.push("/");
         } else {
           if (res.status == 400) {
             message.error(res.message);
           }
         }
+        setLoading(false);
       })
       .catch((err) => {
+        setLoading(false);s
         setError(err.message);
         message.error(err.message);
       });
@@ -53,25 +59,25 @@ export default function LoginPage() {
           </Title>
           <Form
             name="basic"
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 6 }}
             labelAlign="left"
             size={"middle"}
-            wrapperCol={{ span: 20 }}
-            initialValues={{ remember: true }}
+            wrapperCol={{ span: 18 }}
+            // initialValues={{ remember: true }}
             className="login-form p-5"
             onFinish={onFinish}
           >
             <Form.Item
-              label="Email"
+              label="Số điện thoại"
               name="username"
               rules={[
                 {
                   required: true,
-                  message: "Email không được để trống!",
+                  message: "Số điện thoại không được để trống!",
                 },
               ]}
             >
-              <Input placeholder="Nhập vào Email" />
+              <Input placeholder="Nhập vào số điện thoại" />
             </Form.Item>
 
             <Form.Item

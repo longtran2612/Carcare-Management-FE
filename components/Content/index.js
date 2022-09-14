@@ -107,7 +107,7 @@ const MyContent = ({ keyMenu }) => {
         className="site-layout-background"
         style={{
           margin: "5px 5px",
-          padding: 24,
+          padding: 10,
           minHeight: 280,
         }}
       >
