@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   ShopOutlined,
   CarOutlined,
@@ -24,6 +24,7 @@ const { SubMenu } = Menu;
 
 const MyHeader = () => {
   const [keyMenu, setKeyMenu] = useState(1);
+  const dispatch = useDispatch();
   const { isLogin } = useSelector((state) => state.authSlice);
   const router = useRouter();
 
@@ -32,12 +33,10 @@ const MyHeader = () => {
   };
 
   const handleLogout = () => {
-    logout({
-      refreshToken: Cookies.get("refreshToken"),
-    })
+    logout()
       .then((res) => {
         console.log("res:", res);
-        if (res.status == 200) {
+        if (res.data.status == 1) {
           console.log(res.data);
           dispatch(setLogout());
           router.push("/login");
@@ -90,7 +89,7 @@ const MyHeader = () => {
           <SubMenu key="10_1" icon={<UserOutlined />} title="Cá nhân">
             <Menu.Item key="10_1_2">
               {/* <Link a>Đăng xuất</Button> */}
-              <Link href='/login' onClick={()=>handleLogout()}>Đăng xuất</Link>
+              <a  onClick={()=>handleLogout()}>Đăng xuất</a>
             </Menu.Item>
           </SubMenu>
         ) : (

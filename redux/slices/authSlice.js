@@ -16,14 +16,16 @@ const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
       state.isLogin = true;
       Cookies.set("accessToken", action.payload.accessToken);
+      Cookies.set("username", action.payload.username);
       Cookies.set("refreshToken", action.payload.refreshToken);
     },
-    setLogout(state,action) {
+    setLogout(state) {
       state.accessToken = "";
       state.user = "";
       state.refreshToken = "";
       state.isLogin = false;
       Cookies.remove("accessToken");
+      Cookies.remove("username");
       Cookies.remove("refreshToken");
     }
   },

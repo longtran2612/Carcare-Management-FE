@@ -20,9 +20,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
 
       <SessionProvider session={session}>
         <Provider store={store}>
-          <div className="body">
             <Component {...pageProps} />
-          </div>
         </Provider>
       </SessionProvider>
     </Fragment>

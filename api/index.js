@@ -1,18 +1,21 @@
-import axios from "axios";
-import Cookies from "js-cookie";
+import axios from 'axios';
+import queryString from 'query-string';
 
-import { API_URL } from "./url";
-
-const axiosClient = () => {
-  const token = Cookies.get("aceesToken");
-
-  const axiosOptions = axios.create({
-    baseURL: API_URL,
+const axiosClient = axios.create({
+    baseURL: process.env.REACT_APP_API_URL,
     headers: {
-      "content-type": "application/json",
-       Authorization: `Bearer ${token}`,
+        'content-type': 'application/json',
     },
-  });
-  return axiosOptions;
-};
+    paramsSerializer: (params) => queryString.stringify(params),
+});
+
+axiosClient.interceptors.request.use(async (config) => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
 export default axiosClient;
