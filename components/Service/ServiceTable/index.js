@@ -1,7 +1,7 @@
-import { Table } from "antd";
+import { Table , message } from "antd";
+import React, { useState, useEffect } from "react";
 import Column from "antd/lib/table/Column";
-import React from "react";
-
+import {getServices} from 'api/serviceAPI';
 function ServiceTable(props) {
 	// const {
 	// 	topics,
@@ -22,6 +22,27 @@ function ServiceTable(props) {
 	// 	}
 	// 	return course;
 	// };
+	const [services, setServices] = useState([]);
+
+	const handleGetServices = async () => {
+		try {
+			getServices().then((res) => {
+				console.log("res:", res);
+				if (res.data.status == 1) {
+					setServices(res.data.data);
+				} else {
+					message.error(res.message);
+				}
+			})
+		}catch(err){
+			console.log(err)
+	  
+		  }
+	}
+
+	useEffect(() => {
+		handleGetServices()
+	  }, []);
 
 	return (
 		<Table  pagination={false}>
