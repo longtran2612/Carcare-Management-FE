@@ -38,7 +38,7 @@ const onRegister = (data) => {
     method: "POST",
     url: API_URL + `/auth/register`,
     data: {
-      fullName: data.fullname,
+      fullname: data.fullname,
       username: data.phone,
       password: data.password
     },
