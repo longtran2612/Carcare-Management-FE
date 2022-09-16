@@ -54,7 +54,7 @@ const onRegister = (data) => {
 const loadUser = async () => {
   let username = Cookies.get("username");
   console.log("username:", username);
-  return (await axiosClient())({
+  return  axiosClient()({
     method: "GET",
     url: API_URL + `/users/phone=${username}`,
   })
