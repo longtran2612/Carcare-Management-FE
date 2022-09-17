@@ -15,6 +15,6 @@ const getServices = (data) => {
     });
 };
 
-const getService = (id) => {};
+const getService = (data) => {};
 const createService = (data) => {};
 export { getServices, getService, createService };

@@ -10,7 +10,7 @@ const axiosClient = () => {
       baseURL: API_URL,
       headers: {
         "content-type": "application/json",
-        "Authorization" : `Bearer ${token}`
+        "X-ACCESS-TOKEN" : `Bearer ${token}`
       },
     });
     return axiosOptions;
