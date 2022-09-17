@@ -15,7 +15,7 @@ const { Title } = Typography;
 export default function LoginPage() {
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
-  const[loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
@@ -45,15 +45,28 @@ export default function LoginPage() {
 
   return (
     <>
+      {/* <div class="container"> */}
       <Row
         justify="space-around"
         align="middle"
         style={{
           height: "100vh",
+
           textAlign: "center",
         }}
       >
-        <Col span={8} xs={18} sm={14} md={10} lg={8}>
+        <Col
+          span={18}
+          xs={18}
+          sm={14}
+          md={10}
+          lg={8}
+          style={{
+            backgroundColor: "#DFE9F8",
+            padding: "50px",
+            borderRadius: "10px",
+          }}
+        >
           <Title level={2} style={{ marginBottom: "20px" }}>
             Đăng nhập
           </Title>
@@ -63,8 +76,6 @@ export default function LoginPage() {
             labelAlign="left"
             size={"middle"}
             wrapperCol={{ span: 18 }}
-            // initialValues={{ remember: true }}
-            className="login-form p-5"
             onFinish={onFinish}
           >
             <Form.Item
@@ -92,16 +103,14 @@ export default function LoginPage() {
             >
               <Input.Password placeholder="Nhập vào mật khẩu" />
             </Form.Item>
-            <Form.Item className="text-center">
-              <Button
-                className="btn-login"
-                type="primary
+            <Button
+              className="btn-login"
+              type="primary
                             "
-                htmlType="submit"
-              >
-                Đăng nhập
-              </Button>
-            </Form.Item>
+              htmlType="submit"
+            >
+              Đăng nhập
+            </Button>
           </Form>
           Chưa có tài khoản?<Link href="/registry"> Đăng ký</Link>
           <hr></hr>
@@ -126,7 +135,6 @@ export default function LoginPage() {
                 <span>Đăng nhập với Facebook</span>
               </div>
             </div>
-            {/* </a> */}
           </div>
         </Col>
       </Row>

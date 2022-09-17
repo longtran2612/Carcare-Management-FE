@@ -35,21 +35,31 @@ export default function RegistryPage() {
         align="middle"
         style={{
           height: "100vh",
+
           textAlign: "center",
         }}
       >
-        <Col span={8} xs={18} sm={14} md={10} lg={8}>
+        <Col
+          span={18}
+          xs={18}
+          sm={14}
+          md={10}
+          lg={8}
+          style={{
+            backgroundColor: "#DFE9F8",
+            padding: "50px",
+            borderRadius: "10px",
+          }}
+        >
           <Title level={2} style={{ marginBottom: "20px" }}>
             Đăng ký
           </Title>
           <Form
             name="basic"
-            labelCol={{ span: 4 }}
+            labelCol={{ span: 6 }}
             labelAlign="left"
             size={"middle"}
-            wrapperCol={{ span: 20 }}
-      
-          
+            wrapperCol={{ span: 18 }}
             onFinish={onFinish}
           >
             <Form.Item
@@ -90,7 +100,7 @@ export default function RegistryPage() {
               <Input.Password placeholder="Nhập vào mật khẩu" />
             </Form.Item>
             <Form.Item
-              label=" Xác nhận mật khẩu"
+              label=" Xác nhận"
               name="confirmPassword"
               rules={[
                 {
@@ -101,16 +111,14 @@ export default function RegistryPage() {
             >
               <Input.Password placeholder="Xác nhận mật khẩu" />
             </Form.Item>
-            <Form.Item className="text-center">
-              <Button
-                className="btn-registry"
-                type="primary
+            <Button
+              className="btn-registry"
+              type="primary
                         "
-                htmlType="submit"
-              >
-                Đăng ký
-              </Button>
-            </Form.Item>
+              htmlType="submit"
+            >
+              Đăng ký
+            </Button>
           </Form>
           <p className="text-center">
             Đã có tài khoản? <Link href="/login">Đăng nhập</Link>
@@ -137,7 +145,6 @@ export default function RegistryPage() {
                 <span>Đăng nhập với Facebook</span>
               </div>
             </div>
-            {/* </a> */}
           </div>
         </Col>
       </Row>
