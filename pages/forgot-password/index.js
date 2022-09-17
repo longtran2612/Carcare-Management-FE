@@ -6,6 +6,12 @@ import { Typography } from "antd";
 import { Form, Input, Button, Col, Row, message } from "antd";
 import { Router, useRouter } from "next/router";
 import Loading from "components/Loading";
+import firebase from "config/firebase";
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "firebase/auth";
+
 const { Title } = Typography;
 
 export default function ForgotPassword() {
@@ -15,8 +21,44 @@ export default function ForgotPassword() {
 
   const router = useRouter();
 
-  const onFinish = (values) => {};
+  // const onFinish = (values) => {};
 
+  const onFinish = (value) => {
+    e.preventDefault();
+    console.log(number);
+    setError("");
+    if (number === "" || number === undefined)
+      return setError("Please enter a valid phone number!");
+    try {
+      const response = await setUpRecaptha(number);
+      setResult(response);
+      setFlag(true);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  function setUpRecaptha(number) {
+    const recaptchaVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      {},
+      auth
+    );
+    recaptchaVerifier.render();
+    return signInWithPhoneNumber(auth, number, recaptchaVerifier);
+  }
+
+  const verifyOtp = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (otp === "" || otp === null) return;
+    try {
+      await result.confirm(otp);
+      navigate("/home");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  
   return (
     <>
       <Row
@@ -53,7 +95,7 @@ export default function ForgotPassword() {
           >
             <Form.Item
               label="Số điện thoại"
-              name="username"
+              name="number"
               rules={[
                 {
                   required: true,
@@ -75,6 +117,7 @@ export default function ForgotPassword() {
           </Form>
         </Col>
       </Row>
+      
     </>
   );
 }
