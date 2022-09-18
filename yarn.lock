@@ -740,7 +740,12 @@
   dependencies:
     "color-convert" "^2.0.1"
 
-"antd@^4.22.6":
+"antd-country-phone-input@^4.4.0":
+  "integrity" "sha512-SkZE473bv30I19UBIBW8zFbvUk59o7pjDHzWODaCoMxwBy2TpVOpKsVM0C4OabQv9HaUR3TNuJHrK6FcKqkXWQ=="
+  "resolved" "https://registry.npmjs.org/antd-country-phone-input/-/antd-country-phone-input-4.4.0.tgz"
+  "version" "4.4.0"
+
+"antd@^4.22.6", "antd@4.x":
   "integrity" "sha512-cyGq4CFrKcHISkyvXHODqhV8X0W7r6GHP37H/KvvmYibz/1sdts3Sa0FoAPy/c165TjAcSC/ZHxJhuGbo42zvA=="
   "resolved" "https://registry.npmjs.org/antd/-/antd-4.22.6.tgz"
   "version" "4.22.6"
@@ -1971,10 +1976,30 @@
   "resolved" "https://registry.npmjs.org/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz"
   "version" "4.3.0"
 
+"lodash.debounce@^4.0.8":
+  "integrity" "sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow=="
+  "resolved" "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
+  "version" "4.0.8"
+
+"lodash.memoize@^4.1.2":
+  "integrity" "sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag=="
+  "resolved" "https://registry.npmjs.org/lodash.memoize/-/lodash.memoize-4.1.2.tgz"
+  "version" "4.1.2"
+
 "lodash.merge@^4.6.2":
   "integrity" "sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ=="
   "resolved" "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
   "version" "4.6.2"
+
+"lodash.reduce@^4.6.0":
+  "integrity" "sha512-6raRe2vxCYBhpBu+B+TtNGUzah+hQjVdu3E17wfusjyrXBka2nBS8OH/gjVZ5PvHOhWmIZTYri09Z6n/QfnNMw=="
+  "resolved" "https://registry.npmjs.org/lodash.reduce/-/lodash.reduce-4.6.0.tgz"
+  "version" "4.6.0"
+
+"lodash.startswith@^4.2.1":
+  "integrity" "sha512-XClYR1h4/fJ7H+mmCKppbiBmljN/nGs73iq2SjCT9SF4CBPoUHzLvWmH1GtZMhMBZSiRkHXfeA2RY1eIlJ75ww=="
+  "resolved" "https://registry.npmjs.org/lodash.startswith/-/lodash.startswith-4.2.1.tgz"
+  "version" "4.2.1"
 
 "lodash@^4.17.21":
   "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
@@ -2331,7 +2356,7 @@
   "resolved" "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz"
   "version" "2.0.1"
 
-"prop-types@^15.8.1":
+"prop-types@^15.7.2", "prop-types@^15.8.1":
   "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   "version" "15.8.1"
@@ -2621,7 +2646,7 @@
     "rc-motion" "^2.4.4"
     "rc-util" "^5.17.0"
 
-"rc-select@~14.1.0", "rc-select@~14.1.1":
+"rc-select@^12.1.13 || 13.x || 14.x", "rc-select@~14.1.0", "rc-select@~14.1.1":
   "integrity" "sha512-DK01+Q7oCWr5jVPiEp/BTQ8xCB4rI4LfXzZtSmBWJhOMuibyZD1Vlz/DlVKCUFmtBM4SzG4/SltGHoGlcbCqiw=="
   "resolved" "https://registry.npmjs.org/rc-select/-/rc-select-14.1.9.tgz"
   "version" "14.1.9"
@@ -2765,7 +2790,7 @@
     "rc-resize-observer" "^1.0.0"
     "rc-util" "^5.15.0"
 
-"react-dom@*", "react-dom@^16.8 || ^17.0 || ^18.0", "react-dom@^17.0.2 || ^18", "react-dom@^17.0.2 || ^18.0.0-0", "react-dom@>=16.0.0", "react-dom@>=16.11.0", "react-dom@>=16.9.0", "react-dom@17.0.2":
+"react-dom@*", "react-dom@^16.12.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0", "react-dom@^16.2.0", "react-dom@^16.8 || ^17.0 || ^18.0", "react-dom@^17.0.2 || ^18", "react-dom@^17.0.2 || ^18.0.0-0", "react-dom@>=16.0.0", "react-dom@>=16.11.0", "react-dom@>=16.9.0", "react-dom@17.0.2":
   "integrity" "sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-17.0.2.tgz"
   "version" "17.0.2"
@@ -2784,6 +2809,23 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   "version" "18.2.0"
 
+"react-otp-input@^2.4.0":
+  "integrity" "sha512-AIgl7u4sS9BTNCxX1xlaS5fPWay/Zml8Ho5LszXZKXrH1C/TiFsTQGmtl13UecQYO3mSF3HUzG2rrDf0sjEFmg=="
+  "resolved" "https://registry.npmjs.org/react-otp-input/-/react-otp-input-2.4.0.tgz"
+  "version" "2.4.0"
+
+"react-phone-input-2@^2.15.1":
+  "integrity" "sha512-W03abwhXcwUoq+vUFvC6ch2+LJYMN8qSOiO889UH6S7SyMCQvox/LF3QWt+cZagZrRdi5z2ON3omnjoCUmlaYw=="
+  "resolved" "https://registry.npmjs.org/react-phone-input-2/-/react-phone-input-2-2.15.1.tgz"
+  "version" "2.15.1"
+  dependencies:
+    "classnames" "^2.2.6"
+    "lodash.debounce" "^4.0.8"
+    "lodash.memoize" "^4.1.2"
+    "lodash.reduce" "^4.6.0"
+    "lodash.startswith" "^4.2.1"
+    "prop-types" "^15.7.2"
+
 "react-redux@^7.2.1 || ^8.0.2", "react-redux@^8.0.2":
   "integrity" "sha512-nBwiscMw3NoP59NFCXFf02f8xdo+vSHT/uZ1ldDwF7XaTpzm+Phk97VT4urYBl5TYAPNVaFm12UHAEyzkpNzRA=="
   "resolved" "https://registry.npmjs.org/react-redux/-/react-redux-8.0.2.tgz"
@@ -2796,7 +2838,7 @@
     "react-is" "^18.0.0"
     "use-sync-external-store" "^1.0.0"
 
-"react@*", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18", "react@^17.0.2 || ^18", "react@^17.0.2 || ^18.0.0-0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>=16.0.0", "react@>=16.11.0", "react@>=16.9.0", "react@17.0.2":
+"react@*", "react@^16.12.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0", "react@^16.2.0", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18", "react@^17.0.2 || ^18", "react@^17.0.2 || ^18.0.0-0", "react@>= 16.8.0 || 17.x || 18.x", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>=16.0.0", "react@>=16.11.0", "react@>=16.9.0", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   "version" "17.0.2"
@@ -3259,6 +3301,11 @@
   "integrity" "sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ=="
   "resolved" "https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.3.tgz"
   "version" "1.2.3"
+
+"world_countries_lists@^2.1.0":
+  "integrity" "sha512-iFAYeCCCzgKOoFpHcf+Bwr8qrn/FylqIftNJO9Mw5UH5wUu23Zx9YL+1U523Utm5LqpQ+eQ6B/DwQCCe2cTfwQ=="
+  "resolved" "https://registry.npmjs.org/world_countries_lists/-/world_countries_lists-2.6.0.tgz"
+  "version" "2.6.0"
 
 "wrap-ansi@^7.0.0":
   "integrity" "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q=="

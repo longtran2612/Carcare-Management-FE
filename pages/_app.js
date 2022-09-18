@@ -8,6 +8,9 @@ import { Provider } from "react-redux";
 import { Fragment } from "react";
 import Head from "next/head";
 
+
+// import "react-phone-input-2/dist/style.css";
+
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <Fragment>

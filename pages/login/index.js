@@ -3,8 +3,13 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
-import { Typography ,Divider } from "antd";
-import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
+import { Typography, Divider } from "antd";
+import {
+  FacebookOutlined,
+  GoogleOutlined,
+  PhoneOutlined,
+  LockOutlined,
+} from "@ant-design/icons";
 import { Form, Input, Button, Col, Row, message } from "antd";
 import { Router, useRouter } from "next/router";
 import { setLogin } from "redux/slices/authSlice";
@@ -58,9 +63,9 @@ export default function LoginPage() {
         <Col
           span={18}
           xs={18}
-          sm={14}
-          md={10}
-          lg={8}
+          sm={18}
+          md={18}
+          lg={10}
           style={{
             backgroundColor: "#DFE9F8",
             padding: "50px",
@@ -83,12 +88,17 @@ export default function LoginPage() {
               name="username"
               rules={[
                 {
+                  pattern: new RegExp("^(84|0[3|5|7|8|9])+([0-9]{8})$"),
                   required: true,
-                  message: "Số điện thoại không được để trống!",
+                  message:
+                    "Số điện thoại không hợp lệ! Số điện thoại bao gồm 10 ký tự số bắt đầu là 84 hoặc 03, 05, 07, 08, 09",
                 },
               ]}
             >
-              <Input placeholder="Nhập vào số điện thoại" />
+              <Input
+                prefix={<PhoneOutlined className="site-form-item-icon" />}
+                placeholder="Nhập vào số điện thoại"
+              />
             </Form.Item>
 
             <Form.Item
@@ -96,12 +106,19 @@ export default function LoginPage() {
               name="password"
               rules={[
                 {
+                  pattern: new RegExp(
+                    "^([0-9a-zA-Z]*[.!@$%^&(){}[]:;<>,.?/~_+-=|]*).{6,32}$"
+                  ),
                   required: true,
-                  message: "Mật khẩu không được để trống!",
+                  message:
+                    "Mật khẩu không hợp lệ! Mật khẩu bao gồm 6-32 ký tự bao gồm chữ, số và ký tự đặc biệt",
                 },
               ]}
             >
-              <Input.Password placeholder="Nhập vào mật khẩu" />
+              <Input.Password
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                placeholder="Nhập vào mật khẩu"
+              />
             </Form.Item>
             <Button
               className="btn-login"
@@ -114,9 +131,8 @@ export default function LoginPage() {
           </Form>
           <Divider />
           Chưa có tài khoản?<Link href="/registry"> Đăng ký</Link>
-          <br/>
+          <br />
           Quên mật khẩu?<Link href="/forgot-password"> Lấy lại mật khẩu</Link>
-
           {/* <p className="text-center"> Hoặc đăng nhập bằng</p>
           <div className="logo_sign-up">
             <div className="block-google block">

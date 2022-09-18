@@ -1,7 +1,7 @@
 import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
-import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
+import { FacebookOutlined, GoogleOutlined , PhoneOutlined ,LockOutlined ,UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Col, Row, message, Typography , Divider } from "antd";
 import { Router, useRouter } from "next/router";
 import { onRegister } from "api/authAPI";
@@ -40,11 +40,11 @@ export default function RegistryPage() {
         }}
       >
         <Col
-          span={18}
-          xs={18}
-          sm={14}
-          md={10}
-          lg={8}
+           span={18}
+           xs={18}
+           sm={18}
+           md={18}
+           lg={10}
           style={{
             backgroundColor: "#DFE9F8",
             padding: "50px",
@@ -67,24 +67,29 @@ export default function RegistryPage() {
               name="phone"
               rules={[
                 {
+                  pattern: new RegExp("^(84|0[3|5|7|8|9])+([0-9]{8})$"),
                   required: true,
-                  message: "Số điện thoại không được để trống!",
+                  message:
+                    "Số điện thoại không hợp lệ! Số điện thoại bao gồm 10 ký tự số bắt đầu là 84 hoặc 03, 05, 07, 08, 09",
                 },
               ]}
             >
-              <Input placeholder="Nhập vào Số điện thoại" />
+              <Input prefix={<PhoneOutlined className="site-form-item-icon" />} placeholder="Nhập vào Số điện thoại" />
             </Form.Item>
             <Form.Item
               label="Họ tên"
               name="fullname"
               rules={[
                 {
+                  pattern: new RegExp(
+                    '^[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*( *[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)*$'
+                ),
                   required: true,
-                  message: "Tên không được để trống!",
+                  message: "Tên không hợp lệ! Tên bắt đầu bằng chữ hoa, không chứa ký tự đặc biệt",
                 },
               ]}
             >
-              <Input placeholder="Nhập vào Tên" />
+              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Nhập vào Tên" />
             </Form.Item>
 
             <Form.Item
@@ -92,24 +97,32 @@ export default function RegistryPage() {
               name="password"
               rules={[
                 {
+                  pattern: new RegExp(
+                    "^([0-9a-zA-Z]*[.!@$%^&(){}[]:;<>,.?/~_+-=|]*).{6,32}$"
+                  ),
                   required: true,
-                  message: "Mật khẩu không được để trống!",
+                  message:
+                    "Mật khẩu không hợp lệ! Mật khẩu bao gồm 6-32 ký tự bao gồm chữ, số và ký tự đặc biệt",
                 },
               ]}
             >
-              <Input.Password placeholder="Nhập vào mật khẩu" />
+              <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Nhập vào mật khẩu" />
             </Form.Item>
             <Form.Item
               label=" Xác nhận"
               name="confirmPassword"
               rules={[
                 {
+                  pattern: new RegExp(
+                    "^([0-9a-zA-Z]*[.!@$%^&(){}[]:;<>,.?/~_+-=|]*).{6,32}$"
+                  ),
                   required: true,
-                  message: "Mật khẩu không được để trống!",
+                  message:
+                    "Mật khẩu không hợp lệ! Mật khẩu bao gồm 6-32 ký tự bao gồm chữ, số và ký tự đặc biệt",
                 },
               ]}
             >
-              <Input.Password placeholder="Xác nhận mật khẩu" />
+              <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Xác nhận mật khẩu" />
             </Form.Item>
             <Button
               className="btn-registry"

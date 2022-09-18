@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  ShopOutlined,
-  CarOutlined,
-  CarFilled,
   HomeOutlined,
+  InfoOutlined,
+  LogoutOutlined,
+  SettingOutlined,
   LoginOutlined,
   UserOutlined,
-  DropboxOutlined
+  DropboxOutlined,
 } from "@ant-design/icons";
 import { Button, Menu, message } from "antd";
 import Link from "next/link";
@@ -52,8 +52,8 @@ const MyHeader = () => {
   };
   const headerStyle = {
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "right",
+    alignItems: "right",
     padding: "4px 0",
     boxShadow: " 0 4px 4px -2px #c4c4c4",
   };
@@ -65,7 +65,7 @@ const MyHeader = () => {
         onClick={handleOnClick}
         selectedKeys={keyMenu}
       >
-        <Menu.Item key={1} icon={<HomeOutlined />}>
+        {/* <Menu.Item key={1} icon={<HomeOutlined />}>
           <Link href="/">Trang chủ</Link>
         </Menu.Item>
 
@@ -83,13 +83,19 @@ const MyHeader = () => {
 
         <Menu.Item key={3} icon={<CarFilled />}>
           <Link href="/customer">Khách hàng</Link>
-        </Menu.Item>
+        </Menu.Item> */}
 
         {isLogin ? (
           <SubMenu key="10_1" icon={<UserOutlined />} title="Cá nhân">
-            <Menu.Item key="10_1_2">
+            <Menu.Item key="10_3" icon={<InfoOutlined />}>
+              <Link href="/car">Thông tin cá nhân</Link>
+            </Menu.Item>
+            <Menu.Item key="10_4" icon={<SettingOutlined />}>
+              <Link href="/car">Cài đặt</Link>
+            </Menu.Item>
+            <Menu.Item key="10_1" icon={<LogoutOutlined />}>
               {/* <Link a>Đăng xuất</Button> */}
-              <a  onClick={()=>handleLogout()}>Đăng xuất</a>
+              <a onClick={() => handleLogout()}>Đăng xuất</a>
             </Menu.Item>
           </SubMenu>
         ) : (
