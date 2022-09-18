@@ -8,6 +8,7 @@ const authSlice = createSlice({
     refreshToken:"",
     user: {},
     isLogin: false,
+    userNameChangePassword: "",
   },
   reducers: {
     setLogin(state, action) {
@@ -34,5 +35,5 @@ const authSlice = createSlice({
 
 const { reducer, actions } = authSlice;
 
-export const { setLogin ,setLogout } = actions;
+export const { setUserChangePassword,setLogin ,setLogout } = actions;
 export default reducer;

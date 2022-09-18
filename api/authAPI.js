@@ -67,11 +67,24 @@ const loadUser = async () => {
     });
 };
 
-
+const changePassword = async (data) => {
+  return axios({
+    method: "PUT",
+    url: API_URL + `/auth/changePassword`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
 export {
   onRegister,
   login,
   logout,
-  loadUser
+  loadUser,
+  changePassword,
 };
