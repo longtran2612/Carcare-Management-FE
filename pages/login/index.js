@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
-import { Typography } from "antd";
+import { Typography ,Divider } from "antd";
 import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Col, Row, message } from "antd";
 import { Router, useRouter } from "next/router";
@@ -112,11 +112,13 @@ export default function LoginPage() {
               Đăng nhập
             </Button>
           </Form>
+          <Divider />
           Chưa có tài khoản?<Link href="/registry"> Đăng ký</Link>
-          <hr></hr>
-          <p className="text-center"> Hoặc đăng nhập bằng</p>
+          <br/>
+          Quên mật khẩu?<Link href="/forgot-password"> Lấy lại mật khẩu</Link>
+
+          {/* <p className="text-center"> Hoặc đăng nhập bằng</p>
           <div className="logo_sign-up">
-            {/* <a href={authLink.googleAuth}> */}
             <div className="block-google block">
               <div className="icon-login">
                 <GoogleOutlined style={{ fontSize: "30px" }} />
@@ -125,8 +127,7 @@ export default function LoginPage() {
                 <span>Đăng nhập với Google</span>
               </div>
             </div>
-            {/* </a>
-                  <a href={authLink.facebookAuth}> */}
+       
             <div className="block-facebook block">
               <div className="icon-login">
                 <FacebookOutlined style={{ fontSize: "30px" }} />
@@ -135,7 +136,7 @@ export default function LoginPage() {
                 <span>Đăng nhập với Facebook</span>
               </div>
             </div>
-          </div>
+          </div> */}
         </Col>
       </Row>
     </>

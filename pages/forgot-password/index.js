@@ -2,12 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Typography } from "antd";
-import { Form, Input, Button, Col, Row, message } from "antd";
+import { Form, Input, Button, Col, Row, message ,Modal } from "antd";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import { auth } from "config/firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { changePassword } from "api/authAPI";
+import { changePassword, checkExistPhone } from "api/authAPI";
 
 const { Title } = Typography;
 
@@ -24,9 +24,17 @@ export default function ForgotPassword() {
 
   const getOtp = async (values) => {
     const number = "+84" + values.phone;
+    console.log("number:", number);
     setPhoneNumber(number);
-    if (number === "" || number === undefined)
-      return setError("Please enter a valid phone number!");
+    const check = await checkExistPhone(number).then((res) => {
+
+      return res.data;
+    });
+    console.log("check:", check);
+    if (number === "" || number === undefined || check ===true ){
+      message.error("Số điện thoại không tồn tại");
+      return
+    }
     try {
       const response = await setUpRecaptha(number);
       setResult(response);
@@ -79,7 +87,8 @@ export default function ForgotPassword() {
         (res) => {
           if (res.data.status == 1) {
             message.success("Change password success!");
-            router.push("/login");
+            success();
+            // router.push("/login");
           } else {
             message.error(res.data.message);
           }
@@ -89,6 +98,18 @@ export default function ForgotPassword() {
       message.error(err.message);
     }
   };
+
+  function success() {
+    Modal.success({
+        content: 'Cập nhật tài khoản thành công !',
+        onOk: () => {
+            router.push('/login');
+        },
+        onCancel: () => {
+            router.push('/login');
+        },
+    });
+}
 
   return (
     <>

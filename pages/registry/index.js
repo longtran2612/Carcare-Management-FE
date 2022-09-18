@@ -2,7 +2,7 @@ import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
 import { FacebookOutlined, GoogleOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Col, Row, message, Typography } from "antd";
+import { Form, Input, Button, Col, Row, message, Typography , Divider } from "antd";
 import { Router, useRouter } from "next/router";
 import { onRegister } from "api/authAPI";
 const { Title } = Typography;
@@ -123,7 +123,8 @@ export default function RegistryPage() {
           <p className="text-center">
             Đã có tài khoản? <Link href="/login">Đăng nhập</Link>
           </p>
-          <hr></hr>
+          <Divider/>
+          Quên mật khẩu?<Link href="/forgot-password"> Lấy lại mật khẩu</Link>
           <p className="text-center"> Hoặc đăng nhập bằng</p>
           <div className="logo_sign-up">
             {/* <a href={authLink.googleAuth}> */}

@@ -81,10 +81,24 @@ const changePassword = async (data) => {
     });
 };
 
+const  checkExistPhone = async (data) => {
+  return axios({
+    method: "GET",
+    url: API_URL + `/auth/check/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 export {
   onRegister,
   login,
   logout,
   loadUser,
   changePassword,
+  checkExistPhone
 };
