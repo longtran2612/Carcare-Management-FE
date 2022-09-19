@@ -12,7 +12,6 @@ import { changePassword, checkExistPhone } from "api/authAPI";
 import OtpInput from "react-otp-input";
 const { Title } = Typography;
 
-// import ReactPhoneInput from "react-phone-input-2";
 
 export default function ForgotPassword() {
   const dispatch = useDispatch();
@@ -26,10 +25,10 @@ export default function ForgotPassword() {
   const router = useRouter();
 
   const getOtp = async (values) => {
-    console.log(values);
+    // console.log(values);
     setPhoneNumber(values.phone);
     console.log(phoneNumber);
-    const checkExist = await checkExistPhone(phoneNumber).then((res) => {
+    const checkExist = await checkExistPhone(values.phone).then((res) => {
       return res.data;
     });
     console.log("checkExist:", checkExist);
