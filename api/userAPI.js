@@ -3,8 +3,9 @@ import axiosClient from "./index";
 
 import { API_URL } from "./url";
 
-const getUsers = (data) => {
-  return axiosClient({
+
+const getUsers = async () => {
+  return axiosClient()({
     method: "GET",
     url: API_URL + `/users`,
   })

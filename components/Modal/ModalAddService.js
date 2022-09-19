@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Button, Form, Input, Select } from "antd";
+import { Modal, Button, Form, Input, Select, InputNumber } from "antd";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -32,14 +32,17 @@ const ModalAddService = ({ show, handleOk, handleCancel }) => {
           <Form.Item label="Mô tả">
             <TextArea />
           </Form.Item>
-          <Form.Item label="Trạng thái">
-            <Input />
+          <Form.Item label="Danh mục dịch vụ">
+            <Select>
+              <Option value="jack">Sơn</Option>
+              <Option value="vesinh">Vệ sinh</Option>
+            </Select>
           </Form.Item>
-          <Form.Item label="Trạng thái">
-            <Input />
+          <Form.Item label="Giá">
+            <InputNumber />
           </Form.Item>
           <Form.Item {...buttonItemLayout}>
-            <Button type="primary">Submit</Button>
+            {/* <Button type="primary">Submit</Button> */}
           </Form.Item>
         </Form>
       </Modal>

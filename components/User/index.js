@@ -16,13 +16,13 @@ import UserTable from './UserTable';
   return <>
   <Row justify="space-between" gutter={[8, 8]}>
 				<Col xs={24} sm={24} md={24} lg={4} xl={4}>
-					<Button
+					{/* <Button
 						type="primary"
 						onClick={handleOnClick}
 						icon={<PlusCircleOutlined />}
 					>
 						Thêm Khách Hàng
-					</Button>
+					</Button> */}
 				</Col>
 				{/* <CourseSearch topics={topics} onChange={handleSearchChange} /> */}
 			</Row>
