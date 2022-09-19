@@ -31,13 +31,13 @@ function ServiceTable({}) {
     },
     {
       title: "Trạng thái",
-      key: "type",
-      dataIndex: "type",
-      render: (type) => {
+      key: "status",
+      dataIndex: "status",
+      render: (status) => {
         return (
           <>
             <Tag color={"green"}>
-              {type ? type?.toUpperCase() : "Hoạt động"}
+              {status ? 'ACTIVE'?.toUpperCase() : "Hoạt động"}
             </Tag>
           </>
         );
