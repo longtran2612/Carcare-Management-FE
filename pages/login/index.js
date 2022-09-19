@@ -9,7 +9,6 @@ import { Form, Input, Button, Col, Row, message } from "antd";
 import { Router, useRouter } from "next/router";
 import { setLogin } from "redux/slices/authSlice";
 import { login } from "api/authAPI";
-import Loading from "components/Loading";
 const { Title } = Typography;
 
 export default function LoginPage() {
@@ -21,12 +20,9 @@ export default function LoginPage() {
 
   const onFinish = (values) => {
     setLoading(true);
-    console.log("values:", values);
     login(values)
       .then((res) => {
-        console.log("res:", res);
         if (res.data.status == 1) {
-          console.log(res.data);
           dispatch(setLogin(res.data.data));
           router.push("/");
         } else {
@@ -105,9 +101,9 @@ export default function LoginPage() {
             </Form.Item>
             <Button
               className="btn-login"
-              type="primary
-                            "
+              type="primary"
               htmlType="submit"
+              loading={loading}
             >
               Đăng nhập
             </Button>

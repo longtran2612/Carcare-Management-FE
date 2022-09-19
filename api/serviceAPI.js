@@ -17,4 +17,12 @@ const getServices = (data) => {
 
 const getService = (data) => {};
 const createService = (data) => {};
-export { getServices, getService, createService };
+
+const removeServiceApi = (id) => {
+  return axios({
+    method: "DELETE",
+    url: API_URL + `/services/${id}`,
+  });
+};
+
+export { getServices, getService, createService, removeServiceApi };
