@@ -1,52 +1,45 @@
-import { Breadcrumb, Layout } from "antd";
-import React, { useState , useEffect } from "react";
+import { Layout } from "antd";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import MyHeader from "components/Header";
 import SideBar from "components/SideBar";
 import MyContent from "components/Content";
 import { loadUser } from "api/authAPI";
 const { Content, Sider, Footer } = Layout;
 
-
 const Home = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [key, setKey] = useState(1);
+  const [key, setKey] = useState("shop");
 
   const router = useRouter();
 
-  
   const handleAuthentication = async () => {
-
     let accessToken = Cookies.get("accessToken");
     console.log(accessToken);
     if (accessToken == null) {
       router.push("/login");
-      return
+      return;
     }
-    try{
-     loadUser().then((res) => {
-      console.log("res:", res);
-      if (res.data.status == 1) {
-      } else {
-        if (res.status == 400) {
-          message.error(res.message);
+    try {
+      loadUser().then((res) => {
+        console.log("res:", res);
+        if (res.data.status == 1) {
+        } else {
+          if (res.status == 400) {
+            message.error(res.message);
+          }
         }
-      }
+      });
+    } catch (err) {
+      console.log(err);
     }
-
-        )
-     
-    }catch(err){
-      console.log(err)
-
-    }
-  }
+  };
   useEffect(() => {
-    handleAuthentication()
+    handleAuthentication();
   }, []);
-  
+
   return (
     <Layout
       style={{
@@ -66,10 +59,6 @@ const Home = () => {
       </Sider>
       <Layout className="site-layout">
         <MyHeader />
-        <Breadcrumb style={{ margin: "16px 15px" }}>
-          <Breadcrumb.Item>Trang chủ</Breadcrumb.Item>
-          <Breadcrumb.Item>Khách hàng</Breadcrumb.Item>
-        </Breadcrumb>
         <MyContent keyMenu={key} />
         {/* <Footer /> */}
         <Footer style={{ textAlign: "center" }}>

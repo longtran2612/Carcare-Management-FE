@@ -26,7 +26,7 @@ function getItem(label, key, icon, children, type) {
 }
 
 const items = [
-  getItem("Cửa hàng", "1", <ShopOutlined />),
+  getItem("Cửa hàng", "shop", <ShopOutlined />),
   getItem("Hóa đơn", "2", <BorderOutlined />, [
     getItem("Tạo mới hóa đơn", "order-create"),
     getItem("Danh sách hóa đơn", "order-list"),
@@ -72,7 +72,8 @@ const rootSubmenuKeys = [
 const SideBar = ({ handleOpenKey }) => {
   const router = useRouter();
 
-  const onClick = ({ key }) => {
+  const onClick = ({ item, key, keyPath, domEvent }) => {
+    console.log({ item, key, keyPath, domEvent });
     handleOpenKey(key);
   };
 
@@ -86,7 +87,7 @@ const SideBar = ({ handleOpenKey }) => {
         theme="dark"
         items={items}
         onClick={onClick}
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={["shop"]}
       />
     </div>
   );

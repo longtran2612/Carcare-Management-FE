@@ -62,10 +62,9 @@ const MyContent = ({ keyMenu }) => {
       </Affix>
     );
   };
-  console.log(keyMenu);
   const renderViewByKey = () => {
     switch (keyMenu) {
-      case "1":
+      case "shop":
         return <UserPage />;
       case "service":
         return <ServicePage />;
@@ -103,7 +102,7 @@ const MyContent = ({ keyMenu }) => {
     //   </Content>
     // </div>
     <>
-     <Content
+      <Content
         className="site-layout-background"
         style={{
           margin: "5px 5px",
@@ -111,9 +110,8 @@ const MyContent = ({ keyMenu }) => {
           minHeight: 280,
         }}
       >
-     {renderViewByKey()}
-    </Content>
-    
+        {renderViewByKey()}
+      </Content>
     </>
   );
 };
