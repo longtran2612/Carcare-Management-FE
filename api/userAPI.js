@@ -17,4 +17,32 @@ const getUsers = async () => {
     });
 };
 
-export { getUsers };
+const createUser = async (data) => {
+  return axiosClient()({
+    method: "POST",
+    url: API_URL + `/users`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+const updateUser = async (data) => {
+  return axiosClient()({
+    method: "PUT",
+    url: API_URL + `/users`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+export { getUsers , createUser, updateUser};

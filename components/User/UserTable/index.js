@@ -1,9 +1,9 @@
 import { Table, Tag, Space, Button } from "antd";
 import React, { useState, useEffect } from "react";
 import { getUsers } from "api/userAPI";
-import ModalAddService from "components/Modal/ModalAddService";
 import ModalQuestion from "components/Modal/ModalQuestion";
-
+import ModalAddUser
+ from "components/Modal/ModelAddUser";
 function UserTable({}) {
   const [users, setUsers] = useState([]);
   const [modalUser, setModalUser] = useState(false);
@@ -44,6 +44,29 @@ function UserTable({}) {
       dataIndex: "address",
       key: "address",
 
+    },
+    {
+      title: "Trạng thái",
+      key: "status",
+      dataIndex: "status",
+      render: (status) => {
+        return (
+          <>
+          {
+            status === 'ACTIVE' ? (
+              <Tag color={"green"}>
+                {"Hoạt động"}
+              </Tag>
+            ) : (
+              <Tag color={"red"}>
+                {"Không hoạt động"}
+              </Tag>
+            )
+          }
+      
+          </>
+        );
+      },
     },
    
     {
@@ -103,11 +126,11 @@ function UserTable({}) {
         Thêm người dùng
       </Button>
       <Table columns={columns} dataSource={users} />
-      {/* <ModalAddService
-        show={modalService}
+      <ModalAddUser
+        show={modalUser}
         handleCancel={() => setModalUser(false)}
         handleOk={() => console.log("bao")}
-      /> */}
+      />
       <ModalQuestion
         title="Bạn có chắc chắn muốn xóa người dùng này không?"
         visible={modalQuestion}

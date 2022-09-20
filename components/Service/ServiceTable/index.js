@@ -36,9 +36,18 @@ function ServiceTable({}) {
       render: (status) => {
         return (
           <>
-            <Tag color={"green"}>
-              {status ? 'ACTIVE'?.toUpperCase() : "Hoạt động"}
-            </Tag>
+          {
+            status === 'ACTIVE' ? (
+              <Tag color={"green"}>
+                {"Hoạt động"}
+              </Tag>
+            ) : (
+              <Tag color={"red"}>
+                {"Không hoạt động"}
+              </Tag>
+            )
+          }
+      
           </>
         );
       },

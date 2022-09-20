@@ -5,6 +5,7 @@ import { Divider, InputNumber, Typography } from "antd";
 import { PhoneOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Col, Row, message, Modal, Steps } from "antd";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import Loading from "components/Loading";
 import { auth } from "config/firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
@@ -148,6 +149,7 @@ export default function ForgotPassword() {
           <Title level={2} style={{ marginBottom: "20px" }}>
             Lấy lại mật khẩu
           </Title>
+         
 
           {step == 0 && (
             <Form
@@ -304,12 +306,18 @@ export default function ForgotPassword() {
               </Button>
             </Form>
           )}
-          <Divider />
+           <Divider />
           <Steps current={step} onChange={onChange}>
             <Steps.Step title="Nhập số điện thoại" />
             <Steps.Step title="Xác thực OTP" />
             <Steps.Step title="Đổi mật khẩu" />
           </Steps>
+        
+          <Divider/>
+          <p className="text-center">
+            Đã có tài khoản? <Link href="/login">Đăng nhập</Link>
+          </p>
+          Đăng ký tài khoản mới?<Link href="/forgot-password"> Đăng ký</Link>
         </Col>
       </Row>
     </>

@@ -15,8 +15,31 @@ const getServices = (data) => {
     });
 };
 
-const getService = (data) => {};
-const createService = (data) => {};
+const getService = (data) => {
+  return axios({
+    method: "GET",
+    url: API_URL + `/services/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+const createService = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/services`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
 const removeServiceApi = (id) => {
   return axios({
