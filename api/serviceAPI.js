@@ -19,26 +19,14 @@ const getService = (data) => {
   return axios({
     method: "GET",
     url: API_URL + `/services/${data}`,
-  })
-    .then((res) => {
-      return res;
-    })
-    .catch((err) => {
-      throw err;
-    });
+  });
 };
 const createService = (data) => {
   return axios({
     method: "POST",
     url: API_URL + `/services`,
     data: data,
-  })
-    .then((res) => {
-      return res;
-    })
-    .catch((err) => {
-      throw err;
-    });
+  });
 };
 
 const removeServiceApi = (id) => {
@@ -48,4 +36,28 @@ const removeServiceApi = (id) => {
   });
 };
 
-export { getServices, getService, createService, removeServiceApi };
+const updateServiceApi = (data) => {
+  return axios({
+    method: "PUT",
+    url: API_URL + `/services`,
+    data: data,
+  });
+};
+
+// category service
+
+const fetchCategoryServiceApi = () => {
+  return axios({
+    method: "GET",
+    url: API_URL + `/service-categories`,
+  });
+};
+
+export {
+  getServices,
+  getService,
+  createService,
+  removeServiceApi,
+  updateServiceApi,
+  fetchCategoryServiceApi,
+};

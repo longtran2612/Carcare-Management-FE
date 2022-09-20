@@ -6,6 +6,7 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 
 function ServiceTable({}) {
   const [services, setServices] = useState([]);
+  const [servicesItem, setServicesItem] = useState(null);
   const [modalService, setModalService] = useState(false);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
@@ -36,18 +37,11 @@ function ServiceTable({}) {
       render: (status) => {
         return (
           <>
-          {
-            status === 'ACTIVE' ? (
-              <Tag color={"green"}>
-                {"Hoạt động"}
-              </Tag>
+            {status === "ACTIVE" ? (
+              <Tag color={"green"}>{"Hoạt động"}</Tag>
             ) : (
-              <Tag color={"red"}>
-                {"Không hoạt động"}
-              </Tag>
-            )
-          }
-      
+              <Tag color={"red"}>{"Không hoạt động"}</Tag>
+            )}
           </>
         );
       },
@@ -57,7 +51,15 @@ function ServiceTable({}) {
       key: "action",
       render: (_, record) => (
         <Space size={8}>
-          <Button type="primary">Cập nhật</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              setModalService(true);
+              setServicesItem(record);
+            }}
+          >
+            Cập nhật
+          </Button>
           <Button
             type="primary"
             danger
@@ -101,6 +103,12 @@ function ServiceTable({}) {
     handleGetServices();
   }, []);
 
+  const handleSuccessCreateService = (data) => {
+    let newArr = [...services];
+    newArr.push(data);
+    setServices(newArr);
+  };
+
   return (
     <>
       <Button type="primary" onClick={() => setModalService(true)}>
@@ -110,7 +118,8 @@ function ServiceTable({}) {
       <ModalAddService
         show={modalService}
         handleCancel={() => setModalService(false)}
-        handleOk={() => console.log("bao")}
+        onSuccess={(data) => handleSuccessCreateService(data)}
+        item={servicesItem}
       />
       <ModalQuestion
         title="Bạn có chắc chắn muốn xóa dịch vụ này không?"
