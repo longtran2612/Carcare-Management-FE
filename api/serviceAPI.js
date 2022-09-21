@@ -37,9 +37,10 @@ const removeServiceApi = (id) => {
 };
 
 const updateServiceApi = (data) => {
+  console.log(data);
   return axios({
     method: "PUT",
-    url: API_URL + `/services`,
+    url: API_URL + `/services/${data.id}`,
     data: data,
   });
 };

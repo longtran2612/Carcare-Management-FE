@@ -72,16 +72,6 @@ const MyContent = ({ keyMenu }) => {
         return <UserPage />;
       case "service-category":
         return <ServicePage />;
-      case "service":
-        return <ServicePage />;
-      case "service":
-        return <ServicePage />;
-      case "service":
-        return <ServicePage />;
-      case "service":
-        return <ServicePage />;
-      case "service":
-        return <ServicePage />;
       default:
         break;
     }

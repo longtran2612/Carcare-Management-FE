@@ -25,11 +25,6 @@ const ModalAddService = ({ show, onSuccess, handleCancel, item }) => {
         description: values.description,
         categoryId: values.categoryId,
         status: values.status ? statusTemp : item.status,
-        imageUrl: null,
-        createDate: null,
-        createBy: item.createBy,
-        updateDate: null,
-        updateBy: item.createBy,
       };
       const res =
         item == null
@@ -99,6 +94,28 @@ const ModalAddService = ({ show, onSuccess, handleCancel, item }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
+            <Form.Item
+            label="Tên dịch vụ"
+            name="name"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Mô tả"
+            name="description"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <TextArea />
+          </Form.Item>
           <Form.Item
             label="Danh mục dịch vụ"
             rules={[
@@ -132,28 +149,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel, item }) => {
               <Select.Option value="LIKE">LIKE</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            label="Tên dịch vụ"
-            name="name"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Mô tả"
-            name="description"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <TextArea />
-          </Form.Item>
+        
           {item != null && (
             <Form.Item label="Trạng thái" name="status">
               <Switch defaultChecked={item.status == "ACTIVE" ? true : false} />
