@@ -68,7 +68,7 @@ const loadUser = async () => {
 
 const changePassword = async (data) => {
   return axios({
-    method: "PUT",
+    method: "POST",
     url: API_URL + `/auth/change-password`,
     data: data,
   })

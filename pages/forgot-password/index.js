@@ -94,7 +94,8 @@ export default function ForgotPassword() {
     console.log(changePasswordRequets);
     try {
       changePassword(changePasswordRequets).then((res) => {
-        if (res.data.status == 1) {
+        console.log(res);
+        if (res.data.StatusCode == 200) {
           message.success("Change password success!");
           success();
           // router.push("/login");
