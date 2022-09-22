@@ -33,7 +33,7 @@ const items = [
   ]),
 
   getItem("Dịch vụ", "3", <CarOutlined />, [
-    getItem("danh mục dịch vụ", "service-category"),
+    getItem("danh mục dịch vụ", "category"),
     getItem("dịch vụ", "service"),
     getItem("bảng giá", "priceService"),
   ]),

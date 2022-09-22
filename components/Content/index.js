@@ -6,6 +6,7 @@ import Loading from "components/Loading";
 import { logout } from "api/authAPI";
 import UserPage from "components/User";
 import ServicePage from "components/Service";
+import CategoryPage from "components/Category";
 
 const { Content } = Layout;
 
@@ -70,8 +71,8 @@ const MyContent = ({ keyMenu }) => {
         return <ServicePage />;
       case "user":
         return <UserPage />;
-      case "service-category":
-        return <ServicePage />;
+      case "category":
+        return <CategoryPage />;
       default:
         break;
     }
