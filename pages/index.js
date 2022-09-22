@@ -25,9 +25,9 @@ const Home = () => {
     try {
       loadUser().then((res) => {
         console.log("res:", res);
-        if (res.data.status == 1) {
+        if (res.data.StatusCode == 200) {
         } else {
-          if (res.status == 400) {
+          if (res.data.StatusCode == 400) {
             message.error(res.message);
           }
         }

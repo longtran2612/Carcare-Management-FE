@@ -18,7 +18,6 @@ const { Title } = Typography;
 
 export default function LoginPage() {
   const dispatch = useDispatch();
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -27,20 +26,19 @@ export default function LoginPage() {
     setLoading(true);
     login(values)
       .then((res) => {
-        if (res.data.status == 1) {
-          dispatch(setLogin(res.data.data));
+        if (res.data.StatusCode == 200) {
+          dispatch(setLogin(res.data.Data));
           router.push("/");
         } else {
-          if (res.status == 400) {
-            message.error(res.message);
+          if (res.status == 422) {
+            message.error(res.data.message);
           }
         }
         setLoading(false);
       })
       .catch((err) => {
         setLoading(false);
-        setError(err.message);
-        message.error(err.message);
+        message.error(res.data.message);
       });
   };
 

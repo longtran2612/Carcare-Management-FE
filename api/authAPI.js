@@ -56,7 +56,7 @@ const loadUser = async () => {
   console.log("username:", username);
   return axiosClient()({
     method: "GET",
-    url: API_URL + `/users/phone=${username}`,
+    url: API_URL + `/auth/find-by-username/${username}`,
   })
     .then((res) => {
       return res;
@@ -69,7 +69,7 @@ const loadUser = async () => {
 const changePassword = async (data) => {
   return axios({
     method: "PUT",
-    url: API_URL + `/auth/changePassword`,
+    url: API_URL + `/auth/change-password`,
     data: data,
   })
     .then((res) => {
@@ -83,7 +83,7 @@ const changePassword = async (data) => {
 const  checkExistPhone = async (data) => {
   return axios({
     method: "GET",
-    url: API_URL + `/auth/check/${data}`,
+    url: API_URL + `/auth/check-existence/${data}`,
   })
     .then((res) => {
       return res;

@@ -33,7 +33,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel, item }) => {
       if (res.data.status == 1) {
         openNotification("Tạo dịch vụ thành công!", "");
         handleCancel();
-        onSuccess(res.data.data);
+        onSuccess(res.data.Data);
       }
     } catch (error) {
       console.log(error);
@@ -45,7 +45,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel, item }) => {
   const handleFetchCategory = async () => {
     try {
       const res = await fetchCategoryServiceApi();
-      setListCategory(res.data.data);
+      setListCategory(res.data.Data);
     } catch (error) {
       console.log(error);
     }

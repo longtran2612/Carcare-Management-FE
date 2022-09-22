@@ -9,22 +9,18 @@ const { Title } = Typography;
 
 export default function RegistryPage() {
   const router = useRouter();
-  const [error, setError] = useState(false);
   const onFinish = (values) => {
     onRegister(values)
       .then((res) => {
-        console.log("res:", res);
-        if (res.status === 200) {
-          console.log(res.data);
+        if (res.data.StatusCode === 200) {
           router.push("/login");
         } else {
-          if (res.status === 400) {
-            message.error(res.message);
+          if (res.data.StatusCode === 422) {
+            message.error(res.data.message);
           }
         }
       })
       .catch((err) => {
-        setError(err.message);
         message.error(err.message);
       });
   };

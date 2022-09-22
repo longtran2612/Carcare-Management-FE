@@ -36,13 +36,13 @@ const MyHeader = () => {
     logout()
       .then((res) => {
         console.log("res:", res);
-        if (res.data.status == 1) {
-          console.log(res.data);
+        if (res.data.StatusCode == 200) {
+          console.log(res.data.message);
           dispatch(setLogout());
           router.push("/login");
         } else {
-          if (res.status == 400) {
-            message.error(res.message);
+          if (res.status == 422) {
+            message.error(res.data.message);
           }
         }
       })

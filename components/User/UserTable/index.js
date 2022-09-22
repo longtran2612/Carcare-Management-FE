@@ -4,6 +4,7 @@ import { getUsers } from "api/userAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddUser
  from "components/Modal/ModelAddUser";
+ import {message} from "antd";
 function UserTable({}) {
   const [users, setUsers] = useState([]);
   const [modalUser, setModalUser] = useState(false);
@@ -92,12 +93,11 @@ function UserTable({}) {
 
   const handleUsers = async () => {
     try {
-      console.log("handleUsers");
       getUsers().then((res) => {
-        if (res.data.status == 1) {
-          setUsers(res.data.data);
+        if (res.data.StatusCode == 200) {
+          setUsers(res.data.Data);
         } else {
-          message.error(res.message);
+          message.error(res.data.message);
         }
       });
     } catch (err) {

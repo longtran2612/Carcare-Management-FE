@@ -78,10 +78,10 @@ function ServiceTable({}) {
   const handleGetServices = async () => {
     try {
       getServices().then((res) => {
-        if (res.data.status == 1) {
-          setServices(res.data.data);
+        if (res.data.StatusCode == 200) {
+          setServices(res.data.Data);
         } else {
-          message.error(res.message);
+          message.error(res.data.message);
         }
       });
     } catch (err) {
@@ -91,7 +91,7 @@ function ServiceTable({}) {
   const handleRemoveService = async () => {
     try {
       const res = await removeServiceApi(id);
-      if (res.data.status == 1) {
+      if (res.data.StatusCode == 200) {
         handleGetServices();
         setModalQuestion(false);
         setId(null);
