@@ -25,7 +25,7 @@ const { SubMenu } = Menu;
 const MyHeader = () => {
   const [keyMenu, setKeyMenu] = useState(1);
   const dispatch = useDispatch();
-  const { isLogin } = useSelector((state) => state.authSlice);
+  const { isLogin , user } = useSelector((state) => state.authSlice);
   const router = useRouter();
 
   const handleOnClick = (e) => {
@@ -35,9 +35,7 @@ const MyHeader = () => {
   const handleLogout = () => {
     logout()
       .then((res) => {
-        console.log("res:", res);
         if (res.data.StatusCode == 200) {
-          console.log(res.data.message);
           dispatch(setLogout());
           router.push("/login");
         } else {
@@ -65,8 +63,10 @@ const MyHeader = () => {
         onClick={handleOnClick}
         selectedKeys={keyMenu}
       >
-        {/* <Menu.Item key={1} icon={<HomeOutlined />}>
-          <Link href="/">Trang chủ</Link>
+        {/* {user.roles === 'ROLE_USER' (
+
+        <Menu.Item key={1} icon={<HomeOutlined />}>
+          <Link href="/home">Trang chủ</Link>
         </Menu.Item>
 
         <Menu.Item key={4} icon={<ShopOutlined />}>
@@ -77,13 +77,7 @@ const MyHeader = () => {
           <Link href="/service">Dịch vụ</Link>
         </Menu.Item>
         
-        <Menu.Item key={2} icon={<DropboxOutlined />}>
-          <Link href="/car">Sản phẩm</Link>
-        </Menu.Item>
-
-        <Menu.Item key={3} icon={<CarFilled />}>
-          <Link href="/customer">Khách hàng</Link>
-        </Menu.Item> */}
+  )} */}
 
         {isLogin ? (
           <SubMenu key="10_1" icon={<UserOutlined />} title="Cá nhân">
