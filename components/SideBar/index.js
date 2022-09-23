@@ -5,13 +5,11 @@ import {
   DollarOutlined,
   ShopOutlined,
   CarOutlined,
-  BorderOutlined,
-  DropboxOutlined,
+  BorderOutlined
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { Typography } from "antd";
 import React, { useState } from "react";
-import Link from "next/link";
 const { Title } = Typography;
 import { useRouter } from "next/router";
 
@@ -79,7 +77,7 @@ const SideBar = ({ handleOpenKey }) => {
       </div>
       <Menu
         mode="inline"
-        // style={{ height: "100%", borderRight: 0 ,backgroundColor: '#89ddf0' }}
+        style={{ height: "100%" }}
         theme="light"
         items={items}
         onClick={onClick}

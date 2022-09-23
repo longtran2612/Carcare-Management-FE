@@ -54,6 +54,8 @@ const AdminPage = () => {
         theme="light"
         style={{
           height: "100vh",
+          maxHeight: "1000vh",
+          // height: "100%",
           overflow: "auto",
         }}
       >
