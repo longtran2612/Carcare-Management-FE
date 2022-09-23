@@ -9,30 +9,30 @@ import Cookies from "js-cookie";
 function HomePage() {
 
     const router = useRouter();
-    const handleAuthentication = async () => {
-        let accessToken = Cookies.get("accessToken");
-        console.log(accessToken);
-        if (accessToken == null) {
-          router.push("/login");
-          return;
-        }
-        try {
-          loadUser().then((res) => {
-            console.log("res:", res);
-            if (res.data.StatusCode == 200) {
-            } else {
-              if (res.data.StatusCode == 400) {
-                message.error(res.message);
-              }
-            }
-          });
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      useEffect(() => {
-        handleAuthentication();
-      }, []);
+    // const handleAuthentication = async () => {
+    //     let accessToken = Cookies.get("accessToken");
+    //     console.log(accessToken);
+    //     if (accessToken == null) {
+    //       router.push("/login");
+    //       return;
+    //     }
+    //     try {
+    //       loadUser().then((res) => {
+    //         console.log("res:", res);
+    //         if (res.data.StatusCode == 200) {
+    //         } else {
+    //           if (res.data.StatusCode == 400) {
+    //             message.error(res.message);
+    //           }
+    //         }
+    //       });
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   };
+    //   useEffect(() => {
+    //     handleAuthentication();
+    //   }, []);
   return (
     <>
       <Layout
