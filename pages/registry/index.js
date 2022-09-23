@@ -1,27 +1,32 @@
 import Link from "next/link";
-import axios from "axios";
-import { useState } from "react";
 import { FacebookOutlined, GoogleOutlined , PhoneOutlined ,LockOutlined ,UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Col, Row, message, Typography , Divider } from "antd";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { onRegister } from "api/authAPI";
+import { useState } from "react";
 const { Title } = Typography;
 
 export default function RegistryPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const onFinish = (values) => {
+    setLoading(true);
     onRegister(values)
       .then((res) => {
-        if (res.data.StatusCode === 200) {
+        if (res.data.StatusCode == 200) {
           router.push("/login");
         } else {
           if (res.data.StatusCode === 422) {
             message.error(res.data.message);
           }
         }
+        setLoading(false);
       })
       .catch((err) => {
-        message.error(err.message);
+        setLoading(false);
+        message.error('Đăng ký thất bại! Số điện thoại đã tồn tại');
+        message.error('Vui lòng nhập số điện thoại khác');
+       
       });
   };
   return (
@@ -70,7 +75,8 @@ export default function RegistryPage() {
                 },
               ]}
             >
-              <Input prefix={<PhoneOutlined className="site-form-item-icon" />} placeholder="Nhập vào Số điện thoại" />
+              <Input        maxLength={10}
+                  minLength={10} prefix={<PhoneOutlined className="site-form-item-icon" />} placeholder="Nhập vào Số điện thoại" />
             </Form.Item>
             <Form.Item
               label="Họ tên"
@@ -125,6 +131,7 @@ export default function RegistryPage() {
               type="primary
                         "
               htmlType="submit"
+              loading={loading}
             >
               Đăng ký
             </Button>

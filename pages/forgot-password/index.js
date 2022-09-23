@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Divider, InputNumber, Typography } from "antd";
+import { Divider, Typography } from "antd";
 import { PhoneOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Col, Row, message, Modal, Steps } from "antd";
 import { useRouter } from "next/router";
@@ -27,6 +27,7 @@ export default function ForgotPassword() {
 
   const getOtp = async (values) => {
     // console.log(values);
+    setLoading(true);
     setPhoneNumber(values.phone);
     console.log(phoneNumber);
     const checkExist = await checkExistPhone(values.phone).then((res) => {
@@ -45,12 +46,15 @@ export default function ForgotPassword() {
       setResult(response);
       setFlag(true);
       setStep(1);
+      setLoading(false);
     } catch (err) {
       message.error(err.message);
+      setLoading(false);
     }
   };
 
   function setUpRecaptha(number) {
+    setLoading(true);
     // const recaptchaVerifier = new RecaptchaVerifier(
     //   "recaptcha-container",
     //   {},
@@ -68,10 +72,12 @@ export default function ForgotPassword() {
       auth
     );
     recaptchaVerifier.render();
+    setLoading(false);
     return signInWithPhoneNumber(auth, number, recaptchaVerifier);
   }
 
   const verifyOtp = async (e) => {
+    setLoading(true);
     console.log(result);
     if (result === null || result === "") {
       message.error("Vui lòng nhập số điện thoại ở bước 1");
@@ -81,12 +87,15 @@ export default function ForgotPassword() {
       await result.confirm(otp);
       setStep(2);
       message.success("Xác thực thành công!");
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       message.error("Mã OTP chưa chính xác");
     }
   };
 
   const handleChangePassword = async (values) => {
+    setLoading(true);
     const changePasswordRequets = {
       username: phoneNumber,
       newPassword: values.password,
@@ -102,8 +111,11 @@ export default function ForgotPassword() {
         } else {
           message.error(res.data.message);
         }
-      });
+        setLoading(false);
+      }
+      );
     } catch (err) {
+      setLoading(false);
       message.error(err.message);
     }
   };
@@ -175,7 +187,7 @@ export default function ForgotPassword() {
               >
                 <Input  prefix={<PhoneOutlined className="site-form-item-icon" />}
                   placeholder="Nhập số điện thoại"
-                  // maxLength={10}
+                  maxLength={10}
                   minLength={10}
                 />
                 {/* <CountryPhoneInput  short='VN'  placeholder="Nhập số điện thoại" /> */}
@@ -201,6 +213,7 @@ export default function ForgotPassword() {
                 type="primary
                             "
                 htmlType="submit"
+                loading={loading}
               >
                 Gửi mã OTP
               </Button>
@@ -250,6 +263,7 @@ export default function ForgotPassword() {
                 type="primary
                             "
                 htmlType="submit"
+                loading={loading}
               >
                 Xác nhận
               </Button>
@@ -302,6 +316,7 @@ export default function ForgotPassword() {
                 type="primary
                             "
                 htmlType="submit"
+                loading={loading}
               >
                 Xác nhận
               </Button>

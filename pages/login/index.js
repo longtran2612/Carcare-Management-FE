@@ -89,7 +89,8 @@ export default function LoginPage() {
                 },
               ]}
             >
-              <Input
+              <Input        maxLength={10}
+                  minLength={10}
                 prefix={<PhoneOutlined className="site-form-item-icon" />}
                 placeholder="Nhập vào số điện thoại"
               />
