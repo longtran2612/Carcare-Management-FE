@@ -47,20 +47,21 @@ const AdminPage = () => {
       }}
     >
       <Sider
-        trigger={null}
+      className="site-layout-background"
         collapsible
+        onCollapse={(value) => setCollapsed(value)}
         collapsed={collapsed}
+        theme="light"
         style={{
           height: "100vh",
           overflow: "auto",
         }}
       >
-        <SideBar collapsed={collapsed} handleOpenKey={(key) => setKey(key)} />
+        <SideBar  collapsed={collapsed}  handleOpenKey={(key) => setKey(key)} />
       </Sider>
       <Layout className="site-layout">
         <MyHeader />
         <MyContent keyMenu={key} />
-        {/* <Footer /> */}
         <Footer style={{ textAlign: "center" }}>
           ©2022 Coppy right by VLCARSERVICE
         </Footer>

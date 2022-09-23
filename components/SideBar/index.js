@@ -2,7 +2,7 @@ import {
   BarChartOutlined,
   UserOutlined,
   TagsOutlined,
-  ShoppingCartOutlined,
+  DollarOutlined,
   ShopOutlined,
   CarOutlined,
   BorderOutlined,
@@ -33,30 +33,25 @@ const items = [
   ]),
 
   getItem("Dịch vụ", "3", <CarOutlined />, [
-    getItem("danh mục dịch vụ", "category"),
-    getItem("dịch vụ", "service"),
-    getItem("bảng giá", "priceService"),
+    getItem("Danh mục", "category"),
+    getItem("Dịch vụ", "service"),
   ]),
-  getItem("Sản phẩm", "4", <DropboxOutlined />, [
-    getItem("danh mục sản phẩm", "product-category"),
-    getItem("Sản phẩm", "product"),
-    getItem("bảng giá", "priceProduct"),
+  getItem("Bảng giá", "4", <DollarOutlined />, [getItem("bảng giá", "price")]),
+  getItem("Xe", "5", <CarOutlined />, [
+    getItem("Xe khách hàng", "car-model"),
+    getItem("Mẫu xe", "car"),
   ]),
-  getItem("Quản lý xe", "5", <CarOutlined />, [
-    getItem("Xe", "car-model"),
-    getItem("Xe khách hàng", "customer-car"),
-  ]),
-  getItem("Quản lý người dùng", "user", <UserOutlined />, [
+  getItem("Người dùng", "6", <UserOutlined />, [
     getItem("Người dùng", "user"),
     getItem("Khách hàng", "customer"),
     getItem("Nhóm người dùng", "customer-group"),
   ]),
-  getItem("Quản lý trương trình khuyến mãi", "7", <TagsOutlined />, [
-    getItem("Danh sách trương trình khuyến mãi", "promotion"),
+  getItem("Trương trình khuyến mãi", "7", <TagsOutlined />, [
+    getItem("Trương trình khuyến mãi", "promotion"),
   ]),
   getItem("Thống kê - Báo cáo", "8", <BarChartOutlined />, [
-    getItem("Bán hàng - Trả hàng", "sell-report"),
-    getItem("Lợi nhuận - Doanh thu", "income"),
+    getItem("Doanh số", "sell-report"),
+    getItem("Lợi nhuận", "income"),
   ]),
 ];
 
@@ -79,12 +74,13 @@ const SideBar = ({ handleOpenKey }) => {
 
   return (
     <div>
-      <div className="logo">
-        <Title level={5}>Dashboard</Title>
+      <div className="logo" >
+        <Title className="textAlign" style={{height: '53px',  backgroundColor: "#C7E5F4",boxShadow: " 0 4px 4px -2px #D0EDF3"}}  level={5}>Dashboard</Title>
       </div>
       <Menu
         mode="inline"
-        theme="dark"
+        // style={{ height: "100%", borderRight: 0 ,backgroundColor: '#89ddf0' }}
+        theme="light"
         items={items}
         onClick={onClick}
         defaultSelectedKeys={["shop"]}
