@@ -9,6 +9,7 @@ import ServicePage from "components/Service";
 import CategoryPage from "components/Category";
 import CarModelPage from "components/CarModel";
 import CarPage from "components/Car";
+import PriceHeaderPage from "components/PriceHeader";
 const { Content } = Layout;
 
 const MyContent = ({ keyMenu }) => {
@@ -80,6 +81,8 @@ const MyContent = ({ keyMenu }) => {
         return <CarPage/>;
       case "car-model":
         return <CarModelPage/>;
+        case "price":
+          return <PriceHeaderPage/>;
       default:
         break;
     }

@@ -2,10 +2,10 @@ import axios from "axios";
 
 import { API_URL } from "./url";
 
-const getCar = () => {
+const getPrices = () => {
     return axios({
       method: "GET",
-      url: API_URL + `/car`,
+      url: API_URL + `/prices`,
     })
       .then((res) => {
         return res;
@@ -14,11 +14,10 @@ const getCar = () => {
         throw err;
       });
   };
-  
-  const getCarById = (data) => {
+  const getPricesByParent = (data) => {
     return axios({
       method: "GET",
-      url: API_URL + `/car/${data}`,
+      url: API_URL + `/prices/parent=${data}`,
     })
       .then((res) => {
         return res;
@@ -27,23 +26,10 @@ const getCar = () => {
         throw err;
       });
   };
-  const createCar = (data) => {
+  const getPricesByHeader = (data) => {
     return axios({
-      method: "POST",
-      url: API_URL + `/cars`,
-      data: data,
-    })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
-  };
-  const deleteCar = (data) => {
-    return axios({
-      method: "DELETE",
-      url: API_URL + `/cars/${data}`,
+      method: "GET",
+      url: API_URL + `/prices/header=${data}`,
     })
       .then((res) => {
         return res;
@@ -53,4 +39,31 @@ const getCar = () => {
       });
   };
 
-export { getCar, getCarById, createCar, deleteCar };
+  const getPriceById = (data) => {
+    return axios({
+      method: "GET",
+      url: API_URL + `/prices/${data}`,
+    })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+  const createPrice = (data) => {
+    return axios({
+      method: "POST",
+      url: API_URL + `/prices`,
+      data: data,
+    })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+
+
+export { getPriceById,getPricesByHeader,getPricesByParent, getPrices, createPrice };
