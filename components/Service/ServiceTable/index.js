@@ -1,15 +1,16 @@
-import { Table, Tag, Space, Button } from "antd";
+import { Table, Tag, Button } from "antd";
 import React, { useState, useEffect } from "react";
 import { getServices, removeServiceApi } from "api/serviceAPI";
 import ModalAddService from "components/Modal/ModalAddService";
-import ModalQuestion from "components/Modal/ModalQuestion";
+import { useRouter } from "next/router";
+import ServiceDetail from "../ServiceDetail";
 
 function ServiceTable({}) {
   const [services, setServices] = useState([]);
-  const [servicesItem, setServicesItem] = useState(null);
   const [modalService, setModalService] = useState(false);
-  const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
+  const router = useRouter();
+  const { serviceId } = router.query;
 
   const columns = [
     {
@@ -46,33 +47,6 @@ function ServiceTable({}) {
         );
       },
     },
-    {
-      title: "Hành động",
-      key: "action",
-      render: (_, record) => (
-        <Space size={8}>
-          <Button
-            type="primary"
-            onClick={() => {
-              setModalService(true);
-              setServicesItem(record);
-            }}
-          >
-            Cập nhật
-          </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              setModalQuestion(true);
-              setId(record.id);
-            }}
-          >
-            Xóa
-          </Button>
-        </Space>
-      ),
-    },
   ];
 
   const handleGetServices = async () => {
@@ -88,16 +62,6 @@ function ServiceTable({}) {
       console.log(err);
     }
   };
-  const handleRemoveService = async () => {
-    try {
-      const res = await removeServiceApi(id);
-      if (res.data.StatusCode == 200) {
-        handleGetServices();
-        setModalQuestion(false);
-        setId(null);
-      }
-    } catch (error) {}
-  };
 
   useEffect(() => {
     handleGetServices();
@@ -111,21 +75,33 @@ function ServiceTable({}) {
 
   return (
     <>
-      <Button type="primary" onClick={() => setModalService(true)}>
-        Thêm dịch vụ
-      </Button>
-      <Table columns={columns} dataSource={services} />
+      {serviceId ? (
+        <ServiceDetail
+          serviceId={serviceId}
+          onUpdateService={handleGetServices}
+        />
+      ) : (
+        <div>
+          <Button type="primary" onClick={() => setModalService(true)}>
+            Thêm dịch vụ
+          </Button>
+          <Table
+            columns={columns}
+            dataSource={services}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  router.push(`/admin?serviceId=${record.id}`);
+                },
+              };
+            }}
+          />
+        </div>
+      )}
       <ModalAddService
         show={modalService}
         handleCancel={() => setModalService(false)}
         onSuccess={(data) => handleSuccessCreateService(data)}
-        item={servicesItem}
-      />
-      <ModalQuestion
-        title="Bạn có chắc chắn muốn xóa dịch vụ này không?"
-        visible={modalQuestion}
-        handleCancel={() => setModalQuestion(false)}
-        handleOk={() => handleRemoveService()}
       />
     </>
   );

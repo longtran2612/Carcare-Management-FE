@@ -38,7 +38,7 @@ export default function LoginPage() {
       })
       .catch((err) => {
         setLoading(false);
-        message.error(res.data.message);
+        message.error(err.response.data.message);
       });
   };
 
@@ -89,8 +89,9 @@ export default function LoginPage() {
                 },
               ]}
             >
-              <Input        maxLength={10}
-                  minLength={10}
+              <Input
+                maxLength={10}
+                minLength={10}
                 prefix={<PhoneOutlined className="site-form-item-icon" />}
                 placeholder="Nhập vào số điện thoại"
               />

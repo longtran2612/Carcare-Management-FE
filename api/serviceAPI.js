@@ -15,10 +15,10 @@ const getServices = (data) => {
     });
 };
 
-const getService = (data) => {
+const getServiceApi = (id) => {
   return axios({
     method: "GET",
-    url: API_URL + `/services/${data}`,
+    url: API_URL + `/services/${id}`,
   });
 };
 const createService = (data) => {
@@ -36,11 +36,10 @@ const removeServiceApi = (id) => {
   });
 };
 
-const updateServiceApi = (data) => {
-  console.log(data);
+const updateServiceApi = (data, id) => {
   return axios({
     method: "PUT",
-    url: API_URL + `/services/${data.id}`,
+    url: API_URL + `/services/${id}`,
     data: data,
   });
 };
@@ -56,7 +55,7 @@ const fetchCategoryServiceApi = () => {
 
 export {
   getServices,
-  getService,
+  getServiceApi,
   createService,
   removeServiceApi,
   updateServiceApi,

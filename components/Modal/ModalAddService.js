@@ -1,40 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, Select, Switch } from "antd";
-import {
-  createService,
-  fetchCategoryServiceApi,
-  updateServiceApi,
-} from "api/serviceAPI";
+import { createService, fetchCategoryServiceApi } from "api/serviceAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
-import Cookies from "js-cookie";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const ModalAddService = ({ show, onSuccess, handleCancel, item }) => {
+const ModalAddService = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
   const onFinish = async (values) => {
     try {
-      let username = Cookies.get("username");
-      let statusTemp = values.status == false ? "INACTIVE" : "ACTIVE";
-      let body = {
-        id: values.id,
-        type: values.type,
-        name: values.name,
-        description: values.description,
-        categoryId: values.categoryId,
-        status: values.status ? statusTemp : item.status,
-      };
-      const res =
-        item == null
-          ? await createService({ ...values, createBy: username })
-          : await updateServiceApi(body);
-      if (res.data.status == 1) {
-        openNotification("Tạo dịch vụ thành công!", "");
-        handleCancel();
-        onSuccess(res.data.Data);
-      }
+      const res = await createService(values);
+      openNotification("Tạo dịch vụ thành công!", "");
+      handleCancel();
+      onSuccess(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -54,16 +34,6 @@ const ModalAddService = ({ show, onSuccess, handleCancel, item }) => {
   useEffect(() => {
     if (show) {
       handleFetchCategory();
-    }
-  }, [show]);
-  useEffect(() => {
-    if (show && item != null) {
-      form.setFieldsValue({
-        name: item.name,
-        type: item.type,
-        description: item.description,
-        categoryId: item.categoryId,
-      });
     }
   }, [show]);
 
@@ -94,7 +64,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel, item }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-            <Form.Item
+          <Form.Item
             label="Tên dịch vụ"
             name="name"
             rules={[
@@ -149,12 +119,6 @@ const ModalAddService = ({ show, onSuccess, handleCancel, item }) => {
               <Select.Option value="LIKE">LIKE</Select.Option>
             </Select>
           </Form.Item>
-        
-          {item != null && (
-            <Form.Item label="Trạng thái" name="status">
-              <Switch defaultChecked={item.status == "ACTIVE" ? true : false} />
-            </Form.Item>
-          )}
         </Form>
       </Modal>
     </>

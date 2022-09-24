@@ -6,13 +6,7 @@ const getCategories = (data) => {
   return axios({
     method: "GET",
     url: API_URL + `/service-categories`,
-  })
-    .then((res) => {
-      return res;
-    })
-    .catch((err) => {
-      throw err;
-    });
+  });
 };
 const createCategory = (data) => {
   return axios({
