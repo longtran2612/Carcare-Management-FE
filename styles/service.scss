@@ -1,0 +1,18 @@
+.service-content {
+  padding: 10px 25px;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__description {
+    margin: 10px 0px;
+  }
+  &__type span:first-child {
+    font-weight: 500;
+  }
+}
+.service-action {
+  display: flex;
+  justify-content: flex-end;
+}
