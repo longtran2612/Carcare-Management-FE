@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { getPriceHeaders } from "api/PriceHeaderAPI";
 import ModalAddService from "components/Modal/ModalAddService";
 import ModalQuestion from "components/Modal/ModalQuestion";
+import { useRouter } from "next/router";
+import PriceHeaderDetail from "../PriceHeaderDetail";
 
 function PriceHeaderTable({}) {
   const [priceHeaders, setPriceHeaders] = useState([]);
@@ -10,6 +12,8 @@ function PriceHeaderTable({}) {
   // const [modalService, setModalService] = useState(false);
   // const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
+  const router = useRouter();
+  const { priceHeaderId } = router.query;
 
   const columns = [
     {
@@ -121,24 +125,31 @@ function PriceHeaderTable({}) {
 
   return (
     <>
-      {/* <Button type="primary" onClick={() => setModalService(true)}>
-        Thêm dịch vụ
-      </Button> */}
-      <Table columns={columns} dataSource={priceHeaders} />
-      {/* <ModalAddService
-        show={modalService}
-        handleCancel={() => setModalService(false)}
-        onSuccess={(data) => handleSuccessCreateService(data)}
-        item={servicesItem}
-      />
-      <ModalQuestion
-        title="Bạn có chắc chắn muốn xóa dịch vụ này không?"
-        visible={modalQuestion}
-        handleCancel={() => setModalQuestion(false)}
-        handleOk={() => handleRemoveService()}
-      /> */}
+     {priceHeaderId ? (
+        <PriceHeaderDetail
+          priceHeaderId={priceHeaderId}
+          onUpdatePriceHeaders={handleGetPriceHeaders}
+        />
+      ) : (
+        <div>
+          <Table
+            columns={columns}
+            dataSource={priceHeaders}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  router.push(`/admin?priceHeaderId=${record.id}`);
+                },
+              };
+            }}
+          />
+      </div>
+     
+      )
+      }
     </>
   );
-}
+    }
+
 
 export default PriceHeaderTable;

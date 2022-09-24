@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { getServices, removeServiceApi } from "api/serviceAPI";
 import ModalAddService from "components/Modal/ModalAddService";
 import { useRouter } from "next/router";
-import ServiceDetail from "../ServiceDetail";
+import PriceHeaderDetail from "components/PriceHeader/PriceHeaderDetail";
 
 function ServiceTable({}) {
   const [services, setServices] = useState([]);
