@@ -67,8 +67,6 @@ const MyContent = ({ keyMenu }) => {
   };
   const renderViewByKey = () => {
     switch (keyMenu) {
-      case "shop":
-        return <UserPage />;
       case "service":
         return <ServicePage />;
       case "category":
@@ -89,26 +87,14 @@ const MyContent = ({ keyMenu }) => {
   };
 
   return (
-    // <div ref={setContainer}>
-    //   {breadcrumbComponent()}
-    //   <Content
-    //     className="site-layout-background"
-    //     style={{
-    //       margin: "5px 5px",
-    //       padding: 24,
-    //       minHeight: 280,
-    //     }}
-    //   >
-    //   <UserPage/>
-    //   </Content>
-    // </div>
     <>
       <Content
         className="site-layout-background"
         style={{
           margin: "5px 5px",
           padding: 10,
-          minHeight: 280,
+          minHeight: 500,
+          backgroundColor: "#FBE6FF",
         }}
       >
         {renderViewByKey()}

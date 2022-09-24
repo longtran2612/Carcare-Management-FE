@@ -11,7 +11,7 @@ const { Content, Sider, Footer } = Layout;
 
 const AdminPage = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [key, setKey] = useState("shop");
+  const [key, setKey] = useState("car-slot");
 
   const router = useRouter();
 
@@ -55,7 +55,6 @@ const AdminPage = () => {
         style={{
           height: "100vh",
           maxHeight: "1000vh",
-          // height: "100%",
           overflow: "auto",
         }}
       >
@@ -64,8 +63,8 @@ const AdminPage = () => {
       <Layout className="site-layout">
         <MyHeader />
         <MyContent keyMenu={key} />
-        <Footer style={{ textAlign: "center" }}>
-          ©2022 Coppy right by VLCARSERVICE
+        <Footer style={{ backgroundColor:'white', textAlign: "center" }}>
+          ©2022 Coppy right by VL-CARCARE
         </Footer>
       </Layout>
     </Layout>

@@ -24,7 +24,7 @@ function getItem(label, key, icon, children, type) {
 }
 
 const items = [
-  getItem("Cửa hàng", "shop", <ShopOutlined />),
+  getItem("Cửa hàng", "car-slot", <ShopOutlined />),
   getItem("Hóa đơn", "2", <BorderOutlined />, [
     getItem("Tạo mới hóa đơn", "order-create"),
     getItem("Danh sách hóa đơn", "order-list"),
@@ -67,13 +67,14 @@ const SideBar = ({ handleOpenKey }) => {
 
   const onClick = ({ item, key, keyPath, domEvent }) => {
     console.log({ item, key, keyPath, domEvent });
+    router.push("/admin");
     handleOpenKey(key);
   };
 
   return (
     <div>
       <div className="logo" >
-        <Title className="textAlign" style={{height: '53px',  backgroundColor: "#C7E5F4",boxShadow: " 0 4px 4px -2px #D0EDF3"}}  level={5}>Dashboard</Title>
+        <Title className="textAlign" style={{height: '53px',  backgroundColor: "#B1DEF4",boxShadow: " 0 4px 4px -2px #D0EDF3"}}  level={5}>Dashboard</Title>
       </div>
       <Menu
         mode="inline"
