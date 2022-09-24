@@ -16,6 +16,18 @@ const getUsers = async () => {
       throw err;
     });
 };
+const getUserById = async (id) => {
+  return axiosClient()({
+    method: "GET",
+    url: API_URL + `/users/${id}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
 const createUser = async (data) => {
   return axiosClient()({
@@ -45,4 +57,4 @@ const updateUser = async (data) => {
     });
 };
 
-export { getUsers , createUser, updateUser};
+export { getUsers , createUser,getUserById, updateUser};
