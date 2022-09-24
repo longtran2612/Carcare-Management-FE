@@ -7,7 +7,8 @@ import { logout } from "api/authAPI";
 import UserPage from "components/User";
 import ServicePage from "components/Service";
 import CategoryPage from "components/Category";
-
+import CarModelPage from "components/CarModel";
+import CarPage from "components/Car";
 const { Content } = Layout;
 
 const MyContent = ({ keyMenu }) => {
@@ -76,9 +77,9 @@ const MyContent = ({ keyMenu }) => {
       case "user-group":
         return <UserPage />;
       case "car":
-        return <></>;
+        return <CarPage/>;
       case "car-model":
-        return <></>;
+        return <CarModelPage/>;
       default:
         break;
     }

@@ -34,15 +34,15 @@ const items = [
     getItem("Danh mục", "category"),
     getItem("Dịch vụ", "service"),
   ]),
-  getItem("Bảng giá", "4", <DollarOutlined />, [getItem("bảng giá", "price")]),
+  getItem("Bảng giá", "4", <DollarOutlined />, [
+    getItem("bảng giá", "price")]),
   getItem("Xe", "5", <CarOutlined />, [
-    getItem("Xe khách hàng", "car-model"),
-    getItem("Mẫu xe", "car"),
+    getItem("Xe khách hàng", "car"),
+    getItem("Mẫu xe", "car-model"),
   ]),
   getItem("Người dùng", "6", <UserOutlined />, [
     getItem("Người dùng", "user"),
-    getItem("Khách hàng", "customer"),
-    getItem("Nhóm người dùng", "customer-group"),
+    getItem("Nhóm người dùng", "user-group"),
   ]),
   getItem("Trương trình khuyến mãi", "7", <TagsOutlined />, [
     getItem("Trương trình khuyến mãi", "promotion"),

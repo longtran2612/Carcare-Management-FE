@@ -5,7 +5,7 @@ import { API_URL } from "./url";
 const getCar = () => {
     return axios({
       method: "GET",
-      url: API_URL + `/car`,
+      url: API_URL + `/cars`,
     })
       .then((res) => {
         return res;
@@ -18,7 +18,7 @@ const getCar = () => {
   const getCarById = (data) => {
     return axios({
       method: "GET",
-      url: API_URL + `/car/${data}`,
+      url: API_URL + `/cars/${data}`,
     })
       .then((res) => {
         return res;

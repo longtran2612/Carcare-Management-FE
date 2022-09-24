@@ -5,7 +5,7 @@ import { API_URL } from "./url";
 const getCarModel = () => {
     return axios({
       method: "GET",
-      url: API_URL + `/car`,
+      url: API_URL + `/car-models`,
     })
       .then((res) => {
         return res;
@@ -15,10 +15,10 @@ const getCarModel = () => {
       });
   };
   
-  const getCarById = (data) => {
+  const getCarModelById = (data) => {
     return axios({
       method: "GET",
-      url: API_URL + `/car/${data}`,
+      url: API_URL + `/car-models/${data}`,
     })
       .then((res) => {
         return res;
@@ -27,10 +27,10 @@ const getCarModel = () => {
         throw err;
       });
   };
-  const createCar = (data) => {
+  const createCarModel = (data) => {
     return axios({
       method: "POST",
-      url: API_URL + `/cars`,
+      url: API_URL + `/car-models`,
       data: data,
     })
       .then((res) => {
@@ -40,10 +40,10 @@ const getCarModel = () => {
         throw err;
       });
   };
-  const deleteCar = (data) => {
+  const deleteCarModel = (data) => {
     return axios({
       method: "DELETE",
-      url: API_URL + `/cars/${data}`,
+      url: API_URL + `/car-models/${data}`,
     })
       .then((res) => {
         return res;
@@ -53,4 +53,4 @@ const getCarModel = () => {
       });
   };
 
-export { getCar, getCarById, createCar, deleteCar };
+export {getCarModel,getCarModelById,deleteCarModel,createCarModel};
