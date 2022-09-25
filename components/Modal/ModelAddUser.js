@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button, Form, Input, Select, InputNumber } from "antd";
-import { createUser } from "api/userAPI";
+import { createUser } from "pages/api/userAPI";
 
 const { TextArea } = Input;
 const { Option } = Select;

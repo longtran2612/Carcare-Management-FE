@@ -1,6 +1,6 @@
 import { Table, Tag, Button } from "antd";
 import React, { useState, useEffect } from "react";
-import { getServices, removeServiceApi } from "api/serviceAPI";
+import { getServices, removeServiceApi } from "pages/api/serviceAPI";
 import ModalAddService from "components/Modal/ModalAddService";
 import { useRouter } from "next/router";
 import ServiceDetail from "../ServiceDetail";

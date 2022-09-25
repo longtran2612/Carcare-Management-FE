@@ -15,9 +15,9 @@ import {
   getServiceApi,
   removeServiceApi,
   updateServiceApi,
-} from "api/serviceAPI";
+} from "pages/api/serviceAPI";
 import { openNotification } from "utils/notification";
-import { getCategories } from "api/categoryAPI";
+import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 

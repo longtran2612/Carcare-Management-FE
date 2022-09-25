@@ -1,6 +1,6 @@
 import { Table, Tag, Space, Button } from "antd";
 import React, { useState, useEffect } from "react";
-import { getCarModel } from "api/carModel";
+import { getCarModel } from "pages/api/carModel";
 import ModalAddService from "components/Modal/ModalAddService";
 import ModalQuestion from "components/Modal/ModalQuestion";
 

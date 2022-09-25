@@ -2,7 +2,7 @@ import { Table, Tag, Space, Button } from "antd";
 import React, { useState, useEffect } from "react";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import { message } from "antd";
-import {getCategories} from 'api/categoryAPI'
+import {getCategories} from 'pages/api/categoryAPI'
 
 function CategoryTable({}) {
   const [categories, setCategories] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, Select, Switch, InputNumber } from "antd";
-import { createPrice } from "api/priceAPI";
-import { getServices } from "api/serviceAPI";
+import { createPrice } from "pages/api/priceAPI";
+import { getServices } from "pages/api/serviceAPI";
 
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";

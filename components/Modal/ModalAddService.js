@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, Select, Switch } from "antd";
-import { createService, fetchCategoryServiceApi } from "api/serviceAPI";
+import { createService, fetchCategoryServiceApi } from "pages/api/serviceAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 

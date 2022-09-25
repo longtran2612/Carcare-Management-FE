@@ -9,7 +9,7 @@ import Link from "next/link";
 import Loading from "components/Loading";
 import { auth } from "config/firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { changePassword, checkExistPhone } from "api/authAPI";
+import { changePassword, checkExistPhone } from "pages/api/authAPI";
 import OtpInput from "react-otp-input";
 const { Title } = Typography;
 

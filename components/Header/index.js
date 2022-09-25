@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Menu, message } from "antd";
 import Link from "next/link";
-import { logout } from "api/authAPI";
+import { logout } from "pages/api/authAPI";
 import { setLogout } from "redux/slices/authSlice";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";

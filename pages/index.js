@@ -5,7 +5,7 @@ import  MyFooter  from "components/Footer";
 const {Content} = Layout;
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import {loadUser} from "api/authAPI";
+import {loadUser} from "pages/api/authAPI";
 
 function HomePage() {
     const router = useRouter();

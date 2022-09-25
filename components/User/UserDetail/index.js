@@ -10,7 +10,7 @@ import {
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
-import { getUserById ,updateUserById} from "api/userAPI";
+import { getUserById ,updateUserById} from "pages/api/userAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 

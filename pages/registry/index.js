@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FacebookOutlined, GoogleOutlined , PhoneOutlined ,LockOutlined ,UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button, Col, Row, message, Typography , Divider } from "antd";
 import { useRouter } from "next/router";
-import { onRegister } from "api/authAPI";
+import { onRegister } from "pages/api/authAPI";
 import { useState } from "react";
 const { Title } = Typography;
 

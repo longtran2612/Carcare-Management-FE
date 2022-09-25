@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Tag, Row, Col, Typography, Table, Timeline, Button } from "antd";
-import { getCarSlotDetail } from "api/carSlotApi";
+import { getCarSlotDetail } from "pages/api/carSlotApi";
 import { useRouter } from "next/router";
 
 const CarSlotDetail = ({ carSlotId }) => {

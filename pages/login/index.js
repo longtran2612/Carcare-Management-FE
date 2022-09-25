@@ -13,7 +13,7 @@ import {
 import { Form, Input, Button, Col, Row, message } from "antd";
 import { Router, useRouter } from "next/router";
 import { setLogin } from "redux/slices/authSlice";
-import { login } from "api/authAPI";
+import { login } from "pages/api/authAPI";
 const { Title } = Typography;
 
 export default function LoginPage() {

@@ -1,6 +1,6 @@
 import { Table, Tag, Space, Button } from "antd";
 import React, { useState, useEffect } from "react";
-import { getUsers } from "api/userAPI";
+import { getUsers } from "pages/api/userAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddUser from "components/Modal/ModelAddUser";
 import { message } from "antd";

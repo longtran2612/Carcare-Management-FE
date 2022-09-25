@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import MyHeader from "components/Header";
 import SideBar from "components/SideBar";
 import MyContent from "components/Content";
-import { loadUser } from "api/authAPI";
+import { loadUser } from "pages/api/authAPI";
 const { Content, Sider, Footer } = Layout;
 
 const AdminPage = () => {

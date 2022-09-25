@@ -18,11 +18,11 @@ import {
   getServiceApi,
   removeServiceApi,
   updateServiceApi,
-} from "api/serviceAPI";
+} from "pages/api/serviceAPI";
 import { openNotification } from "utils/notification";
-import { getCategories } from "api/categoryAPI";
-import { getPricesByHeader } from "api/priceAPI";
-import { getPriceHeaderById } from "api/PriceHeaderAPI";
+import { getCategories } from "pages/api/categoryAPI";
+import { getPricesByHeader } from "pages/api/priceAPI";
+import { getPriceHeaderById } from "pages/api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";

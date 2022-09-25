@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Breadcrumb, Layout, Affix, Space, Col, Row, Button, Spin } from "antd";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
-import { logout } from "api/authAPI";
+import { logout } from "pages/api/authAPI";
 import UserPage from "components/User";
 import ServicePage from "components/Service";
 import CategoryPage from "components/Category";
