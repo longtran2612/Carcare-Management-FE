@@ -196,9 +196,6 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
               </Select>
             </Form.Item>
             <div className="service-action">
-              <Button type="danger" onClick={() => setModalQuestion(true)}>
-                Xóa
-              </Button>
               <Button
                 type="primary"
                 onClick={() => {
@@ -225,12 +222,6 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
             />
           </Col>
       </Row>
-      <ModalQuestion
-        title="Bạn có chắc chắn muốn xóa dịch vụ này không?"
-        visible={modalQuestion}
-        handleCancel={() => setModalQuestion(false)}
-        handleOk={() => handleRemovePriceHeader()}
-      />
     </>
   );
 };

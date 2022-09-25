@@ -35,7 +35,7 @@ const items = [
     getItem("Dịch vụ", "service"),
   ]),
   getItem("Bảng giá", "4", <DollarOutlined />, [
-    getItem("bảng giá", "price")]),
+    getItem("Bảng giá", "price")]),
   getItem("Xe", "5", <CarOutlined />, [
     getItem("Xe khách hàng", "car"),
     getItem("Mẫu xe", "car-model"),
