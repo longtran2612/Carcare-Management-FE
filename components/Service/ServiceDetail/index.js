@@ -100,7 +100,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
           <Image
             width={300}
             height={250}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            src="https://i.ibb.co/MfNTNJS/may-rua-xe-oto-com-vn-4-84d9.jpg"
           />
         </Col>
         <Col span={15}>

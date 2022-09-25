@@ -43,10 +43,10 @@ const createUser = async (data) => {
     });
 };
 
-const updateUser = async (data) => {
+const updateUserById = async (data,id) => {
   return axiosClient()({
     method: "PUT",
-    url: API_URL + `/users`,
+    url: API_URL + `/users/${id}`,
     data: data,
   })
     .then((res) => {
@@ -57,4 +57,4 @@ const updateUser = async (data) => {
     });
 };
 
-export { getUsers , createUser,getUserById, updateUser};
+export { getUsers , createUser,getUserById, updateUserById};

@@ -10,7 +10,7 @@ import {
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
-import { getUserById } from "api/userAPI";
+import { getUserById ,updateUserById} from "api/userAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 
@@ -49,19 +49,16 @@ const UserDetail = ({ userId, onUpdateUser }) => {
   const onFinish = async (values) => {
     try {
       let body = {
-        id: userDetail.id,
-        name: response.data.Data.name,
-        phone: response.data.Data.phone,
-        email: response.data.Data.email,
-        address: response.data.Data.address,
-        image: response.data.Data.image,
-        status: response.data.Data.status,
+        name: values.name,
+        email: values.email,
+        address: values.address,
+        status: values.status,
       };
-    //   const res = await updateServiceApi(body, userDetail.id);
-    //   if (res.data.StatusCode == "200") {
-    //     openNotification("Cập nhật dịch vụ thành công!", "");
-    //     onUpdateUser();
-    //   }
+      const res = await updateUserById(body, userId);
+      if (res.data.StatusCode == "200") {
+        openNotification("Cập nhật người dùng thành công!", "");
+        onUpdateUser();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -91,17 +88,6 @@ const UserDetail = ({ userId, onUpdateUser }) => {
             <Form.Item
               label="Tên"
               name="name"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Số điện thoại"
-              name="phone"
               rules={[
                 {
                   required: true,
@@ -149,9 +135,6 @@ const UserDetail = ({ userId, onUpdateUser }) => {
               </Select>
             </Form.Item>
             <div className="service-action">
-              <Button type="danger" onClick={() => setModalQuestion(true)}>
-                Xóa
-              </Button>
               <Button
                 type="primary"
                 onClick={() => {

@@ -7,7 +7,7 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 function CarTable({}) {
   const [cars, setCars] = useState([]);
   // const [servicesItem, setServicesItem] = useState(null);
-  // const [modalService, setModalService] = useState(false);
+  const [modalCar, setModalCar] = useState(false);
   // const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
 
@@ -58,7 +58,7 @@ function CarTable({}) {
     //       <Button
     //         type="primary"
     //         onClick={() => {
-    //           setModalService(true);
+    //           setModalCar(true);
     //           setServicesItem(record);
     //         }}
     //       >
@@ -115,13 +115,13 @@ function CarTable({}) {
 
   return (
     <>
-      {/* <Button type="primary" onClick={() => setModalService(true)}>
-        Thêm dịch vụ
-      </Button> */}
+      <Button type="primary" onClick={() => setModalCar(true)}>
+        Thêm Xe
+      </Button>
       <Table columns={columns} dataSource={cars} />
       {/* <ModalAddService
-        show={modalService}
-        handleCancel={() => setModalService(false)}
+        show={modalCar}
+        handleCancel={() => setModalCar(false)}
         onSuccess={(data) => handleSuccessCreateService(data)}
         item={servicesItem}
       />

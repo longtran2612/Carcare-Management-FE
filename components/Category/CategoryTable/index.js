@@ -6,7 +6,7 @@ import {getCategories} from 'api/categoryAPI'
 
 function CategoryTable({}) {
   const [categories, setCategories] = useState([]);
-  const [modalUser, setModalUser] = useState(false);
+  const [modalCategory, setModalCategory] = useState(false);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
 
@@ -94,13 +94,13 @@ function CategoryTable({}) {
 
   return (
     <>
-      {/* <Button type="primary" onClick={() => setModalUser(true)}>
+      <Button type="primary" onClick={() => setModalCategory(true)}>
         Thêm danh mục
-      </Button> */}
+      </Button>
       <Table columns={columns} dataSource={categories} />
       {/* <ModalAddUser
-        show={modalUser}
-        handleCancel={() => setModalUser(false)}
+        show={modalCategory}
+        handleCancel={() => setModalCategory(false)}
         handleOk={() => console.log("bao")}
       /> */}
       {/* <ModalQuestion

@@ -1,7 +1,6 @@
 import { Table, Tag, Space, Button } from "antd";
 import React, { useState, useEffect } from "react";
 import { getPriceHeaders } from "api/PriceHeaderAPI";
-import ModalAddService from "components/Modal/ModalAddService";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import { useRouter } from "next/router";
 import PriceHeaderDetail from "../PriceHeaderDetail";
@@ -9,7 +8,7 @@ import PriceHeaderDetail from "../PriceHeaderDetail";
 function PriceHeaderTable({}) {
   const [priceHeaders, setPriceHeaders] = useState([]);
   // const [servicesItem, setServicesItem] = useState(null);
-  // const [modalService, setModalService] = useState(false);
+  const [modalPriceHeader, setModalPriceHeader] = useState(false);
   // const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
   const router = useRouter();
@@ -68,7 +67,7 @@ function PriceHeaderTable({}) {
     //       <Button
     //         type="primary"
     //         onClick={() => {
-    //           setModalService(true);
+    //           setModalPriceHeader(true);
     //           setServicesItem(record);
     //         }}
     //       >
@@ -91,7 +90,7 @@ function PriceHeaderTable({}) {
 
   const handleGetPriceHeaders = async () => {
     try {
-        getPriceHeaders().then((res) => {
+      getPriceHeaders().then((res) => {
         if (res.data.StatusCode == 200) {
           setPriceHeaders(res.data.Data);
         } else {
@@ -125,13 +124,16 @@ function PriceHeaderTable({}) {
 
   return (
     <>
-     {priceHeaderId ? (
+      {priceHeaderId ? (
         <PriceHeaderDetail
           priceHeaderId={priceHeaderId}
           onUpdatePriceHeaders={handleGetPriceHeaders}
         />
       ) : (
         <div>
+          <Button type="primary" onClick={() => setModalPriceHeader(true)}>
+            Thêm bảng giá
+          </Button>
           <Table
             columns={columns}
             dataSource={priceHeaders}
@@ -143,13 +145,10 @@ function PriceHeaderTable({}) {
               };
             }}
           />
-      </div>
-     
-      )
-      }
+        </div>
+      )}
     </>
   );
-    }
-
+}
 
 export default PriceHeaderTable;

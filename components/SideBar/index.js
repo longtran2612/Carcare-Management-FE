@@ -82,7 +82,7 @@ const SideBar = ({ handleOpenKey }) => {
         theme="light"
         items={items}
         onClick={onClick}
-        defaultSelectedKeys={["shop"]}
+        defaultSelectedKeys={["car-slot"]}
       />
     </div>
   );

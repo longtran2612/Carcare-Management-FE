@@ -3,6 +3,7 @@ import {
   Col,
   Row,
   Image,
+  Space,
   Button,
   Tag,
   Form,
@@ -24,6 +25,7 @@ import { getPricesByHeader } from "api/priceAPI";
 import { getPriceHeaderById } from "api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
+import ModalAddPrice from "components/Modal/ModalAddPrice";
 
 const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const router = useRouter();
@@ -32,6 +34,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const [priceHeaderDetail, setPriceHeaderDetail] = useState({});
   const [prices, setPrices] = useState([]);
   const [modalQuestion, setModalQuestion] = useState(false);
+  const [modalPrice, setModalPrice] = useState(false);
 
   const fetchPrice = async () => {
     try {
@@ -81,6 +84,11 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       key: "id",
     },
     {
+      title: "Tên giá",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
       title: "Giá trị",
       dataIndex: "price",
       key: "price",
@@ -89,6 +97,25 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       title: "Mã dịch vụ",
       dataIndex: "parentId",
       key: "parentId",
+    },
+    {
+      title: "Hành động",
+      key: "action",
+      render: (_, record) => (
+        <Space size={8}>
+          <Button type="primary">Cập nhật</Button>
+          <Button
+            type="primary"
+            danger
+            onClick={() => {
+              setModalQuestion(true);
+              setId(record.id);
+            }}
+          >
+            Xóa
+          </Button>
+        </Space>
+      ),
     },
   ];
 
@@ -119,6 +146,13 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       setModalQuestion(false);
     } catch (error) {}
   };
+  const handleSuccessCreatePrice = (data) => {
+    let newArr = [...prices];
+    newArr.push(data);
+    setPrices(newArr);
+  };
+
+
   return (
     <>
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
@@ -215,6 +249,9 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
           </Form>
         </Col>
         <Col span={24}>
+        <Button type="primary" onClick={() => setModalPrice(true)}>
+            Thêm giá
+          </Button>
           <Table
             columns={columns}
             dataSource={prices}
@@ -222,6 +259,13 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
             />
           </Col>
       </Row>
+
+      <ModalAddPrice
+        show={modalPrice}
+        handleCancel={() => setModalPrice(false)}
+        onSuccess={(data) => handleSuccessCreatePrice(data)}
+        priceHeaderId={priceHeaderId}
+      />
     </>
   );
 };
