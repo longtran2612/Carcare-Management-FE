@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Tag, Row, Col, Typography, Table, Timeline, Button } from "antd";
 import { getCarSlotDetail } from "api/carSlotApi";
-import {useRouter} from "next/router"
+import { useRouter } from "next/router";
 
 const CarSlotDetail = ({ carSlotId }) => {
   const { Title } = Typography;
-    const { Column, ColumnGroup } = Table;
-    const router = useRouter()
+  const { Column, ColumnGroup } = Table;
+  const router = useRouter();
 
   const [carSlotDetail, setCarSlotDetail] = useState();
   const fetchCarSlotDetail = async () => {
