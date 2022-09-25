@@ -46,7 +46,7 @@ const CarSlot = () => {
               return (
                 <Col
                   key={carSlot.id}
-                  span={8}
+                  span={12}
                   style={{ marginBottom: "10px" }}
                   onClick={() => router.push(`/admin?carSlotId=${carSlot.id}`)}
                 >
