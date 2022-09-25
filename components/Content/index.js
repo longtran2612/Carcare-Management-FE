@@ -10,6 +10,7 @@ import CategoryPage from "components/Category";
 import CarModelPage from "components/CarModel";
 import CarPage from "components/Car";
 import PriceHeaderPage from "components/PriceHeader";
+import CarSlot from "components/CarSlot";
 const { Content } = Layout;
 
 const MyContent = ({ keyMenu }) => {
@@ -76,11 +77,13 @@ const MyContent = ({ keyMenu }) => {
       case "user-group":
         return <UserPage />;
       case "car":
-        return <CarPage/>;
+        return <CarPage />;
       case "car-model":
-        return <CarModelPage/>;
-        case "price":
-          return <PriceHeaderPage/>;
+        return <CarModelPage />;
+      case "price":
+        return <PriceHeaderPage />;
+      case "car-slot":
+        return <CarSlot />;
       default:
         break;
     }

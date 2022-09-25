@@ -14,4 +14,16 @@ a {
 * {
   box-sizing: border-box;
 }
-
+.card-slot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-slot div:first-child {
+  border-right: 1px solid #ccc;
+  flex-basis: 50%;
+}
+.card-slot div:last-child {
+  flex-basis: 50%;
+  text-align: right;
+}
