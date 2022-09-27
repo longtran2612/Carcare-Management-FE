@@ -26,6 +26,7 @@ import { getPriceHeaderById } from "pages/api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";
+import moment from "moment";
 
 const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const router = useRouter();
@@ -35,6 +36,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const [prices, setPrices] = useState([]);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [modalPrice, setModalPrice] = useState(false);
+  const formatDate = "YYYY/MM/DD";
 
   const fetchPrice = async () => {
     try {
@@ -53,12 +55,12 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       form.setFieldsValue({
         name: response.data.Data.name,
         description: response.data.Data.description,
-        fromDate: response.data.Data.fromDate,
-        toDate: response.data.Data.toDate,
+        fromDate: moment(moment(response.data.Data.fromDate), formatDate),
+        toDate: moment(moment(response.data.Data.toDate), formatDate),
         status: response.data.Data.status,
       });
     } catch (error) {
-      openNotification(error.response.data);
+      // openNotification(error.response.data);
     }
   };
 
@@ -152,7 +154,6 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
     setPrices(newArr);
   };
 
-
   return (
     <>
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
@@ -168,67 +169,81 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Form.Item
-              label="Tên bảng giá"
-              name="name"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Mô tả"
-              name="description"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <TextArea />
-            </Form.Item>
-            <Form.Item
-              label="Ngày bắt đầu"
-              name="fromDate"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              {/* <DatePicker/> */}
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Ngày bắt đầu"
-              name="toDate"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              {/* <DatePicker/> */}
-              <Input />
-            </Form.Item>
+            <Row>
+              <Col span={10} style={{ marginRight: "20px" }}>
+                <Form.Item
+                  label="Tên bảng giá"
+                  name="name"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
 
-            <Form.Item
-              label="Trạng thái"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-              name="status"
-            >
-              <Select>
-                <Select.Option value="ACTIVE">Hoạt động</Select.Option>
-                <Select.Option value="INACTIVE">Không hoạt động</Select.Option>
-              </Select>
-            </Form.Item>
+              <Col span={4}>
+                <Form.Item
+                  label="Ngày bắt đầu"
+                  name="fromDate"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <DatePicker format={formatDate} />
+                  {/* <Input /> */}
+                </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Form.Item
+                  label="Ngày bắt đầu"
+                  name="toDate"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <DatePicker />
+                  {/* <Input /> */}
+                </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Form.Item
+                  label="Trạng thái"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  name="status"
+                >
+                  <Select>
+                    <Select.Option value="ACTIVE">Hoạt động</Select.Option>
+                    <Select.Option value="INACTIVE">
+                      Không hoạt động
+                    </Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={23}>
+                <Form.Item
+                  label="Mô tả"
+                  name="description"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <TextArea rows={4} />
+                </Form.Item>
+              </Col>
+            </Row>
             <div className="service-action">
               <Button
                 type="primary"
@@ -249,15 +264,11 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
           </Form>
         </Col>
         <Col span={24}>
-        <Button type="primary" onClick={() => setModalPrice(true)}>
+          <Button type="primary" onClick={() => setModalPrice(true)}>
             Thêm giá
           </Button>
-          <Table
-            columns={columns}
-            dataSource={prices}
-            rowKey="id"
-            />
-          </Col>
+          <Table columns={columns} dataSource={prices} rowKey="id" />
+        </Col>
       </Row>
 
       <ModalAddPrice

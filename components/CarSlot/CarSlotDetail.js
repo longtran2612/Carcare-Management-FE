@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Tag, Row, Col, Typography, Table, Timeline, Button } from "antd";
 import { getCarSlotDetail } from "pages/api/carSlotApi";
 import { useRouter } from "next/router";
+import { formatMoney } from "utils/format";
 
 const CarSlotDetail = ({ carSlotId }) => {
   const { Title } = Typography;
@@ -16,6 +17,12 @@ const CarSlotDetail = ({ carSlotId }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const totalPriceService = () => {
+    return carSlotDetail?.serviceProfileList?.reduce((total, cur) => {
+      return (total += cur.price.price);
+    }, 0);
   };
 
   useEffect(() => {
@@ -36,7 +43,6 @@ const CarSlotDetail = ({ carSlotId }) => {
         break;
     }
   };
-
   return (
     <>
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
@@ -52,24 +58,30 @@ const CarSlotDetail = ({ carSlotId }) => {
             <Col flex={4}>
               <Table
                 footer={() => (
-                  <div style={{ textAlign: "right" }}>Tổng tiền: 100k</div>
+                  <div style={{ textAlign: "right" }}>
+                    Tổng tiền: {formatMoney(totalPriceService() || 0)}
+                  </div>
                 )}
+                dataSource={carSlotDetail?.serviceProfileList}
               >
-                <Column
-                  title="STT"
-                  dataIndex="stt"
-                  key="stt"
-                  render={(text, record, dataIndex) => {
-                    return <div>{dataIndex + 1}</div>;
-                  }}
-                />
                 <ColumnGroup title="Dịch vụ sử dụng">
                   <Column
-                    title="Tên dịch vụ"
-                    dataIndex="serviceId"
-                    key="serviceId"
+                    title="STT"
+                    dataIndex="stt"
+                    key="stt"
+                    render={(text, record, dataIndex) => {
+                      return <div>{dataIndex + 1}</div>;
+                    }}
                   />
-                  <Column title="Giá dịch vụ" dataIndex="id" key="id" />
+                  <Column title="Tên dịch vụ" dataIndex="name" key="name" />
+                  <Column
+                    title="Giá dịch vụ"
+                    dataIndex="price"
+                    key="price"
+                    render={(text, record, dataIndex) => {
+                      return <div>{formatMoney(record.price.price)}</div>;
+                    }}
+                  />
                 </ColumnGroup>
               </Table>
             </Col>
@@ -78,27 +90,40 @@ const CarSlotDetail = ({ carSlotId }) => {
                 <Title level={4}>Thông tin khách hàng</Title>
                 <Timeline>
                   <Timeline.Item>
-                    Create a services site 2015-09-01
+                    Tên: {carSlotDetail?.car?.user?.name}
                   </Timeline.Item>
                   <Timeline.Item>
-                    Solve initial network problems 2015-09-01
+                    Số điện thoại: {carSlotDetail?.car?.user?.phone}
                   </Timeline.Item>
-                  <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
+                </Timeline>
+                <Title level={4}>Thông tin xe</Title>
+                <Timeline>
                   <Timeline.Item>
-                    <Timeline>
-                      <Timeline.Item>
-                        Create a services site 2015-09-01
-                      </Timeline.Item>
-                      <Timeline.Item>
-                        Solve initial network problems 2015-09-01
-                      </Timeline.Item>
-                      <Timeline.Item>
-                        Technical testing 2015-09-01
-                      </Timeline.Item>
-                      <Timeline.Item>
-                        Network problems being solved 2015-09-01
-                      </Timeline.Item>
-                    </Timeline>
+                    Tên xe: {carSlotDetail?.car?.carModel?.name}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Nhãn hiệu: {carSlotDetail?.car?.carModel?.brand}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Loại xe: {carSlotDetail?.car?.carModel?.model}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Nhiên liệu: {carSlotDetail?.car?.carModel?.fuel}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Hộp số: {carSlotDetail?.car?.carModel?.transmission}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Chỗ ngồi: {carSlotDetail?.car?.carModel?.seats}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Biển số: {carSlotDetail?.car?.licensePlate}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Màu xe: {carSlotDetail?.car?.color}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Mô tả: {carSlotDetail?.car?.description}
                   </Timeline.Item>
                 </Timeline>
               </div>
