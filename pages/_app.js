@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           name="viewport"
           content="viewport-fit=cover width=device-width, initial-scale=1"
         />
-        <link rel="icon" href="/images/favicon.png" />
+         <link rel="icon" href="/images/favicon.ico" />
       </Head>
 
       <SessionProvider session={session}>

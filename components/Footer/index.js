@@ -8,8 +8,9 @@ import {
   GithubOutlined,
 } from "@ant-design/icons";
 import Link  from "next/link";
+import Image from "next/image";
 
-import logo from "public/images/logo.jpg";
+import logo from "public/images/logo.svg";
 
 const MyFooter =() => {
 
@@ -21,7 +22,8 @@ const MyFooter =() => {
           <div className="footer_left">
             <Link href="/">
               <div className="footer_left-logo-page">
-                <img src={logo} alt="VLCARSERVICE" />
+                <Image  width={200} height={200} src={logo} alt="VLCARSERVICE" />
+                
               </div>
             </Link>
 

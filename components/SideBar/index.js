@@ -5,13 +5,15 @@ import {
   DollarOutlined,
   ShopOutlined,
   CarOutlined,
-  BorderOutlined
+  BorderOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { Typography } from "antd";
 import React, { useState } from "react";
 const { Title } = Typography;
 import { useRouter } from "next/router";
+import logo from "public/images/logo.svg";
+import Image from "next/image";
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -34,8 +36,7 @@ const items = [
     getItem("Danh mục", "category"),
     getItem("Dịch vụ", "service"),
   ]),
-  getItem("Bảng giá", "4", <DollarOutlined />, [
-    getItem("Bảng giá", "price")]),
+  getItem("Bảng giá", "4", <DollarOutlined />, [getItem("Bảng giá", "price")]),
   getItem("Xe", "5", <CarOutlined />, [
     getItem("Xe khách hàng", "car"),
     getItem("Mẫu xe", "car-model"),
@@ -72,9 +73,15 @@ const SideBar = ({ handleOpenKey }) => {
   };
 
   return (
-    <div>
-      <div className="logo" >
-        <Title className="textAlign" style={{height: '53px',  backgroundColor: "#B1DEF4",boxShadow: " 0 4px 4px -2px #D0EDF3"}}  level={5}>Dashboard</Title>
+    <div style={{ height:'100%'}}>
+      <div className="logo" style={{textAlign:"center"}}>
+        <Image
+          style={{ alignItems: "center" }}
+          width={75}
+          height={75}
+          src={logo}
+          alt="VLCARSERVICE"
+        />
       </div>
       <Menu
         mode="inline"

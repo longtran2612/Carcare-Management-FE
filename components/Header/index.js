@@ -53,8 +53,7 @@ const MyHeader = () => {
     justifyContent: "right",
     alignItems: "right",
     padding: "4px 0",
-    backgroundColor: "#B1DEF4",
-    boxShadow: " 0 4px 4px -2px #A9E8F5",
+    boxShadow: " 0 4px 4px -2px #CCD6FC",
   };
   return (
     <div className="header">
