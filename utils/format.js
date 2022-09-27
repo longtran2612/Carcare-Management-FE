@@ -5,4 +5,7 @@ const changeDate = (x) => {
   let array = x.split("/");
   return array[1] + "/" + array[0] + "/" + array[2];
 };
-export default changeDate;
+const formatMoney = (num) => {
+  return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + " VNĐ";
+};
+export { changeDate, formatMoney };
