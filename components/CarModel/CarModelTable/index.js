@@ -16,14 +16,16 @@ function CarModelTable({}) {
       title: "STT",
       dataIndex: "key",
       key: "key",
+      width: 70,
       render: (text, record, dataIndex) => {
         return <div>{dataIndex + 1}</div>;
       },
     },
     {
-      title: "",
+      title: "Mã",
       dataIndex: "id",
       key: "id",
+
     },
     {
       title: "Tên mẫu xe",

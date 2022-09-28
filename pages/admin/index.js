@@ -61,6 +61,7 @@ const AdminPage = () => {
           theme="light"
           style={
             {
+              overflow: "auto",
               left: 0,
               top: 0,
               bottom: 0,

@@ -28,6 +28,8 @@ const MyHeader = () => {
   const { isLogin , user } = useSelector((state) => state.authSlice);
   const router = useRouter();
 
+  const accessToken = Cookies.get("accessToken");
+
   const handleOnClick = (e) => {
     setKeyMenu(e.key);
   };
@@ -79,7 +81,7 @@ const MyHeader = () => {
         
   )} */}
 
-        {isLogin ? (
+        {accessToken ? (
           <SubMenu key="10_1" icon={<UserOutlined />} title="Cá nhân">
             <Menu.Item key="10_3" icon={<InfoOutlined />}>
               <Link href="/car">Thông tin cá nhân</Link>

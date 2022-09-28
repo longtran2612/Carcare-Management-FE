@@ -183,7 +183,6 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   <Input />
                 </Form.Item>
               </Col>
-
               <Col span={4}>
                 <Form.Item
                   label="Ngày bắt đầu"
@@ -200,7 +199,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
               </Col>
               <Col span={4}>
                 <Form.Item
-                  label="Ngày bắt đầu"
+                  label="Ngày kết thúc"
                   name="toDate"
                   rules={[
                     {

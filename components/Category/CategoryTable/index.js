@@ -15,6 +15,7 @@ function CategoryTable({}) {
       title: "STT",
       dataIndex: "key",
       key: "key",
+      width: 70,
       render: (text, record, dataIndex) => {
         return <div>{dataIndex + 1}</div>;
       },

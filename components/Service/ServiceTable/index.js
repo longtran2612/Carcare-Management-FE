@@ -17,6 +17,7 @@ function ServiceTable({}) {
       title: "STT",
       dataIndex: "key",
       key: "key",
+      width: 70,
       render: (text, record, dataIndex) => {
         return <div>{dataIndex + 1}</div>;
       },
@@ -25,11 +26,17 @@ function ServiceTable({}) {
       title: "Mã dịch vụ",
       dataIndex: "id",
       key: "id",
+    
     },
     {
       title: "Tên dịch vụ",
       dataIndex: "name",
       key: "name",
+    },
+    {
+      title: "Loại dịch vụ",
+      dataIndex: "type",
+      key: "type",
     },
     {
       title: "Trạng thái",
