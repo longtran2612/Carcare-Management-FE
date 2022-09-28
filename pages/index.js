@@ -37,6 +37,7 @@ function HomePage() {
       <Layout
       style={{
         minHeight: "100vh",
+        backgroundColor:'white'
       }}
     >
         <MyHeader />

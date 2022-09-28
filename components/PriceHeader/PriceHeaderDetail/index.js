@@ -267,6 +267,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
           <Button type="primary" onClick={() => setModalPrice(true)}>
             Thêm giá
           </Button>
+
           <Table columns={columns} dataSource={prices} rowKey="id" />
         </Col>
       </Row>

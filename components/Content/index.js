@@ -89,21 +89,7 @@ const MyContent = ({ keyMenu }) => {
     }
   };
 
-  return (
-    <>
-      <Content
-        className="site-layout-background"
-        style={{
-          margin: "5px 5px",
-          padding: 10,
-          minHeight: 500,
-          backgroundColor: "#FBE6FF",
-        }}
-      >
-        {renderViewByKey()}
-      </Content>
-    </>
-  );
+  return <>{renderViewByKey()}</>;
 };
 
 export default MyContent;
