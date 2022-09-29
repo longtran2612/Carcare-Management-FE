@@ -5,6 +5,7 @@ import { openNotification } from "utils/notification";
 import { getUserById, updateUserById } from "pages/api/userAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
+import moment from "moment";
 const formatDate = "YYYY/MM/DD";
 
 
@@ -25,13 +26,13 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         name: response.data.Data.name,
         phone: response.data.Data.phone,
         email: response.data.Data.email,
-        birthDay: response.data.Data.birthDay,
+        birthDay: moment(moment(response.data.Data.birthDay), formatDate),
         address: response.data.Data.address,
         image: response.data.Data.image,
         status: response.data.Data.status,
       });
     } catch (error) {
-      openNotification(error.response.data);
+      openNotification(error.response.Message);
     }
   };
 
@@ -48,6 +49,9 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         email: values.email,
         address: values.address,
         status: values.status,
+        image: values.image,
+        birthDay: values.birthDay,
+
       };
       const res = await updateUserById(body, userId);
       if (res.data.StatusCode == "200") {
