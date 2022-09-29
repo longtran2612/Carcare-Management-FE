@@ -1,22 +1,40 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Col, Row, Image, Button, Form, Select, Input, DatePicker } from "antd";
+import {
+  Col,
+  Row,
+  Image,
+  Button,
+  Form,
+  Select,
+  Input,
+  DatePicker,
+  Upload,
+} from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
-import { getUserById, updateUserById } from "pages/api/userAPI";
+import {
+  getUserById,
+  updateUserById,
+  uploadImagesUser,
+} from "pages/api/userAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
+import ModalUploadImage from "components/Modal/ModalUploadImage";
+import { UploadOutlined } from "@ant-design/icons";
 const formatDate = "YYYY/MM/DD";
-
 
 const UserDetail = ({ userId, onUpdateUser }) => {
   const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
   const [userDetail, setUserDetail] = useState({});
+  const [modalUpload, setModalUpload] = useState(false);
+  const [listFiles, setListFiles] = useState({
+    images: [],
+    imageBlob: [],
+  });
   const [modalQuestion, setModalQuestion] = useState(false);
-
-
 
   const fetchUserDetail = async () => {
     try {
@@ -51,7 +69,6 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         status: values.status,
         image: values.image,
         birthDay: values.birthDay,
-
       };
       const res = await updateUserById(body, userId);
       if (res.data.StatusCode == "200") {
@@ -62,9 +79,39 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       console.log(error);
     }
   };
+  // handle upload image
 
-  
+  const handleFileChosen = (info) => {
+    const result = info.fileList.map((file) => {
+      const blob = new Blob([file.originFileObj], {
+        type: file.type,
+      });
+      return (window.URL || window.webkitURL).createObjectURL(blob);
+    });
+    setListFiles({ images: info.fileList, imageBlob: result });
+    setModalUpload(true);
+  };
 
+  const handleUploadImages = async () => {
+    try {
+      const formData = new FormData();
+      let temp = [];
+      listFiles.images.map((image) => {
+        let file = {
+          uri: image.originFileObj.path,
+          type: "multipart/form-data",
+          name: image.originFileObj.path,
+        };
+        temp.push(file);
+      });
+      formData.append("files", temp);
+      const response = await uploadImagesUser(formData);
+      //   setListFiles({ images: [], imageBlob: [] });
+      //   setModalUpload(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -76,6 +123,16 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       <Row>
         <Col span={6}>
           <Image width={300} height={250} src={userDetail.image} />
+          <div style={{ marginTop: "20px" }}>
+            <Upload
+              onChange={(info) => handleFileChosen(info)}
+              multiple
+              showUploadList={false}
+              fileList={listFiles.imageBlob}
+            >
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </div>
         </Col>
         <Col span={17}>
           <Form
@@ -200,6 +257,12 @@ const UserDetail = ({ userId, onUpdateUser }) => {
           </Form>
         </Col>
       </Row>
+      <ModalUploadImage
+        visible={modalUpload}
+        handleCancel={() => setModalUpload(false)}
+        handleOk={() => handleUploadImages()}
+        listImage={listFiles.imageBlob}
+      />
     </>
   );
 };
