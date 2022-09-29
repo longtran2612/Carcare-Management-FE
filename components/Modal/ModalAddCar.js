@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Input, Select, Switch, InputNumber, DatePicker } from "antd";
-import { createPriceHeader } from "pages/api/PriceHeaderAPI";
-import { getServices } from "pages/api/serviceAPI";
+import {
+  Modal,
+  Button,
+  Row,
+  Col,
+  Form,
+  Input,
+  Select,
+  Switch,
+  InputNumber,
+  DatePicker,
+} from "antd";
+import { createCar } from "pages/api/carAPI";
+import { getCarModel } from "pages/api/carModel";
+import { getUsers } from "pages/api/userAPI";
 
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
@@ -9,24 +21,46 @@ const { TextArea } = Input;
 import moment from "moment";
 const formatDate = "YYYY/MM/DD";
 
-
 const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
+  const [carModels, setCarModels] = useState([]);
+  const [users, setUsers] = useState([]);
+
   const onFinish = async (values) => {
     try {
-      const res = await createPriceHeader(values);
-      openNotification("Tạo bảng giá thành công thành công!", "");
+      const res = await createCar(values);
+      openNotification("Tạo xe thành công thành công!", "");
       handleCancel();
       onSuccess(res.data);
     } catch (error) {
       console.log(error);
     }
   };
+  const getCarModels = async () => {
+    try {
+      const res = await getCarModel();
+      setCarModels(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getUsersData = async () => {
+    try {
+      const res = await getUsers();
+      setUsers(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getCarModels();
+    getUsersData();
+  }, []);
 
   return (
     <>
       <Modal
-        title="Thêm bảng giá mới"
+        title="Thêm mẫu xe"
         visible={show}
         onOk={() => {
           form
@@ -50,50 +84,110 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Form.Item
-            label="Tên bảng giá"
-            name="name"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-            <Form.Item
-                label="Mô tả"
-                name="description"
+          <Row>
+            <Col span={11} className="MarRight40">
+              <Form.Item
+                label="Tên mẫu xe"
+                name="name"
                 rules={[
-                {
+                  {
                     required: true,
-                },
+                  },
                 ]}
-            >
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={5} className="MarRight20">
+              <Form.Item
+                label="Màu sắc"
+                name="color"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={5} className="MarRight20">
+              <Form.Item
+                label="Biển số xe"
+                name="licensePlate"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={11} className="MarRight40">
+              <Form.Item label="Mẫu xe" name="carModelId">
+                <Select
+                  showSearch
+                  placeholder="Chọn mẫu xe"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.children.includes(input)
+                  }
+                  filterSort={(optionA, optionB) =>
+                    optionA.children
+                      .toLowerCase()
+                      .localeCompare(optionB.children.toLowerCase())
+                  }
+                >
+                  {carModels.map((item, index) => {
+                    return (
+                      <Select.Option key={index} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={10}>
+              <Form.Item
+                label="Người sở hữu"
+                name="userId"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  placeholder="Người sở hữu"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.children.includes(input)
+                  }
+                  filterSort={(optionA, optionB) =>
+                    optionA.children
+                      .toLowerCase()
+                      .localeCompare(optionB.children.toLowerCase())
+                  }
+                >
+                  {users.map((item, index) => {
+                    return (
+                      <Select.Option key={index} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={23}>
+              <Form.Item label="Mô tả" name="description">
                 <TextArea rows={4} />
-            </Form.Item>
-            <Form.Item
-                label="Ngày bắt đầu"
-                name="fromDate"
-                rules={[
-                {
-                    required: true,
-                },
-                ]}
-            >
-                <DatePicker format={formatDate} />
-            </Form.Item>
-            <Form.Item
-                label="Ngày kết thúc"
-                name="toDate"
-                rules={[
-                {
-                    required: true,
-                },
-                ]}
-            >
-                <DatePicker format={formatDate} />
-            </Form.Item>
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </>

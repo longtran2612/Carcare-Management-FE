@@ -1,15 +1,16 @@
 import { Table, Tag, Space, Button } from "antd";
 import React, { useState, useEffect } from "react";
 import { getCarModel } from "pages/api/carModel";
-import ModalAddService from "components/Modal/ModalAddService";
+import { useRouter } from "next/router";
 import ModalQuestion from "components/Modal/ModalQuestion";
+import ModalAddCarModel from "components/Modal/ModalAddCarModal";
 
 function CarModelTable({}) {
   const [carModels, setCarModels] = useState([]);
-  // const [servicesItem, setServicesItem] = useState(null);
   const [modalCarModel, setModalCarModel] = useState(false);
-  // const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
+  const router = useRouter();
+  const { carModelId } = router.query;
 
   const columns = [
     {
@@ -62,33 +63,6 @@ function CarModelTable({}) {
       dataIndex: "fuel",
       key: "fuel",
     },
-    // {
-    //   title: "Hành động",
-    //   key: "action",
-    //   render: (_, record) => (
-    //     <Space size={8}>
-    //       <Button
-    //         type="primary"
-    //         onClick={() => {
-    //           setModalCarModel(true);
-    //           setServicesItem(record);
-    //         }}
-    //       >
-    //         Cập nhật
-    //       </Button>
-    //       <Button
-    //         type="primary"
-    //         danger
-    //         onClick={() => {
-    //           setModalQuestion(true);
-    //           setId(record.id);
-    //         }}
-    //       >
-    //         Xóa
-    //       </Button>
-    //     </Space>
-    //   ),
-    // },
   ];
 
   const handleGetCarModel = async () => {
@@ -119,25 +93,32 @@ function CarModelTable({}) {
     handleGetCarModel();
   }, []);
 
-  // const handleSuccessCreateService = (data) => {
-  //   let newArr = [...services];
-  //   newArr.push(data);
-  //   setServices(newArr);
-  // };
+  const handleSuccessCarModel = (data) => {
+    let newArr = [...carModels];
+    newArr.push(data);
+    setServices(newArr);
+  };
 
   return (
     <>
+    {carModelId ? (
+        <ServiceDetail
+        carModelId={carModelId}
+          onUpdateService={handleGetCarModel}
+        />
+      ) : (
+        <div>
       <Button type="primary" onClick={() => setModalCarModel(true)}>
         Thêm mẫu xe
       </Button>
       <Table columns={columns} dataSource={carModels} />
-      {/* <ModalAddService
-        show={modalService}
+      </div>)}
+      <ModalAddCarModel
+        show={modalCarModel}
         handleCancel={() => setModalCarModel(false)}
-        onSuccess={(data) => handleSuccessCreateService(data)}
-        item={servicesItem}
+        onSuccess={(data) => handleSuccessCarModel(data)}
       />
-      <ModalQuestion
+      {/* <ModalQuestion
         title="Bạn có chắc chắn muốn xóa dịch vụ này không?"
         visible={modalQuestion}
         handleCancel={() => setModalQuestion(false)}

@@ -3,13 +3,14 @@ import React, { useState, useEffect } from "react";
 import { getCar } from "pages/api/carAPI";
 import ModalAddService from "components/Modal/ModalAddService";
 import ModalQuestion from "components/Modal/ModalQuestion";
-
+import ModalAddCar from "components/Modal/ModalAddCar";
+import { useRouter } from "next/router";
 function CarTable({}) {
   const [cars, setCars] = useState([]);
-  // const [servicesItem, setServicesItem] = useState(null);
   const [modalCar, setModalCar] = useState(false);
-  // const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
+  const router = useRouter();
+  const { carModelId } = router.query;
 
   const columns = [
     {
@@ -33,7 +34,7 @@ function CarTable({}) {
     },
     {
       title: "Mẫu xe",
-      dataIndex: "carModelId",
+      dataIndex: "CarModel.name",
       key: "carModelId",
     },
     {
@@ -48,7 +49,7 @@ function CarTable({}) {
     },
     {
       title: "Sở hữu",
-      dataIndex: "userId",
+      dataIndex: "user.name",
       key: "userId",
     },
     // {
@@ -108,11 +109,11 @@ function CarTable({}) {
     handleGetCar();
   }, []);
 
-  // const handleSuccessCreateService = (data) => {
-  //   let newArr = [...services];
-  //   newArr.push(data);
-  //   setServices(newArr);
-  // };
+  const handleSuccessCreateCar = (data) => {
+    let newArr = [...cars];
+    newArr.push(data);
+    setCars(newArr);
+  };
 
   return (
     <>
@@ -120,13 +121,12 @@ function CarTable({}) {
         Thêm Xe
       </Button>
       <Table columns={columns} dataSource={cars} />
-      {/* <ModalAddService
+      <ModalAddCar
         show={modalCar}
         handleCancel={() => setModalCar(false)}
-        onSuccess={(data) => handleSuccessCreateService(data)}
-        item={servicesItem}
+        onSuccess={(data) => handleSuccessCreateCar(data)}
       />
-      <ModalQuestion
+      {/* <ModalQuestion
         title="Bạn có chắc chắn muốn xóa dịch vụ này không?"
         visible={modalQuestion}
         handleCancel={() => setModalQuestion(false)}
