@@ -3,7 +3,6 @@ import axiosClient from "./index";
 
 import { API_URL } from "./url";
 
-
 const getUsers = async () => {
   return axiosClient()({
     method: "GET",
@@ -43,7 +42,7 @@ const createUser = async (data) => {
     });
 };
 
-const updateUserById = async (data,id) => {
+const updateUserById = async (data, id) => {
   return axiosClient()({
     method: "PUT",
     url: API_URL + `/users/${id}`,
@@ -57,4 +56,15 @@ const updateUserById = async (data,id) => {
     });
 };
 
-export { getUsers , createUser,getUserById, updateUserById};
+const uploadImagesUser = async (data) => {
+  return axios({
+    method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data;",
+    },
+    url: API_URL + "/upload",
+    data: data,
+  });
+};
+
+export { getUsers, createUser, getUserById, updateUserById, uploadImagesUser };
