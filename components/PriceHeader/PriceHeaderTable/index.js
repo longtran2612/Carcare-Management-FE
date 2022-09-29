@@ -4,10 +4,12 @@ import { getPriceHeaders } from "pages/api/PriceHeaderAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import { useRouter } from "next/router";
 import PriceHeaderDetail from "../PriceHeaderDetail";
+import ModalAddPriceHeader from "components/Modal/ModalAddPriceHeader";
+import moment from "moment";
+const formatDate = "YYYY/MM/DD";
 
 function PriceHeaderTable({}) {
   const [priceHeaders, setPriceHeaders] = useState([]);
-  // const [servicesItem, setServicesItem] = useState(null);
   const [modalPriceHeader, setModalPriceHeader] = useState(false);
   // const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
@@ -35,7 +37,7 @@ function PriceHeaderTable({}) {
     },
     {
       title: "Từ ngày",
-      dataIndex: "fromDate",
+      dataIndex: moment("fromDate").format(formatDate),
       key: "fromDate",
     },
     {
@@ -116,11 +118,11 @@ function PriceHeaderTable({}) {
     handleGetPriceHeaders();
   }, []);
 
-  // const handleSuccessCreateService = (data) => {
-  //   let newArr = [...services];
-  //   newArr.push(data);
-  //   setServices(newArr);
-  // };
+  const handleSuccessCreatePriceHeader = (data) => {
+    let newArr = [...priceHeaders];
+    newArr.push(data);
+    setPriceHeaders(newArr);
+  };
 
   return (
     <>
@@ -144,6 +146,11 @@ function PriceHeaderTable({}) {
                 },
               };
             }}
+          />
+            <ModalAddPriceHeader
+            show={modalPriceHeader}
+            handleCancel={() => setModalPriceHeader(false)}
+            onSuccess={(data) => handleSuccessCreatePriceHeader(data)}
           />
         </div>
       )}
