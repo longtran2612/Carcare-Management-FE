@@ -1,54 +1,116 @@
 import React, { useState } from "react";
-import { Modal, Button, Form, Input, Select, InputNumber } from "antd";
+import {
+  Modal,
+  Button,
+  Form,
+  Input,
+  Select,
+  Col,
+  Row,
+  InputNumber,
+} from "antd";
 import { createUser } from "pages/api/userAPI";
+import { validateMessages } from "utils/messageForm";
+import { openNotification } from "utils/notification";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const ModalAddUser = ({ show, handleOk, handleCancel }) => {
+const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
+  const [form] = Form.useForm();
   const buttonItemLayout = {
     wrapperCol: {
       span: 14,
       offset: 4,
     },
   };
-  const onFinish = (values) => {
-    console.log("Received values of form:", values);
-    createUser(values)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const onFinish = async (values) => {
+    try {
+      const res = await createUser(values);
+      console.log(res);
+      openNotification("Tạo người dùng thành công!", "");
+      handleCancel();
+      onSuccess(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
       <Modal
-        title="Thêm Người dùng"
+        title="Thêm người dùng mới"
         visible={show}
-        onOk={handleOk}
+        onOk={() => {
+          form
+            .validateFields()
+            .then((values) => {
+              form.resetFields();
+              onFinish(values);
+            })
+            .catch((info) => {
+              console.log("Validate Failed:", info);
+            });
+        }}
         onCancel={handleCancel}
         width={700}
         okText="Xác nhận"
         cancelText="Hủy bỏ"
       >
         <Form layout="vertical" onFinish={onFinish} autoComplete="off">
-          <Form.Item label="Tên người dùng" name="fullname">
-            <Input  />
-          </Form.Item>
-          <Form.Item   name="phone" label="Số điện thoại">
-            <Input />
-          </Form.Item>
-          <Form.Item name="email" label="Email">
-            <Input />
-          </Form.Item>
-          <Form.Item  name="address" label="Địa chỉ">
-            <Input/>
-          </Form.Item>
-          <Form.Item {...buttonItemLayout}>
-            <Button htmlType="submit" type="primary">Submit</Button>
-          </Form.Item>
+          <Row>
+            <Col span={22}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                label="Tên người dùng"
+                name="fullname"
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={10} style={{ marginRight: "3rem" }}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                name="phone"
+                label="Số điện thoại"
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={10}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                name="email"
+                label="Email"
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={22}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                name="address"
+                label="Địa chỉ"
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </>

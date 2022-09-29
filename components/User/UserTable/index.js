@@ -231,6 +231,11 @@ function UserTable({}) {
     console.log("Various parameters", pagination, filters, sorter);
     setFilteredInfo(filters);
   };
+  const handleSuccessCreteUser = (data) => {
+    let newArr = [...users];
+    newArr.push(data);
+    setUsers(newArr);
+  };
 
   return (
     <>
@@ -256,7 +261,7 @@ function UserTable({}) {
           <ModalAddUser
             show={modalUser}
             handleCancel={() => setModalUser(false)}
-            handleOk={() => console.log("bao")}
+            onSuccess={(data) => handleSuccessCreteUser(data)}
           />
         </div>
       )}
