@@ -35,6 +35,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
     imageBlob: [],
   });
   const [modalQuestion, setModalQuestion] = useState(false);
+  const [imageS3, setImageS3] = useState(null);
 
   const fetchUserDetail = async () => {
     try {
@@ -67,10 +68,11 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         email: values.email,
         address: values.address,
         status: values.status,
-        image: values.image,
+        image: imageS3,
         birthDay: values.birthDay,
       };
       const res = await updateUserById(body, userId);
+      setUserDetail(res.data.Data);
       if (res.data.StatusCode == "200") {
         openNotification("Cập nhật người dùng thành công!", "");
         onUpdateUser();
@@ -82,7 +84,6 @@ const UserDetail = ({ userId, onUpdateUser }) => {
   // handle upload image
 
   const handleFileChosen = (info) => {
-    console.log(info);
     const result = info.fileList.map((file) => {
       const blob = new Blob([file.originFileObj], {
         type: file.type,
@@ -99,8 +100,11 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       listFiles.images.map((image) => {
         formData.append("files", image.originFileObj);
       });
-
       const response = await uploadImagesUser(formData);
+      setImageS3(response.data.Data[0]);
+      setUserDetail((prevState) => {
+        return { ...prevState, image: response.data.Data[0] };
+      });
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
@@ -118,7 +122,13 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       <Row>
         <Col span={6}>
           <Image width={300} height={250} src={userDetail.image} />
-          <div style={{ marginTop: "10px" ,display:'flex',justifyContent:'center' }}>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <Upload
               onChange={(info) => handleFileChosen(info)}
               multiple

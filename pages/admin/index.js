@@ -47,69 +47,67 @@ const AdminPage = () => {
   }, []);
 
   return (
-    <Layout
-      style={{
-        minHeight: "100vh",
-      }}
-    >
-   
+      <Layout
+        style={{
+          minHeight: "100vh",
+        }}
+      >
         <Sider
           className="site-layout-background"
           collapsible
           onCollapse={(value) => setCollapsed(value)}
           collapsed={collapsed}
           theme="light"
-          style={
-            {
-              overflow: "auto",
-              left: 0,
-              top: 0,
-              bottom: 0,
-            }
-          }
-        >
-          <Affix style={{  top: 0, left: 0 }} >
-
-          <SideBar collapsed={collapsed} handleOpenKey={(key) => setKey(key)} />
-          </Affix>
-
-        </Sider>
-      <Layout className="site-layout">
-        <MyHeader />
-        <Content
-          className="site-layout-background"
           style={{
-            margin: "5px 5px",
-            padding: 10,
-            minHeight: 500,
-            backgroundColor: "#FBE6FF",
+            overflow: "auto",
+            left: 0,
+            top: 0,
+            bottom: 0,
           }}
         >
-          <MyContent
-            style={{ margin: "24px 16px 0", overflow: "initial" }}
-            keyMenu={key}
-          />
-        </Content>
-        <Footer style={{ backgroundColor: "white", textAlign: "center" }}>
-          <Row justify="center">
-            <Image width={100} height={100} src={logo} alt="logo" />
-            <Space />
-            <Typography.Title
-              level={4}
-              style={{
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                color: "#1890ff",
-              }}
-            >
-              ©2022 Coppy right by VL-CARCARE
-            </Typography.Title>
-          </Row>
-        </Footer>
+          <Affix style={{ top: 0, left: 0 }}>
+            <SideBar
+              collapsed={collapsed}
+              handleOpenKey={(key) => setKey(key)}
+            />
+          </Affix>
+        </Sider>
+        <Layout className="site-layout">
+          <MyHeader />
+          <Content
+            className="site-layout-background"
+            style={{
+              margin: "5px 5px",
+              padding: 10,
+              minHeight: 500,
+              backgroundColor: "#FBE6FF",
+            }}
+          >
+            <MyContent
+              style={{ margin: "24px 16px 0", overflow: "initial" }}
+              keyMenu={key}
+            />
+          </Content>
+          <Footer style={{ backgroundColor: "white", textAlign: "center" }}>
+            <Row justify="center">
+              <Image width={100} height={100} src={logo} alt="logo" />
+              <Space />
+              <Typography.Title
+                level={4}
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "#1890ff",
+                }}
+              >
+                ©2022 Coppy right by VL-CARCARE
+              </Typography.Title>
+            </Row>
+          </Footer>
+        </Layout>
       </Layout>
-    </Layout>
   );
 };
 
