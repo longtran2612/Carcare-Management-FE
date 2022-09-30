@@ -57,10 +57,11 @@ const updateUserById = async (data, id) => {
 };
 
 const uploadImagesUser = async (data) => {
+  console.log(data);
   return axios({
     method: "POST",
     headers: {
-      "Content-Type": "multipart/form-data;",
+      'Content-Type':  'multipart/form-data',
     },
     url: API_URL + "/upload",
     data: data,

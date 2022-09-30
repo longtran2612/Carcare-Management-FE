@@ -82,6 +82,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
   // handle upload image
 
   const handleFileChosen = (info) => {
+    console.log(info);
     const result = info.fileList.map((file) => {
       const blob = new Blob([file.originFileObj], {
         type: file.type,
@@ -95,19 +96,13 @@ const UserDetail = ({ userId, onUpdateUser }) => {
   const handleUploadImages = async () => {
     try {
       const formData = new FormData();
-      let temp = [];
       listFiles.images.map((image) => {
-        let file = {
-          uri: image.originFileObj.path,
-          type: "multipart/form-data",
-          name: image.originFileObj.path,
-        };
-        temp.push(file);
+        formData.append("files", image.originFileObj);
       });
-      formData.append("files", temp);
+
       const response = await uploadImagesUser(formData);
-      //   setListFiles({ images: [], imageBlob: [] });
-      //   setModalUpload(false);
+      setListFiles({ images: [], imageBlob: [] });
+      setModalUpload(false);
     } catch (error) {
       console.log(error);
     }
