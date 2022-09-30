@@ -5,12 +5,13 @@ import ModalAddService from "components/Modal/ModalAddService";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCar from "components/Modal/ModalAddCar";
 import { useRouter } from "next/router";
+import CarDetail from "../CarDetail";
 function CarTable({}) {
   const [cars, setCars] = useState([]);
   const [modalCar, setModalCar] = useState(false);
   const [id, setId] = useState(null);
   const router = useRouter();
-  const { carModelId } = router.query;
+  const { carId } = router.query;
 
   const columns = [
     {
@@ -34,8 +35,11 @@ function CarTable({}) {
     },
     {
       title: "Mẫu xe",
-      dataIndex: "CarModel.name",
-      key: "carModelId",
+      dataIndex: "carModel",
+      key: "carModel",
+      render: (carModel) => {
+        return <div>{carModel.name}</div>;
+      }
     },
     {
       title: "Biển số xe",
@@ -49,8 +53,12 @@ function CarTable({}) {
     },
     {
       title: "Sở hữu",
-      dataIndex: "user.name",
-      key: "userId",
+      dataIndex: "user",
+      key: "user",
+      render: (user) => {
+        return <div>{user.name}</div>;
+      }
+      
     },
     // {
     //   title: "Hành động",
@@ -117,10 +125,26 @@ function CarTable({}) {
 
   return (
     <>
-      <Button type="primary" onClick={() => setModalCar(true)}>
-        Thêm Xe
-      </Button>
-      <Table columns={columns} dataSource={cars} />
+      {carId ? (
+        <CarDetail carId={carId} onUpdateCar={handleGetCar} />
+      ) : (
+        <div>
+          <Button type="primary" onClick={() => setModalCar(true)}>
+            Thêm Xe
+          </Button>
+          <Table
+            columns={columns}
+            dataSource={cars}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  router.push(`/admin?carId=${record.id}`);
+                },
+              };
+            }}
+          />
+        </div>
+      )}
       <ModalAddCar
         show={modalCar}
         handleCancel={() => setModalCar(false)}

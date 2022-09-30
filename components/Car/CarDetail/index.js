@@ -6,74 +6,53 @@ import {
   Button,
   Form,
   Select,
+  Typography,
   Input,
   DatePicker,
+  Timeline,
   InputNumber,
   Upload,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
-import {
-  getUserById,
-  updateUserById,
-  uploadImagesUser,
-} from "pages/api/userAPI";
-import { getCarModelById } from "pages/api/carModel";
+import { getCarById } from "pages/api/carAPI";
+import { getCarModel } from "pages/api/carModel";
+import { getUsers } from "pages/api/userAPI";
 import { validateMessages } from "utils/messageForm";
-import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
 const formatDate = "YYYY/MM/DD";
+const { Title } = Typography;
 
-const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
+const CarDetail = ({ carId, onUpdateCar }) => {
   const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  const [carModelDetail, setCarModelDetail] = useState({});
+  const [carDetail, setCarDetail] = useState({});
   const [modalUpload, setModalUpload] = useState(false);
+  const [carModels, setCarModels] = useState([]);
+  const [users, setUsers] = useState([]);
   const [listFiles, setListFiles] = useState({
     images: [],
     imageBlob: [],
   });
   const [modalQuestion, setModalQuestion] = useState(false);
-
-  const [brands, setBrands] = useState([
-    "Toyota",
-    "VinFast",
-    "Nissan",
-    "Suzuki",
-    "Subaru",
-    "Lexus",
-    "Audi",
-    "Volkswagen",
-    "Honda",
-    "Volvo",
-    "Hyundai",
-    "Mazda",
-    "KIA",
-    "Mitsubishi",
-    "Maserati",
-    "Chevrolet",
-    "Ford",
-    "Mercedes-Benz",
-    "BMW",
-  ]);
-
-  const fetchcarModelDetail = async () => {
+  console.log(carDetail);
+  const fetchcarDetail = async () => {
     try {
-      const response = await getCarModelById(carModelId);
-      setCarModelDetail(response.data.Data);
+      const response = await getCarById(carId);
+      setCarDetail(response.data.Data);
+ 
       form.setFieldsValue({
         id: response.data.Data.id,
         name: response.data.Data.name,
-        brand: response.data.Data.brand,
-        model: response.data.Data.model,
-        engine: response.data.Data.engine,
-        imageUrl: response.data.Data.imageUrl,
-        transmission: response.data.Data.transmission,
-        seats: response.data.Data.seats,
-        fuel: response.data.Data.fuel,
+        color: response.data.Data.color,
+        licensePlate: response.data.Data.licensePlate,
+        description: response.data.Data.description,
+        user: response.data.Data.user,
+        carModel: response.data.Data.carModel,
+
       });
     } catch (error) {
       openNotification(error.response.Message);
@@ -81,10 +60,29 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
   };
 
   useEffect(() => {
-    if (carModelId) {
-      fetchcarModelDetail();
+    getCarModels();
+    getUsersData();
+    if (carId) {
+      fetchcarDetail();
     }
-  }, [carModelId]);
+  }, [carId]);
+
+  const getCarModels = async () => {
+    try {
+      const res = await getCarModel();
+      setCarModels(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getUsersData = async () => {
+    try {
+      const res = await getUsers();
+      setUsers(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onFinish = async (values) => {
     try {
@@ -96,10 +94,10 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
         image: values.image,
         birthDay: values.birthDay,
       };
-      const res = await updateUserById(body, carModelId);
+      const res = await updateUserById(body, carId);
       if (res.data.StatusCode == "200") {
         openNotification("Cập nhật người dùng thành công!", "");
-        onUpdateCarModel();
+        onUpdateCar();
       }
     } catch (error) {
       console.log(error);
@@ -143,7 +141,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
       <br />
       <Row>
         <Col span={6}>
-          <Image width={300} height={250} src={carModelDetail.image} />
+          <Image width={300} height={250} src={carDetail.image} />
           <div style={{ marginTop: "10px" ,display:'flex',justifyContent:'center' }}>
             <Upload
               onChange={(info) => handleFileChosen(info)}
@@ -162,8 +160,8 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
             autoComplete="off"
             validateMessages={validateMessages}
           >
-             <Row>
-            <Col span={11} className="MarRight20">
+            <Row>
+            <Col span={11} className="MarRight40">
               <Form.Item
                 label="Tên mẫu xe"
                 name="name"
@@ -178,34 +176,8 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
             </Col>
             <Col span={5} className="MarRight20">
               <Form.Item
-                label="Số nghế ngồi"
-                name="seats"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber style={{width:'100%'}} min={1} max={16} />
-              </Form.Item>
-            </Col>
-            <Col span={5} className="MarRight20">
-              <Form.Item
-                label="Năm sản xuất"
-                name="year"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber style={{width:'100%'}} min={1900} max={moment().year()} />
-              </Form.Item>
-            </Col>
-            <Col span={11}  className="MarRight20">
-              <Form.Item
-                label="Model"
-                name="model"
+                label="Màu sắc"
+                name="color"
                 rules={[
                   {
                     required: true,
@@ -215,10 +187,48 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                 <Input />
               </Form.Item>
             </Col>
+            <Col span={5} className="MarRight20">
+              <Form.Item
+                label="Biển số xe"
+                name="licensePlate"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            {/* <Col span={11} className="MarRight40">
+              <Form.Item label="Mẫu xe" name="carModelId">
+                <Select
+                  showSearch
+                  placeholder="Chọn mẫu xe"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.children.includes(input)
+                  }
+                  filterSort={(optionA, optionB) =>
+                    optionA.children
+                      .toLowerCase()
+                      .localeCompare(optionB.children.toLowerCase())
+                  }
+                >
+                  {carModels.map((item, index) => {
+                    return (
+                      <Select.Option key={index} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
             <Col span={10}>
               <Form.Item
-                label="Thương hiệu"
-                name="brand"
+                label="Người sở hữu"
+                name="userId"
                 rules={[
                   {
                     required: true,
@@ -227,7 +237,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
               >
                 <Select
                   showSearch
-                  placeholder="Chọn thương hiệu"
+                  placeholder="Người sở hữu"
                   optionFilterProp="children"
                   filterOption={(input, option) =>
                     option.children.includes(input)
@@ -238,68 +248,34 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                       .localeCompare(optionB.children.toLowerCase())
                   }
                 >
-                  {brands.map((brand) => (
-                    <Option key={brand}>{brand}</Option>
-                  ))}
+                  {users.map((item, index) => {
+                    return (
+                      <Select.Option key={index} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    );
+                  })}
                 </Select>
               </Form.Item>
-            </Col>
-        
-            <Col span={7}  className="MarRight20">
-              <Form.Item
-                label="Đông cơ"
-                name="engine"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
+            </Col> */}
+            <Col span={23}>
+              <Form.Item label="Mô tả" name="description">
+                <TextArea rows={4} />
               </Form.Item>
             </Col>
-            <Col span={7} className="MarRight20"  >
-              <Form.Item
-                label="Truyền động"
-                name="transmission"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={7} className="MarRight20">
-              <Form.Item
-                label="Nhiên liệu"
-                name="fuel"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Select 
-                  showSearch
-                  placeholder="Chọn nhiên liệu"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.includes(input)
-                  }
-                  filterSort={(optionA, optionB) =>
-                    optionA.children
-                      .toLowerCase()
-                      .localeCompare(optionB.children.toLowerCase())
-                  }
-                >
-                  <Option value="Xăng">Xăng</Option>
-                  <Option value="Dầu">Dầu</Option>
-                  <Option value="Điện">Điện</Option>
-                </Select>
-              </Form.Item>
-            </Col>
+            <Col span={23}>
+            <Title level={4}>Người sở hữu</Title>
+                <Timeline>
+                  <Timeline.Item>
+                    Tên: {carDetail?.user?.name}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Số điện thoại: {carDetail?.user?.phone}
+                  </Timeline.Item>
+                </Timeline>
+              </Col>
+              
+
           </Row>
             <div className="service-action">
               <div style={{ marginRight: "20px" }}>
@@ -342,4 +318,4 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
   );
 };
 
-export default CarModelDetail;
+export default CarDetail;

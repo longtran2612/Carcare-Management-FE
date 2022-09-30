@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import PriceHeaderDetail from "../PriceHeaderDetail";
 import ModalAddPriceHeader from "components/Modal/ModalAddPriceHeader";
 import moment from "moment";
-const formatDate = "YYYY/MM/DD";
+const formatDate = "DD/MM/YYYY";
 
 function PriceHeaderTable({}) {
   const [priceHeaders, setPriceHeaders] = useState([]);
@@ -37,13 +37,21 @@ function PriceHeaderTable({}) {
     },
     {
       title: "Từ ngày",
-      dataIndex: moment("fromDate").format(formatDate),
+      dataIndex:"fromDate",
       key: "fromDate",
+     render: (text, record, dataIndex) => {
+        return <div>{moment(record.fromDate).format(formatDate)}</div>;
+      }
+
     },
     {
       title: "Đến ngày",
       dataIndex: "toDate",
       key: "toDate",
+      render: (text, record, dataIndex) => {
+        return <div>{moment(record.toDate).format(formatDate)}</div>;
+      }
+      
     },
     {
       title: "Trạng thái",

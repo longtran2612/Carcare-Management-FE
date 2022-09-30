@@ -4,6 +4,7 @@ import { getCarModel } from "pages/api/carModel";
 import { useRouter } from "next/router";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCarModel from "components/Modal/ModalAddCarModal";
+import CarModelDetail from "components/CarModel/CarModelDetail";
 
 function CarModelTable({}) {
   const [carModels, setCarModels] = useState([]);
@@ -26,7 +27,6 @@ function CarModelTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
-
     },
     {
       title: "Tên mẫu xe",
@@ -101,18 +101,29 @@ function CarModelTable({}) {
 
   return (
     <>
-    {carModelId ? (
-        <ServiceDetail
-        carModelId={carModelId}
-          onUpdateService={handleGetCarModel}
+      {carModelId ? (
+        <CarModelDetail 
+          carModelId={carModelId}
+          onUpdateCarModel={handleGetCarModel}
         />
       ) : (
         <div>
-      <Button type="primary" onClick={() => setModalCarModel(true)}>
-        Thêm mẫu xe
-      </Button>
-      <Table columns={columns} dataSource={carModels} />
-      </div>)}
+          <Button type="primary" onClick={() => setModalCarModel(true)}>
+            Thêm mẫu xe
+          </Button>
+          <Table
+            columns={columns}
+            dataSource={carModels}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  router.push(`/admin?carModelId=${record.id}`);
+                },
+              };
+            }}
+          />
+        </div>
+      )}
       <ModalAddCarModel
         show={modalCarModel}
         handleCancel={() => setModalCarModel(false)}

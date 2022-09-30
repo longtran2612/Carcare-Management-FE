@@ -14,6 +14,7 @@ const { Title } = Typography;
 import { useRouter } from "next/router";
 import logo from "public/images/logo.png";
 import Image from "next/image";
+import Link from "next/link";
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -75,13 +76,18 @@ const SideBar = ({ handleOpenKey }) => {
   return (
     <div style={{ height:'100%'}}>
       <div className="logo" style={{textAlign:"center"}}>
+      <Link href="/admin">
         <Image
+          
           style={{ alignItems: "center" }}
           width={75}
           height={75}
           src={logo}
           alt="VLCARSERVICE"
         />
+        </Link>
+        
+    
       </div>
       <Menu
         mode="inline"

@@ -118,14 +118,14 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       <Row>
         <Col span={6}>
           <Image width={300} height={250} src={userDetail.image} />
-          <div style={{ marginTop: "20px" }}>
+          <div style={{ marginTop: "10px" ,display:'flex',justifyContent:'center' }}>
             <Upload
               onChange={(info) => handleFileChosen(info)}
               multiple
               showUploadList={false}
               fileList={listFiles.imageBlob}
             >
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              <Button icon={<UploadOutlined />}>Thay đổi ảnh đại diện</Button>
             </Upload>
           </div>
         </Col>
