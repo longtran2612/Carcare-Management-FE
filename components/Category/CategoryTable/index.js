@@ -3,12 +3,16 @@ import React, { useState, useEffect } from "react";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import { message } from "antd";
 import {getCategories} from 'pages/api/categoryAPI'
+import ModalAddCategory from "components/Modal/ModalAddCategory";
 
 function CategoryTable({}) {
   const [categories, setCategories] = useState([]);
   const [modalCategory, setModalCategory] = useState(false);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
+
+
+
 
   const columns = [
     {
@@ -93,17 +97,23 @@ function CategoryTable({}) {
   
   }, []);
 
+  const handleSuccessCategory = (data) => {
+    let newArr = [...categories];
+    newArr.push(data);
+    setCategories(newArr);
+  };
+
   return (
     <>
       <Button type="primary" onClick={() => setModalCategory(true)}>
         Thêm danh mục
       </Button>
       <Table columns={columns} dataSource={categories} />
-      {/* <ModalAddUser
+      <ModalAddCategory
         show={modalCategory}
         handleCancel={() => setModalCategory(false)}
-        handleOk={() => console.log("bao")}
-      /> */}
+        onSuccess={(data) => handleSuccessCategory(data)}
+      />
       {/* <ModalQuestion
         title="Bạn có chắc chắn muốn xóa người dùng này không?"
         visible={modalQuestion}

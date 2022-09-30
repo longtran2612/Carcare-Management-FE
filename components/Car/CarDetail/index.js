@@ -43,7 +43,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
     try {
       const response = await getCarById(carId);
       setCarDetail(response.data.Data);
- 
+
       form.setFieldsValue({
         id: response.data.Data.id,
         name: response.data.Data.name,
@@ -52,7 +52,6 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         description: response.data.Data.description,
         user: response.data.Data.user,
         carModel: response.data.Data.carModel,
-
       });
     } catch (error) {
       openNotification(error.response.Message);
@@ -142,7 +141,13 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       <Row>
         <Col span={6}>
           <Image width={300} height={250} src={carDetail.image} />
-          <div style={{ marginTop: "10px" ,display:'flex',justifyContent:'center' }}>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <Upload
               onChange={(info) => handleFileChosen(info)}
               multiple
@@ -161,46 +166,46 @@ const CarDetail = ({ carId, onUpdateCar }) => {
             validateMessages={validateMessages}
           >
             <Row>
-            <Col span={11} className="MarRight40">
-              <Form.Item
-                label="Tên mẫu xe"
-                name="name"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={5} className="MarRight20">
-              <Form.Item
-                label="Màu sắc"
-                name="color"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={5} className="MarRight20">
-              <Form.Item
-                label="Biển số xe"
-                name="licensePlate"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            {/* <Col span={11} className="MarRight40">
+              <Col span={11} className="MarRight40">
+                <Form.Item
+                  label="Tên mẫu xe"
+                  name="name"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={5} className="MarRight20">
+                <Form.Item
+                  label="Màu sắc"
+                  name="color"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={5} className="MarRight20">
+                <Form.Item
+                  label="Biển số xe"
+                  name="licensePlate"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              {/* <Col span={11} className="MarRight40">
               <Form.Item label="Mẫu xe" name="carModelId">
                 <Select
                   showSearch
@@ -258,25 +263,41 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                 </Select>
               </Form.Item>
             </Col> */}
-            <Col span={23}>
-              <Form.Item label="Mô tả" name="description">
-                <TextArea rows={4} />
-              </Form.Item>
-            </Col>
-            <Col span={23}>
-            <Title level={4}>Người sở hữu</Title>
-                <Timeline>
-                  <Timeline.Item>
-                    Tên: {carDetail?.user?.name}
-                  </Timeline.Item>
+              <Col span={23}>
+                <Form.Item label="Mô tả" name="description">
+                  <TextArea rows={4} />
+                </Form.Item>
+              </Col>
+              <Col span={14} className="MarRight40">
+                <Title level={4}>Người sở hữu</Title>
+                <Timeline style={{marginTop:'20px'}}>
+                  <Timeline.Item>Tên: {carDetail?.user?.name}</Timeline.Item>
                   <Timeline.Item>
                     Số điện thoại: {carDetail?.user?.phone}
                   </Timeline.Item>
                 </Timeline>
               </Col>
-              
-
-          </Row>
+              <Col span={6}>
+                <Title level={4}>Thông tin mẫu xe</Title>
+                <Timeline style={{marginTop:'20px'}}>
+                  <Timeline.Item>
+                    Loại xe: {carDetail?.carModel?.model}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Nhãn hiệu: {carDetail?.carModel?.brand}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Nhiên liệu: {carDetail?.carModel?.fuel}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Hộp số: {carDetail?.carModel?.transmission}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Chỗ ngồi: {carDetail?.carModel?.seats}
+                  </Timeline.Item>
+                </Timeline>
+              </Col>
+            </Row>
             <div className="service-action">
               <div style={{ marginRight: "20px" }}>
                 <Button
