@@ -44,6 +44,14 @@ const updateServiceApi = (data, id) => {
   });
 };
 
+const searchService = (params) => {
+  return axios({
+    method: "GET",
+    url: API_URL + "/services/search",
+    params: params,
+  });
+};
+
 // category service
 
 const fetchCategoryServiceApi = () => {
@@ -60,4 +68,5 @@ export {
   removeServiceApi,
   updateServiceApi,
   fetchCategoryServiceApi,
+  searchService,
 };

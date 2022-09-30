@@ -47,21 +47,14 @@ const updateUserById = async (data, id) => {
     method: "PUT",
     url: API_URL + `/users/${id}`,
     data: data,
-  })
-    .then((res) => {
-      return res;
-    })
-    .catch((err) => {
-      throw err;
-    });
+  });
 };
 
 const uploadImagesUser = async (data) => {
-  console.log(data);
   return axios({
     method: "POST",
     headers: {
-      'Content-Type':  'multipart/form-data',
+      "Content-Type": "multipart/form-data",
     },
     url: API_URL + "/upload",
     data: data,
