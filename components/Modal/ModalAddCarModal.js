@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
   Modal,
-  Button,
   Row,
   Col,
   Form,
   Input,
   Select,
-  Switch,
+ 
   InputNumber,
-  DatePicker,
 } from "antd";
 import { createCarModel } from "pages/api/carModel";
 

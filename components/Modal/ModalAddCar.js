@@ -52,6 +52,8 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
       console.log(error);
     }
   };
+console.log(users)
+
   useEffect(() => {
     getCarModels();
     getUsersData();
@@ -130,14 +132,10 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
                   showSearch
                   placeholder="Chọn mẫu xe"
                   optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.includes(input)
+                  filterOption={(i, o) =>
+                    o.children.includes(i)
                   }
-                  filterSort={(optionA, optionB) =>
-                    optionA.children
-                      .toLowerCase()
-                      .localeCompare(optionB.children.toLowerCase())
-                  }
+                  
                 >
                   {carModels.map((item, index) => {
                     return (
@@ -149,19 +147,11 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={10}>
-              <Form.Item
-                label="Người sở hữu"
-                name="userId"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+            <Col span={11} >
+              <Form.Item label="Người sở hữu" name="userId">
                 <Select
                   showSearch
-                  placeholder="Người sở hữu"
+                  placeholder="Chọn Người sở hữu"
                   optionFilterProp="children"
                   filterOption={(input, option) =>
                     option.children.includes(input)
@@ -182,6 +172,7 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
                 </Select>
               </Form.Item>
             </Col>
+         
             <Col span={23}>
               <Form.Item label="Mô tả" name="description">
                 <TextArea rows={4} />

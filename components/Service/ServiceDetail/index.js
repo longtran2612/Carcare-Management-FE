@@ -45,6 +45,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       form.setFieldsValue({
         name: response.data.Data.name,
         type: response.data.Data.type,
+        imageUrl: response.data.Data.imageUrl,
         description: response.data.Data.description,
         categoryId: response.data.Data.categoryId,
         status: response.data.Data.status,
@@ -96,12 +97,24 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       <br />
       <br />
       <Row>
-        <Col span={6}>
-          <Image
-            width={300}
-            height={250}
-            src="https://i.ibb.co/MfNTNJS/may-rua-xe-oto-com-vn-4-84d9.jpg"
-          />
+      <Col span={6}>
+          <Image width={300} height={250} src={serviceDetail.imageUrl} />
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            {/* <Upload
+              onChange={(info) => handleFileChosen(info)}
+              multiple
+              showUploadList={false}
+              fileList={listFiles.imageBlob}
+            >
+              <Button icon={<UploadOutlined />}>Tải hình lên</Button>
+            </Upload> */}
+          </div>
         </Col>
         <Col span={15}>
           <Form

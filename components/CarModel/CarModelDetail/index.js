@@ -143,7 +143,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
       <br />
       <Row>
         <Col span={6}>
-          <Image width={300} height={250} src={carModelDetail.image} />
+          <Image width={300} height={250} src={carModelDetail.imageUrl} />
           <div style={{ marginTop: "10px" ,display:'flex',justifyContent:'center' }}>
             <Upload
               onChange={(info) => handleFileChosen(info)}

@@ -95,7 +95,19 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
             ]}
             name="categoryId"
           >
-            <Select>
+            <Select
+             showSearch
+             placeholder="Chọn danh mục"
+             optionFilterProp="children"
+             filterOption={(input, option) =>
+               option.children.includes(input)
+             }
+             filterSort={(optionA, optionB) =>
+               optionA.children
+                 .toLowerCase()
+                 .localeCompare(optionB.children.toLowerCase())
+             }
+           >
               {listCategory?.map((item) => {
                 return (
                   <Select.Option key={item.id} value={item.id}>
