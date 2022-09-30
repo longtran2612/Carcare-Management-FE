@@ -118,9 +118,7 @@ function CarTable({}) {
   }, []);
 
   const handleSuccessCreateCar = (data) => {
-    let newArr = [...cars];
-    newArr.push(data);
-    setCars(newArr);
+    handleGetCar();
   };
 
   return (

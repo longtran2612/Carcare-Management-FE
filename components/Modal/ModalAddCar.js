@@ -53,6 +53,7 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
     }
   };
 console.log(users)
+console.log(carModels)
 
   useEffect(() => {
     getCarModels();
@@ -132,8 +133,13 @@ console.log(users)
                   showSearch
                   placeholder="Chọn mẫu xe"
                   optionFilterProp="children"
-                  filterOption={(i, o) =>
-                    o.children.includes(i)
+                  filterOption={(input, option) =>
+                    option.children.includes(input)
+                  }
+                  filterSort={(optionA, optionB) =>
+                    optionA.children
+                      .toLowerCase()
+                      .localeCompare(optionB.children.toLowerCase())
                   }
                   
                 >
@@ -153,14 +159,8 @@ console.log(users)
                   showSearch
                   placeholder="Chọn Người sở hữu"
                   optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.includes(input)
-                  }
-                  filterSort={(optionA, optionB) =>
-                    optionA.children
-                      .toLowerCase()
-                      .localeCompare(optionB.children.toLowerCase())
-                  }
+                 
+                  
                 >
                   {users.map((item, index) => {
                     return (
