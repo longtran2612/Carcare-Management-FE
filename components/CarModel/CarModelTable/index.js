@@ -27,6 +27,7 @@ function CarModelTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
+      render: (id) => <a>{id}</a>,
     },
     {
       title: "Tên mẫu xe",
@@ -96,7 +97,7 @@ function CarModelTable({}) {
   const handleSuccessCarModel = (data) => {
     let newArr = [...carModels];
     newArr.push(data);
-    setServices(newArr);
+    setCarModels(newArr);
   };
 
   return (

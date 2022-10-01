@@ -11,43 +11,32 @@ import {
   Input,
 } from "antd";
 import { useRouter } from "next/router";
-import {
-  getServiceApi,
-  removeServiceApi,
-  updateServiceApi,
-} from "pages/api/serviceAPI";
+import { getCategoryById, updateCategory } from "pages/api/categoryAPI";
 import { openNotification } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 
-const ServiceDetail = ({ serviceId, onUpdateService }) => {
+const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
   const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  const [serviceDetail, setServiceDetail] = useState({});
+  const [categoryDetail, setCategoryDetail] = useState({});
   const [categoryServices, setCategoryServices] = useState({});
   const [modalQuestion, setModalQuestion] = useState(false);
 
-  const fetchCategoryService = async () => {
-    try {
-      const response = await getCategories();
-      setCategoryServices(response.data.Data);
-    } catch (error) {
-      openNotification(error.response.data);
-    }
-  };
 
-  const fetchServiceDetail = async () => {
+
+  const fetchcategoryDetail = async () => {
     try {
-      const response = await getServiceApi(serviceId);
-      setServiceDetail(response.data.Data);
+      const response = await getCategoryById(categoryId);
+      setCategoryDetail(response.data.Data);
+      console.log(response.data.Data);
       form.setFieldsValue({
         name: response.data.Data.name,
         type: response.data.Data.type,
         imageUrl: response.data.Data.imageUrl,
         description: response.data.Data.description,
-        categoryId: response.data.Data.categoryId,
         status: response.data.Data.status,
       });
     } catch (error) {
@@ -56,26 +45,24 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
   };
 
   useEffect(() => {
-    if (serviceId) {
-      fetchServiceDetail();
-      fetchCategoryService();
+    if (categoryId) {
+        fetchcategoryDetail()
     }
-  }, [serviceId]);
+  }, [categoryId]);
 
   const onFinish = async (values) => {
     try {
       let body = {
-        id: serviceDetail.id,
+        id: categoryDetail.id,
         type: values.type,
         name: values.name,
         description: values.description,
-        categoryId: values.categoryId,
         status: values.status,
       };
-      const res = await updateServiceApi(body, serviceDetail.id);
+      const res = await updateCategory(body, categoryDetail.id);
       if (res.data.StatusCode == "200") {
         openNotification("Cập nhật dịch vụ thành công!", "");
-        onUpdateService();
+        onUpdateCategory();
       }
     } catch (error) {
       console.log(error);
@@ -83,9 +70,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
   };
   const handleRemoveService = async () => {
     try {
-      await removeServiceApi(serviceDetail.id);
+      await removeServiceApi(categoryDetail.id);
       router.push("/admin");
-      onUpdateService();
+      onUpdateCategory();
       setModalQuestion(false);
     } catch (error) {}
   };
@@ -93,7 +80,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
     <>
       <Row>
         <Col span={6}>
-          <Image width={300} height={250} src={serviceDetail.imageUrl} />
+          <Image width={300} height={250} src={categoryDetail.imageUrl} />
           <div
             style={{
               marginTop: "10px",
@@ -134,22 +121,6 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
               </Col>
               <Col span={5} style={{ marginRight: "20px" }}>
                 <Form.Item
-                  label="Kiểu dịch vụ"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                  name="type"
-                >
-                  <Select>
-                    <Select.Option value="HOT">HOT</Select.Option>
-                    <Select.Option value="LIKE">LIKE</Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={5} style={{ marginRight: "20px" }}>
-                <Form.Item
                   label="Trạng thái"
                   rules={[
                     {
@@ -166,39 +137,20 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={11} style={{ marginRight: "20px" }}>
+              <Col span={5} style={{ marginRight: "20px" }}>
                 <Form.Item
-                  label="Danh mục dịch vụ"
+                  label="Kiểu dịch vụ"
                   rules={[
                     {
                       required: true,
                     },
                   ]}
-                  name="categoryId"
+                  name="type"
                 >
                   <Select>
-                    {Object.keys(categoryServices).length > 0 &&
-                      categoryServices?.map((item) => {
-                        return (
-                          <Select.Option key={item.id} value={item.id}>
-                            {item.name}
-                          </Select.Option>
-                        );
-                      })}
+                    <Select.Option value="HOT">HOT</Select.Option>
+                    <Select.Option value="LIKE">LIKE</Select.Option>
                   </Select>
-                </Form.Item>
-              </Col>
-              <Col span={23} style={{ marginRight: "20px" }}>
-                <Form.Item
-                  label="Mô tả"
-                  name="description"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <TextArea rows={4} />
                 </Form.Item>
               </Col>
             </Row>
@@ -235,4 +187,4 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
   );
 };
 
-export default ServiceDetail;
+export default CategoryDetail;

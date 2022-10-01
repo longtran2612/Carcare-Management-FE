@@ -29,6 +29,7 @@ function PriceHeaderTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
+      render: (id) => <a>{id}</a>,
     },
     {
       title: "Tên bảng giá",

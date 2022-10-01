@@ -133,14 +133,10 @@ const CarDetail = ({ carId, onUpdateCar }) => {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
-      <br />
-      <br />
+      
       <Row>
         <Col span={6}>
-          <Image width={300} height={250} src={carDetail.image} />
+          <Image width={300} height={250} src={carDetail.imageUrl} />
           <div
             style={{
               marginTop: "10px",

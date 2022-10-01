@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Input, Select, Switch, InputNumber, DatePicker } from "antd";
+import {
+  Modal,
+  Button,
+  Form,
+  Input,
+  Row,
+  Col,
+  Select,
+  Switch,
+  InputNumber,
+  DatePicker,
+} from "antd";
 import { createPriceHeader } from "pages/api/PriceHeaderAPI";
 import { getServices } from "pages/api/serviceAPI";
 
@@ -8,7 +19,6 @@ import { openNotification } from "utils/notification";
 const { TextArea } = Input;
 import moment from "moment";
 const formatDate = "YYYY/MM/DD";
-
 
 const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
@@ -50,50 +60,52 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Form.Item
-            label="Tên bảng giá"
-            name="name"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-            <Form.Item
-                label="Mô tả"
-                name="description"
+          <Row>
+            <Col span={11} className="MarRight20">
+              <Form.Item
+                label="Tên bảng giá"
+                name="name"
                 rules={[
-                {
+                  {
                     required: true,
-                },
+                  },
                 ]}
-            >
-                <TextArea rows={4} />
-            </Form.Item>
-            <Form.Item
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={5} className="MarRight20">
+              <Form.Item
                 label="Ngày bắt đầu"
                 name="fromDate"
                 rules={[
-                {
+                  {
                     required: true,
-                },
+                  },
                 ]}
-            >
-                <DatePicker format={formatDate} />
-            </Form.Item>
-            <Form.Item
+              >
+                <DatePicker placeholder="bắt đầu" format={formatDate} />
+              </Form.Item>
+            </Col>
+            <Col span={5} className="MarRight20">
+              <Form.Item
                 label="Ngày kết thúc"
                 name="toDate"
                 rules={[
-                {
+                  {
                     required: true,
-                },
+                  },
                 ]}
-            >
-                <DatePicker format={formatDate} />
-            </Form.Item>
+              >
+                <DatePicker placeholder="kết thúc" format={formatDate} />
+              </Form.Item>
+            </Col>
+            <Col span={23} className="MarRight20">
+              <Form.Item label="Mô tả" name="description">
+                <TextArea rows={4} />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </>

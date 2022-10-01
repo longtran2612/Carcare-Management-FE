@@ -1,7 +1,6 @@
 import { Table, Tag, Space, Button } from "antd";
 import React, { useState, useEffect } from "react";
 import { getCar } from "pages/api/carAPI";
-import ModalAddService from "components/Modal/ModalAddService";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCar from "components/Modal/ModalAddCar";
 import { useRouter } from "next/router";
@@ -13,6 +12,7 @@ function CarTable({}) {
   const router = useRouter();
   const { carId } = router.query;
 
+  console.log(cars)
   const columns = [
     {
       title: "STT",
@@ -27,6 +27,7 @@ function CarTable({}) {
       title: "MÃ",
       dataIndex: "id",
       key: "id",
+      render: (id) => <a>{id}</a>,
     },
     {
       title: "Tên xe",

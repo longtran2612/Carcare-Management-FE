@@ -1,4 +1,4 @@
-import { Table, Tag, Space, Button } from "antd";
+import { Table, Tag, Space, Button ,Tooltip } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { getUsers } from "pages/api/userAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -158,6 +158,7 @@ function UserTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
+      render: text => <a>{text}</a>,
       ...getColumnSearchProps("id"),
       sorter: {
         compare: (a, b) => a.id - b.id,
@@ -169,6 +170,11 @@ function UserTable({}) {
       dataIndex: "name",
       key: "name",
       ...getColumnSearchProps("name"),
+      render: (name) => (
+        <Tooltip placement="topLeft" title={name}>
+          {name}
+        </Tooltip>
+      ),
     },
     {
       title: "Số điện thoại",
@@ -179,13 +185,24 @@ function UserTable({}) {
         compare: (a, b) => a.phone - b.phone,
         multiple: 2,
       },
+      render: (phone) => (
+        <Tooltip placement="topLeft" title={phone}>
+          {phone}
+        </Tooltip>
+      ),
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
       ...getColumnSearchProps("email"),
+      render: (email) => (
+        <Tooltip placement="topLeft" title={email}>
+          {email}
+        </Tooltip>
+      ),
     },
+    
     {
       title: "Địa chỉ",
       dataIndex: "address",
@@ -193,6 +210,11 @@ function UserTable({}) {
       ...getColumnSearchProps("address"),
       sorter: (a, b) => a.address.length - b.address.length,
       sortDirections: ["descend", "ascend"],
+      render: (address) => (
+        <Tooltip placement="topLeft" title={address}>
+          {address}
+        </Tooltip>
+      ),
     },
     {
       title: "Trạng thái",
@@ -250,6 +272,7 @@ function UserTable({}) {
             onChange={handleChange}
             columns={columns}
             dataSource={users}
+      
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {

@@ -72,7 +72,7 @@ const ModalAddCategory = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col>
+            <Col span={6}>
               <Form.Item
                 label="Loại doanh mục"
                 name="type"
@@ -82,7 +82,7 @@ const ModalAddCategory = ({ show, onSuccess, handleCancel }) => {
                   },
                 ]}
               >
-                <Select span={4}>
+                <Select style={{width:'100%'}}>
                   <Option value="NORMAL">Thường</Option>
                   <Option value="NEW">Mới</Option>
                   <Option value="HOT">HOT</Option>

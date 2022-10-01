@@ -18,7 +18,8 @@ function ServiceTable({}) {
   const { serviceId } = router.query;
   const { Option } = Select;
   const [searchValue, setSearchValue] = useState({
-    name: "",
+    id:"",
+    name:"",
     category_id: null,
   });
   const [categoryServices, setCategoryServices] = useState([]);
@@ -38,6 +39,7 @@ function ServiceTable({}) {
       title: "Mã dịch vụ",
       dataIndex: "id",
       key: "id",
+      render: (id) => <a>{id}</a>,
     },
     {
       title: "Tên dịch vụ",
@@ -45,9 +47,42 @@ function ServiceTable({}) {
       key: "name",
     },
     {
+      title: "Danh mục dịch vụ",
+      dataIndex: "category",
+      key: "category",
+      render: (category) => {
+        return (
+          <>
+            {category === null ? (
+              <Tag color={"red"}>{"Chưa có danh mục"}</Tag>
+            ) : (
+              <div>{category.name}</div>
+            )}
+          </>
+        );
+      },
+    },
+
+    {
       title: "Loại dịch vụ",
       dataIndex: "type",
       key: "type",
+    },
+    {
+      title: "Giá",
+      dataIndex: "price",
+      key: "price",
+      render: (price) => {
+        return (
+          <>
+            {price === null ? (
+              <Tag color={"red"}>{"Chưa có giá"}</Tag>
+            ) : (
+              <div>{price.price}</div>
+            )}
+          </>
+        );
+      },
     },
     {
       title: "Trạng thái",
@@ -67,15 +102,11 @@ function ServiceTable({}) {
     },
   ];
 
+  console.log(services);
   const handleGetServices = async () => {
     try {
-      getServices().then((res) => {
-        if (res.data.StatusCode == 200) {
-          setServices(res.data.Data);
-        } else {
-          message.error(res.data.message);
-        }
-      });
+      const response = await searchService();
+      setServices(response.data.Data.data);
     } catch (err) {
       console.log(err);
     }
@@ -105,12 +136,14 @@ function ServiceTable({}) {
     try {
       setLoading(true);
       const response = await searchService(searchValue);
+      console.log(response)
       setServices(response.data.Data.data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   };
+  console.log(searchValue)
 
   return (
     <>
@@ -125,21 +158,28 @@ function ServiceTable({}) {
             Thêm dịch vụ
           </Button>
           <Row style={{ margin: "20px 0px" }}>
-            <Col span={6}>
+          <Col span={4} style={{marginRight: "10px" }}>
+              <Input
+                value={searchValue.id}
+                onChange={(e) => setSearchValue({ ...searchValue, id: e.target.value })}
+                placeholder="Mã dịch vụ"
+              />
+            </Col>
+            <Col span={4} style={{marginRight: "10px" }}>
               <Input
                 value={searchValue.name}
-                onChange={(e) => setSearchValue(e.target.value)}
+                onChange={(e) => setSearchValue({ ...searchValue, name: e.target.value })}
                 placeholder="Tên dịch vụ"
               />
             </Col>
-            <Col span={6}>
+            <Col span={4}>
               <Select
                 showSearch
-                style={{ width: "90%", marginLeft: "10px" }}
+                style={{ width: "90%"}}
                 optionFilterProp="children"
                 placeholder="Danh mục dịch vụ"
                 onChange={(value) =>
-                  setSearchValue({ ...searchValue, categoryID: value })
+                  setSearchValue({ ...searchValue, category_id: value })
                 }
                 filterOption={(input, option) =>
                   option.children.toLowerCase().includes(input.toLowerCase())

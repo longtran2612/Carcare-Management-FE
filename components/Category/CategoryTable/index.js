@@ -1,18 +1,20 @@
-import { Table, Tag, Space, Button } from "antd";
+import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
 import React, { useState, useEffect } from "react";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import { message } from "antd";
-import {getCategories} from 'pages/api/categoryAPI'
+import { getCategories } from "pages/api/categoryAPI";
 import ModalAddCategory from "components/Modal/ModalAddCategory";
+import CategoryDetail from "../CategoryDetail";
+import { useRouter } from "next/router";
 
 function CategoryTable({}) {
   const [categories, setCategories] = useState([]);
   const [modalCategory, setModalCategory] = useState(false);
   const [modalQuestion, setModalQuestion] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const [id, setId] = useState(null);
-
-
-
+  const router = useRouter();
+  const { categoryId } = router.query;
 
   const columns = [
     {
@@ -28,6 +30,15 @@ function CategoryTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
+      filteredValue: [searchText],
+      onFilter: (value, record) => {
+        return (
+          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.name).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.type).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.status).toLowerCase().includes(value.toLowerCase())
+        );
+      },
     },
     {
       title: "Tên",
@@ -36,8 +47,8 @@ function CategoryTable({}) {
     },
     {
       title: "Loại",
-      dataIndex: "phone",
-      key: "phone",
+      dataIndex: "type",
+      key: "type",
     },
     {
       title: "Trạng thái",
@@ -94,7 +105,6 @@ function CategoryTable({}) {
 
   useEffect(() => {
     handleCatetgory();
-  
   }, []);
 
   const handleSuccessCategory = (data) => {
@@ -103,12 +113,45 @@ function CategoryTable({}) {
     setCategories(newArr);
   };
 
+
+
+
+
   return (
     <>
-      <Button type="primary" onClick={() => setModalCategory(true)}>
-        Thêm danh mục
-      </Button>
-      <Table columns={columns} dataSource={categories} />
+      {categoryId ? (
+        <CategoryDetail
+          categoryId={categoryId}
+          onUpdateCategory={handleCatetgory}
+        />
+      ) : (
+        <div>
+          <Button type="primary" onClick={() => setModalCategory(true)}>
+            Thêm danh mục
+          </Button>
+          <Row style={{ margin: "20px 0px" }}>
+            <Col span={4} style={{ marginRight: "10px" }}>
+              <Input.Search
+                placeholder="Tìm kiếm"
+                onChange={(e) => setSearchText(e.target.value)}
+                onSearch={(value) => setSearchText(value)}
+                value={searchText}
+              />
+            </Col>
+          </Row>
+          <Table
+            columns={columns}
+            dataSource={categories}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  router.push(`/admin?categoryId=${record.id}`);
+                },
+              };
+            }}
+          />
+        </div>
+      )}
       <ModalAddCategory
         show={modalCategory}
         handleCancel={() => setModalCategory(false)}

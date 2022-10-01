@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Input, Select, Switch, InputNumber } from "antd";
+import { Modal,Row,Col, Button, Form, Input, Select, Switch, InputNumber } from "antd";
 import { createPrice } from "pages/api/priceAPI";
 import { getServices } from "pages/api/serviceAPI";
 
@@ -70,6 +70,8 @@ const ModalAddPrice = ({ priceHeaderId,show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
+           <Row>
+            <Col span={7} className="MarRight20">
           <Form.Item
             label="Tên giá"
             name="name"
@@ -81,6 +83,8 @@ const ModalAddPrice = ({ priceHeaderId,show, onSuccess, handleCancel }) => {
           >
             <Input />
           </Form.Item>
+          </Col>
+          <Col span={7}  className="MarRight20">
           <Form.Item
             label="Giá"
             name="price"
@@ -90,8 +94,10 @@ const ModalAddPrice = ({ priceHeaderId,show, onSuccess, handleCancel }) => {
               },
             ]}
           >
-            <InputNumber />
+            <InputNumber prefix='VND' min={0} style={{width:'100%'}} />
           </Form.Item>
+          </Col>
+          <Col span={7} >
           <Form.Item
             label="Dịch vụ"
             rules={[
@@ -101,7 +107,15 @@ const ModalAddPrice = ({ priceHeaderId,show, onSuccess, handleCancel }) => {
             ]}
             name="serviceId"
           >
-            <Select>
+            <Select
+              showSearch
+              placeholder="Chọn dịch vụ"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              
+            >
               {listService?.map((item) => {
                 return (
                   <Select.Option key={item.id} value={item.id}>
@@ -111,6 +125,9 @@ const ModalAddPrice = ({ priceHeaderId,show, onSuccess, handleCancel }) => {
               })}
             </Select>
           </Form.Item>
+          </Col>
+          </Row>
+        
         </Form>
       </Modal>
     </>

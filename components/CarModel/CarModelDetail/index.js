@@ -136,11 +136,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
-      <br />
-      <br />
+     
       <Row>
         <Col span={6}>
           <Image width={300} height={250} src={carModelDetail.imageUrl} />

@@ -156,11 +156,6 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
-      <br />
-      <br />
       <Row>
         <Col span={24}>
           <Form
