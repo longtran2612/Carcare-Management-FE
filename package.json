@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@do-kevin/pc-vn": "^2.0.5",
     "@reduxjs/toolkit": "^1.8.4",
     "antd": "^4.22.6",
     "axios": "^0.27.2",

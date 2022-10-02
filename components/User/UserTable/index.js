@@ -1,9 +1,8 @@
-import { Table, Tag, Space, Button ,Tooltip } from "antd";
+import { Table, message, Tag, Space, Button ,Tooltip, Row,Col,Input} from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { getUsers } from "pages/api/userAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddUser from "components/Modal/ModelAddUser";
-import { message, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import UserDetail from "../UserDetail";
@@ -21,6 +20,7 @@ function UserTable({}) {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
   const [filteredInfo, setFilteredInfo] = useState({});
+  const [searchTextGlobal,setSearchTextGlobal ] = useState("");
 
   const handleUsers = async () => {
     try {
@@ -164,6 +164,17 @@ function UserTable({}) {
         compare: (a, b) => a.id - b.id,
         multiple: 2,
       },
+      filteredValue: [searchText],
+      onFilter: (value, record) => {
+        return (
+          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.name).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.email).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.phone).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.address).toLowerCase().includes(value.toLowerCase())    
+          )
+      },
+
     },
     {
       title: "Tên",
@@ -268,6 +279,16 @@ function UserTable({}) {
           <Button type="primary" onClick={() => setModalUser(true)}>
             Thêm người dùng
           </Button>
+          <Row style={{ margin: "20px 0px" }}>
+            <Col span={4} style={{ marginRight: "10px" }}>
+              <Input.Search
+                placeholder="Tìm kiếm"
+                onChange={(e) => setSearchText(e.target.value)}
+                onSearch={(value) => setSearchText(value)}
+                value={searchText}
+              />
+            </Col>
+          </Row>
           <Table
             onChange={handleChange}
             columns={columns}

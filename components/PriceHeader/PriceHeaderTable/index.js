@@ -1,4 +1,4 @@
-import { Table, Tag, Space, Button } from "antd";
+import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
 import React, { useState, useEffect } from "react";
 import { getPriceHeaders } from "pages/api/PriceHeaderAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -14,6 +14,7 @@ function PriceHeaderTable({}) {
   // const [modalQuestion, setModalQuestion] = useState(false);
   const [id, setId] = useState(null);
   const router = useRouter();
+  const [searchText, setSearchText] = useState("");
   const { priceHeaderId } = router.query;
 
   const columns = [
@@ -30,6 +31,14 @@ function PriceHeaderTable({}) {
       dataIndex: "id",
       key: "id",
       render: (id) => <a>{id}</a>,
+      filteredValue: [searchText],
+      onFilter: (value, record) => {
+        return (
+          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.name).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.status).toLowerCase().includes(value.toLowerCase())
+        );
+      },
     },
     {
       title: "Tên bảng giá",
@@ -38,12 +47,11 @@ function PriceHeaderTable({}) {
     },
     {
       title: "Từ ngày",
-      dataIndex:"fromDate",
+      dataIndex: "fromDate",
       key: "fromDate",
-     render: (text, record, dataIndex) => {
+      render: (text, record, dataIndex) => {
         return <div>{moment(record.fromDate).format(formatDate)}</div>;
-      }
-
+      },
     },
     {
       title: "Đến ngày",
@@ -51,8 +59,7 @@ function PriceHeaderTable({}) {
       key: "toDate",
       render: (text, record, dataIndex) => {
         return <div>{moment(record.toDate).format(formatDate)}</div>;
-      }
-      
+      },
     },
     {
       title: "Trạng thái",
@@ -145,6 +152,16 @@ function PriceHeaderTable({}) {
           <Button type="primary" onClick={() => setModalPriceHeader(true)}>
             Thêm bảng giá
           </Button>
+          <Row style={{ margin: "20px 0px" }}>
+            <Col span={4} style={{ marginRight: "10px" }}>
+              <Input.Search
+                placeholder="Tìm kiếm"
+                onChange={(e) => setSearchText(e.target.value)}
+                onSearch={(value) => setSearchText(value)}
+                value={searchText}
+              />
+            </Col>
+          </Row>
           <Table
             columns={columns}
             dataSource={priceHeaders}
@@ -156,7 +173,7 @@ function PriceHeaderTable({}) {
               };
             }}
           />
-            <ModalAddPriceHeader
+          <ModalAddPriceHeader
             show={modalPriceHeader}
             handleCancel={() => setModalPriceHeader(false)}
             onSuccess={(data) => handleSuccessCreatePriceHeader(data)}
