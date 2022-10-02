@@ -10,9 +10,12 @@ import logo from "public/images/logo.png";
 import Image from "next/image";
 const { Content, Sider, Footer } = Layout;
 
+
+
 const AdminPage = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [key, setKey] = useState("car-slot");
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 

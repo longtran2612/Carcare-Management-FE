@@ -1,4 +1,4 @@
-import { Table, Tag, Space, Button } from "antd";
+import { Table, Tag, Space, Button,Row,Col,Input } from "antd";
 import React, { useState, useEffect } from "react";
 import { getCar } from "pages/api/carAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -9,6 +9,7 @@ function CarTable({}) {
   const [cars, setCars] = useState([]);
   const [modalCar, setModalCar] = useState(false);
   const [id, setId] = useState(null);
+  const [searchText, setSearchText] = useState("");
   const router = useRouter();
   const { carId } = router.query;
 
@@ -28,6 +29,15 @@ function CarTable({}) {
       dataIndex: "id",
       key: "id",
       render: (id) => <a>{id}</a>,
+      filteredValue: [searchText],
+      onFilter: (value, record) => {
+        return (
+          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.name).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.carModel.name).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.user.name).toLowerCase().includes(value.toLowerCase())      
+        );
+      },
     },
     {
       title: "Tên xe",
@@ -131,6 +141,16 @@ function CarTable({}) {
           <Button type="primary" onClick={() => setModalCar(true)}>
             Thêm Xe
           </Button>
+          <Row style={{ margin: "20px 0px" }}>
+            <Col span={4} style={{ marginRight: "10px" }}>
+              <Input.Search
+                placeholder="Tìm kiếm"
+                onChange={(e) => setSearchText(e.target.value)}
+                onSearch={(value) => setSearchText(value)}
+                value={searchText}
+              />
+            </Col>
+          </Row>
           <Table
             columns={columns}
             dataSource={cars}

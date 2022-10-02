@@ -1,4 +1,4 @@
-import { Table, Tag, Space, Button } from "antd";
+import { Table, Tag, Space, Button , Row, Col, Input} from "antd";
 import React, { useState, useEffect } from "react";
 import { getCarModel } from "pages/api/carModel";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ function CarModelTable({}) {
   const [carModels, setCarModels] = useState([]);
   const [modalCarModel, setModalCarModel] = useState(false);
   const [id, setId] = useState(null);
+  const [searchText, setSearchText] = useState("");
   const router = useRouter();
   const { carModelId } = router.query;
 
@@ -28,6 +29,21 @@ function CarModelTable({}) {
       dataIndex: "id",
       key: "id",
       render: (id) => <a>{id}</a>,
+      filteredValue: [searchText],
+      onFilter: (value, record) => {
+        return (
+          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.name).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.brand).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.model).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.type).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.year).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.engine).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.fuel).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.transmission).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.seat).toLowerCase().includes(value.toLowerCase())
+        );
+      },
     },
     {
       title: "Tên mẫu xe",
@@ -112,6 +128,16 @@ function CarModelTable({}) {
           <Button type="primary" onClick={() => setModalCarModel(true)}>
             Thêm mẫu xe
           </Button>
+          <Row style={{ margin: "20px 0px" }}>
+            <Col span={4} style={{ marginRight: "10px" }}>
+              <Input.Search
+                placeholder="Tìm kiếm"
+                onChange={(e) => setSearchText(e.target.value)}
+                onSearch={(value) => setSearchText(value)}
+                value={searchText}
+              />
+            </Col>
+          </Row>
           <Table
             columns={columns}
             dataSource={carModels}
