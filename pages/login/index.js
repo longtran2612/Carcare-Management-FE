@@ -14,6 +14,7 @@ import { Form, Input, Button, Col, Row, message } from "antd";
 import { Router, useRouter } from "next/router";
 import { setLogin } from "redux/slices/authSlice";
 import { login } from "pages/api/authAPI";
+import Loading from "components/Loading";
 const { Title } = Typography;
 
 export default function LoginPage() {
@@ -151,6 +152,7 @@ export default function LoginPage() {
           </div> */}
         </Col>
       </Row>
+      <Loading loading={loading} />
     </>
   );
 }

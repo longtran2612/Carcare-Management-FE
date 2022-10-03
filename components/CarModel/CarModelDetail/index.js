@@ -24,6 +24,7 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
+import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
 
 const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
@@ -32,6 +33,8 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
   const { TextArea } = Input;
   const [carModelDetail, setCarModelDetail] = useState({});
   const [modalUpload, setModalUpload] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [listFiles, setListFiles] = useState({
     images: [],
     imageBlob: [],
@@ -61,6 +64,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
   ]);
 
   const fetchcarModelDetail = async () => {
+    setLoading(true);
     try {
       const response = await getCarModelById(carModelId);
       setCarModelDetail(response.data.Data);
@@ -75,7 +79,9 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
         seats: response.data.Data.seats,
         fuel: response.data.Data.fuel,
       });
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       openNotification(error.response.Message);
     }
   };
@@ -334,6 +340,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
         handleOk={() => handleUploadImages()}
         listImage={listFiles.imageBlob}
       />
+      <Loading loading={loading} />
     </>
   );
 };

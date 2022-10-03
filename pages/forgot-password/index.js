@@ -336,6 +336,7 @@ export default function ForgotPassword() {
           Đăng ký tài khoản mới?<Link href="/forgot-password"> Đăng ký</Link>
         </Col>
       </Row>
+      
     </>
   );
 }

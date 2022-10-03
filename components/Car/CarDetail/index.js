@@ -22,6 +22,7 @@ import { validateMessages } from "utils/messageForm";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
+import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
 const { Title } = Typography;
 
@@ -33,6 +34,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
   const [modalUpload, setModalUpload] = useState(false);
   const [carModels, setCarModels] = useState([]);
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [listFiles, setListFiles] = useState({
     images: [],
     imageBlob: [],
@@ -40,10 +42,10 @@ const CarDetail = ({ carId, onUpdateCar }) => {
   const [modalQuestion, setModalQuestion] = useState(false);
   console.log(carDetail);
   const fetchcarDetail = async () => {
+    setLoading(true);
     try {
       const response = await getCarById(carId);
       setCarDetail(response.data.Data);
-
       form.setFieldsValue({
         id: response.data.Data.id,
         name: response.data.Data.name,
@@ -53,7 +55,9 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         user: response.data.Data.user,
         carModel: response.data.Data.carModel,
       });
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       openNotification(error.response.Message);
     }
   };
@@ -67,19 +71,25 @@ const CarDetail = ({ carId, onUpdateCar }) => {
   }, [carId]);
 
   const getCarModels = async () => {
+    setLoading(true);
     try {
       const res = await getCarModel();
       setCarModels(res.data.Data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   const getUsersData = async () => {
+    setLoading(true);
     try {
       const res = await getUsers();
       setUsers(res.data.Data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -331,6 +341,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         handleOk={() => handleUploadImages()}
         listImage={listFiles.imageBlob}
       />
+      <Loading loading={loading} />
     </>
   );
 };

@@ -1,4 +1,14 @@
-import { Table, message, Tag, Space, Button ,Tooltip, Row,Col,Input} from "antd";
+import {
+  Table,
+  message,
+  Tag,
+  Space,
+  Button,
+  Tooltip,
+  Row,
+  Col,
+  Input,
+} from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { getUsers } from "pages/api/userAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -7,6 +17,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import UserDetail from "../UserDetail";
 import Highlighter from "react-highlight-words";
+import Loading from "components/Loading";
 
 function UserTable({}) {
   const [users, setUsers] = useState([]);
@@ -20,25 +31,29 @@ function UserTable({}) {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
   const [filteredInfo, setFilteredInfo] = useState({});
-  const [searchTextGlobal,setSearchTextGlobal ] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleUsers = async () => {
+    setLoading(true);
     try {
       getUsers().then((res) => {
         if (res.data.StatusCode == 200) {
           setUsers(res.data.Data);
+          setLoading(false);
         } else {
           message.error(res.data.message);
+          setLoading(false);
         }
+       
       });
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
 
   useEffect(() => {
     handleUsers();
-    console.log(users);
   }, []);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -158,7 +173,7 @@ function UserTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
-      render: text => <a>{text}</a>,
+      render: (text) => <a>{text}</a>,
       ...getColumnSearchProps("id"),
       sorter: {
         compare: (a, b) => a.id - b.id,
@@ -171,10 +186,9 @@ function UserTable({}) {
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.email).toLowerCase().includes(value.toLowerCase()) ||
           String(record.phone).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.address).toLowerCase().includes(value.toLowerCase())    
-          )
+          String(record.address).toLowerCase().includes(value.toLowerCase())
+        );
       },
-
     },
     {
       title: "Tên",
@@ -213,7 +227,7 @@ function UserTable({}) {
         </Tooltip>
       ),
     },
-    
+
     {
       title: "Địa chỉ",
       dataIndex: "address",
@@ -293,7 +307,6 @@ function UserTable({}) {
             onChange={handleChange}
             columns={columns}
             dataSource={users}
-      
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {
@@ -315,6 +328,7 @@ function UserTable({}) {
         handleCancel={() => setModalQuestion(false)}
         // handleOk={() => handleRemoveService()}
       />
+      <Loading loading={loading} />
     </>
   );
 }

@@ -22,6 +22,7 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
+import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
 
 const UserDetail = ({ userId, onUpdateUser }) => {
@@ -36,8 +37,10 @@ const UserDetail = ({ userId, onUpdateUser }) => {
   });
   const [modalQuestion, setModalQuestion] = useState(false);
   const [imageS3, setImageS3] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchUserDetail = async () => {
+    setLoading(true);
     try {
       const response = await getUserById(userId);
       setUserDetail(response.data.Data);
@@ -50,7 +53,9 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         image: response.data.Data.image,
         status: response.data.Data.status,
       });
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       openNotification(error.response.Message);
     }
   };
@@ -268,6 +273,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         handleOk={() => handleUploadImages()}
         listImage={listFiles.imageBlob}
       />
+      <Loading loading={loading} />
     </>
   );
 };

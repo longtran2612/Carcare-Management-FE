@@ -16,6 +16,7 @@ import { openNotification } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
+import Loading from "components/Loading";
 
 const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
   const router = useRouter();
@@ -24,10 +25,12 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
   const [categoryDetail, setCategoryDetail] = useState({});
   const [categoryServices, setCategoryServices] = useState({});
   const [modalQuestion, setModalQuestion] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
 
   const fetchcategoryDetail = async () => {
+    setLoading(true);
     try {
       const response = await getCategoryById(categoryId);
       setCategoryDetail(response.data.Data);
@@ -39,7 +42,9 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
         description: response.data.Data.description,
         status: response.data.Data.status,
       });
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       openNotification(error.response.data);
     }
   };
@@ -183,6 +188,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
         handleCancel={() => setModalQuestion(false)}
         handleOk={() => handleRemoveService()}
       />
+      <Loading loading={loading} />
     </>
   );
 };

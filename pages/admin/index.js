@@ -8,9 +8,8 @@ import MyContent from "components/Content";
 import { loadUser } from "pages/api/authAPI";
 import logo from "public/images/logo.png";
 import Image from "next/image";
+import Loading from "components/Loading";
 const { Content, Sider, Footer } = Layout;
-
-
 
 const AdminPage = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -20,10 +19,12 @@ const AdminPage = () => {
   const router = useRouter();
 
   const handleAuthentication = async () => {
+    setLoading(true);
     let accessToken = Cookies.get("accessToken");
     console.log(accessToken);
     if (accessToken == null) {
       router.push("/login");
+      setLoading(false);
       return;
     }
     try {
@@ -40,9 +41,11 @@ const AdminPage = () => {
             message.error(res.message);
           }
         }
+        setLoading(false);
       });
     } catch (err) {
       console.log(err);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -50,6 +53,7 @@ const AdminPage = () => {
   }, []);
 
   return (
+    <>
       <Layout
         style={{
           minHeight: "100vh",
@@ -111,6 +115,8 @@ const AdminPage = () => {
           </Footer>
         </Layout>
       </Layout>
+      <Loading loading={loading} />
+    </>
   );
 };
 

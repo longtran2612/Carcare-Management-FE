@@ -16,10 +16,13 @@ const CarSlot = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchCarSlots = async () => {
+    setLoading(true);
     try {
       const response = await getCarSlots();
       setCarSlots(response.data.Data);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -102,6 +105,7 @@ const CarSlot = () => {
           </Row>
         </div>
       )}
+      <Loading loading={loading} />
         
     </>
   );

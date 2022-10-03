@@ -20,6 +20,7 @@ import { openNotification } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
+import Loading from "components/Loading";
 
 const ServiceDetail = ({ serviceId, onUpdateService }) => {
   const router = useRouter();
@@ -28,17 +29,22 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
   const [serviceDetail, setServiceDetail] = useState({});
   const [categoryServices, setCategoryServices] = useState({});
   const [modalQuestion, setModalQuestion] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fetchCategoryService = async () => {
+    setLoading(true);
     try {
       const response = await getCategories();
       setCategoryServices(response.data.Data);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       openNotification(error.response.data);
     }
   };
 
   const fetchServiceDetail = async () => {
+    setLoading(true);
     try {
       const response = await getServiceApi(serviceId);
       setServiceDetail(response.data.Data);
@@ -50,7 +56,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         categoryId: response.data.Data.categoryId,
         status: response.data.Data.status,
       });
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       openNotification(error.response.data);
     }
   };
@@ -231,6 +239,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         handleCancel={() => setModalQuestion(false)}
         handleOk={() => handleRemoveService()}
       />
+      <Loading loading={loading} />
     </>
   );
 };

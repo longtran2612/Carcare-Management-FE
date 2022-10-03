@@ -6,6 +6,7 @@ import { getCategories } from "pages/api/categoryAPI";
 import ModalAddCategory from "components/Modal/ModalAddCategory";
 import CategoryDetail from "../CategoryDetail";
 import { useRouter } from "next/router";
+import Loading from "components/Loading";
 
 function CategoryTable({}) {
   const [categories, setCategories] = useState([]);
@@ -13,6 +14,7 @@ function CategoryTable({}) {
   const [modalQuestion, setModalQuestion] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [id, setId] = useState(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { categoryId } = router.query;
 
@@ -89,16 +91,18 @@ function CategoryTable({}) {
   ];
 
   const handleCatetgory = async () => {
+    setLoading(true);
     try {
       getCategories().then((res) => {
-        console.log(res);
         if (res.data.StatusCode == 200) {
           setCategories(res.data.Data);
         } else {
           message.error(res.data.message);
         }
+        setLoading(false);
       });
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
@@ -163,6 +167,7 @@ function CategoryTable({}) {
         handleCancel={() => setModalQuestion(false)}
         // handleOk={() => handleRemoveService()}
       /> */}
+      <Loading loading={loading} />
     </>
   );
 }

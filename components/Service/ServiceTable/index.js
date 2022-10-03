@@ -9,6 +9,7 @@ import {
 import ModalAddService from "components/Modal/ModalAddService";
 import { useRouter } from "next/router";
 import ServiceDetail from "../ServiceDetail";
+import Loading from "components/Loading";
 
 function ServiceTable({}) {
   const [services, setServices] = useState([]);
@@ -102,21 +103,26 @@ function ServiceTable({}) {
     },
   ];
 
-  console.log(services);
   const handleGetServices = async () => {
+    setLoading(true);
     try {
       const response = await searchService();
       setServices(response.data.Data.data);
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
 
   const fetchCategoryServices = async () => {
+    setLoading(true);
     try {
       const response = await fetchCategoryServiceApi();
       setCategoryServices(response.data.Data);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -133,8 +139,8 @@ function ServiceTable({}) {
   };
 
   const handleSearchService = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await searchService(searchValue);
       console.log(response)
       setServices(response.data.Data.data);
@@ -222,6 +228,7 @@ function ServiceTable({}) {
         handleCancel={() => setModalService(false)}
         onSuccess={(data) => handleSuccessCreateService(data)}
       />
+      <Loading loading={loading} />
     </>
   );
 }

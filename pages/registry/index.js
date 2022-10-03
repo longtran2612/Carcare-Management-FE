@@ -4,6 +4,7 @@ import { Form, Input, Button, Col, Row, message, Typography , Divider } from "an
 import { useRouter } from "next/router";
 import { onRegister } from "pages/api/authAPI";
 import { useState } from "react";
+import Loading from "components/Loading";
 const { Title } = Typography;
 
 export default function RegistryPage() {
@@ -165,6 +166,7 @@ export default function RegistryPage() {
           </div>
         </Col>
       </Row>
+      <Loading loading={loading} />
     </>
   );
 }

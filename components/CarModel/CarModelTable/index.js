@@ -5,12 +5,14 @@ import { useRouter } from "next/router";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCarModel from "components/Modal/ModalAddCarModal";
 import CarModelDetail from "components/CarModel/CarModelDetail";
+import Loading from "components/Loading";
 
 function CarModelTable({}) {
   const [carModels, setCarModels] = useState([]);
   const [modalCarModel, setModalCarModel] = useState(false);
   const [id, setId] = useState(null);
   const [searchText, setSearchText] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { carModelId } = router.query;
 
@@ -83,15 +85,15 @@ function CarModelTable({}) {
   ];
 
   const handleGetCarModel = async () => {
+    setLoading(true);
     try {
-      getCarModel().then((res) => {
-        if (res.data.StatusCode == 200) {
-          setCarModels(res.data.Data);
-        } else {
-          message.error(res.data.message);
-        }
-      });
+      const res = await getCarModel();
+      if (res.status === 200) {
+        setCarModels(res.data.Data);
+      }
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
@@ -162,6 +164,7 @@ function CarModelTable({}) {
         handleCancel={() => setModalQuestion(false)}
         handleOk={() => handleRemoveService()}
       /> */}
+      <Loading loading={loading} />
     </>
   );
 }

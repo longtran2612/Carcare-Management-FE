@@ -27,6 +27,8 @@ import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";
 import moment from "moment";
+import { LineChartOutlined } from "@ant-design/icons";
+import Loading from "components/Loading";
 
 const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const router = useRouter();
@@ -37,18 +39,23 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const [modalQuestion, setModalQuestion] = useState(false);
   const [modalPrice, setModalPrice] = useState(false);
   const formatDate = "YYYY/MM/DD";
+  const [loading, setLoading] = useState(false);
 
   const fetchPrice = async () => {
+    setLoading(true);
     try {
       const response = await getPricesByHeader(priceHeaderId);
       console.log(response.data.Data);
       setPrices(response.data.Data);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       openNotification(error.response.data);
     }
   };
 
   const fetchPriceHeaderDetail = async () => {
+    setLoading(true);
     try {
       const response = await getPriceHeaderById(priceHeaderId);
       setPriceHeaderDetail(response.data.Data);
@@ -59,7 +66,9 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
         toDate: moment(moment(response.data.Data.toDate), formatDate),
         status: response.data.Data.status,
       });
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       // openNotification(error.response.data);
     }
   };
@@ -272,6 +281,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
         onSuccess={(data) => handleSuccessCreatePrice(data)}
         priceHeaderId={priceHeaderId}
       />
+      <Loading show={loading} />
     </>
   );
 };

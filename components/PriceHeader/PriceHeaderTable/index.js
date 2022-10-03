@@ -7,6 +7,7 @@ import PriceHeaderDetail from "../PriceHeaderDetail";
 import ModalAddPriceHeader from "components/Modal/ModalAddPriceHeader";
 import moment from "moment";
 const formatDate = "DD/MM/YYYY";
+import Loading from "components/Loading";
 
 function PriceHeaderTable({}) {
   const [priceHeaders, setPriceHeaders] = useState([]);
@@ -16,6 +17,7 @@ function PriceHeaderTable({}) {
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const { priceHeaderId } = router.query;
+  const [loading, setLoading] = useState(false);
 
   const columns = [
     {
@@ -107,6 +109,7 @@ function PriceHeaderTable({}) {
   ];
 
   const handleGetPriceHeaders = async () => {
+    setLoading(true);
     try {
       getPriceHeaders().then((res) => {
         if (res.data.StatusCode == 200) {
@@ -114,8 +117,10 @@ function PriceHeaderTable({}) {
         } else {
           message.error(res.data.message);
         }
+        setLoading(false);
       });
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
@@ -180,6 +185,7 @@ function PriceHeaderTable({}) {
           />
         </div>
       )}
+      <Loading loading={loading} />
     </>
   );
 }
