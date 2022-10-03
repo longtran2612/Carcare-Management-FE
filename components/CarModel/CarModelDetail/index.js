@@ -303,7 +303,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
               </Form.Item>
             </Col>
           </Row>
-            <div className="service-action">
+          <div style={{right:'20px'}} className="service-action">
               <div style={{ marginRight: "20px" }}>
                 <Button
                   onClick={() => {

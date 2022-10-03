@@ -210,25 +210,33 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                 </Form.Item>
               </Col>
             </Row>
-            <div className="service-action">
-              {/* <Button type="danger" onClick={() => setModalQuestion(true)}>
-                Xóa
-              </Button> */}
-              <Button
-                type="primary"
-                onClick={() => {
-                  form
-                    .validateFields()
-                    .then((values) => {
-                      onFinish(values);
-                    })
-                    .catch((info) => {
-                      console.log("Validate Failed:", info);
-                    });
-                }}
-              >
-                Cập nhật
-              </Button>
+            <div style={{bottom:'0',right:'20px',margin:'10px'}} className="service-action">
+              <div style={{ marginRight: "20px" }}>
+                <Button
+                  onClick={() => {
+                    router.push("/admin");
+                  }}
+                >
+                  Đặt lại
+                </Button>
+              </div>
+              <div>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    form
+                      .validateFields()
+                      .then((values) => {
+                        onFinish(values);
+                      })
+                      .catch((info) => {
+                        console.log("Validate Failed:", info);
+                      });
+                  }}
+                >
+                  Cập nhật
+                </Button>
+              </div>
             </div>
           </Form>
         </Col>

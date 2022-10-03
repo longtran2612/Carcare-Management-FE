@@ -3,19 +3,24 @@ import { Tag, Row, Col, Typography, Table, Timeline, Button } from "antd";
 import { getCarSlotDetail } from "pages/api/carSlotApi";
 import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
+import Loading from "components/Loading";
 
 const CarSlotDetail = ({ carSlotId }) => {
   const { Title } = Typography;
   const { Column, ColumnGroup } = Table;
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const [carSlotDetail, setCarSlotDetail] = useState();
   const fetchCarSlotDetail = async () => {
+    setLoading(true);
     try {
       const response = await getCarSlotDetail(carSlotId);
       setCarSlotDetail(response.data.Data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -55,6 +60,49 @@ const CarSlotDetail = ({ carSlotId }) => {
             {convertStatusCarSlot(carSlotDetail?.status)}
           </div>
           <Row>
+          <Col flex={1}>
+              <div className="carslot-customer">
+                <Title level={4}>Thông tin khách hàng</Title>
+                <Timeline>
+                  <Timeline.Item>
+                    Tên: {carSlotDetail?.car?.user?.name}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Số điện thoại: {carSlotDetail?.car?.user?.phone}
+                  </Timeline.Item>
+                </Timeline>
+                <Title level={4}>Thông tin xe</Title>
+                <Timeline>
+                  <Timeline.Item>
+                    Tên xe: {carSlotDetail?.car?.carModel?.name}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Nhãn hiệu: {carSlotDetail?.car?.carModel?.brand}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Loại xe: {carSlotDetail?.car?.carModel?.model}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Nhiên liệu: {carSlotDetail?.car?.carModel?.fuel}
+                  </Timeline.Item>
+                  {/* <Timeline.Item>
+                    Hộp số: {carSlotDetail?.car?.carModel?.transmission}
+                  </Timeline.Item> */}
+                  <Timeline.Item>
+                    Chỗ ngồi: {carSlotDetail?.car?.carModel?.seats}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Biển số: {carSlotDetail?.car?.licensePlate}
+                  </Timeline.Item>
+                  <Timeline.Item>
+                    Màu xe: {carSlotDetail?.car?.color}
+                  </Timeline.Item>
+                  {/* <Timeline.Item>
+                    Mô tả: {carSlotDetail?.car?.description}
+                  </Timeline.Item> */}
+                </Timeline>
+              </div>
+            </Col>
             <Col flex={4}>
               <Table
                 footer={() => (
@@ -84,53 +132,14 @@ const CarSlotDetail = ({ carSlotId }) => {
                   />
                 </ColumnGroup>
               </Table>
-            </Col>
-            <Col flex={1}>
-              <div className="carslot-customer">
-                <Title level={4}>Thông tin khách hàng</Title>
-                <Timeline>
-                  <Timeline.Item>
-                    Tên: {carSlotDetail?.car?.user?.name}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Số điện thoại: {carSlotDetail?.car?.user?.phone}
-                  </Timeline.Item>
-                </Timeline>
-                <Title level={4}>Thông tin xe</Title>
-                <Timeline>
-                  <Timeline.Item>
-                    Tên xe: {carSlotDetail?.car?.carModel?.name}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Nhãn hiệu: {carSlotDetail?.car?.carModel?.brand}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Loại xe: {carSlotDetail?.car?.carModel?.model}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Nhiên liệu: {carSlotDetail?.car?.carModel?.fuel}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Hộp số: {carSlotDetail?.car?.carModel?.transmission}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Chỗ ngồi: {carSlotDetail?.car?.carModel?.seats}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Biển số: {carSlotDetail?.car?.licensePlate}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Màu xe: {carSlotDetail?.car?.color}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Mô tả: {carSlotDetail?.car?.description}
-                  </Timeline.Item>
-                </Timeline>
-              </div>
-            </Col>
+              <Button style={{position:'absolute',right:'20px',bottom:'0'}} type="primary" size="large" >
+                Hoàn thành - Xuất hóa đơn
+              </Button>
+            </Col>        
           </Row>
         </div>
       </div>
+      <Loading loading={loading} />
     </>
   );
 };

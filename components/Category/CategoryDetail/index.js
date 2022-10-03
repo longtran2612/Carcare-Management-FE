@@ -159,7 +159,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
                 </Form.Item>
               </Col>
             </Row>
-            <div className="service-action">
+            <div style={{bottom:'0',right:'20px'}} className="service-action">
               {/* <Button type="danger" onClick={() => setModalQuestion(true)}>
                 Xóa
               </Button> */}

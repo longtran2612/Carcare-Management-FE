@@ -236,7 +236,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                 </Form.Item>
               </Col>
             </Row>
-            <div className="service-action">
+            <div style={{bottom:'0',right:'30px'}} className="service-action">
               <div style={{ marginRight: "20px" }}>
                 <Button
                   onClick={() => {

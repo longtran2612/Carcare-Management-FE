@@ -304,7 +304,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                 </Timeline>
               </Col>
             </Row>
-            <div className="service-action">
+            <div style={{bottom:'0',right:'20px'}} className="service-action">
               <div style={{ marginRight: "20px" }}>
                 <Button
                   onClick={() => {
