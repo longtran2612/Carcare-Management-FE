@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import {
   Col,
   Row,
@@ -14,21 +14,17 @@ import {
   Table,
 } from "antd";
 import { useRouter } from "next/router";
-import {
-  getServiceApi,
-  removeServiceApi,
-  updateServiceApi,
-} from "pages/api/serviceAPI";
+
 import { openNotification } from "utils/notification";
-import { getCategories } from "pages/api/categoryAPI";
 import { getPricesByHeader } from "pages/api/priceAPI";
-import { getPriceHeaderById } from "pages/api/PriceHeaderAPI";
+import { getPriceHeaderById,updatePriceHeader } from "pages/api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";
 import moment from "moment";
-import { LineChartOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
+import { ClearOutlined , SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
 
 const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const router = useRouter();
@@ -40,6 +36,97 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const [modalPrice, setModalPrice] = useState(false);
   const formatDate = "YYYY/MM/DD";
   const [loading, setLoading] = useState(false);
+
+  const [searchText, setSearchText] = useState("");
+  const [searchGlobal, setSearchGlobal] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, dataIndex) => {
+    setSearchText(selectedKeys[0]);
+    setSearchGlobal(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = () => {
+    setSearchText("");
+    setSearchGlobal("");
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Tìm ${dataIndex}`}
+          value={selectedKeys[0]}
+          onSearch={(value) => setSearchText(value)}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Tìm
+          </Button>
+          <Button
+            onClick={() => {
+              handleReset();
+            }}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Xóa bộ lọc
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
 
   const fetchPrice = async () => {
     setLoading(true);
@@ -93,6 +180,14 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       title: "Mã giá",
       dataIndex: "id",
       key: "id",
+      filteredValue: [searchGlobal],
+      onFilter: (value, record) => {
+        return (
+          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.parentId).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.price).toLowerCase().includes(value.toLowerCase())
+        );
+      },
     },
     {
       title: "Tên giá",
@@ -108,6 +203,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       title: "Mã dịch vụ",
       dataIndex: "parentId",
       key: "parentId",
+      ...getColumnSearchProps("parentId"),
     },
     {
       title: "Hành động",
@@ -140,7 +236,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
         categoryId: values.categoryId,
         status: values.status,
       };
-      const res = await updateServiceApi(body, priceHeaderDetail.id);
+      const res = await updatePriceHeader(body, priceHeaderDetail.id);
       if (res.data.StatusCode == "200") {
         openNotification("Cập nhật dịch vụ thành công!", "");
         onUpdatePriceHeader();
@@ -149,14 +245,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       console.log(error);
     }
   };
-  const handleRemovePriceHeader = async () => {
-    try {
-      await removeServiceApi(priceHeaderDetail.id);
-      router.push("/admin");
-      onUpdatePriceHeader();
-      setModalQuestion(false);
-    } catch (error) {}
-  };
+
   const handleSuccessCreatePrice = (data) => {
     let newArr = [...prices];
     newArr.push(data);
@@ -270,6 +359,24 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
           <Button type="primary" onClick={() => setModalPrice(true)}>
             Thêm giá
           </Button>
+          <Row style={{ margin: "20px 0px" }}>
+          <Col span={8} style={{ marginRight: "10px" }}>
+              <Input.Search
+                placeholder="Tìm kiếm"
+                onChange={(e) => setSearchGlobal(e.target.value)}
+                onSearch={(value) => setSearchGlobal(value)}
+                value={searchGlobal}
+              />
+            </Col>
+            <Col span={4}>
+              <Button
+                onClick={() => setSearchGlobal("")}
+                icon={<ClearOutlined />}
+              >
+                Xóa bộ lọc
+              </Button>
+            </Col>
+            </Row>
 
           <Table columns={columns} dataSource={prices} rowKey="id" />
         </Col>

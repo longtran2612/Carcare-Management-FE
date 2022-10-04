@@ -26,6 +26,8 @@ import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
+import { ClearOutlined , SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
 
 const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
   const router = useRouter();

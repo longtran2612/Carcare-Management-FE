@@ -1,11 +1,14 @@
-import { Table, Tag, Space, Button,Row,Col,Input } from "antd";
-import React, { useState, useEffect } from "react";
+import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
+import React, { useState, useEffect, useRef } from "react";
+import { ClearOutlined } from "@ant-design/icons";
 import { getCar } from "pages/api/carAPI";
+import { SearchOutlined } from "@ant-design/icons";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCar from "components/Modal/ModalAddCar";
 import { useRouter } from "next/router";
 import CarDetail from "../CarDetail";
 import Loading from "components/Loading";
+import Highlighter from "react-highlight-words";
 function CarTable({}) {
   const [cars, setCars] = useState([]);
   const [modalCar, setModalCar] = useState(false);
@@ -15,7 +18,96 @@ function CarTable({}) {
   const router = useRouter();
   const { carId } = router.query;
 
-  console.log(cars)
+  const [searchGlobal, setSearchGlobal] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, dataIndex) => {
+    setSearchText(selectedKeys[0]);
+    setSearchGlobal(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = () => {
+    setSearchText("");
+    setSearchGlobal("");
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Tìm ${dataIndex}`}
+          value={selectedKeys[0]}
+          onSearch={(value) => setSearchText(value)}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Tìm
+          </Button>
+          <Button
+            onClick={() => {
+              handleReset();
+            }}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Xóa bộ lọc
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
   const columns = [
     {
       title: "STT",
@@ -31,20 +123,28 @@ function CarTable({}) {
       dataIndex: "id",
       key: "id",
       render: (id) => <a>{id}</a>,
-      filteredValue: [searchText],
+      filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
           String(record.id).toLowerCase().includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.carModel.name).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.user.name).toLowerCase().includes(value.toLowerCase())      
+          String(record.color).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.licensePlate)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.carModel.name)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.user.name).toLowerCase().includes(value.toLowerCase())
         );
       },
+      // ...getColumnSearchProps("id"),
     },
     {
       title: "Tên xe",
       dataIndex: "name",
       key: "name",
+      ...getColumnSearchProps("name"),
     },
     {
       title: "Mẫu xe",
@@ -52,17 +152,19 @@ function CarTable({}) {
       key: "carModel",
       render: (carModel) => {
         return <div>{carModel.name}</div>;
-      }
+      },
     },
     {
       title: "Biển số xe",
       dataIndex: "licensePlate",
       key: "licensePlate",
+      ...getColumnSearchProps("licensePlate"),
     },
     {
       title: "Màu xe",
       dataIndex: "color",
       key: "color",
+      ...getColumnSearchProps("color"),
     },
     {
       title: "Sở hữu",
@@ -70,36 +172,8 @@ function CarTable({}) {
       key: "user",
       render: (user) => {
         return <div>{user.name}</div>;
-      }
-      
+      },
     },
-    // {
-    //   title: "Hành động",
-    //   key: "action",
-    //   render: (_, record) => (
-    //     <Space size={8}>
-    //       <Button
-    //         type="primary"
-    //         onClick={() => {
-    //           setModalCar(true);
-    //           setServicesItem(record);
-    //         }}
-    //       >
-    //         Cập nhật
-    //       </Button>
-    //       <Button
-    //         type="primary"
-    //         danger
-    //         onClick={() => {
-    //           setModalQuestion(true);
-    //           setId(record.id);
-    //         }}
-    //       >
-    //         Xóa
-    //       </Button>
-    //     </Space>
-    //   ),
-    // },
   ];
 
   const handleGetCar = async () => {
@@ -142,16 +216,25 @@ function CarTable({}) {
             Thêm Xe
           </Button>
           <Row style={{ margin: "20px 0px" }}>
-            <Col span={4} style={{ marginRight: "10px" }}>
+          <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
                 placeholder="Tìm kiếm"
-                onChange={(e) => setSearchText(e.target.value)}
-                onSearch={(value) => setSearchText(value)}
-                value={searchText}
+                onChange={(e) => setSearchGlobal(e.target.value)}
+                onSearch={(value) => setSearchGlobal(value)}
+                value={searchGlobal}
               />
+            </Col>
+            <Col span={4}>
+              <Button
+                onClick={() => setSearchGlobal("")}
+                icon={<ClearOutlined />}
+              >
+                Xóa bộ lọc
+              </Button>
             </Col>
           </Row>
           <Table
+            onChange={handleSearch}
             columns={columns}
             dataSource={cars}
             onRow={(record, rowIndex) => {
@@ -175,7 +258,7 @@ function CarTable({}) {
         handleCancel={() => setModalQuestion(false)}
         handleOk={() => handleRemoveService()}
       /> */}
-      <Loading  loading={loading} />
+      <Loading loading={loading} />
     </>
   );
 }

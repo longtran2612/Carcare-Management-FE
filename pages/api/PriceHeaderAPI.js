@@ -52,5 +52,19 @@ const getPriceHeaders = () => {
         throw err;
       });
   };
+  const updatePriceHeader = (data) => {
+    return axios({
+      method: "PUT",
+      url: API_URL + `/price-headers/${data.id}`,
+      data: data,
+    })
 
-export { getPriceHeaderById, getPriceHeaders, createPriceHeader, deletePriceHeader };
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+
+export { getPriceHeaderById,updatePriceHeader, getPriceHeaders, createPriceHeader, deletePriceHeader };

@@ -10,14 +10,15 @@ import {
   Input,
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
+import { ClearOutlined } from "@ant-design/icons";
 import { getUsers } from "pages/api/userAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddUser from "components/Modal/ModelAddUser";
 import { SearchOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import UserDetail from "../UserDetail";
-import Highlighter from "react-highlight-words";
 import Loading from "components/Loading";
+import Highlighter from "react-highlight-words";
 
 function UserTable({}) {
   const [users, setUsers] = useState([]);
@@ -27,53 +28,23 @@ function UserTable({}) {
   const router = useRouter();
   const { userId } = router.query;
 
+  const [searchGlobal, setSearchGlobal] = useState("");
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
   const [filteredInfo, setFilteredInfo] = useState({});
   const [loading, setLoading] = useState(false);
-
-  const handleUsers = async () => {
-    setLoading(true);
-    try {
-      getUsers().then((res) => {
-        if (res.data.StatusCode == 200) {
-          setUsers(res.data.Data);
-          setLoading(false);
-        } else {
-          message.error(res.data.message);
-          setLoading(false);
-        }
-       
-      });
-    } catch (err) {
-      setLoading(false);
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    handleUsers();
-  }, []);
-
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
+  const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
+    setSearchGlobal(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-
-  const handleReset = (clearFilters) => {
-    clearFilters();
+  const handleReset = () => {
     setSearchText("");
+    setSearchGlobal("");
   };
-
   const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys }) => (
       <div
         style={{
           padding: 8,
@@ -81,12 +52,13 @@ function UserTable({}) {
       >
         <Input
           ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`Tìm ${dataIndex}`}
           value={selectedKeys[0]}
+          onSearch={(value) => setSearchText(value)}
           onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          onPressEnter={() => handleSearch(selectedKeys, dataIndex)}
           style={{
             marginBottom: 8,
             display: "block",
@@ -95,36 +67,25 @@ function UserTable({}) {
         <Space>
           <Button
             type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            onClick={() => handleSearch(selectedKeys, dataIndex)}
             icon={<SearchOutlined />}
             size="small"
             style={{
               width: 90,
             }}
           >
-            Search
+            Tìm
           </Button>
           <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
+            onClick={() => {
+              handleReset();
+            }}
             size="small"
             style={{
               width: 90,
             }}
           >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
+            Xóa bộ lọc
           </Button>
         </Space>
       </div>
@@ -158,7 +119,31 @@ function UserTable({}) {
         text
       ),
   });
+  const handleUsers = async () => {
+    setLoading(true);
+    try {
+      getUsers().then((res) => {
+        if (res.data.StatusCode == 200) {
+          setUsers(res.data.Data);
+          setLoading(false);
+        } else {
+          message.error(res.data.message);
+          setLoading(false);
+        }
+      });
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+    }
+  };
 
+  useEffect(() => {
+    handleUsers();
+  }, []);
+
+  const handleSuccessCreteUser = (data) => {
+    handleUsers();
+  };
   const columns = [
     {
       title: "STT",
@@ -179,7 +164,7 @@ function UserTable({}) {
         compare: (a, b) => a.id - b.id,
         multiple: 2,
       },
-      filteredValue: [searchText],
+      filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
           String(record.id).toLowerCase().includes(value.toLowerCase()) ||
@@ -274,16 +259,6 @@ function UserTable({}) {
     },
   ];
 
-  const handleChange = (pagination, filters, sorter) => {
-    console.log("Various parameters", pagination, filters, sorter);
-    setFilteredInfo(filters);
-  };
-  const handleSuccessCreteUser = (data) => {
-    let newArr = [...users];
-    newArr.push(data);
-    setUsers(newArr);
-  };
-
   return (
     <>
       {userId ? (
@@ -294,17 +269,25 @@ function UserTable({}) {
             Thêm người dùng
           </Button>
           <Row style={{ margin: "20px 0px" }}>
-            <Col span={4} style={{ marginRight: "10px" }}>
+            <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
                 placeholder="Tìm kiếm"
-                onChange={(e) => setSearchText(e.target.value)}
-                onSearch={(value) => setSearchText(value)}
-                value={searchText}
+                onChange={(e) => setSearchGlobal(e.target.value)}
+                onSearch={(value) => setSearchGlobal(value)}
+                value={searchGlobal}
               />
+            </Col>
+            <Col span={4}>
+              <Button
+                onClick={() => setSearchGlobal("")}
+                icon={<ClearOutlined />}
+              >
+                Xóa bộ lọc
+              </Button>
             </Col>
           </Row>
           <Table
-            onChange={handleChange}
+            onChange={handleSearch}
             columns={columns}
             dataSource={users}
             onRow={(record, rowIndex) => {

@@ -1,11 +1,13 @@
-import { Table, Tag, Space, Button , Row, Col, Input} from "antd";
-import React, { useState, useEffect } from "react";
+import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
+import React, { useState, useEffect, useRef } from "react";
 import { getCarModel } from "pages/api/carModel";
 import { useRouter } from "next/router";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCarModel from "components/Modal/ModalAddCarModal";
 import CarModelDetail from "components/CarModel/CarModelDetail";
 import Loading from "components/Loading";
+import { ClearOutlined , SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
 
 function CarModelTable({}) {
   const [carModels, setCarModels] = useState([]);
@@ -16,6 +18,95 @@ function CarModelTable({}) {
   const router = useRouter();
   const { carModelId } = router.query;
 
+  const [searchGlobal, setSearchGlobal] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+
+  const handleSearch = (selectedKeys, dataIndex) => {
+    setSearchText(selectedKeys[0]);
+    setSearchGlobal(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = () => {
+    setSearchText("");
+    setSearchGlobal("");
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Tìm ${dataIndex}`}
+          value={selectedKeys[0]}
+          onSearch={(value) => setSearchText(value)}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Tìm
+          </Button>
+          <Button
+            onClick={() => {
+              handleReset();
+            }}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Xóa bộ lọc
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
   const columns = [
     {
       title: "STT",
@@ -31,7 +122,7 @@ function CarModelTable({}) {
       dataIndex: "id",
       key: "id",
       render: (id) => <a>{id}</a>,
-      filteredValue: [searchText],
+      filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
           String(record.id).toLowerCase().includes(value.toLowerCase()) ||
@@ -42,7 +133,9 @@ function CarModelTable({}) {
           String(record.year).toLowerCase().includes(value.toLowerCase()) ||
           String(record.engine).toLowerCase().includes(value.toLowerCase()) ||
           String(record.fuel).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.transmission).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.transmission)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.seat).toLowerCase().includes(value.toLowerCase())
         );
       },
@@ -51,36 +144,43 @@ function CarModelTable({}) {
       title: "Tên mẫu xe",
       dataIndex: "name",
       key: "name",
+      ...getColumnSearchProps("name"),
     },
     {
       title: "Hãng xe",
       dataIndex: "brand",
       key: "brand",
+      ...getColumnSearchProps("brand"),
     },
     {
       title: "Model",
       dataIndex: "model",
       key: "model",
+      ...getColumnSearchProps("model"),
     },
     {
       title: "Động cơ",
       dataIndex: "engine",
       key: "engine",
+      ...getColumnSearchProps("engine"),
     },
     {
       title: "Truyền động",
       dataIndex: "transmission",
       key: "transmission",
+      ...getColumnSearchProps("transmission"),
     },
     {
       title: "Số nghế ngồi",
       dataIndex: "seats",
       key: "seats",
+      ...getColumnSearchProps("seats"),
     },
     {
       title: "Nhiên liệu",
       dataIndex: "fuel",
       key: "fuel",
+      ...getColumnSearchProps("fuel"),
     },
   ];
 
@@ -121,7 +221,7 @@ function CarModelTable({}) {
   return (
     <>
       {carModelId ? (
-        <CarModelDetail 
+        <CarModelDetail
           carModelId={carModelId}
           onUpdateCarModel={handleGetCarModel}
         />
@@ -131,16 +231,25 @@ function CarModelTable({}) {
             Thêm mẫu xe
           </Button>
           <Row style={{ margin: "20px 0px" }}>
-            <Col span={4} style={{ marginRight: "10px" }}>
+            <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
                 placeholder="Tìm kiếm"
-                onChange={(e) => setSearchText(e.target.value)}
-                onSearch={(value) => setSearchText(value)}
-                value={searchText}
+                onChange={(e) => setSearchGlobal(e.target.value)}
+                onSearch={(value) => setSearchGlobal(value)}
+                value={searchGlobal}
               />
+            </Col>
+            <Col span={4}>
+              <Button
+                onClick={() => setSearchGlobal("")}
+                icon={<ClearOutlined />}
+              >
+                Xóa bộ lọc
+              </Button>
             </Col>
           </Row>
           <Table
+            onChange={handleSearch}
             columns={columns}
             dataSource={carModels}
             onRow={(record, rowIndex) => {
