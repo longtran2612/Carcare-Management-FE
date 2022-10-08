@@ -136,10 +136,6 @@ function UserTable({}) {
       dataIndex: "id",
       key: "id",
       render: (id) => <a style={{ color: "blue" }}>{id}</a>,
-      sorter: {
-        compare: (a, b) => a.id - b.id,
-        multiple: 2,
-      },
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -270,12 +266,12 @@ function UserTable({}) {
               />
             </Col>
             <Col span={4}>
-              <Button style={{float:"right"}} onClick={() => handleReset()} icon={<ClearOutlined />}>
+              <Button onClick={() => handleReset()} icon={<ClearOutlined />}>
                 Xóa bộ lọc
               </Button>
             </Col>
             <Col span={11}>
-              <Button type="primary" onClick={() => setModalUser(true)}>
+              <Button className="PullRight" type="primary" onClick={() => setModalUser(true)}>
                 Thêm người dùng
               </Button>
             </Col>
@@ -284,6 +280,7 @@ function UserTable({}) {
             onChange={handleSearch}
             columns={columns}
             dataSource={users}
+            bordered
             pagination={{
               pageSize: 20,
             }}

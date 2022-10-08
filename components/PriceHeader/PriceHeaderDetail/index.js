@@ -376,31 +376,40 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
           </Form>
         </Col>
         <Col span={24}>
-          <Row style={{ margin: "20px 0px" }}>
-            <Col span={8} style={{ marginRight: "10px" }}>
-              <Input.Search
-                placeholder="Tìm kiếm"
-                onChange={(e) => setSearchGlobal(e.target.value)}
-                onSearch={(value) => setSearchGlobal(value)}
-                value={searchGlobal}
-              />
-            </Col>
-            <Col span={4}>
-              <Button
-                onClick={() => setSearchGlobal("")}
-                icon={<ClearOutlined />}
-              >
-                Xóa bộ lọc
-              </Button>
-            </Col>
-            <Col span={11}>
-              <Button style={{float:'right'}} type="primary" onClick={() => setModalPrice(true)}>
-                Thêm giá
-              </Button>
-            </Col>
-          </Row>
-
           <Table
+          bordered
+            title={() => (
+              <>
+                <Row>
+                  <Col span={8} style={{ marginRight: "10px" }}>
+                    <Input.Search
+                      placeholder="Tìm kiếm mã/tên/giá dịch vụ"
+                      onChange={(e) => setSearchGlobal(e.target.value)}
+                      onSearch={(value) => setSearchGlobal(value)}
+                      value={searchGlobal}
+                    />
+                  </Col>
+                  <Col span={4}>
+                    <Button
+                      onClick={() => setSearchGlobal("")}
+                      icon={<ClearOutlined />}
+                    >
+                      Xóa bộ lọc
+                    </Button>
+                  </Col>
+                  <Col span={11}>
+                    <Button
+                      style={{ float: "right" }}
+                      type="primary"
+                      onClick={() => setModalPrice(true)}
+                    >
+                      {" "}
+                      Thêm giá
+                    </Button>
+                  </Col>
+                </Row>
+              </>
+            )}
             columns={columns}
             dataSource={prices}
             pagination={{

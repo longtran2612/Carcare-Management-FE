@@ -254,6 +254,7 @@ function CarModelTable({}) {
             onChange={handleSearch}
             columns={columns}
             dataSource={carModels}
+            bordered
             pagination={{
               pageSize: 20,
             }}

@@ -247,6 +247,7 @@ function CarTable({}) {
           </Row>
           <Table
             onChange={handleSearch}
+            bordered
             columns={columns}
             dataSource={cars}
             pagination={{

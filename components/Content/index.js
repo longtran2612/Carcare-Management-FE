@@ -1,9 +1,4 @@
-import { HomeOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
-import { Breadcrumb, Layout, Affix, Space, Col, Row, Button, Spin } from "antd";
-import { useRouter } from "next/router";
-import Loading from "components/Loading";
-import { logout } from "pages/api/authAPI";
+import React from "react";
 import UserPage from "components/User";
 import ServicePage from "components/Service";
 import CategoryPage from "components/Category";
@@ -11,11 +6,13 @@ import CarModelPage from "components/CarModel";
 import CarPage from "components/Car";
 import PriceHeaderPage from "components/PriceHeader";
 import CarSlot from "components/CarSlot";
-const { Content } = Layout;
+import OrderPage from "components/Order";
 
 const MyContent = ({ keyMenu }) => {
   const renderViewByKey = () => {
     switch (keyMenu) {
+      case "order":
+        return <OrderPage />;
       case "service":
         return <ServicePage />;
       case "category":

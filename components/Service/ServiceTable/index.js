@@ -314,6 +314,7 @@ function ServiceTable({}) {
             onChange={handleSearch}
             columns={columns}
             dataSource={services}
+            bordered
             pagination={{
               pageSize: 20,
             }}

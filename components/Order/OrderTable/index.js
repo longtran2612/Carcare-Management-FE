@@ -1,24 +1,27 @@
 import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
 import React, { useState, useEffect, useRef } from "react";
+import { getPriceHeaders } from "pages/api/PriceHeaderAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
-import { message } from "antd";
-import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
-import { getCategories } from "pages/api/categoryAPI";
-import ModalAddCategory from "components/Modal/ModalAddCategory";
-import CategoryDetail from "../CategoryDetail";
 import { useRouter } from "next/router";
+import moment from "moment";
+const formatDate = "DD/MM/YYYY";
 import Loading from "components/Loading";
+import {
+  ClearOutlined,
+  SearchOutlined,
+  PlusSquareOutlined,
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import { COOKIE_NAME_PRERENDER_BYPASS } from "next/dist/server/api-utils";
 
-function CategoryTable({}) {
-  const [categories, setCategories] = useState([]);
-  const [modalCategory, setModalCategory] = useState(false);
-  const [modalQuestion, setModalQuestion] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [id, setId] = useState(null);
-  const [loading, setLoading] = useState(false);
+function OrderTable({}) {
+  // const [priceHeaders, setPriceHeaders] = useState([]);
+  // const [modalPriceHeader, setModalPriceHeader] = useState(false);
+  // const [id, setId] = useState(null);
   const router = useRouter();
-  const { categoryId } = router.query;
+  const [searchText, setSearchText] = useState("");
+  // const { priceHeaderId } = router.query;
+  const [loading, setLoading] = useState(false);
 
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -109,34 +112,6 @@ function CategoryTable({}) {
         text
       ),
   });
-
-  const handleCatetgory = async () => {
-    setLoading(true);
-    try {
-      getCategories().then((res) => {
-        if (res.data.StatusCode == 200) {
-          setCategories(res.data.Data);
-        } else {
-          message.error(res.data.message);
-        }
-        setLoading(false);
-      });
-    } catch (err) {
-      setLoading(false);
-      console.log(err);
-    }
-  };
-
-  const handleSuccessCategory = (data) => {
-    let newArr = [...categories];
-    newArr.push(data);
-    setCategories(newArr);
-  };
-
-  useEffect(() => {
-    handleCatetgory();
-  }, []);
-
   const columns = [
     {
       title: "STT",
@@ -151,33 +126,50 @@ function CategoryTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
+      width: 140,
       render: (id) => <a style={{ color: "blue" }}>{id}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
           String(record.id).toLowerCase().includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.type).toLowerCase().includes(value.toLowerCase()) ||
           String(record.status).toLowerCase().includes(value.toLowerCase())
         );
       },
     },
     {
-      title: "Tên",
-      dataIndex: "name",
-      key: "name",
-      ...getColumnSearchProps("name"),
+      title: "Dịch vụ",
+      dataIndex: "service",
+      key: "service",
     },
     {
-      title: "Loại",
-      dataIndex: "type",
-      key: "type",
-      ...getColumnSearchProps("type"),
+      title: "Khách hàng",
+      dataIndex: "customer",
+      key: "customer",
+    },
+    {
+      title: "Xe",
+      dataIndex: "car",
+      key: "car",
+    },
+    {
+      title: "Nhân viên sử lý",
+      dataIndex: "employee",
+      key: "employee",
+    },
+    {
+      title: "Thời gian tạo",
+      dataIndex: "toDate",
+      key: "toDate",
+      render: (text, record, dataIndex) => {
+        return <div>{moment(record.toDate).format(formatDate)}</div>;
+      },
     },
     {
       title: "Trạng thái",
       key: "status",
       dataIndex: "status",
+      ...getColumnSearchProps("status"),
       render: (status) => {
         return (
           <>
@@ -191,73 +183,127 @@ function CategoryTable({}) {
       },
     },
   ];
+
+  // const handleGetPriceHeaders = async () => {
+  //   setLoading(true);
+  //   try {
+  //     getPriceHeaders().then((res) => {
+  //       if (res.data.StatusCode == 200) {
+  //         setPriceHeaders(res.data.Data);
+  //       } else {
+  //         message.error(res.data.message);
+  //       }
+  //       setLoading(false);
+  //     });
+  //   } catch (err) {
+  //     setLoading(false);
+  //     console.log(err);
+  //   }
+  // };
+  // // const handleRemoveService = async () => {
+  // //   try {
+  // //     const res = await removeServiceApi(id);
+  // //     if (res.data.StatusCode == 200) {
+  // //       handleGetServices();
+  // //       setModalQuestion(false);
+  // //       setId(null);
+  // //     }
+  // //   } catch (error) {}
+  // // };
+
+  // useEffect(() => {
+  //   handleGetPriceHeaders();
+  // }, []);
+
+  // const handleSuccessCreatePriceHeader = (data) => {
+  //   let newArr = [...priceHeaders];
+  //   newArr.push(data);
+  //   setPriceHeaders(newArr);
+  // };
+
   return (
     <>
-      {categoryId ? (
-        <CategoryDetail
-          categoryId={categoryId}
-          onUpdateCategory={handleCatetgory}
+      {/* {priceHeaderId ? (
+        <PriceHeaderDetail
+          priceHeaderId={priceHeaderId}
+          onUpdatePriceHeaders={handleGetPriceHeaders}
         />
-      ) : (
-        <div>
-          <Row style={{ margin: "20px 0px" }}>
-            <Col span={8} style={{ marginRight: "10px" }}>
-              <Input.Search
-                placeholder="Tìm kiếm"
-                onChange={(e) => setSearchGlobal(e.target.value)}
-                onSearch={(value) => setSearchGlobal(value)}
-                value={searchGlobal}
-              />
-            </Col>
-            <Col span={4}>
-              <Button
-                onClick={() => setSearchGlobal("")}
-                icon={<ClearOutlined />}
-              >
-                Xóa bộ lọc
-              </Button>
-            </Col>
-            <Col span={11}>
-              <Button style={{float:"right"}} type="primary" onClick={() => setModalCategory(true)}>
-                Thêm danh mục
-              </Button>
-            </Col>
-          </Row>
+      ) : ( */}
+      <div>
           <Table
-            onChange={handleSearch}
+            title={() => (
+              <>
+                <Row>
+                  <Col span={8} style={{ marginRight: "10px" }}>
+                    <Input.Search
+                      placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
+                      onChange={(e) => setSearchGlobal(e.target.value)}
+                      onSearch={(value) => setSearchGlobal(value)}
+                      value={searchGlobal}
+                    />
+                  </Col>
+                  <Col span={4}>
+                    <Button
+                      onClick={() => setSearchGlobal("")}
+                      icon={<ClearOutlined />}
+                    >
+                      Xóa bộ lọc
+                    </Button>
+                  </Col>
+                  <Col span={11}>
+                    <Button
+                      style={{ float: "right" }}
+                      type="primary"
+                      onClick={() => setModalPrice(true)}
+                    >
+                      {" "}
+                      Thêm mới yêu cầu
+                    </Button>
+                  </Col>
+                </Row>
+              </>
+            )}
             columns={columns}
-            dataSource={categories}
             bordered
+            // dataSource={priceHeaders}
             pagination={{
               pageSize: 20,
             }}
             scroll={{
               y: 450,
             }}
+            expandable={{
+              expandedRowRender: (record) => (
+                <p
+                  style={{
+                    margin: 0,
+                  }}
+                >
+                  {record.description}
+                </p>
+              ),
+              rowExpandable: (record) => record.name !== "Not Expandable",
+            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {
-                  router.push(`/admin?categoryId=${record.id}`);
+                  router.push(`/admin?orderId=${record.id}`);
                 },
               };
             }}
           />
-        </div>
-      )}
-      <ModalAddCategory
-        show={modalCategory}
-        handleCancel={() => setModalCategory(false)}
-        onSuccess={(data) => handleSuccessCategory(data)}
-      />
-      {/* <ModalQuestion
-        title="Bạn có chắc chắn muốn xóa người dùng này không?"
-        visible={modalQuestion}
-        handleCancel={() => setModalQuestion(false)}
-        // handleOk={() => handleRemoveService()}
-      /> */}
+      
+      </div>
+      {/* <ModalAddPriceHeader
+            show={modalPriceHeader}
+            handleCancel={() => setModalPriceHeader(false)}
+            onSuccess={(data) => handleSuccessCreatePriceHeader(data)}
+          />
+      
+      )} */}
       <Loading loading={loading} />
     </>
   );
 }
 
-export default CategoryTable;
+export default OrderTable;

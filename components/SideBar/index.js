@@ -5,7 +5,8 @@ import {
   DollarOutlined,
   ShopOutlined,
   CarOutlined,
-  BorderOutlined,
+  BookOutlined,
+  ClearOutlined
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { Typography } from "antd";
@@ -28,12 +29,11 @@ function getItem(label, key, icon, children, type) {
 
 const items = [
   getItem("Cửa hàng", "car-slot", <ShopOutlined />),
-  getItem("Hóa đơn", "2", <BorderOutlined />, [
-    getItem("Tạo mới hóa đơn", "order-create"),
-    getItem("Danh sách hóa đơn", "order-list"),
+  getItem("Hóa đơn", "2", <BookOutlined  />, [
+    getItem("Danh sách hóa đơn", "order"),
   ]),
 
-  getItem("Dịch vụ", "3", <CarOutlined />, [
+  getItem("Dịch vụ", "3", <ClearOutlined />, [
     getItem("Danh mục", "category"),
     getItem("Dịch vụ", "service"),
   ]),
@@ -53,15 +53,6 @@ const items = [
     getItem("Doanh số", "sell-report"),
     getItem("Lợi nhuận", "income"),
   ]),
-];
-
-const rootSubmenuKeys = [
-  "order",
-  "service",
-  "product",
-  "customer",
-  "promotion",
-  "report",
 ];
 
 const SideBar = ({ handleOpenKey }) => {

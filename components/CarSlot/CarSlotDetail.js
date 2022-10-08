@@ -6,7 +6,9 @@ import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
 import Loading from "components/Loading";
 import Image from "next/image";
-import slot_active from "public/images/slot_active.png";
+// import slot_active from "public/images/slot_active.png";
+import select_order from "public/images/select_order.png";
+import OrderTable from "components/Order/OrderTable";
 
 const CarSlotDetail = ({ carSlotId }) => {
   const { Title } = Typography;
@@ -89,6 +91,7 @@ const CarSlotDetail = ({ carSlotId }) => {
     }
   };
   console.log(carSlotDetail?.status);
+
   return (
     <>
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
@@ -186,29 +189,46 @@ const CarSlotDetail = ({ carSlotId }) => {
             </Row>
           )}
           {carSlotDetail?.status == "AVAILABLE" && (
-            <Row style={{display:'flex',justifyContent:"center",alignItems:'center',marginTop:'50px'}}>
-              <Card  headStyle={{
-                  
-                      textAlign: "center",
-                      fontSize:'20px'
-                    }}
-                    bodyStyle={{ height: "35vh", borderRadius: "5px" }}
-                    hoverable
-                    title="Sử lý yêu cầu chăm sóc xe mới"
-                    bordered={false}
-                  >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignContent: "center",
-                  }}
-                  
-                >
-                   <Image height={200} width={200} src={slot_active} />;
-                </div>
-              </Card>
+            <Row span={24}>
+              <Col span={24}>
+                <Col span={24}>
+                  <h3>
+                    Vị trí đang trống!!! 
+                    Vui lòng chọn yêu cầu cần xử lý
+                  </h3>
+                </Col>
+              </Col>
+              <Col span={6}>
+                <Image src={select_order} />
+              </Col>
+              <Col span={18}>
+                <OrderTable />
+              </Col>
             </Row>
+
+            // <Row style={{display:'flex',justifyContent:"center",alignItems:'center',marginTop:'50px'}}>
+            //   <Card  headStyle={{
+
+            //           textAlign: "center",
+            //           fontSize:'20px'
+            //         }}
+            //         bodyStyle={{ height: "35vh", borderRadius: "5px" }}
+            //         hoverable
+            //         title="Sử lý yêu cầu chăm sóc xe mới"
+            //         bordered={false}
+            //       >
+            //     <div
+            //       style={{
+            //         display: "flex",
+            //         justifyContent: "center",
+            //         alignContent: "center",
+            //       }}
+
+            //     >
+            //        <Image height={200} width={200} src={slot_active} />;
+            //     </div>
+            //   </Card>
+            // </Row>
           )}
         </div>
       </div>

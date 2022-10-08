@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row, Tag } from "antd";
+import { Card, Col, Row, Tag, Timeline } from "antd";
 import { getCarSlots } from "pages/api/carSlotApi";
 import { useRouter } from "next/router";
 import CarSlotDetail from "./CarSlotDetail";
@@ -8,6 +8,7 @@ import slot_active from "public/images/slot_active.png";
 import slot_available from "public/images/slot_available.png";
 import slot_unavailable from "public/images/slot_unavailable.png";
 import Loading from "components/Loading";
+import { UserOutlined, CarOutlined,FieldTimeOutlined } from "@ant-design/icons";
 
 const CarSlot = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const CarSlot = () => {
       console.log(error);
     }
   };
+  console.log("carSlots", carSlots);
 
   const convertStatusCarSlot = (status) => {
     switch (status) {
@@ -76,26 +78,62 @@ const CarSlot = () => {
                       backgroundColor: "#8CB3F1",
                       color: "white",
                       textAlign: "center",
-                      fontSize:'20px'
+                      fontSize: "20px",
                     }}
                     bodyStyle={{ height: "35vh", borderRadius: "5px" }}
                     hoverable
                     title={carSlot.name}
                     bordered={false}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignContent: "center",
-                      }}
-                    >
-                      {convertStatusCarSlotImg(carSlot.status)}
-                    </div>
-                    {carSlot.status == "ACTIVE" && (
+                    {carSlot.status == "ACTIVE" ? (
                       <div className="card-slot">
-                        <div><p>Khách hàng: {carSlot.car.user.name}</p></div>
-                        <div> </div>
+                        <div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignContent: "center",
+                            }}
+                          >
+                            {convertStatusCarSlotImg(carSlot.status)}
+                          </div>
+                        </div>
+
+                        <div>
+                          <Timeline>
+                            <Timeline.Item dot={<UserOutlined />}>
+                              {carSlot?.car?.user?.name} -{" "}
+                              {carSlot?.car?.user?.phone}
+                            </Timeline.Item>
+                            <Timeline.Item dot={<CarOutlined />}>
+                              {carSlot?.car?.name}  {carSlot?.car?.color}  {carSlot?.car?.licensePlate}
+                            </Timeline.Item>
+                            <Timeline.Item>
+                              {carSlot?.serviceProfileList?.map((item) => {
+                                return (
+                                  <>
+                                    {item?.name}{", "}
+                                  </>
+                                );
+                              })}
+                            </Timeline.Item>
+                            <Timeline.Item dot={<FieldTimeOutlined />}>
+                              Thời gian ước tính:
+                            </Timeline.Item>
+                          </Timeline>
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignContent: "center",
+                          }}
+                        >
+                          {convertStatusCarSlotImg(carSlot.status)}
+                        </div>
                       </div>
                     )}
                   </Card>
@@ -106,7 +144,6 @@ const CarSlot = () => {
         </div>
       )}
       <Loading loading={loading} />
-        
     </>
   );
 };

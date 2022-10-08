@@ -246,6 +246,7 @@ function PriceHeaderTable({}) {
           <Table
             columns={columns}
             dataSource={priceHeaders}
+            bordered
             pagination={{
               pageSize: 20,
             }}
