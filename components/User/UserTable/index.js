@@ -24,21 +24,22 @@ function UserTable({}) {
   const [users, setUsers] = useState([]);
   const [modalUser, setModalUser] = useState(false);
   const [modalQuestion, setModalQuestion] = useState(false);
-  const [id, setId] = useState(null);
   const router = useRouter();
   const { userId } = router.query;
+  const [loading, setLoading] = useState(false);
 
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
   const [filteredInfo, setFilteredInfo] = useState({});
-  const [loading, setLoading] = useState(false);
+
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
     setSearchGlobal(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
+
   const handleReset = () => {
     setSearchText("");
     setSearchGlobal("");
@@ -119,47 +120,22 @@ function UserTable({}) {
         text
       ),
   });
-  const handleUsers = async () => {
-    setLoading(true);
-    try {
-      getUsers().then((res) => {
-        if (res.data.StatusCode == 200) {
-          setUsers(res.data.Data);
-          setLoading(false);
-        } else {
-          message.error(res.data.message);
-          setLoading(false);
-        }
-      });
-    } catch (err) {
-      setLoading(false);
-      console.log(err);
-    }
-  };
 
-  useEffect(() => {
-    handleUsers();
-  }, []);
-
-  const handleSuccessCreteUser = (data) => {
-    handleUsers();
-  };
   const columns = [
     {
       title: "STT",
       dataIndex: "key",
       key: "key",
+      width: 70,
       render: (text, record, dataIndex) => {
         return <div>{dataIndex + 1}</div>;
       },
-      width: 70,
     },
     {
       title: "Mã",
       dataIndex: "id",
       key: "id",
-      render: (text) => <a>{text}</a>,
-      ...getColumnSearchProps("id"),
+      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
       sorter: {
         compare: (a, b) => a.id - b.id,
         multiple: 2,
@@ -259,15 +235,31 @@ function UserTable({}) {
     },
   ];
 
+  const handleUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await getUsers();
+      setUsers(res.data.Data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    handleUsers();
+  }, []);
+
+  const handleSuccessCreteUser = (data) => {
+    handleUsers();
+  };
+
   return (
     <>
       {userId ? (
         <UserDetail userId={userId} onUpdateUser={handleUsers} />
       ) : (
         <div>
-          <Button type="primary" onClick={() => setModalUser(true)}>
-            Thêm người dùng
-          </Button>
           <Row style={{ margin: "20px 0px" }}>
             <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
@@ -278,11 +270,13 @@ function UserTable({}) {
               />
             </Col>
             <Col span={4}>
-              <Button
-                onClick={() => setSearchGlobal("")}
-                icon={<ClearOutlined />}
-              >
+              <Button style={{float:"right"}} onClick={() => handleReset()} icon={<ClearOutlined />}>
                 Xóa bộ lọc
+              </Button>
+            </Col>
+            <Col span={11}>
+              <Button type="primary" onClick={() => setModalUser(true)}>
+                Thêm người dùng
               </Button>
             </Col>
           </Row>
@@ -290,6 +284,12 @@ function UserTable({}) {
             onChange={handleSearch}
             columns={columns}
             dataSource={users}
+            pagination={{
+              pageSize: 20,
+            }}
+            scroll={{
+              y: 450,
+            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {

@@ -6,7 +6,7 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCarModel from "components/Modal/ModalAddCarModal";
 import CarModelDetail from "components/CarModel/CarModelDetail";
 import Loading from "components/Loading";
-import { ClearOutlined , SearchOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
 function CarModelTable({}) {
@@ -121,7 +121,7 @@ function CarModelTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
-      render: (id) => <a>{id}</a>,
+      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -227,9 +227,6 @@ function CarModelTable({}) {
         />
       ) : (
         <div>
-          <Button type="primary" onClick={() => setModalCarModel(true)}>
-            Thêm mẫu xe
-          </Button>
           <Row style={{ margin: "20px 0px" }}>
             <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
@@ -247,11 +244,22 @@ function CarModelTable({}) {
                 Xóa bộ lọc
               </Button>
             </Col>
+            <Col span={11}>
+              <Button  style={{float:"right"}} type="primary" onClick={() => setModalCarModel(true)}>
+                Thêm mẫu xe
+              </Button>
+            </Col>
           </Row>
           <Table
             onChange={handleSearch}
             columns={columns}
             dataSource={carModels}
+            pagination={{
+              pageSize: 20,
+            }}
+            scroll={{
+              y: 450,
+            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {

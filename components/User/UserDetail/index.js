@@ -236,34 +236,39 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                 </Form.Item>
               </Col>
             </Row>
-            <div style={{bottom:'0',right:'30px'}} className="service-action">
-              <div style={{ marginRight: "20px" }}>
-                <Button
-                  onClick={() => {
-                    router.push("/admin");
-                  }}
-                >
-                  Đặt lại
-                </Button>
+            <Row className="PullRight">
+              <div
+                style={{ bottom: "0", right: "20px", margin: "10px" }}
+                className="service-action"
+              >
+                <div style={{ marginRight: "20px" }}>
+                  <Button
+                    onClick={() => {
+                      fetchUserDetail();
+                    }}
+                  >
+                    Đặt lại
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      form
+                        .validateFields()
+                        .then((values) => {
+                          onFinish(values);
+                        })
+                        .catch((info) => {
+                          console.log("Validate Failed:", info);
+                        });
+                    }}
+                  >
+                    Cập nhật
+                  </Button>
+                </div>
               </div>
-              <div>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    form
-                      .validateFields()
-                      .then((values) => {
-                        onFinish(values);
-                      })
-                      .catch((info) => {
-                        console.log("Validate Failed:", info);
-                      });
-                  }}
-                >
-                  Cập nhật
-                </Button>
-              </div>
-            </div>
+            </Row>
           </Form>
         </Col>
       </Row>

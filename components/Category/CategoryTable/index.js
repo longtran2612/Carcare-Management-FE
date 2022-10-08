@@ -1,8 +1,8 @@
 import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import { message } from "antd";
-import { ClearOutlined ,SearchOutlined } from "@ant-design/icons"
+import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import { getCategories } from "pages/api/categoryAPI";
 import ModalAddCategory from "components/Modal/ModalAddCategory";
 import CategoryDetail from "../CategoryDetail";
@@ -110,8 +110,6 @@ function CategoryTable({}) {
       ),
   });
 
-
-
   const handleCatetgory = async () => {
     setLoading(true);
     try {
@@ -129,18 +127,15 @@ function CategoryTable({}) {
     }
   };
 
-
   const handleSuccessCategory = (data) => {
     let newArr = [...categories];
     newArr.push(data);
     setCategories(newArr);
   };
 
-
   useEffect(() => {
     handleCatetgory();
   }, []);
-
 
   const columns = [
     {
@@ -156,6 +151,7 @@ function CategoryTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
+      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -204,11 +200,8 @@ function CategoryTable({}) {
         />
       ) : (
         <div>
-          <Button type="primary" onClick={() => setModalCategory(true)}>
-            Thêm danh mục
-          </Button>
           <Row style={{ margin: "20px 0px" }}>
-          <Col span={8} style={{ marginRight: "10px" }}>
+            <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
                 placeholder="Tìm kiếm"
                 onChange={(e) => setSearchGlobal(e.target.value)}
@@ -224,11 +217,22 @@ function CategoryTable({}) {
                 Xóa bộ lọc
               </Button>
             </Col>
+            <Col span={11}>
+              <Button style={{float:"right"}} type="primary" onClick={() => setModalCategory(true)}>
+                Thêm danh mục
+              </Button>
+            </Col>
           </Row>
           <Table
-           onChange={handleSearch}
+            onChange={handleSearch}
             columns={columns}
             dataSource={categories}
+            pagination={{
+              pageSize: 20,
+            }}
+            scroll={{
+              y: 450,
+            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {

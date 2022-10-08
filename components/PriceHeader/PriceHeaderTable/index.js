@@ -1,5 +1,5 @@
 import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getPriceHeaders } from "pages/api/PriceHeaderAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import { useRouter } from "next/router";
@@ -8,7 +8,7 @@ import ModalAddPriceHeader from "components/Modal/ModalAddPriceHeader";
 import moment from "moment";
 const formatDate = "DD/MM/YYYY";
 import Loading from "components/Loading";
-import { ClearOutlined , SearchOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
 function PriceHeaderTable({}) {
@@ -24,7 +24,6 @@ function PriceHeaderTable({}) {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
 
-  
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
     setSearchGlobal(selectedKeys[0]);
@@ -115,6 +114,7 @@ function PriceHeaderTable({}) {
       title: "STT",
       dataIndex: "key",
       key: "key",
+      width: 70,
       render: (text, record, dataIndex) => {
         return <div>{dataIndex + 1}</div>;
       },
@@ -123,7 +123,7 @@ function PriceHeaderTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
-      render: (id) => <a>{id}</a>,
+      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -220,11 +220,8 @@ function PriceHeaderTable({}) {
         />
       ) : (
         <div>
-          <Button type="primary" onClick={() => setModalPriceHeader(true)}>
-            Thêm bảng giá
-          </Button>
           <Row style={{ margin: "20px 0px" }}>
-          <Col span={8} style={{ marginRight: "10px" }}>
+            <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
                 placeholder="Tìm kiếm"
                 onChange={(e) => setSearchGlobal(e.target.value)}
@@ -240,10 +237,21 @@ function PriceHeaderTable({}) {
                 Xóa bộ lọc
               </Button>
             </Col>
+            <Col span={11}>
+              <Button style={{float:"right"}} type="primary" onClick={() => setModalPriceHeader(true)}>
+                Thêm bảng giá
+              </Button>
+            </Col>
           </Row>
           <Table
             columns={columns}
             dataSource={priceHeaders}
+            pagination={{
+              pageSize: 20,
+            }}
+            scroll={{
+              y: 450,
+            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {

@@ -1,4 +1,4 @@
-import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
+import { Table, Tag, Space, Button, Row, Col, Input, Tooltip } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { ClearOutlined } from "@ant-design/icons";
 import { getCar } from "pages/api/carAPI";
@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import CarDetail from "../CarDetail";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
+
 function CarTable({}) {
   const [cars, setCars] = useState([]);
   const [modalCar, setModalCar] = useState(false);
@@ -122,8 +123,12 @@ function CarTable({}) {
       title: "MÃ",
       dataIndex: "id",
       key: "id",
-      render: (id) => <a>{id}</a>,
+      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
       filteredValue: [searchGlobal],
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+        multiple: 2,
+      },
       onFilter: (value, record) => {
         return (
           String(record.id).toLowerCase().includes(value.toLowerCase()) ||
@@ -138,19 +143,26 @@ function CarTable({}) {
           String(record.user.name).toLowerCase().includes(value.toLowerCase())
         );
       },
-      // ...getColumnSearchProps("id"),
     },
     {
       title: "Tên xe",
       dataIndex: "name",
       key: "name",
       ...getColumnSearchProps("name"),
+      render: (name) => (
+        <Tooltip placement="topLeft" title={name}>
+          {name}
+        </Tooltip>
+      ),
     },
     {
       title: "Mẫu xe",
       dataIndex: "carModel",
       key: "carModel",
       render: (carModel) => {
+        <Tooltip placement="topLeft" title={carModel.name}>
+          {carModel.name}
+        </Tooltip>;
         return <div>{carModel.name}</div>;
       },
     },
@@ -212,11 +224,9 @@ function CarTable({}) {
         <CarDetail carId={carId} onUpdateCar={handleGetCar} />
       ) : (
         <div>
-          <Button type="primary" onClick={() => setModalCar(true)}>
-            Thêm Xe
-          </Button>
+         
           <Row style={{ margin: "20px 0px" }}>
-          <Col span={8} style={{ marginRight: "10px" }}>
+            <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
                 placeholder="Tìm kiếm"
                 onChange={(e) => setSearchGlobal(e.target.value)}
@@ -225,11 +235,13 @@ function CarTable({}) {
               />
             </Col>
             <Col span={4}>
-              <Button
-                onClick={() => setSearchGlobal("")}
-                icon={<ClearOutlined />}
-              >
+              <Button onClick={() => handleReset()} icon={<ClearOutlined />}>
                 Xóa bộ lọc
+              </Button>
+            </Col>
+            <Col span={11}>
+              <Button style={{float:"right"}} type="primary" onClick={() => setModalCar(true)}>
+                Thêm Xe
               </Button>
             </Col>
           </Row>
@@ -237,6 +249,12 @@ function CarTable({}) {
             onChange={handleSearch}
             columns={columns}
             dataSource={cars}
+            pagination={{
+              pageSize: 20,
+            }}
+            scroll={{
+              y: 450,
+            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {

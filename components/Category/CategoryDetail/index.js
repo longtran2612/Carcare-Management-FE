@@ -159,26 +159,39 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
                 </Form.Item>
               </Col>
             </Row>
-            <div style={{bottom:'0',right:'20px'}} className="service-action">
-              {/* <Button type="danger" onClick={() => setModalQuestion(true)}>
-                Xóa
-              </Button> */}
-              <Button
-                type="primary"
-                onClick={() => {
-                  form
-                    .validateFields()
-                    .then((values) => {
-                      onFinish(values);
-                    })
-                    .catch((info) => {
-                      console.log("Validate Failed:", info);
-                    });
-                }}
+            <Row className="PullRight">
+              <div
+                style={{ bottom: "0", right: "20px", margin: "10px" }}
+                className="service-action"
               >
-                Cập nhật
-              </Button>
-            </div>
+                <div style={{ marginRight: "20px" }}>
+                  <Button
+                    onClick={() => {
+                      fetchcategoryDetail();
+                    }}
+                  >
+                    Đặt lại
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      form
+                        .validateFields()
+                        .then((values) => {
+                          onFinish(values);
+                        })
+                        .catch((info) => {
+                          console.log("Validate Failed:", info);
+                        });
+                    }}
+                  >
+                    Cập nhật
+                  </Button>
+                </div>
+              </div>
+            </Row>
           </Form>
         </Col>
       </Row>

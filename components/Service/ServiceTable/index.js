@@ -1,6 +1,6 @@
-import { Table, Tag, Button, Input, Row, Col,Space, Select } from "antd";
-import React, { useState, useEffect ,useRef} from "react";
-import {SearchOutlined ,ClearOutlined} from "@ant-design/icons";
+import { Table, Tag, Button, Input, Row, Col, Space, Select } from "antd";
+import React, { useState, useEffect, useRef } from "react";
+import { SearchOutlined, ClearOutlined } from "@ant-design/icons";
 import {
   fetchCategoryServiceApi,
   getServices,
@@ -166,7 +166,6 @@ function ServiceTable({}) {
       ),
   });
 
-
   const columns = [
     {
       title: "STT",
@@ -181,7 +180,7 @@ function ServiceTable({}) {
       title: "Mã dịch vụ",
       dataIndex: "id",
       key: "id",
-      render: (id) => <a>{id}</a>,
+      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
       sorter: {
         compare: (a, b) => a.id - b.id,
         multiple: 2,
@@ -192,7 +191,10 @@ function ServiceTable({}) {
           String(record.id).toLowerCase().includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.type).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.status).toLowerCase().includes(value.toLowerCase()) 
+          String(record.status).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.price?.price)
+            .toLowerCase()
+            .includes(value.toLowerCase())
         );
       },
     },
@@ -246,6 +248,7 @@ function ServiceTable({}) {
       title: "Trạng thái",
       key: "status",
       dataIndex: "status",
+      ...getColumnSearchProps("status"),
       sorter: (a, b) => a.status.length - b.status.length,
       sortDirections: ["descend", "ascend"],
       filters: [
@@ -284,9 +287,6 @@ function ServiceTable({}) {
         />
       ) : (
         <div>
-          <Button type="primary" onClick={() => setModalService(true)}>
-            Thêm dịch vụ
-          </Button>
           <Row style={{ margin: "20px 0px" }}>
             <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
@@ -304,11 +304,22 @@ function ServiceTable({}) {
                 Xóa bộ lọc
               </Button>
             </Col>
+            <Col span={11}>
+              <Button style={{float:"right"}} type="primary" onClick={() => setModalService(true)}>
+                Thêm dịch vụ
+              </Button>
+            </Col>
           </Row>
           <Table
             onChange={handleSearch}
             columns={columns}
             dataSource={services}
+            pagination={{
+              pageSize: 20,
+            }}
+            scroll={{
+              y: 450,
+            }}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {

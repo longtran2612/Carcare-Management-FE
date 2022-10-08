@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Col,
   Row,
@@ -17,13 +17,16 @@ import { useRouter } from "next/router";
 
 import { openNotification } from "utils/notification";
 import { getPricesByHeader } from "pages/api/priceAPI";
-import { getPriceHeaderById,updatePriceHeader } from "pages/api/PriceHeaderAPI";
+import {
+  getPriceHeaderById,
+  updatePriceHeader,
+} from "pages/api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";
 import moment from "moment";
 import Loading from "components/Loading";
-import { ClearOutlined , SearchOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
 const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
@@ -172,6 +175,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       title: "STT",
       dataIndex: "key",
       key: "key",
+      width: 70,
       render: (text, record, dataIndex) => {
         return <div>{dataIndex + 1}</div>;
       },
@@ -263,7 +267,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
             validateMessages={validateMessages}
           >
             <Row>
-              <Col span={10} style={{ marginRight: "20px" }}>
+              <Col span={10} style={{ marginRight: "40px" }}>
                 <Form.Item
                   label="Tên bảng giá"
                   name="name"
@@ -332,35 +336,48 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                     },
                   ]}
                 >
-                  <TextArea rows={4} />
+                  <TextArea rows={2} />
                 </Form.Item>
               </Col>
             </Row>
-            <div style={{bottom:'0',right:'20px'}} className="service-action">
-              <Button
-                type="primary"
-                onClick={() => {
-                  form
-                    .validateFields()
-                    .then((values) => {
-                      onFinish(values);
-                    })
-                    .catch((info) => {
-                      console.log("Validate Failed:", info);
-                    });
-                }}
+            <Row className="PullRight">
+              <div
+                style={{ bottom: "0", right: "20px", margin: "10px" }}
+                className="service-action"
               >
-                Cập nhật
-              </Button>
-            </div>
+                <div style={{ marginRight: "20px" }}>
+                  <Button
+                    onClick={() => {
+                      fetchPriceHeaderDetail();
+                    }}
+                  >
+                    Đặt lại
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      form
+                        .validateFields()
+                        .then((values) => {
+                          onFinish(values);
+                        })
+                        .catch((info) => {
+                          console.log("Validate Failed:", info);
+                        });
+                    }}
+                  >
+                    Cập nhật
+                  </Button>
+                </div>
+              </div>
+            </Row>
           </Form>
         </Col>
         <Col span={24}>
-          <Button type="primary" onClick={() => setModalPrice(true)}>
-            Thêm giá
-          </Button>
           <Row style={{ margin: "20px 0px" }}>
-          <Col span={8} style={{ marginRight: "10px" }}>
+            <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
                 placeholder="Tìm kiếm"
                 onChange={(e) => setSearchGlobal(e.target.value)}
@@ -376,9 +393,24 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                 Xóa bộ lọc
               </Button>
             </Col>
-            </Row>
+            <Col span={11}>
+              <Button style={{float:'right'}} type="primary" onClick={() => setModalPrice(true)}>
+                Thêm giá
+              </Button>
+            </Col>
+          </Row>
 
-          <Table columns={columns} dataSource={prices} rowKey="id" />
+          <Table
+            columns={columns}
+            dataSource={prices}
+            pagination={{
+              pageSize: 10,
+            }}
+            scroll={{
+              y: 200,
+            }}
+            rowKey="id"
+          />
         </Col>
       </Row>
 
