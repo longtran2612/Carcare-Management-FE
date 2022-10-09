@@ -6,26 +6,27 @@ import {
   LogoutOutlined,
   SettingOutlined,
   LoginOutlined,
-  UserOutlined,
+  UserOutlined,CarOutlined,
   DropboxOutlined,
 } from "@ant-design/icons";
-import { Button, Menu, message } from "antd";
+import { Button, Menu, message,Layout } from "antd";
 import Link from "next/link";
 import { logout } from "pages/api/authAPI";
 import { setLogout } from "redux/slices/authSlice";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-
-// import logo from "public/images/logo.jpg";
+import logo from "public/images/logo.png";
+import Image from "next/image";
 // import './style.scss';
 // import MenuDivider from "antd/lib/menu/MenuDivider";
+const { Header } = Layout;
 
 const { SubMenu } = Menu;
 
 const MyHeader = () => {
   const [keyMenu, setKeyMenu] = useState(1);
   const dispatch = useDispatch();
-  const { isLogin , user } = useSelector((state) => state.authSlice);
+  const { isLogin, user } = useSelector((state) => state.authSlice);
   const router = useRouter();
 
   const accessToken = Cookies.get("accessToken");
@@ -52,42 +53,40 @@ const MyHeader = () => {
   };
   const headerStyle = {
     display: "flex",
-    justifyContent: "right",
+    justifyContent: "center",
     alignItems: "right",
     padding: "4px 0",
     boxShadow: " 0 4px 4px -2px #CCD6FC",
   };
   return (
     <div className="header">
+     
       <Menu
         mode="horizontal"
         style={headerStyle}
         onClick={handleOnClick}
         selectedKeys={keyMenu}
       >
-        {/* {user.roles === 'ROLE_USER' (
+          <Image style={{justifyContent:'flex-start',display:"plex"}} src={logo} alt="logo" width={75} height={75} />
+        {user.roles === "ROLE_USER" && (
+          <>
+            <Menu.Item key={1} icon={<HomeOutlined />}>
+              <Link href="/home">Trang chủ</Link>
+            </Menu.Item>
 
-        <Menu.Item key={1} icon={<HomeOutlined />}>
-          <Link href="/home">Trang chủ</Link>
-        </Menu.Item>
-
-        <Menu.Item key={4} icon={<ShopOutlined />}>
-          <Link href="/store">Cửa hàng</Link>
-        </Menu.Item>
-
-        <Menu.Item key={2} icon={<CarOutlined />}>
-          <Link href="/service">Dịch vụ</Link>
-        </Menu.Item>
-        
-  )} */}
+            <Menu.Item key={2} icon={<CarOutlined />}>
+              <Link href="/service">Dịch vụ</Link>
+            </Menu.Item>
+          </>
+        )}
 
         {accessToken ? (
           <SubMenu key="10_1" icon={<UserOutlined />} title="Cá nhân">
             <Menu.Item key="10_3" icon={<InfoOutlined />}>
-              <Link href="/car">Thông tin cá nhân</Link>
+              <Link href="/profile">Thông tin cá nhân</Link>
             </Menu.Item>
             <Menu.Item key="10_4" icon={<SettingOutlined />}>
-              <Link href="/car">Cài đặt</Link>
+              <Link href="/setting">Cài đặt</Link>
             </Menu.Item>
             <Menu.Item key="10_1" icon={<LogoutOutlined />}>
               {/* <Link a>Đăng xuất</Button> */}
@@ -105,7 +104,8 @@ const MyHeader = () => {
           </SubMenu>
         )}
       </Menu>
-    </div>
+      
+     </div>
   );
 };
 

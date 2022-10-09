@@ -10,12 +10,14 @@ import {
   PhoneOutlined,
   LockOutlined,
 } from "@ant-design/icons";
-import { Form, Input, Button, Col, Row, message } from "antd";
+import { Form, Input, Button, Col, Row, message, Space } from "antd";
 import { Router, useRouter } from "next/router";
 import { setLogin } from "redux/slices/authSlice";
 import { login } from "pages/api/authAPI";
 import Loading from "components/Loading";
 const { Title } = Typography;
+import logo from "public/images/logo.png";
+import Image from "next/image";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ export default function LoginPage() {
       .then((res) => {
         if (res.data.StatusCode == 200) {
           dispatch(setLogin(res.data.Data));
+
           router.push("/");
         } else {
           if (res.status == 422) {
@@ -67,9 +70,22 @@ export default function LoginPage() {
             borderRadius: "10px",
           }}
         >
-          <Title level={2} style={{ marginBottom: "20px" }}>
-            Đăng nhập
-          </Title>
+          <Row justify="center">
+            <Typography.Title
+              level={1}
+              style={{
+                textAlign: "center",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "#1890ff",
+              }}
+            >
+              Đăng nhập
+            </Typography.Title>
+            {"   "}
+            <Image width={100} height={100} src={logo} alt="logo" />
+          </Row>
           <Form
             name="basic"
             labelCol={{ span: 6 }}

@@ -120,7 +120,7 @@ const CarSlotDetail = ({ carSlotId }) => {
           {carSlotDetail?.status == "ACTIVE" && (
             <Row>
               <Col span={6}>
-                <div className="carslot-customer">
+                <div className="carslot-customer content-white">
                   <Title level={4}>Thông tin khách hàng</Title>
                   <Timeline>
                     <Timeline.Item>

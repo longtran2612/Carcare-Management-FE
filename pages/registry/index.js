@@ -1,11 +1,28 @@
 import Link from "next/link";
-import { FacebookOutlined, GoogleOutlined , PhoneOutlined ,LockOutlined ,UserOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Col, Row, message, Typography , Divider } from "antd";
+import {
+  FacebookOutlined,
+  GoogleOutlined,
+  PhoneOutlined,
+  LockOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import {
+  Form,
+  Input,
+  Button,
+  Col,
+  Row,
+  message,
+  Typography,
+  Divider,
+} from "antd";
 import { useRouter } from "next/router";
 import { onRegister } from "pages/api/authAPI";
 import { useState } from "react";
 import Loading from "components/Loading";
 const { Title } = Typography;
+import logo from "public/images/logo.png";
+import Image from "next/image";
 
 export default function RegistryPage() {
   const router = useRouter();
@@ -25,9 +42,8 @@ export default function RegistryPage() {
       })
       .catch((err) => {
         setLoading(false);
-        message.error('Đăng ký thất bại! Số điện thoại đã tồn tại');
-        message.error('Vui lòng nhập số điện thoại khác');
-       
+        message.error("Đăng ký thất bại! Số điện thoại đã tồn tại");
+        message.error("Vui lòng nhập số điện thoại khác");
       });
   };
   return (
@@ -42,20 +58,34 @@ export default function RegistryPage() {
         }}
       >
         <Col
-           span={18}
-           xs={18}
-           sm={18}
-           md={18}
-           lg={10}
+          span={18}
+          xs={18}
+          sm={18}
+          md={18}
+          lg={10}
           style={{
             backgroundColor: "#DFE9F8",
             padding: "50px",
             borderRadius: "10px",
           }}
         >
-          <Title level={2} style={{ marginBottom: "20px" }}>
-            Đăng ký
-          </Title>
+         <Row justify="center">
+              <Typography.Title
+                level={1}
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "#1890ff",
+                }}
+              >
+               Đăng ký
+              </Typography.Title>
+              {"   "}
+              <Image  width={100} height={100} src={logo} alt="logo" />
+              
+            </Row>
           <Form
             name="basic"
             labelCol={{ span: 6 }}
@@ -63,6 +93,7 @@ export default function RegistryPage() {
             size={"middle"}
             wrapperCol={{ span: 18 }}
             onFinish={onFinish}
+          
           >
             <Form.Item
               label="Số điện thoại"
@@ -76,8 +107,12 @@ export default function RegistryPage() {
                 },
               ]}
             >
-              <Input        maxLength={10}
-                  minLength={10} prefix={<PhoneOutlined className="site-form-item-icon" />} placeholder="Nhập vào Số điện thoại" />
+              <Input
+                maxLength={10}
+                minLength={10}
+                prefix={<PhoneOutlined className="site-form-item-icon" />}
+                placeholder="Nhập vào Số điện thoại"
+              />
             </Form.Item>
             <Form.Item
               label="Họ tên"
@@ -85,14 +120,18 @@ export default function RegistryPage() {
               rules={[
                 {
                   pattern: new RegExp(
-                    '^[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*( *[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)*$'
-                ),
+                    "^[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*( *[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)*$"
+                  ),
                   required: true,
-                  message: "Tên không hợp lệ! Tên bắt đầu bằng chữ hoa, không chứa ký tự đặc biệt",
+                  message:
+                    "Tên không hợp lệ! Tên bắt đầu bằng chữ hoa, không chứa ký tự đặc biệt",
                 },
               ]}
             >
-              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Nhập vào Tên" />
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="Nhập vào Tên"
+              />
             </Form.Item>
 
             <Form.Item
@@ -109,7 +148,10 @@ export default function RegistryPage() {
                 },
               ]}
             >
-              <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Nhập vào mật khẩu" />
+              <Input.Password
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                placeholder="Nhập vào mật khẩu"
+              />
             </Form.Item>
             <Form.Item
               label=" Xác nhận"
@@ -125,7 +167,10 @@ export default function RegistryPage() {
                 },
               ]}
             >
-              <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Xác nhận mật khẩu" />
+              <Input.Password
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                placeholder="Xác nhận mật khẩu"
+              />
             </Form.Item>
             <Button
               className="btn-registry"
@@ -137,33 +182,8 @@ export default function RegistryPage() {
               Đăng ký
             </Button>
           </Form>
-          <p className="text-center">
-            Đã có tài khoản? <Link href="/login">Đăng nhập</Link>
-          </p>
-          <Divider/>
+            Đã có tài khoản? <Link href="/login">Đăng nhập</Link> <br/>
           Quên mật khẩu?<Link href="/forgot-password"> Lấy lại mật khẩu</Link>
-          <p className="text-center"> Hoặc đăng nhập bằng</p>
-          <div className="logo_sign-up">
-            {/* <a href={authLink.googleAuth}> */}
-            <div className="block-google block">
-              <div className="icon-login">
-                <GoogleOutlined style={{ fontSize: "30px" }} />
-              </div>
-              <div className="text-button">
-                <span>Đăng nhập với Google</span>
-              </div>
-            </div>
-            {/* </a> */}
-            {/* <a href={authLink.facebookAuth}> */}
-            <div className="block-facebook block">
-              <div className="icon-login">
-                <FacebookOutlined style={{ fontSize: "30px" }} />
-              </div>
-              <div className="text-button">
-                <span>Đăng nhập với Facebook</span>
-              </div>
-            </div>
-          </div>
         </Col>
       </Row>
       <Loading loading={loading} />

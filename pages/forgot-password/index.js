@@ -12,7 +12,8 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { changePassword, checkExistPhone } from "pages/api/authAPI";
 import OtpInput from "react-otp-input";
 const { Title } = Typography;
-
+import logo from "public/images/logo.png";
+import Image from "next/image";
 
 export default function ForgotPassword() {
   const dispatch = useDispatch();
@@ -159,9 +160,23 @@ export default function ForgotPassword() {
             borderRadius: "10px",
           }}
         >
-          <Title level={2} style={{ marginBottom: "20px" }}>
-            Lấy lại mật khẩu
-          </Title>
+         <Row justify="center">
+              <Typography.Title
+                level={1}
+                style={{
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "#1890ff",
+                }}
+              >
+                Lấy lại mật khẩu
+              </Typography.Title>
+              {"   "}
+              <Image  width={100} height={100} src={logo} alt="logo" />
+              
+            </Row>
          
 
           {step == 0 && (

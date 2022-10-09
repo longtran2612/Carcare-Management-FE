@@ -1,7 +1,7 @@
 import axios from "axios";
 import axiosClient from "./index";
-
 import { API_URL } from "./url";
+import Cookies from "js-cookie";
 
 const getUsers = async () => {
   return axiosClient()({
@@ -27,7 +27,19 @@ const getUserById = async (id) => {
       throw err;
     });
 };
-
+const getUserByPhone = async () => {
+  let phone = Cookies.get("username");
+  return axiosClient()({
+    method: "GET",
+    url: API_URL + `/users/phone/${phone}`,
+  })
+  .then((res) => {
+    return res;
+  })
+  .catch((err) => {
+    throw err;
+  });
+};
 const createUser = async (data) => {
   return axiosClient()({
     method: "POST",
@@ -61,4 +73,4 @@ const uploadImagesUser = async (data) => {
   });
 };
 
-export { getUsers, createUser, getUserById, updateUserById, uploadImagesUser };
+export { getUsers, createUser,getUserByPhone, getUserById, updateUserById, uploadImagesUser };

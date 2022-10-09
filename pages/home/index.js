@@ -1,47 +1,37 @@
-import React ,{useEffect} from "react";
-import { Layout } from 'antd';
-import  MyHeader from "components/Header";
-import  MyFooter  from "components/Footer";
-const {Content} = Layout;
+import React, { useEffect, useState } from "react";
+import { Layout } from "antd";
+import MyHeader from "components/Header";
+import MyFooter from "components/Footer";
+const { Content } = Layout;
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import { Features } from "components-customer/features";
+import { CustomerHeader } from "components-customer/header";
+import { About } from "components-customer/about";
+import { Services } from "components-customer/services";
+import JsonData from "data/data.json";
 
 function HomePage() {
+  const router = useRouter();
 
-    const router = useRouter();
-    // const handleAuthentication = async () => {
-    //     let accessToken = Cookies.get("accessToken");
-    //     console.log(accessToken);
-    //     if (accessToken == null) {
-    //       router.push("/login");
-    //       return;
-    //     }
-    //     try {
-    //       loadUser().then((res) => {
-    //         console.log("res:", res);
-    //         if (res.data.StatusCode == 200) {
-    //         } else {
-    //           if (res.data.StatusCode == 400) {
-    //             message.error(res.message);
-    //           }
-    //         }
-    //       });
-    //     } catch (err) {
-    //       console.log(err);
-    //     }
-    //   };
-    //   useEffect(() => {
-    //     handleAuthentication();
-    //   }, []);
+  const [landingPageData, setLandingPageData] = useState({});
+  useEffect(() => {
+    setLandingPageData(JsonData);
+  }, []);
   return (
     <>
       <Layout
-      style={{
-        minHeight: "100vh",
-      }}
-    >
+        style={{
+          minHeight: "100vh",
+        }}
+      >
         <MyHeader />
-        <Content>Content</Content>
+        <Content>
+          <CustomerHeader data={landingPageData.Header} />
+          <Features data={landingPageData.Features} />
+          <Services data={landingPageData.Services} />
+          <About data={landingPageData.About} />
+        </Content>
         <MyFooter />
       </Layout>
     </>
