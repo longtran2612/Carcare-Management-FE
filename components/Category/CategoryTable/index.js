@@ -127,10 +127,8 @@ function CategoryTable({}) {
     }
   };
 
-  const handleSuccessCategory = (data) => {
-    let newArr = [...categories];
-    newArr.push(data);
-    setCategories(newArr);
+  const handleSuccessCategory = () => {
+    handleCatetgory();
   };
 
   useEffect(() => {

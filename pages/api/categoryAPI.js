@@ -11,7 +11,7 @@ const getCategories = (data) => {
 const createCategory = (data) => {
   return axios({
     method: "POST",
-    url: API_URL + `/service-categories`,
+    url: API_URL + `/service-categories/create`,
     data: data,
   })
     .then((res) => {

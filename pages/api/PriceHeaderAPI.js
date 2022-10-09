@@ -30,7 +30,7 @@ const getPriceHeaders = () => {
   const createPriceHeader = (data) => {
     return axios({
       method: "POST",
-      url: API_URL + `/price-headers`,
+      url: API_URL + `/price-headers/create`,
       data: data,
     })
       .then((res) => {

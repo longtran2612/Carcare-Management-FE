@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Tag, Row, Col, Typography, Table, Timeline, Button, Card } from "antd";
+import {
+  Tag,
+  Row,
+  Col,
+  Typography,
+  Table,
+  Timeline,
+  Button,
+  Text,
+  Card,
+  Steps,
+} from "antd";
 import { getCarSlotDetail } from "pages/api/carSlotApi";
-import { SyncOutlined } from "@ant-design/icons";
+import { SyncOutlined ,LoadingOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
 import Loading from "components/Loading";
@@ -15,6 +26,8 @@ const CarSlotDetail = ({ carSlotId }) => {
   const { Column, ColumnGroup } = Table;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
+  const [step, setStep] = useState(1);
 
   const [carSlotDetail, setCarSlotDetail] = useState();
 
@@ -106,7 +119,7 @@ const CarSlotDetail = ({ carSlotId }) => {
           </div>
           {carSlotDetail?.status == "ACTIVE" && (
             <Row>
-              <Col flex={1}>
+              <Col span={6}>
                 <div className="carslot-customer">
                   <Title level={4}>Thông tin khách hàng</Title>
                   <Timeline>
@@ -149,42 +162,99 @@ const CarSlotDetail = ({ carSlotId }) => {
                   </Timeline>
                 </div>
               </Col>
-              <Col flex={4}>
-                <Table
-                  footer={() => (
-                    <div style={{ textAlign: "right" }}>
-                      Tổng tiền: {formatMoney(totalPriceService() || 0)}
-                    </div>
-                  )}
-                  dataSource={carSlotDetail?.serviceProfileList}
-                >
-                  <ColumnGroup title="Dịch vụ sử dụng">
-                    <Column
-                      title="STT"
-                      dataIndex="stt"
-                      key="stt"
-                      render={(text, record, dataIndex) => {
-                        return <div>{dataIndex + 1}</div>;
+              <Col span={18}>
+                <Row>
+                  <Col
+                    className="content-white"
+                    style={{ marginBottom: "1rem" }}
+                    span={24}
+                  >
+                    <Steps
+                      // type="navigation"
+                      // size="small"
+                      current={step}
+                      // onChange={onChange}
+                      className="site-navigation-steps"
+                    >
+                      <Steps.Step
+                        title="Tiếp nhận"
+                        status="finish"
+                        description="Thời gian tiếp nhận yêu cầu"
+                      />
+                      <Steps.Step
+                        title="Xử lý"
+                        status="process"
+                        icon={<LoadingOutlined />}
+                        description="Thời gian sử lý yêu cầu"
+                      />
+                      <Steps.Step
+                        title="Hoàn thành"
+                        status="wait"
+                        description="Thời gian hoàn thành"
+                      />
+                    </Steps>
+                  </Col>
+                  <Col span={24}>
+                    <Table
+                      dataSource={carSlotDetail?.serviceProfileList}
+                      summary={() => {
+                        return (
+                          <>
+                            <Table.Summary.Row>
+                              <Table.Summary.Cell
+                                index={0}
+                              ></Table.Summary.Cell>
+                              <Table.Summary.Cell
+                                index={1}
+                              ></Table.Summary.Cell>
+                              <Table.Summary.Cell
+                                index={2}
+                              ></Table.Summary.Cell>
+                              <Table.Summary.Cell index={3}>
+                                {formatMoney(totalPriceService() || 0)}
+                              </Table.Summary.Cell>
+                            </Table.Summary.Row>
+                          </>
+                        );
                       }}
-                    />
-                    <Column title="Tên dịch vụ" dataIndex="name" key="name" />
-                    <Column
-                      title="Giá dịch vụ"
-                      dataIndex="price"
-                      key="price"
-                      render={(text, record, dataIndex) => {
-                        return <div>{formatMoney(record.price.price)}</div>;
-                      }}
-                    />
-                  </ColumnGroup>
-                </Table>
-                <Button
-                  style={{ position: "absolute", right: "20px", bottom: "0" }}
-                  type="primary"
-                  size="large"
-                >
-                  Hoàn thành - Xuất hóa đơn
-                </Button>
+                    >
+                      <ColumnGroup title="Dịch vụ sử dụng">
+                        <Column
+                          title="STT"
+                          dataIndex="stt"
+                          key="stt"
+                          width={70}
+                          render={(text, record, dataIndex) => {
+                            return <div>{dataIndex + 1}</div>;
+                          }}
+                        />
+                        <Column
+                          title="Tên dịch vụ"
+                          dataIndex="name"
+                          key="name"
+                        />
+                        <Column title="Thời gian sử lý"></Column>
+                        <Column
+                          title="Giá dịch vụ"
+                          dataIndex="price"
+                          key="price"
+                          render={(text, record, dataIndex) => {
+                            return <div>{formatMoney(record.price.price)}</div>;
+                          }}
+                        />
+                      </ColumnGroup>
+                    </Table>
+                  </Col>
+                </Row>
+                <Row>
+                  <Button
+                    style={{ position: "absolute", right: "20px", bottom: "0" }}
+                    type="primary"
+                    size="large"
+                  >
+                    Hoàn thành - Xuất hóa đơn
+                  </Button>
+                </Row>
               </Col>
             </Row>
           )}
@@ -192,16 +262,13 @@ const CarSlotDetail = ({ carSlotId }) => {
             <Row span={24}>
               <Col span={24}>
                 <Col span={24}>
-                  <h3>
-                    Vị trí đang trống!!! 
-                    Vui lòng chọn yêu cầu cần xử lý
-                  </h3>
+                  <h3>Vị trí đang trống!!! Vui lòng chọn yêu cầu cần xử lý</h3>
                 </Col>
               </Col>
-              <Col span={6}>
+              {/* <Col span={6}>
                 <Image src={select_order} />
-              </Col>
-              <Col span={18}>
+              </Col> */}
+              <Col span={24}>
                 <OrderTable />
               </Col>
             </Row>

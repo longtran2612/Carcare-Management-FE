@@ -36,8 +36,8 @@ function ServiceTable({}) {
   const handleGetServices = async () => {
     setLoading(true);
     try {
-      const response = await searchService();
-      setServices(response.data.Data.data);
+      const response = await getServices();
+      setServices(response.data.Data);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -63,9 +63,8 @@ function ServiceTable({}) {
   }, []);
 
   const handleSuccessCreateService = (data) => {
-    let newArr = [...services];
-    newArr.push(data);
-    setServices(newArr);
+    handleGetServices();
+    fetchCategoryServices();
   };
 
   const handleSearchService = async () => {
@@ -178,9 +177,9 @@ function ServiceTable({}) {
     },
     {
       title: "Mã dịch vụ",
-      dataIndex: "id",
-      key: "id",
-      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
+      dataIndex: "serviceCode",
+      key: "serviceCode",
+      render: (serviceCode) => <a style={{ color: "blue" }}>{serviceCode}</a>,
       sorter: {
         compare: (a, b) => a.id - b.id,
         multiple: 2,
@@ -188,11 +187,11 @@ function ServiceTable({}) {
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.serviceCode).toLowerCase().includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.type).toLowerCase().includes(value.toLowerCase()) ||
           String(record.status).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.price?.price)
+          String(record.servicePrice?.price)
             .toLowerCase()
             .includes(value.toLowerCase())
         );
@@ -204,23 +203,23 @@ function ServiceTable({}) {
       key: "name",
       ...getColumnSearchProps("name"),
     },
-    {
-      title: "Danh mục dịch vụ",
-      dataIndex: "category",
-      key: "category",
-      ...getColumnSearchProps("category"),
-      render: (category) => {
-        return (
-          <>
-            {category === null ? (
-              <Tag color={"red"}>{"Chưa có danh mục"}</Tag>
-            ) : (
-              <div>{category.name}</div>
-            )}
-          </>
-        );
-      },
-    },
+    // {
+    //   title: "Danh mục dịch vụ",
+    //   dataIndex: "category",
+    //   key: "category",
+    //   ...getColumnSearchProps("category"),
+    //   render: (category) => {
+    //     return (
+    //       <>
+    //         {category === null ? (
+    //           <Tag color={"red"}>{"Chưa có danh mục"}</Tag>
+    //         ) : (
+    //           <div>{category.name}</div>
+    //         )}
+    //       </>
+    //     );
+    //   },
+    // },
 
     {
       title: "Loại dịch vụ",
@@ -230,15 +229,15 @@ function ServiceTable({}) {
     },
     {
       title: "Giá",
-      dataIndex: "price",
-      key: "price",
-      render: (price) => {
+      dataIndex: "servicePrice",
+      key: "servicePrice",
+      render: (servicePrice) => {
         return (
           <>
-            {price === null ? (
+            {servicePrice === null ? (
               <Tag color={"red"}>{"Chưa có giá"}</Tag>
             ) : (
-              <div>{price.price}</div>
+              <div>{servicePrice.price}</div>
             )}
           </>
         );
@@ -246,31 +245,31 @@ function ServiceTable({}) {
     },
     {
       title: "Trạng thái",
-      key: "status",
-      dataIndex: "status",
-      ...getColumnSearchProps("status"),
-      sorter: (a, b) => a.status.length - b.status.length,
+      key: "statusName",
+      dataIndex: "statusName",
+      ...getColumnSearchProps("statusName"),
+      sorter: (a, b) => a.statusName.length - b.statusName.length,
       sortDirections: ["descend", "ascend"],
       filters: [
         {
-          value: "ACTIVE",
-          text: "Hoạt động",
+          value: "Đang có hiệu lực",
+          text: "Đang có hiệu lực",
         },
         {
-          value: "INACTIVE",
-          text: "Không hoạt động",
+          value: "Không có hiệu lực",
+          text: "Không có hiệu lực",
         },
       ],
-      filteredValue: filteredInfo.status || null,
-      onFilter: (value, record) => record.status.includes(value),
+      filteredValue: filteredInfo.statusName || null,
+      onFilter: (value, record) => record.statusName.includes(value),
       ellipsis: true,
-      render: (status) => {
+      render: (statusName) => {
         return (
           <>
-            {status === "ACTIVE" ? (
-              <Tag color={"green"}>{"Hoạt động"}</Tag>
+            {statusName === "Đang có hiệu lực" ? (
+              <Tag color={"green"}>{"Đang có hiệu lực"}</Tag>
             ) : (
-              <Tag color={"red"}>{"Không hoạt động"}</Tag>
+              <Tag color={"red"}>{"Không có hiệu lực"}</Tag>
             )}
           </>
         );

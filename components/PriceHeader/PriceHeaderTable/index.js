@@ -121,13 +121,13 @@ function PriceHeaderTable({}) {
     },
     {
       title: "Mã",
-      dataIndex: "id",
-      key: "id",
-      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
+      dataIndex: "priceHeaderCode",
+      key: "priceHeaderCode",
+      render: (priceHeaderCode) => <a style={{ color: "blue" }}>{priceHeaderCode}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.priceHeaderCode).toLowerCase().includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.status).toLowerCase().includes(value.toLowerCase())
         );

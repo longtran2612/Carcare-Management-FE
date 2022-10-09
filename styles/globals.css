@@ -27,7 +27,7 @@ a {
 .card-slot div:last-child {
   /* align-self: start; */
   flex-basis: 50%;
-  margin-left: 1rem;
+  padding-left: 1rem;
   
   /* text-align: right; */
 }
@@ -37,12 +37,23 @@ a {
 }
 
 .content{
-  background-color: #fff;
+  background-color: rgb(233, 241, 244);
   border-radius: 5px;
-  
   min-height: 70vh;
   margin: 24px 16px 0;
-   overflow: initial;
-      margin: 10px 10px;
-     padding: 10px;
+  overflow: initial;
+  margin: 10px 10px;
+  padding: 10px;
+
+}
+
+.content-white {
+  background-color: #fff;
+  border-radius: 5px;
+  min-height: 70vh;
+  margin: 24px 16px 0;
+  overflow: initial;
+  margin: 10px 10px;
+  padding: 10px;
+
 }

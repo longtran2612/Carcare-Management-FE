@@ -28,6 +28,7 @@ import moment from "moment";
 import Loading from "components/Loading";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import { formatMoney } from "utils/format";
 
 const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const router = useRouter();
@@ -181,33 +182,47 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       },
     },
     {
-      title: "Mã giá",
-      dataIndex: "id",
-      key: "id",
+      title: "Mã dịch vụ",
+      dataIndex: "parentId",
+      key: "parentId",
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
           String(record.parentId).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.name).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.statusName).toLowerCase().includes(value.toLowerCase()) ||
           String(record.price).toLowerCase().includes(value.toLowerCase())
         );
       },
     },
     {
-      title: "Tên giá",
+      title: "Tên dịch vụ",
       dataIndex: "name",
       key: "name",
+      ...getColumnSearchProps("name"),
     },
     {
-      title: "Giá trị",
+      title: "Giá dịch vụ",
       dataIndex: "price",
       key: "price",
+      render:(price) =>{
+        return <div>{formatMoney(price)}</div>;
+      },
+      ...getColumnSearchProps("price"),
     },
     {
-      title: "Mã dịch vụ",
-      dataIndex: "parentId",
-      key: "parentId",
-      ...getColumnSearchProps("parentId"),
+      title: "Trạng thái",
+      dataIndex: "statusName",
+      key: "statusName",
+      render: (statusName) => {
+        return (
+          <>
+            {" "}
+            <Tag color={"green"}>{statusName}</Tag>{" "}
+          </>
+        );
+      },
+      ...getColumnSearchProps("statusName"),
     },
     {
       title: "Hành động",
@@ -215,16 +230,6 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       render: (_, record) => (
         <Space size={8}>
           <Button type="primary">Cập nhật</Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              setModalQuestion(true);
-              setId(record.id);
-            }}
-          >
-            Xóa
-          </Button>
         </Space>
       ),
     },
@@ -377,7 +382,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
         </Col>
         <Col span={24}>
           <Table
-          bordered
+            bordered
             title={() => (
               <>
                 <Row>

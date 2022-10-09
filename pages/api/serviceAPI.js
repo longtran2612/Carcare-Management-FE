@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { API_URL } from "./url";
 
-const getServices = (data) => {
+const getServices = () => {
   return axios({
     method: "GET",
     url: API_URL + `/services`,
@@ -24,7 +24,7 @@ const getServiceApi = (id) => {
 const createService = (data) => {
   return axios({
     method: "POST",
-    url: API_URL + `/services`,
+    url: API_URL + `/services/create`,
     data: data,
   });
 };

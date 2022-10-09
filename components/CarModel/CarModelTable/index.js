@@ -213,9 +213,7 @@ function CarModelTable({}) {
   }, []);
 
   const handleSuccessCarModel = (data) => {
-    let newArr = [...carModels];
-    newArr.push(data);
-    setCarModels(newArr);
+    handleGetCarModel();
   };
 
   return (

@@ -133,13 +133,13 @@ function UserTable({}) {
     },
     {
       title: "Mã",
-      dataIndex: "id",
-      key: "id",
-      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
+      dataIndex: "userCode",
+      key: "userCode",
+      render: (userCode) => <a style={{ color: "blue" }}>{userCode}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.userCode).toLowerCase().includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.email).toLowerCase().includes(value.toLowerCase()) ||
           String(record.phone).toLowerCase().includes(value.toLowerCase()) ||
