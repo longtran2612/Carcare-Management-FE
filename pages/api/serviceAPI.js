@@ -15,33 +15,58 @@ const getServices = () => {
     });
 };
 
-const getServiceApi = (id) => {
+const getServiceById = (id) => {
   return axios({
     method: "GET",
     url: API_URL + `/services/${id}`,
-  });
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+
+const getServiceByCode = (code) => {
+  return axios({
+    method: "GET",
+    url: API_URL + `/services/${code}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 const createService = (data) => {
   return axios({
     method: "POST",
     url: API_URL + `/services/create`,
     data: data,
-  });
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 
-const removeServiceApi = (id) => {
-  return axios({
-    method: "DELETE",
-    url: API_URL + `/services/${id}`,
-  });
-};
-
-const updateServiceApi = (data, id) => {
+const updateService = (data, id) => {
   return axios({
     method: "PUT",
     url: API_URL + `/services/${id}`,
     data: data,
-  });
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 
 const searchService = (params) => {
@@ -49,24 +74,21 @@ const searchService = (params) => {
     method: "GET",
     url: API_URL + "/services/search",
     params: params,
-  });
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 
-// category service
-
-const fetchCategoryServiceApi = () => {
-  return axios({
-    method: "GET",
-    url: API_URL + `/service-categories`,
-  });
-};
 
 export {
   getServices,
-  getServiceApi,
+  getServiceById,
+  getServiceByCode,
   createService,
-  removeServiceApi,
-  updateServiceApi,
-  fetchCategoryServiceApi,
+  updateService,
   searchService,
 };

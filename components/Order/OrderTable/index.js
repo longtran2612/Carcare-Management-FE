@@ -1,6 +1,6 @@
 import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
 import React, { useState, useEffect, useRef } from "react";
-import { getPriceHeaders } from "pages/api/PriceHeaderAPI";
+import { getPriceHeaders } from "pages/api/priceHeaderAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import { useRouter } from "next/router";
 import moment from "moment";

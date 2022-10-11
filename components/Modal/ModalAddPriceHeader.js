@@ -11,7 +11,7 @@ import {
   InputNumber,
   DatePicker,
 } from "antd";
-import { createPriceHeader } from "pages/api/PriceHeaderAPI";
+import { createPriceHeader } from "pages/api/priceHeaderAPI";
 import { getServices } from "pages/api/serviceAPI";
 
 import { validateMessages } from "utils/messageForm";

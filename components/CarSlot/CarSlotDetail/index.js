@@ -12,7 +12,7 @@ import {
   Steps,
 } from "antd";
 import { getCarSlotDetail } from "pages/api/carSlotApi";
-import { SyncOutlined ,LoadingOutlined } from "@ant-design/icons";
+import { SyncOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
 import Loading from "components/Loading";
@@ -259,15 +259,12 @@ const CarSlotDetail = ({ carSlotId }) => {
             </Row>
           )}
           {carSlotDetail?.status == "AVAILABLE" && (
-            <Row span={24}>
+            <Row className="content-white" span={24}>
               <Col span={24}>
-                <Col span={24}>
-                  <h3>Vị trí đang trống!!! Vui lòng chọn yêu cầu cần xử lý</h3>
-                </Col>
+                <Typography.Title className="content-center" level={2}>
+                Vị trí đang trống !!! vui lòng chọn yêu cầu sử lý
+                </Typography.Title>
               </Col>
-              {/* <Col span={6}>
-                <Image src={select_order} />
-              </Col> */}
               <Col span={24}>
                 <OrderTable />
               </Col>

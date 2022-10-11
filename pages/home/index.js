@@ -9,6 +9,7 @@ import { Features } from "components-customer/features";
 import { CustomerHeader } from "components-customer/header";
 import { About } from "components-customer/about";
 import { Services } from "components-customer/services";
+import {CustomerNavigation} from 'components-customer/navigation';
 import JsonData from "data/data.json";
 
 function HomePage() {
@@ -27,6 +28,8 @@ function HomePage() {
       >
         <MyHeader />
         <Content>
+        <CustomerNavigation />
+        {/* <Header data={landingPageData.Header} /> */}
           <CustomerHeader data={landingPageData.Header} />
           <Features data={landingPageData.Features} />
           <Services data={landingPageData.Services} />
