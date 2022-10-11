@@ -1,32 +1,25 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  HomeOutlined,
   InfoOutlined,
   LogoutOutlined,
   SettingOutlined,
   LoginOutlined,
-  UserOutlined,CarOutlined,
-  DropboxOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-import { Button, Menu, message,Layout } from "antd";
+import {  Menu, message } from "antd";
 import Link from "next/link";
 import { logout } from "pages/api/authAPI";
 import { setLogout } from "redux/slices/authSlice";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import logo from "public/images/logo.png";
-import Image from "next/image";
-// import './style.scss';
-// import MenuDivider from "antd/lib/menu/MenuDivider";
-const { Header } = Layout;
 
 const { SubMenu } = Menu;
 
 const MyHeader = () => {
   const [keyMenu, setKeyMenu] = useState(1);
   const dispatch = useDispatch();
-  const { isLogin, user } = useSelector((state) => state.authSlice);
+  const { user } = useSelector((state) => state.authSlice);
   const router = useRouter();
 
   const accessToken = Cookies.get("accessToken");
@@ -53,9 +46,10 @@ const MyHeader = () => {
   };
   const headerStyle = {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "right",
     alignItems: "right",
-    padding: "4px 0",
+    padding: "4px 16px",
+    paddingRight: "20px",
     boxShadow: " 0 4px 4px -2px #CCD6FC",
   };
   return (
@@ -67,16 +61,16 @@ const MyHeader = () => {
         onClick={handleOnClick}
         selectedKeys={keyMenu}
       >
-          <Image style={{justifyContent:'flex-start',display:"plex"}} src={logo} alt="logo" width={75} height={75} />
+         
         {user.roles === "ROLE_USER" && (
           <>
-            <Menu.Item key={1} icon={<HomeOutlined />}>
+            {/* <Menu.Item key={1} icon={<HomeOutlined />}>
               <Link href="/home">Trang chủ</Link>
             </Menu.Item>
 
             <Menu.Item key={2} icon={<CarOutlined />}>
               <Link href="/service">Dịch vụ</Link>
-            </Menu.Item>
+            </Menu.Item> */}
           </>
         )}
 

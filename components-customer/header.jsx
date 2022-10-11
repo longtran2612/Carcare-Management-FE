@@ -1,4 +1,4 @@
-export const CustomerHeader = (props) => {
+export const CustomerHeader = () => {
   return (
     <header id='header'>
       <div className='intro'>
@@ -7,15 +7,15 @@ export const CustomerHeader = (props) => {
             <div className='row'>
               <div className='col-md-8 col-md-offset-2 intro-text'>
                 <h1>
-                  {props.data ? props.data.title : 'Loading'}
+                VL CARCARE 
                   <span></span>
                 </h1>
-                <p>{props.data ? props.data.paragraph : 'Loading'}</p>
+                <p>Hãy tặng chiếc xe của bạn món quà tuyệt vời nhất</p>
                 <a
                   href='#features'
                   className='btn btn-custom btn-lg page-scroll'
                 >
-                  Learn More
+                  Xem thêm
                 </a>{' '}
               </div>
             </div>

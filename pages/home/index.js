@@ -9,8 +9,9 @@ import { Features } from "components-customer/features";
 import { CustomerHeader } from "components-customer/header";
 import { About } from "components-customer/about";
 import { Services } from "components-customer/services";
-import {CustomerNavigation} from 'components-customer/navigation';
+import { CustomerNavigation } from "components-customer/navigation";
 import JsonData from "data/data.json";
+import { Testimonials } from "components-customer/testimonials";
 
 function HomePage() {
   const router = useRouter();
@@ -28,12 +29,12 @@ function HomePage() {
       >
         <MyHeader />
         <Content>
-        <CustomerNavigation />
-        {/* <Header data={landingPageData.Header} /> */}
-          <CustomerHeader data={landingPageData.Header} />
+          <CustomerNavigation />
+          <CustomerHeader />
           <Features data={landingPageData.Features} />
           <Services data={landingPageData.Services} />
           <About data={landingPageData.About} />
+          <Testimonials data={landingPageData.Testimonials} />
         </Content>
         <MyFooter />
       </Layout>

@@ -4,7 +4,9 @@ import "../styles/style.scss";
 import "../styles/service.scss";
 import "../styles/carslot.scss";
 import "antd/dist/antd.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles/bootstrap.css";
+
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 import { SessionProvider } from "next-auth/react";
 import store from "../redux/store";

@@ -7,7 +7,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html>
+      <Html className="scroll-smooth">
         <Head>
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -34,6 +34,7 @@ class MyDocument extends Document {
             href="/skins/bootstrap.min.css"
           />
           <link rel="stylesheet" type="text/css" href="/skins/animate.css" />
+          <script src="https://rawgit.com/kswedberg/jquery-smooth-scroll/master/jquery.smooth-scroll.js"></script>
           <link
             rel="stylesheet"
             type="text/css"

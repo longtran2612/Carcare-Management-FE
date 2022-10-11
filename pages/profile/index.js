@@ -29,6 +29,8 @@ import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
 import MyHeader from "components/Header";
 import MyFooter from "components/Footer";
+import { CustomerNavigation } from "components-customer/navigation";
+
 const UserDetail = () => {
   const router = useRouter();
   const [form] = Form.useForm();
@@ -124,8 +126,8 @@ const UserDetail = () => {
   return (
     <>
       <Layout>
-        <MyHeader />
-        <Layout.Content style={{paddingLeft:'5rem',paddingRight:'5rem' ,minHeight:'100vh'}} className="content">
+        <CustomerNavigation />
+        <Layout.Content style={{paddingTop:'5rem',paddingLeft:'5rem',paddingRight:'5rem' ,minHeight:'100vh'}} className="content">
           <Row>
             <Col span={6}>
               <Image width={300} height={250} src={userDetail.image} />
