@@ -14,12 +14,11 @@ import {
   Table,
 } from "antd";
 import { useRouter } from "next/router";
-
 import { openNotification } from "utils/notification";
 import { getPricesByHeader } from "pages/api/priceAPI";
 import {
   getPriceHeaderById,
-  updatePriceHeader,
+  updatePriceHeader
 } from "pages/api/priceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";

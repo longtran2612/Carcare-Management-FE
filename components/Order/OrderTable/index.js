@@ -1,7 +1,5 @@
 import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
 import React, { useState, useEffect, useRef } from "react";
-import { getPriceHeaders } from "pages/api/priceHeaderAPI";
-import ModalQuestion from "components/Modal/ModalQuestion";
 import { useRouter } from "next/router";
 import moment from "moment";
 const formatDate = "DD/MM/YYYY";
@@ -9,10 +7,8 @@ import Loading from "components/Loading";
 import {
   ClearOutlined,
   SearchOutlined,
-  PlusSquareOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { COOKIE_NAME_PRERENDER_BYPASS } from "next/dist/server/api-utils";
 
 function OrderTable({}) {
   // const [priceHeaders, setPriceHeaders] = useState([]);
