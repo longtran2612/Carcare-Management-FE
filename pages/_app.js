@@ -8,13 +8,12 @@ import "../styles/bootstrap.css";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 
-import { SessionProvider } from "next-auth/react";
 import store from "../redux/store";
 import { Provider } from "react-redux";
 import { Fragment } from "react";
 import Head from "next/head";
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+function MyApp({ Component, pageProps }) {
   return (
     <Fragment>
       <Head>
@@ -24,12 +23,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         />
          <link rel="icon" href="/images/favicon.ico" />
       </Head>
-
-      <SessionProvider session={session}>
         <Provider store={store}>
           <Component {...pageProps} />
         </Provider>
-      </SessionProvider>
     </Fragment>
   );
 }
