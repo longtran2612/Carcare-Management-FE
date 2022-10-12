@@ -1,4 +1,4 @@
-import logo from "public/images/logo.png";
+import logo from "public/images/logo-header-customer.png";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -54,7 +54,7 @@ export const CustomerNavigation = () => {
             <span className="icon-bar"></span>{" "}
           </button>
           <a className="navbar-brand page-scroll" href="/home">
-            <Image src={logo} width={100} height={70} />
+            <Image src={logo} width={120} height={90} />
             {/* VLCARCARE */}
           </a>{" "}
         </div>
