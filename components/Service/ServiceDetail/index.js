@@ -19,6 +19,8 @@ import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import Loading from "components/Loading";
 
+
+
 const ServiceDetail = ({ serviceId, onUpdateService }) => {
   const router = useRouter();
   const [form] = Form.useForm();
@@ -39,6 +41,8 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       openNotification(error.response.data);
     }
   };
+
+  console.log("categoryServices", categoryServices);
 
   const fetchServiceDetail = async () => {
     setLoading(true);

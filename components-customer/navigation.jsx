@@ -54,8 +54,8 @@ export const CustomerNavigation = () => {
             <span className="icon-bar"></span>{" "}
           </button>
           <a className="navbar-brand page-scroll" href="/home">
-            {/* <Image src={logo} height={100} /> */}
-            VLCARCARE
+            <Image src={logo} width={100} height={70} />
+            {/* VLCARCARE */}
           </a>{" "}
         </div>
 

@@ -32,7 +32,7 @@ function HomePageCustomer() {
           <CustomerNavigation />
           <CustomerHeader />
           <Features data={landingPageData.Features} />
-          <Services data={landingPageData.Services} />
+          <Services  data={landingPageData.Services} />
           <About data={landingPageData.About} />
           <Testimonials data={landingPageData.Testimonials} />
         </Content>
