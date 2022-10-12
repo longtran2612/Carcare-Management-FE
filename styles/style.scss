@@ -22,7 +22,7 @@ $black_text: #363636;
     position: relative;
   
     &_left {
-        padding: 1rem 3rem;
+        padding: 1rem 2rem;
         display: flex;
         flex-flow: column wrap;
 
@@ -35,7 +35,7 @@ $black_text: #363636;
 
         &-intro {
             color: $black_text;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
         }
 
         &-contact {
@@ -72,11 +72,11 @@ $black_text: #363636;
         padding: 1rem 3rem;
 
         ul span {
-            font-size: 1.8rem;
+            font-size: 1.1rem;
             font-weight: 700;
         }
         li {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             list-style-type: none;
             padding-top: 10px;
         }

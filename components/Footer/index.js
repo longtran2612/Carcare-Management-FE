@@ -1,5 +1,4 @@
 import React from "react";
-// import "./style.scss";
 import { Col, Divider, Row, Space } from "antd";
 import {
   FacebookFilled,
@@ -10,7 +9,7 @@ import {
 import Link  from "next/link";
 import Image from "next/image";
 
-import logo from "public/images/logo.png";
+import logo from "public/images/logo-footer-customer.png";
 
 const MyFooter =() => {
 
@@ -20,10 +19,9 @@ const MyFooter =() => {
       <Row gutter={[0, 16]}>
         <Col xl={{ span: 10 }} xs={{ span: 24 }} sm={{ span: 24 }}>
           <div className="footer_left">
-            <Link href="/">
-              <div className="footer_left-logo-page">
+            <Link href="/home">
+              <div  className="footer_left-logo-page">
                 <Image  width={200} height={200} src={logo} alt="VLCARSERVICE" />
-                
               </div>
             </Link>
 
