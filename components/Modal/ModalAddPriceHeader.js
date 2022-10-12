@@ -1,23 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Modal,
-  Button,
   Form,
   Input,
   Row,
   Col,
-  Select,
-  Switch,
-  InputNumber,
   DatePicker,
 } from "antd";
-import { createPriceHeader } from "pages/api/PriceHeaderAPI";
-import { getServices } from "pages/api/serviceAPI";
-
+import { createPriceHeader } from "pages/api/priceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 const { TextArea } = Input;
-import moment from "moment";
 const formatDate = "YYYY/MM/DD";
 
 const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {

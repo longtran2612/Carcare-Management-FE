@@ -2,11 +2,12 @@ import { Table, Tag, Button, Input, Row, Col, Space, Select } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { SearchOutlined, ClearOutlined } from "@ant-design/icons";
 import {
-  fetchCategoryServiceApi,
   getServices,
-  removeServiceApi,
   searchService,
 } from "pages/api/serviceAPI";
+import {
+  getCategories,
+} from "pages/api/categoryAPI";
 import ModalAddService from "components/Modal/ModalAddService";
 import { useRouter } from "next/router";
 import ServiceDetail from "../ServiceDetail";
@@ -48,7 +49,7 @@ function ServiceTable({}) {
   const fetchCategoryServices = async () => {
     setLoading(true);
     try {
-      const response = await fetchCategoryServiceApi();
+      const response = await getCategories();
       setCategoryServices(response.data.Data);
       setLoading(false);
     } catch (error) {

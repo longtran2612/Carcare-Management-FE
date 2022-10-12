@@ -2,13 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   Col,
   Row,
-  Image,
   Space,
   Button,
   Tag,
   Form,
   Select,
-  Switch,
   Input,
   DatePicker,
   Table,
@@ -19,7 +17,7 @@ import { getPricesByHeader } from "pages/api/priceAPI";
 import {
   getPriceHeaderById,
   updatePriceHeader
-} from "pages/api/PriceHeaderAPI";
+} from "pages/api/priceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";

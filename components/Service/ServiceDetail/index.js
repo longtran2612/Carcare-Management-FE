@@ -4,10 +4,8 @@ import {
   Row,
   Image,
   Button,
-  Tag,
   Form,
   Select,
-  Switch,
   Input,
 } from "antd";
 import { useRouter } from "next/router";
