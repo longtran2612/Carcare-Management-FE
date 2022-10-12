@@ -10,9 +10,8 @@ import {
 } from "antd";
 import { useRouter } from "next/router";
 import {
-  getServiceApi,
-  removeServiceApi,
-  updateServiceApi,
+  getServiceById,
+  updateService,
 } from "pages/api/serviceAPI";
 import { openNotification } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
@@ -44,7 +43,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
   const fetchServiceDetail = async () => {
     setLoading(true);
     try {
-      const response = await getServiceApi(serviceId);
+      const response = await getServiceById(serviceId);
       setServiceDetail(response.data.Data);
       form.setFieldsValue({
         name: response.data.Data.name,
@@ -78,7 +77,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         categoryId: values.categoryId,
         status: values.status,
       };
-      const res = await updateServiceApi(body, serviceDetail.id);
+      const res = await updateService(body, serviceDetail.id);
       if (res.data.StatusCode == "200") {
         openNotification("Cập nhật dịch vụ thành công!", "");
         onUpdateService();
@@ -87,14 +86,14 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       console.log(error);
     }
   };
-  const handleRemoveService = async () => {
-    try {
-      await removeServiceApi(serviceDetail.id);
-      router.push("/admin");
-      onUpdateService();
-      setModalQuestion(false);
-    } catch (error) {}
-  };
+  // const handleRemoveService = async () => {
+  //   try {
+  //     await re(serviceDetail.id);
+  //     router.push("/admin");
+  //     onUpdateService();
+  //     setModalQuestion(false);
+  //   } catch (error) {}
+  // };
   return (
     <>
       <Row>
@@ -244,12 +243,12 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
           </Form>
         </Col>
       </Row>
-      <ModalQuestion
+      {/* <ModalQuestion
         title="Bạn có chắc chắn muốn xóa dịch vụ này không?"
         visible={modalQuestion}
         handleCancel={() => setModalQuestion(false)}
         handleOk={() => handleRemoveService()}
-      />
+      /> */}
       <Loading loading={loading} />
     </>
   );
