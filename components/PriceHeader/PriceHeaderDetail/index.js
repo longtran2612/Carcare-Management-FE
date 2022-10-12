@@ -17,7 +17,7 @@ import { getPricesByHeader } from "pages/api/priceAPI";
 import {
   getPriceHeaderById,
   updatePriceHeader
-} from "pages/api/priceHeaderAPI";
+} from "pages/api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";

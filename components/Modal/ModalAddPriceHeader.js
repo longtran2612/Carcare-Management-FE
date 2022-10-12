@@ -7,7 +7,7 @@ import {
   Col,
   DatePicker,
 } from "antd";
-import { createPriceHeader } from "pages/api/priceHeaderAPI";
+import { createPriceHeader } from "pages/api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 const { TextArea } = Input;
