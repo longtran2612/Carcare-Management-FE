@@ -10,7 +10,8 @@ import {
   Switch,
   InputNumber,
 } from "antd";
-import { createService, fetchCategoryServiceApi } from "pages/api/serviceAPI";
+import { createService } from "pages/api/serviceAPI";
+import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 
@@ -48,7 +49,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
 
   const handleFetchCategory = async () => {
     try {
-      const res = await fetchCategoryServiceApi();
+      const res = await getCategories();
       setListCategory(res.data.Data);
     } catch (error) {
       console.log(error);
