@@ -7,7 +7,7 @@
 // }
 
 .logo-style {
-    height: 80px;
+  height: 80px;
 }
 
 $text-color: #fff;
@@ -17,133 +17,139 @@ $demesion-img: 300px;
 $black_text: #363636;
 
 .footer {
-    background-color: rgb(251, 251, 251);
-    clear: both;
-    position: relative;
-  
-    &_left {
-        padding: 1rem 2rem;
+  background-color: rgb(251, 251, 251);
+  clear: both;
+  position: relative;
+
+  &_left {
+    padding: 1rem 2rem;
+    display: flex;
+    flex-flow: column wrap;
+
+    &-logo-page img {
+      max-width: 100%;
+      height: calc(#{$demesion-img} - 20px);
+      width: $demesion-img;
+      object-fit: contain;
+    }
+
+    &-intro {
+      color: $black_text;
+      font-size: 1.2rem;
+    }
+
+    &-contact {
+      margin-top: 2.6rem;
+      display: flex;
+      &--logo-branch {
+        width: $size-icon;
+        height: $size-icon;
+        background-color: $main-color;
         display: flex;
-        flex-flow: column wrap;
 
-        &-logo-page img {
-            max-width: 100%;
-            height: calc(#{$demesion-img} - 20px);
-            width: $demesion-img;
-            object-fit: contain;
-        }
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: $text-color;
 
-        &-intro {
-            color: $black_text;
-            font-size: 1.2rem;
-        }
+        border: 1px solid $main-color;
+        box-shadow: 0 8px 8px -4px lightblue;
+        transition: all 0.2s ease-in-out;
+      }
 
-        &-contact {
-            margin-top: 2.6rem;
-            display: flex;
-            &--logo-branch {
-                width: $size-icon;
-                height: $size-icon;
-                background-color: $main-color;
-                display: flex;
+      &--logo-branch ~ &--logo-branch {
+        margin-left: 30px;
+      }
 
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                color: $text-color;
+      &--logo-branch:hover {
+        background-color: #fff;
+        color: $main-color;
+      }
+    }
+  }
 
-                border: 1px solid $main-color;
-                box-shadow: 0 8px 8px -4px lightblue;
-                transition: all 0.2s ease-in-out;
-            }
+  &_right {
+    padding: 1rem 3rem;
 
-            &--logo-branch ~ &--logo-branch {
-                margin-left: 30px;
-            }
-
-            &--logo-branch:hover {
-                background-color: #fff;
-                color: $main-color;
-            }
-        }
+    ul span {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    li {
+      font-size: 1.1rem;
+      list-style-type: none;
+      padding-top: 10px;
+    }
+    ul {
+      padding-inline-start: 0;
+    }
+    a {
+      color: $black_text;
+      transition: all 0.2s ease-in-out;
     }
 
-    &_right {
-        padding: 1rem 3rem;
-
-        ul span {
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-        li {
-            font-size: 1.1rem;
-            list-style-type: none;
-            padding-top: 10px;
-        }
-        ul {
-            padding-inline-start: 0;
-        }
-        a {
-            color: $black_text;
-            transition: all 0.2s ease-in-out;
-        }
-
-        li a:hover {
-            margin-left: 5px;
-        }
-
-        &-copyright {
-            text-align: center;
-            padding: 3rem 0;
-            color: #666;
-        }
+    li a:hover {
+      margin-left: 5px;
     }
+
+    &-copyright {
+      text-align: center;
+      padding: 3rem 0;
+      color: #666;
+    }
+  }
 }
 
-
 .block {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 0.8rem 5rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0.8rem 5rem;
 
-    font-weight: 500;
-    margin: 1rem 0;
-    border-radius: 5px;
-    cursor: pointer;
-    position: relative;
-    // & > div {
-    //     flex-grow: 1;
-    // }
+  font-weight: 500;
+  margin: 1rem 0;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  // & > div {
+  //     flex-grow: 1;
+  // }
 }
 
 .block-google {
-    background-color: #d64937;
-    color: #ffffff;
+  background-color: #d64937;
+  color: #ffffff;
 }
 
 .block-facebook {
-    background-color: #3a5794;
-    color: #ffffff;
+  background-color: #3a5794;
+  color: #ffffff;
 }
 
 .icon-login {
-    position: absolute;
-    left: 0.6rem;
-    top: 50%;
-    transform: translateY(-50%);
+  position: absolute;
+  left: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .MarRight20 {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 .MarRight40 {
-    margin-right: 40px;
+  margin-right: 40px;
 }
 .width100 {
-    width: 100%;
+  width: 100%;
 }
 
 .PullRight {
-    float: right;
+  float: right;
 }
+
+/* For demo */
+.ant-carousel .slick-dots {
+    margin: 0 !important;
+}
+
+

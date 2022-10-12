@@ -96,7 +96,7 @@ const AdminPage = () => {
           </Content>
           <Footer style={{ backgroundColor: "white", textAlign: "center" }}>
             <Row justify="center">
-              <Image width={100} height={100} src={logo} alt="logo" />
+        
               <Space />
               <Typography.Title
                 level={4}
