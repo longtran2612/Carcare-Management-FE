@@ -5,6 +5,7 @@ import  MyFooter  from "components/Footer";
 const {Content} = Layout;
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import HomePageCustomer from "pages/home";
 import {loadUser} from "pages/api/authAPI";
 
 function HomePage() {
@@ -34,16 +35,7 @@ function HomePage() {
       }, []);
   return (
     <>
-      <Layout
-      style={{
-        minHeight: "100vh",
-        backgroundColor:'white'
-      }}
-    >
-        <MyHeader />
-        <Content>Content</Content>
-        <MyFooter />
-      </Layout>
+     <HomePageCustomer/>
     </>
   );
 }

@@ -13,7 +13,7 @@ import { CustomerNavigation } from "components-customer/navigation";
 import JsonData from "data/data.json";
 import { Testimonials } from "components-customer/testimonials";
 
-function HomePage() {
+function HomePageCustomer() {
   const router = useRouter();
 
   const [landingPageData, setLandingPageData] = useState({});
@@ -42,4 +42,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default HomePageCustomer;
