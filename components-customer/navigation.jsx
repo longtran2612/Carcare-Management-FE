@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { setLogout } from "redux/slices/authSlice";
-import { Menu,message } from "antd";
+import { Menu, message } from "antd";
 import { logout } from "pages/api/authAPI";
 const { SubMenu } = Menu;
 import Cookies from "js-cookie";
@@ -53,8 +53,10 @@ export const CustomerNavigation = () => {
             <span className="icon-bar"></span>{" "}
             <span className="icon-bar"></span>{" "}
           </button>
-          <a className="navbar-brand page-scroll" href="/home">
-            <Image src={logo} width={120} height={90} />
+          <a className="navbar-brand page-scroll">
+            <Link href="/">
+              <Image src={logo} width={120} height={90} />
+            </Link>
             {/* VLCARCARE */}
           </a>{" "}
         </div>
