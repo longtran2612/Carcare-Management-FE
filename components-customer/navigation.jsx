@@ -7,10 +7,13 @@ import {
   SettingOutlined,
   LoginOutlined,
   UserOutlined,
+  DownOutlined,
+  HighlightOutlined,
+  ClearOutlined
 } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { setLogout } from "redux/slices/authSlice";
-import { Menu, message } from "antd";
+import { Menu, message, Dropdown } from "antd";
 import { logout } from "pages/api/authAPI";
 const { SubMenu } = Menu;
 import Cookies from "js-cookie";
@@ -21,6 +24,7 @@ export const CustomerNavigation = () => {
   const { user } = useSelector((state) => state.authSlice);
   const accessToken = Cookies.get("accessToken");
   const router = useRouter();
+
   const handleLogout = () => {
     logout()
       .then((res) => {
@@ -37,6 +41,61 @@ export const CustomerNavigation = () => {
         message.error(err.message);
       });
   };
+
+  const handleMenu=()=>{
+    if(accessToken){
+      return(
+        <Menu>
+        <Menu.Item key="0">
+          <Link href="/profile">
+            <a>
+              <UserOutlined /> Trang cá nhân
+            </a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <Link href="/change-password">
+            <a>
+              <ClearOutlined /> Dịch vụ đang sử dụng
+            </a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <Link href="/change-password">
+            <a>
+              <SettingOutlined /> Đổi mật khẩu
+            </a>
+          </Link>
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item key="3" onClick={handleLogout}>
+          <LogoutOutlined /> Đăng xuất
+        </Menu.Item>
+      </Menu>
+      )
+    }else{
+      return(
+        <Menu>
+        <Menu.Item key="0">
+          <Link href="/login">
+            <a>
+              <LoginOutlined /> Đăng nhập
+            </a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <Link href="/register">
+            <a>
+              <HighlightOutlined /> Đăng ký
+            </a>
+          </Link>
+        </Menu.Item>
+      </Menu>
+      )
+    }
+  }
+
+
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -87,37 +146,14 @@ export const CustomerNavigation = () => {
               </a>
             </li>
             <li>
-              <div className="page-scroll">
-                <Menu>
-                  {accessToken ? (
-                    <SubMenu key="10_1" icon={<UserOutlined />} title="Cá nhân">
-                      <Menu.Item key="10_3" icon={<InfoOutlined />}>
-                        <Link href="/profile">Thông tin cá nhân</Link>
-                      </Menu.Item>
-                      <Menu.Item key="10_4" icon={<SettingOutlined />}>
-                        <Link href="/setting">Cài đặt</Link>
-                      </Menu.Item>
-                      <Menu.Item key="10_1" icon={<LogoutOutlined />}>
-                        {/* <Link a>Đăng xuất</Button> */}
-                        <a onClick={() => handleLogout()}>Đăng xuất</a>
-                      </Menu.Item>
-                    </SubMenu>
-                  ) : (
-                    <SubMenu
-                      key="11"
-                      icon={<LoginOutlined />}
-                      title="Đăng ký/Đăng nhập"
-                    >
-                      <Menu.Item key="11_1">
-                        <Link href="/login">Đăng nhập</Link>
-                      </Menu.Item>
-                      <Menu.Item key="11_2">
-                        <Link href="/registry">Đăng ký</Link>
-                      </Menu.Item>
-                    </SubMenu>
-                  )}
-                </Menu>
-              </div>
+              <a  className="page-scroll">
+                <Dropdown overlay={handleMenu}>
+                  <a onClick={(e) => e.preventDefault()}>
+                    {accessToken ? 'Cá nhân' : "Đăng ký/Đăng nhập"} <DownOutlined />
+                    {/* Cá nhân <DownOutlined /> */}
+                  </a>
+                </Dropdown>
+              </a>
             </li>
           </ul>
         </div>
