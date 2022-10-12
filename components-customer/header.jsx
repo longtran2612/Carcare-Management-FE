@@ -6,7 +6,7 @@ import bg3 from "public/img/intro-bg3.jpg";
 export const CustomerHeader = () => {
   return (
     <header id="header">
-      <Carousel effect='scrollx' autoplay>
+      <Carousel draggable effect='fade' autoplay>
         <div className="intro bg1">
           <div className="overlay">
             <div className="container">
