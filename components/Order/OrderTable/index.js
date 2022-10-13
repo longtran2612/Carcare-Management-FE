@@ -122,7 +122,7 @@ function OrderTable({}) {
       title: "Mã",
       dataIndex: "id",
       key: "id",
-      width: 140,
+      width: 70,
       render: (id) => <a style={{ color: "blue" }}>{id}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {

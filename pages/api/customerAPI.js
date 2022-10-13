@@ -31,7 +31,7 @@ const getCustomerById = async (data) => {
 const getCustomerByCode = async (data) => {
     return axios({
       method: "GET",
-      url: API_URL + `/customer/find-customner-by-code/${data}`,
+      url: API_URL + `/customer/find-customer-by-code/${data}`,
     })
       .then((res) => {
         return res;

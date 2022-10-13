@@ -284,7 +284,7 @@ import {
               onRow={(record, rowIndex) => {
                 return {
                   onClick: (event) => {
-                    router.push(`/admin?customerId=${record.id}`);
+                    router.push(`/admin?customerId=${record.customerCode}`);
                   },
                 };
               }}
