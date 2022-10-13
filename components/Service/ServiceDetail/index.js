@@ -7,6 +7,7 @@ import {
   Form,
   Select,
   Input,
+  InputNumber,
 } from "antd";
 import { useRouter } from "next/router";
 import {
@@ -55,7 +56,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         imageUrl: response.data.Data.imageUrl,
         description: response.data.Data.description,
         categoryId: response.data.Data.categoryId,
+        estimateTime: response.data.Data.estimateTime,
         status: response.data.Data.status,
+        statusName: response.data.Data.statusName,
       });
       setLoading(false);
     } catch (error) {
@@ -74,11 +77,11 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
   const onFinish = async (values) => {
     try {
       let body = {
-        id: serviceDetail.id,
         type: values.type,
         name: values.name,
         description: values.description,
         categoryId: values.categoryId,
+        imageUrl: values.imageUrl,
         status: values.status,
       };
       const res = await updateService(body, serviceDetail.id);
@@ -100,7 +103,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
   // };
   return (
     <>
-      <Row>
+      <Row gutter={[16,16]}>
         <Col span={6}>
           <Image width={300} height={250} src={serviceDetail.imageUrl} />
           <div
@@ -120,15 +123,15 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
             </Upload> */}
           </div>
         </Col>
-        <Col span={15}>
+        <Col span={18}>
           <Form
             form={form}
             layout="vertical"
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row>
-              <Col span={11} style={{ marginRight: "20px" }}>
+            <Row gutter={[32,32]}>
+              <Col span={18} >
                 <Form.Item
                   label="Tên dịch vụ"
                   name="name"
@@ -141,7 +144,25 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={5} style={{ marginRight: "20px" }}>
+              <Col span={6} >
+                <Form.Item
+                  label="Trạng thái"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  name="statusName"
+                >
+                  <Select>
+                    <Select.Option value="ACTIVE">Hoạt động</Select.Option>
+                    <Select.Option value="INACTIVE">
+                      Không hoạt động
+                    </Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={6} >
                 <Form.Item
                   label="Kiểu dịch vụ"
                   rules={[
@@ -157,7 +178,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={5} style={{ marginRight: "20px" }}>
+              <Col span={6} >
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -165,7 +186,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                       required: true,
                     },
                   ]}
-                  name="status"
+                  name="statusName"
                 >
                   <Select>
                     <Select.Option value="ACTIVE">Hoạt động</Select.Option>
@@ -175,7 +196,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={11} style={{ marginRight: "20px" }}>
+              <Col span={6} >
                 <Form.Item
                   label="Danh mục dịch vụ"
                   rules={[
@@ -197,7 +218,20 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={23} style={{ marginRight: "20px" }}>
+              <Col span={6} >
+                <Form.Item
+                  label="Thời gian xử lý"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  name="estimateTime"
+                >
+                  <InputNumber/>
+                </Form.Item>
+              </Col>
+              <Col span={23}>
                 <Form.Item
                   label="Mô tả"
                   name="description"

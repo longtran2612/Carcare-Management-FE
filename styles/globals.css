@@ -62,13 +62,20 @@ a {
 }
 
 .ant-input{
-  border-radius: 10px !important;
+  border-radius: 5px !important;
   height: 35px;
 }
 .ant-input-number{
-  border-radius: 10px !important;
+  border-radius: 5px !important;
   height: 35px;
   width: 100% !important;
+}
+.ant-picker{
+  height: 35px;
+  width: 100% !important;
+}
+.ant-select-selector {
+  height: 35px !important
 }
 
 .ant-btn{

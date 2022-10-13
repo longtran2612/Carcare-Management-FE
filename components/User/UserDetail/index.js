@@ -124,7 +124,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       </Button>
       <br />
       <br />
-      <Row>
+      <Row gutter={[16,16]}>
         <Col span={6}>
           <Image width={300} height={250} src={userDetail.image} />
           <div
@@ -144,15 +144,15 @@ const UserDetail = ({ userId, onUpdateUser }) => {
             </Upload>
           </div>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Form
             form={form}
             layout="vertical"
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row>
-              <Col span={11} style={{ marginRight: "20px" }}>
+            <Row gutter={[32,32]}>
+              <Col span={12} >
                 <Form.Item
                   label="Tên"
                   name="name"
@@ -165,7 +165,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={5} style={{ marginRight: "20px" }}>
+              <Col span={6} >
                 <Form.Item
                   label="Ngày sinh"
                   name="birthDay"
@@ -178,7 +178,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                   <DatePicker format={formatDate} />
                 </Form.Item>
               </Col>
-              <Col span={5}>
+              <Col span={6}>
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -196,7 +196,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={11} style={{ marginRight: "20px" }}>
+              <Col span={12} >
                 <Form.Item
                   label="Email"
                   name="email"
@@ -209,7 +209,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col span={12}>
                 <Form.Item
                   label="Số điện thoại"
                   name="phone"
@@ -222,7 +222,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                   <Input disabled="true" />
                 </Form.Item>
               </Col>
-              <Col span={23}>
+              <Col span={24}>
                 <Form.Item
                   label="Địa chỉ"
                   name="address"

@@ -1,7 +1,7 @@
 import React from "react";
 import { Breadcrumb } from "antd";
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
-// import UserTable from "./UserTable";
+import CustomerTable from "./CustomerTable";
 
 const CustomerPage = () => {
   return (
@@ -16,7 +16,7 @@ const CustomerPage = () => {
         </Breadcrumb.Item>
       </Breadcrumb>
 
-      {/* <UserTable /> */}
+      <CustomerTable />
     </>
   );
 };

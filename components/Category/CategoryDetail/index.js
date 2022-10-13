@@ -4,16 +4,13 @@ import {
   Row,
   Image,
   Button,
-  Tag,
   Form,
   Select,
-  Switch,
   Input,
 } from "antd";
 import { useRouter } from "next/router";
 import { getCategoryById, updateCategory } from "pages/api/categoryAPI";
 import { openNotification } from "utils/notification";
-import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import Loading from "components/Loading";
@@ -83,7 +80,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
   };
   return (
     <>
-      <Row>
+      <Row gutter={[16,16]}>
         <Col span={6}>
           <Image width={300} height={250} src={categoryDetail.imageUrl} />
           <div
@@ -103,15 +100,15 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
             </Upload> */}
           </div>
         </Col>
-        <Col span={15}>
+        <Col span={18}>
           <Form
             form={form}
             layout="vertical"
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row>
-              <Col span={11} style={{ marginRight: "20px" }}>
+             <Row gutter={[32,32]}>
+              <Col span={24} >
                 <Form.Item
                   label="Tên dịch vụ"
                   name="name"
@@ -124,7 +121,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={5} style={{ marginRight: "20px" }}>
+              <Col span={24} >
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -142,7 +139,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={5} style={{ marginRight: "20px" }}>
+              <Col span={24}>
                 <Form.Item
                   label="Kiểu dịch vụ"
                   rules={[

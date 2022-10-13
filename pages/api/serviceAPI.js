@@ -57,8 +57,8 @@ const createService = (data) => {
 
 const updateService = (data, id) => {
   return axios({
-    method: "PUT",
-    url: API_URL + `/services/${id}`,
+    method: "POST",
+    url: API_URL + `/services/update/${id}`,
     data: data,
   })
     .then((res) => {
