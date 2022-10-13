@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Button,
-  Row,
-  Col,
-  Form,
-  Input,
-  Select,
-  Switch,
-  InputNumber,
-  DatePicker,
-} from "antd";
+import { Modal, Row, Col, Form, Input, Select, InputNumber } from "antd";
 import { createCar } from "pages/api/carAPI";
 import { getCarModel } from "pages/api/carModel";
-import { getUsers } from "pages/api/userAPI";
-
+import { getCustomers } from "pages/api/customerAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 const { TextArea } = Input;
@@ -25,6 +13,28 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
   const [carModels, setCarModels] = useState([]);
   const [users, setUsers] = useState([]);
+  const [brands, setBrands] = useState([
+    "Toyota",
+    "VinFast",
+    "Nissan",
+    "Suzuki",
+    "Subaru",
+    "Lexus",
+    "Audi",
+    "Volkswagen",
+    "Honda",
+    "Volvo",
+    "Hyundai",
+    "Mazda",
+    "KIA",
+    "Mitsubishi",
+    "Maserati",
+    "Chevrolet",
+    "Ford",
+    "Mercedes-Benz",
+    "BMW",
+    "Cadillac"
+  ]);
 
   const onFinish = async (values) => {
     try {
@@ -46,14 +56,14 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
   };
   const getUsersData = async () => {
     try {
-      const res = await getUsers();
+      const res = await getCustomers();
       setUsers(res.data.Data);
     } catch (error) {
       console.log(error);
     }
   };
-console.log(users)
-console.log(carModels)
+  console.log(users);
+  console.log(carModels);
 
   useEffect(() => {
     getCarModels();
@@ -87,8 +97,8 @@ console.log(carModels)
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Row>
-            <Col span={11} className="MarRight40">
+          <Row gutter={[16, 4]}>
+            <Col span={12}>
               <Form.Item
                 label="Tên mẫu xe"
                 name="name"
@@ -101,7 +111,67 @@ console.log(carModels)
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={5} className="MarRight20">
+            <Col span={12}>
+              <Form.Item label="Người sở hữu" name="customerId">
+                <Select
+                  showSearch
+                  placeholder="Chọn Người sở hữu"
+                  optionFilterProp="children"
+                >
+                  {users.map((item, index) => {
+                    return (
+                      <Select.Option key={index} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label="Model"
+                name="model"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label="Thương hiệu"
+                name="brand"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  placeholder="Chọn thương hiệu"
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.children.includes(input)
+                  }
+                  filterSort={(optionA, optionB) =>
+                    optionA.children
+                      .toLowerCase()
+                      .localeCompare(optionB.children.toLowerCase())
+                  }
+                >
+                  {brands.map((brand) => (
+                    <Option key={brand}>{brand}</Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col span={8}>
               <Form.Item
                 label="Màu sắc"
                 name="color"
@@ -114,7 +184,7 @@ console.log(carModels)
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={5} className="MarRight20">
+            <Col span={8}>
               <Form.Item
                 label="Biển số xe"
                 name="licensePlate"
@@ -127,11 +197,73 @@ console.log(carModels)
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={11} className="MarRight40">
-              <Form.Item label="Mẫu xe" name="carModelId">
+
+            <Col span={8}>
+              <Form.Item
+                label="Số nghế ngồi"
+                name="seats"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <InputNumber min={1} max={16} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label="Năm sản xuất"
+                name="year"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <InputNumber min={1900} max={moment().year()} />
+              </Form.Item>
+            </Col>
+
+            <Col span={8}>
+              <Form.Item
+                label="Đông cơ"
+                name="engine"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label="Truyền động"
+                name="transmission"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label="Nhiên liệu"
+                name="fuel"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Select
                   showSearch
-                  placeholder="Chọn mẫu xe"
+                  placeholder="Chọn nhiên liệu"
                   optionFilterProp="children"
                   filterOption={(input, option) =>
                     option.children.includes(input)
@@ -141,39 +273,14 @@ console.log(carModels)
                       .toLowerCase()
                       .localeCompare(optionB.children.toLowerCase())
                   }
-                  
                 >
-                  {carModels.map((item, index) => {
-                    return (
-                      <Select.Option key={index} value={item.id}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })}
+                  <Option value="Xăng">Xăng</Option>
+                  <Option value="Dầu">Dầu</Option>
+                  <Option value="Điện">Điện</Option>
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={11} >
-              <Form.Item label="Người sở hữu" name="userId">
-                <Select
-                  showSearch
-                  placeholder="Chọn Người sở hữu"
-                  optionFilterProp="children"
-                 
-                  
-                >
-                  {users.map((item, index) => {
-                    return (
-                      <Select.Option key={index} value={item.id}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col>
-         
-            <Col span={23}>
+            <Col span={24}>
               <Form.Item label="Mô tả" name="description">
                 <TextArea rows={4} />
               </Form.Item>
