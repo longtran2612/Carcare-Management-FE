@@ -53,8 +53,8 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Row>
-            <Col span={11} className="MarRight20">
+          <Row gutter={[16,16]}>
+            <Col span={12}>
               <Form.Item
                 label="Tên bảng giá"
                 name="name"
@@ -67,10 +67,10 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={5} className="MarRight20">
+            <Col span={6} >
               <Form.Item
                 label="Ngày bắt đầu"
-                name="fromDate"
+                name="effectiveDate"
                 rules={[
                   {
                     required: true,
@@ -80,10 +80,10 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
                 <DatePicker placeholder="bắt đầu" format={formatDate} />
               </Form.Item>
             </Col>
-            <Col span={5} className="MarRight20">
+            <Col span={6} >
               <Form.Item
                 label="Ngày kết thúc"
-                name="toDate"
+                name="expirationDate"
                 rules={[
                   {
                     required: true,
@@ -93,7 +93,7 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
                 <DatePicker placeholder="kết thúc" format={formatDate} />
               </Form.Item>
             </Col>
-            <Col span={23} className="MarRight20">
+            <Col span={24} >
               <Form.Item label="Mô tả" name="description">
                 <TextArea rows={4} />
               </Form.Item>

@@ -206,9 +206,7 @@ function PriceHeaderTable({}) {
   }, []);
 
   const handleSuccessCreatePriceHeader = (data) => {
-    let newArr = [...priceHeaders];
-    newArr.push(data);
-    setPriceHeaders(newArr);
+    handleGetPriceHeaders();
   };
 
   return (

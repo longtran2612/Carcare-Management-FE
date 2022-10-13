@@ -253,14 +253,12 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   };
 
   const handleSuccessCreatePrice = (data) => {
-    let newArr = [...prices];
-    newArr.push(data);
-    setPrices(newArr);
+    fetchPrice();
   };
 
   return (
     <>
-      <Row>
+      <Row gutter={[16,16]}>
         <Col span={24}>
           <Form
             form={form}
@@ -268,8 +266,8 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row>
-              <Col span={10} style={{ marginRight: "40px" }}>
+            <Row gutter={[32,8]}>
+              <Col span={6} >
                 <Form.Item
                   label="Tên bảng giá"
                   name="name"
@@ -282,7 +280,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={4}>
+              <Col span={6}>
                 <Form.Item
                   label="Ngày bắt đầu"
                   name="fromDate"
@@ -296,7 +294,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   {/* <Input /> */}
                 </Form.Item>
               </Col>
-              <Col span={4}>
+              <Col span={6}>
                 <Form.Item
                   label="Ngày kết thúc"
                   name="toDate"
@@ -310,7 +308,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   {/* <Input /> */}
                 </Form.Item>
               </Col>
-              <Col span={4}>
+              <Col span={6}>
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -328,7 +326,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={23}>
+              <Col span={24}>
                 <Form.Item
                   label="Mô tả"
                   name="description"

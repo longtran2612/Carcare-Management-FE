@@ -9,7 +9,7 @@ import {
   Input,
 } from "antd";
 import { useRouter } from "next/router";
-import { getCategoryById, updateCategory } from "pages/api/categoryAPI";
+import { getCategoryById,getCategoryByCode, updateCategory } from "pages/api/categoryAPI";
 import { openNotification } from "utils/notification";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -24,19 +24,16 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
   const [modalQuestion, setModalQuestion] = useState(false);
   const [loading, setLoading] = useState(false);
 
-
-
   const fetchcategoryDetail = async () => {
     setLoading(true);
     try {
-      const response = await getCategoryById(categoryId);
+      const response = await getCategoryByCode(categoryId);
       setCategoryDetail(response.data.Data);
       console.log(response.data.Data);
       form.setFieldsValue({
         name: response.data.Data.name,
         type: response.data.Data.type,
         imageUrl: response.data.Data.imageUrl,
-        description: response.data.Data.description,
         status: response.data.Data.status,
       });
       setLoading(false);
@@ -55,10 +52,8 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
   const onFinish = async (values) => {
     try {
       let body = {
-        id: categoryDetail.id,
         type: values.type,
         name: values.name,
-        description: values.description,
         status: values.status,
       };
       const res = await updateCategory(body, categoryDetail.id);
@@ -69,14 +64,6 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
     } catch (error) {
       console.log(error);
     }
-  };
-  const handleRemoveService = async () => {
-    try {
-      await removeServiceApi(categoryDetail.id);
-      router.push("/admin");
-      onUpdateCategory();
-      setModalQuestion(false);
-    } catch (error) {}
   };
   return (
     <>

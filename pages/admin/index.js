@@ -56,7 +56,7 @@ const AdminPage = () => {
     <>
       <Layout
         style={{
-          minHeight: "100vh",
+          minHeight: "70vh",
         }}
       >
         <Sider

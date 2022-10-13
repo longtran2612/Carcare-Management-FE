@@ -23,7 +23,7 @@ const createCategory = (data) => {
 };
 const updateCategory = (data, id) => {
   return axios({
-    method: "PUT",
+    method: "POST",
     url: API_URL + `/service-categories/${id}`,
     data: data,
   })
@@ -34,10 +34,10 @@ const updateCategory = (data, id) => {
       throw err;
     });
 };
-const getCategoryById = (id) => {
+const getCategoryById = (data) => {
   return axios({
     method: "GET",
-    url: API_URL + `/service-categories/${id}`,
+    url: API_URL + `/service-categories/${data}`,
   })
     .then((res) => {
       return res;
@@ -46,5 +46,16 @@ const getCategoryById = (id) => {
       throw err;
     });
 };
-
-export { getCategories, createCategory,updateCategory, getCategoryById };
+const getCategoryByCode = (data) => {
+  return axios({
+    method: "GET",
+    url: API_URL + `/service-categories/find-category-by-code/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+export { getCategories, createCategory,updateCategory, getCategoryById, getCategoryByCode };

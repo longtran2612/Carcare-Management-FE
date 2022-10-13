@@ -28,6 +28,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
       description: values.description,
       type: values.type,
       categoryId: values.categoryId,
+      estimateTime: values.estimateTime,
       servicePrice: {
         price: values.price,
         currency: currency
@@ -106,8 +107,8 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Row>
-            <Col span={11} className="MarRight20">
+          <Row gutter={[16,16]}>
+            <Col span={12} >
               <Form.Item
                 label="Tên dịch vụ"
                 name="name"
@@ -120,7 +121,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={11} className="MarRight20">
+            <Col span={12} >
               <Form.Item
                 label="Danh mục dịch vụ"
                 rules={[
@@ -153,7 +154,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={11} className="MarRight20">
+            <Col span={8} >
               <Form.Item
                 label="Kiểu dịch vụ"
                 rules={[
@@ -169,7 +170,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={11} className="MarRight20">
+            <Col span={8} >
               <Form.Item
                 label="Giá dịch vụ"
                 rules={[
@@ -182,7 +183,20 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 <InputNumber addonAfter={selectCurrency} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-            <Col span={23} className="MarRight20">
+            <Col span={8}>
+              <Form.Item
+                label="Thời gian dự kiến"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                name="estimateTime"
+              >
+                <InputNumber  />
+              </Form.Item>
+            </Col>
+            <Col span={24}>
               <Form.Item label="Mô tả" name="description">
                 <TextArea />
               </Form.Item>

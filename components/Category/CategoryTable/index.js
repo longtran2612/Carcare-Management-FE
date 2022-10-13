@@ -13,9 +13,7 @@ import Highlighter from "react-highlight-words";
 function CategoryTable({}) {
   const [categories, setCategories] = useState([]);
   const [modalCategory, setModalCategory] = useState(false);
-  const [modalQuestion, setModalQuestion] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [id, setId] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { categoryId } = router.query;
@@ -189,6 +187,7 @@ function CategoryTable({}) {
       },
     },
   ];
+
   return (
     <>
       {categoryId ? (
@@ -235,7 +234,7 @@ function CategoryTable({}) {
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {
-                  router.push(`/admin?categoryId=${record.id}`);
+                  router.push(`/admin?categoryId=${record.categoryCode}`);
                 },
               };
             }}

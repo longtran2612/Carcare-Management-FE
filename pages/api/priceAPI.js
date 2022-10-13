@@ -54,7 +54,7 @@ const getPrices = () => {
   const createPrice = (data) => {
     return axios({
       method: "POST",
-      url: API_URL + `/prices`,
+      url: API_URL + `/prices/create`,
       data: data,
     })
       .then((res) => {
