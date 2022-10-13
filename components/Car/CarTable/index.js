@@ -1,7 +1,7 @@
 import { Table, Tag, Space, Button, Row, Col, Input, Tooltip } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { ClearOutlined } from "@ant-design/icons";
-import { getCar } from "pages/api/carAPI";
+import { getCars } from "pages/api/carAPI";
 import { SearchOutlined } from "@ant-design/icons";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCar from "components/Modal/ModalAddCar";
@@ -121,26 +121,24 @@ function CarTable({}) {
     },
     {
       title: "MÃ",
-      dataIndex: "id",
-      key: "id",
-      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
+      dataIndex: "carCode",
+      key: "carCode",
+      render: (carCode) => <a style={{ color: "blue" }}>{carCode}</a>,
       filteredValue: [searchGlobal],
       sorter: {
-        compare: (a, b) => a.id - b.id,
+        compare: (a, b) => a.carCode - b.carCode,
         multiple: 2,
       },
       onFilter: (value, record) => {
         return (
-          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.carCode).toLowerCase().includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.color).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.licensePlate)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.carModel.name)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.user.name).toLowerCase().includes(value.toLowerCase())
+          String(record.brand).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.model).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.licensePlate).toLowerCase().includes(value.toLowerCase())  ||
+          String(record.customerName).toLowerCase().includes(value.toLowerCase())
+
         );
       },
     },
@@ -156,15 +154,16 @@ function CarTable({}) {
       ),
     },
     {
-      title: "Mẫu xe",
-      dataIndex: "carModel",
-      key: "carModel",
-      render: (carModel) => {
-        <Tooltip placement="topLeft" title={carModel.name}>
-          {carModel.name}
-        </Tooltip>;
-        return <div>{carModel.name}</div>;
-      },
+      title: "Thương hiệu",
+      dataIndex: "brand",
+      key: "brand",
+      ...getColumnSearchProps("brand"),
+    },
+    {
+      title: "Model",
+      dataIndex: "model",
+      key: "model",
+      ...getColumnSearchProps("model"),
     },
     {
       title: "Biển số xe",
@@ -180,18 +179,16 @@ function CarTable({}) {
     },
     {
       title: "Sở hữu",
-      dataIndex: "user",
-      key: "user",
-      render: (user) => {
-        return <div>{user.name}</div>;
-      },
+      dataIndex: "customerName",
+      key: "customerName",
+      ...getColumnSearchProps("customerName"),
     },
   ];
 
   const handleGetCar = async () => {
     setLoading(true);
     try {
-      const res = await getCar();
+      const res = await getCars();
       setCars(res.data.Data);
       setLoading(false);
     } catch (err) {
@@ -259,7 +256,7 @@ function CarTable({}) {
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {
-                  router.push(`/admin?carId=${record.id}`);
+                  router.push(`/admin?carId=${record.carCode}`);
                 },
               };
             }}
@@ -271,12 +268,6 @@ function CarTable({}) {
         handleCancel={() => setModalCar(false)}
         onSuccess={(data) => handleSuccessCreateCar(data)}
       />
-      {/* <ModalQuestion
-        title="Bạn có chắc chắn muốn xóa dịch vụ này không?"
-        visible={modalQuestion}
-        handleCancel={() => setModalQuestion(false)}
-        handleOk={() => handleRemoveService()}
-      /> */}
       <Loading loading={loading} />
     </>
   );

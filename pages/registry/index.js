@@ -51,25 +51,25 @@ export default function RegistryPage() {
       <Row
         justify="space-around"
         align="middle"
+        className="background-login"
         style={{
           height: "100vh",
-
           textAlign: "center",
         }}
       >
         <Col
+        className="background-login-white"
           span={18}
           xs={18}
           sm={18}
           md={18}
           lg={10}
           style={{
-            backgroundColor: "#DFE9F8",
             padding: "50px",
             borderRadius: "10px",
           }}
         >
-         <Row justify="center">
+         <Row  justify="center">
               <Typography.Title
                 level={1}
                 style={{
@@ -92,8 +92,7 @@ export default function RegistryPage() {
             labelAlign="left"
             size={"middle"}
             wrapperCol={{ span: 18 }}
-            onFinish={onFinish}
-          
+            onFinish={onFinish}      
           >
             <Form.Item
               label="Số điện thoại"
@@ -182,6 +181,7 @@ export default function RegistryPage() {
               Đăng ký
             </Button>
           </Form>
+          <Divider/>
             Đã có tài khoản? <Link href="/login">Đăng nhập</Link> <br/>
           Quên mật khẩu?<Link href="/forgot-password"> Lấy lại mật khẩu</Link>
         </Col>

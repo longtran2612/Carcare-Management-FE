@@ -1,29 +1,24 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Col,
   Row,
   Image,
   Button,
   Form,
-  Select,
   Typography,
   Input,
-  DatePicker,
   Timeline,
-  InputNumber,
   Upload,
+  InputNumber,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
-import { getCarById } from "pages/api/carAPI";
-import { getCarModel } from "pages/api/carModel";
+import { getCarByCode,updateCar } from "pages/api/carAPI";
 import { getUsers } from "pages/api/userAPI";
 import { validateMessages } from "utils/messageForm";
-import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
-const formatDate = "YYYY/MM/DD";
 const { Title } = Typography;
 
 const CarDetail = ({ carId, onUpdateCar }) => {
@@ -44,16 +39,27 @@ const CarDetail = ({ carId, onUpdateCar }) => {
   const fetchcarDetail = async () => {
     setLoading(true);
     try {
-      const response = await getCarById(carId);
+      const response = await getCarByCode(carId);
       setCarDetail(response.data.Data);
+      console.log(response.data.Data);
       form.setFieldsValue({
         id: response.data.Data.id,
+        carCode: response.data.Data.carCode,
         name: response.data.Data.name,
         color: response.data.Data.color,
         licensePlate: response.data.Data.licensePlate,
         description: response.data.Data.description,
-        user: response.data.Data.user,
-        carModel: response.data.Data.carModel,
+        brand: response.data.Data.brand,
+        model: response.data.Data.model,
+        engine: response.data.Data.engine,
+        transmission: response.data.Data.transmission,
+        seats: response.data.Data.seats,
+        fuel: response.data.Data.fuel,
+        year: response.data.Data.year,
+        imageUrl: response.data.Data.imageUrl,
+        customerName: response.data.Data.customerName,
+        customerPhoneNumber: response.data.Data.customerPhoneNumber,
+        customerCode: response.data.Data.customerCode,
       });
       setLoading(false);
     } catch (error) {
@@ -63,49 +69,31 @@ const CarDetail = ({ carId, onUpdateCar }) => {
   };
 
   useEffect(() => {
-    getCarModels();
-    getUsersData();
     if (carId) {
       fetchcarDetail();
     }
   }, [carId]);
 
-  const getCarModels = async () => {
-    setLoading(true);
-    try {
-      const res = await getCarModel();
-      setCarModels(res.data.Data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-  const getUsersData = async () => {
-    setLoading(true);
-    try {
-      const res = await getUsers();
-      setUsers(res.data.Data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
 
   const onFinish = async (values) => {
     try {
       let body = {
         name: values.name,
-        email: values.email,
-        address: values.address,
-        status: values.status,
-        image: values.image,
-        birthDay: values.birthDay,
+        color: values.color,
+        licensePlate: values.licensePlate,
+        description: values.description,
+        brand: values.brand,
+        model: values.model,
+        engine: values.engine,
+        transmission: values.transmission,
+        seats: values.seats,
+        fuel: values.fuel,
+        year: values.year,
+        imageUrl: values.imageUrl,
       };
-      const res = await updateUserById(body, carId);
+      const res = await updateCar(body, carDetail?.id);
       if (res.data.StatusCode == "200") {
-        openNotification("Cập nhật người dùng thành công!", "");
+        openNotification("Thành công", "Cập nhật thành công");
         onUpdateCar();
       }
     } catch (error) {
@@ -143,8 +131,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
 
   return (
     <>
-      
-      <Row>
+      <Row gutter={[4, 4]}>
         <Col span={6}>
           <Image width={300} height={250} src={carDetail.imageUrl} />
           <div
@@ -163,16 +150,35 @@ const CarDetail = ({ carId, onUpdateCar }) => {
               <Button icon={<UploadOutlined />}>Tải hình lên</Button>
             </Upload>
           </div>
+          <div
+            className="content-white"
+            style={{
+              marginTop: "20px",
+              justifyContent: "center",
+            }}
+          >
+            <Title style={{ textAlign: "center" }} level={4}>
+              Người sở hữu
+            </Title>
+            <Timeline style={{ marginTop: "20px" }}>
+              <Timeline.Item>Tên: {carDetail?.customerName}</Timeline.Item>
+              <Timeline.Item>
+                Số điện thoại: {carDetail?.customerPhoneNumber}
+              </Timeline.Item>
+              <Timeline.Item>Mã: {carDetail?.customerCode}</Timeline.Item>
+            </Timeline>
+          </div>
         </Col>
-        <Col span={17}>
+
+        <Col span={18}>
           <Form
             form={form}
             layout="vertical"
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row>
-              <Col span={11} className="MarRight40">
+            <Row gutter={30}>
+              <Col span={18}>
                 <Form.Item
                   label="Tên mẫu xe"
                   name="name"
@@ -185,20 +191,20 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={5} className="MarRight20">
+              <Col span={6}>
                 <Form.Item
-                  label="Màu sắc"
-                  name="color"
+                  label="Mã xe"
+                  name="carCode"
                   rules={[
                     {
                       required: true,
                     },
                   ]}
                 >
-                  <Input />
+                  <Input disabled="true" />
                 </Form.Item>
               </Col>
-              <Col span={5} className="MarRight20">
+              <Col span={6}>
                 <Form.Item
                   label="Biển số xe"
                   name="licensePlate"
@@ -211,97 +217,101 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              {/* <Col span={11} className="MarRight40">
-              <Form.Item label="Mẫu xe" name="carModelId">
-                <Select
-                  showSearch
-                  placeholder="Chọn mẫu xe"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.includes(input)
-                  }
-                  filterSort={(optionA, optionB) =>
-                    optionA.children
-                      .toLowerCase()
-                      .localeCompare(optionB.children.toLowerCase())
-                  }
+              <Col span={6}>
+                <Form.Item
+                  label="Màu sắc"
+                  name="color"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
                 >
-                  {carModels.map((item, index) => {
-                    return (
-                      <Select.Option key={index} value={item.id}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={10}>
-              <Form.Item
-                label="Người sở hữu"
-                name="userId"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Select
-                  showSearch
-                  placeholder="Người sở hữu"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.includes(input)
-                  }
-                  filterSort={(optionA, optionB) =>
-                    optionA.children
-                      .toLowerCase()
-                      .localeCompare(optionB.children.toLowerCase())
-                  }
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Hãng xe"
+                  name="brand"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
                 >
-                  {users.map((item, index) => {
-                    return (
-                      <Select.Option key={index} value={item.id}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col> */}
-              <Col span={23}>
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Dòng xe"
+                  name="model"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Dung tích"
+                  name="engine"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Truyền động"
+                  name="transmission"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Số chỗ"
+                  name="seats"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <InputNumber />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Nhiên liệu"
+                  name="fuel"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
                 <Form.Item label="Mô tả" name="description">
                   <TextArea rows={4} />
                 </Form.Item>
-              </Col>
-              <Col span={14} className="MarRight40">
-                <Title level={4}>Người sở hữu</Title>
-                <Timeline style={{marginTop:'20px'}}>
-                  <Timeline.Item>Tên: {carDetail?.user?.name}</Timeline.Item>
-                  <Timeline.Item>
-                    Số điện thoại: {carDetail?.user?.phone}
-                  </Timeline.Item>
-                </Timeline>
-              </Col>
-              <Col span={6}>
-                <Title level={4}>Thông tin mẫu xe</Title>
-                <Timeline style={{marginTop:'20px'}}>
-                  <Timeline.Item>
-                    Loại xe: {carDetail?.carModel?.model}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Nhãn hiệu: {carDetail?.carModel?.brand}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Nhiên liệu: {carDetail?.carModel?.fuel}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Hộp số: {carDetail?.carModel?.transmission}
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    Chỗ ngồi: {carDetail?.carModel?.seats}
-                  </Timeline.Item>
-                </Timeline>
               </Col>
             </Row>
             <Row className="PullRight">

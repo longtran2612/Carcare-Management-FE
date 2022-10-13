@@ -49,8 +49,7 @@ a {
 
 .content-white {
   background-color: #fff;
-  border-radius: 5px;
-  min-height: 70vh;
+  border-radius: 10px;
   margin: 10px 10px;
   padding: 10px;
 
@@ -60,4 +59,25 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.ant-input{
+  border-radius: 10px !important;
+  height: 35px;
+}
+.ant-input-number{
+  border-radius: 10px !important;
+  height: 35px;
+  width: 100% !important;
+}
+
+.ant-btn{
+  border-radius: 5px !important;
+  height: 40px;
+}
+.background-login{
+  background: linear-gradient(to top right, #AE9CE1, #F5E7DB);
+}
+.background-login-white{
+  background: #fff
 }

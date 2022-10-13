@@ -52,6 +52,7 @@ export default function LoginPage() {
       <Row
         justify="space-around"
         align="middle"
+        className="background-login"
         style={{
           height: "100vh",
 
@@ -59,13 +60,14 @@ export default function LoginPage() {
         }}
       >
         <Col
+         className="background-login-white"
           span={18}
           xs={18}
           sm={18}
           md={18}
           lg={10}
           style={{
-            backgroundColor: "#DFE9F8",
+           
             padding: "50px",
             borderRadius: "10px",
           }}

@@ -142,6 +142,7 @@ export default function ForgotPassword() {
       <Row
         justify="space-around"
         align="middle"
+        className="background-login"
         style={{
           height: "100vh",
 
@@ -154,8 +155,9 @@ export default function ForgotPassword() {
           sm={18}
           md={18}
           lg={10}
+          className="background-login-white"
           style={{
-            backgroundColor: "#DFE9F8",
+           
             padding: "50px",
             borderRadius: "10px",
           }}

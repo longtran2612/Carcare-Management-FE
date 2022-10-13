@@ -64,12 +64,12 @@ const CarSlot = () => {
         <CarSlotDetail carSlotId={carSlotId} />
       ) : (
         <div className="site-card-border-less-wrapper">
-          <Row gutter={16}>
+          <Row gutter={[16, 16]}>
             {carSlots?.map((carSlot) => {
               return (
                 <Col
                   key={carSlot.id}
-                  span={12}
+                  span={8}
                   style={{ marginBottom: "10px" }}
                   onClick={() => router.push(`/admin?carSlotId=${carSlot.id}`)}
                 >
@@ -77,10 +77,16 @@ const CarSlot = () => {
                     headStyle={{
                       backgroundColor: "#8CB3F1",
                       color: "white",
+                      height:"50px",
                       textAlign: "center",
                       fontSize: "20px",
                     }}
-                    bodyStyle={{ height: "35vh", borderRadius: "5px" }}
+                    style={{        
+                      margin: "10px",
+                      borderRadius: "20px",
+                      overflow: "hidden"
+                    }}
+               
                     hoverable
                     title={carSlot.name}
                     bordered={false}

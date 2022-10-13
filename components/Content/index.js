@@ -7,6 +7,7 @@ import CarPage from "components/Car";
 import PriceHeaderPage from "components/PriceHeader";
 import CarSlot from "components/CarSlot";
 import OrderPage from "components/Order";
+import CustomerPage from "components/Customer";
 
 const MyContent = ({ keyMenu }) => {
   const renderViewByKey = () => {
@@ -29,6 +30,8 @@ const MyContent = ({ keyMenu }) => {
         return <PriceHeaderPage />;
       case "car-slot":
         return <CarSlot />;
+      case "customer":
+        return <CustomerPage />;
       default:
         break;
     }
