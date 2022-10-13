@@ -14,6 +14,7 @@ import {
   import { getCustomers } from "pages/api/customerAPI"; 
   import ModalQuestion from "components/Modal/ModalQuestion";
   import ModalAddUser from "components/Modal/ModelAddUser";
+  import ModalAddCustomer from "components/Modal/ModalAddCustomer";
   import { SearchOutlined } from "@ant-design/icons";
   import { useRouter } from "next/router";
   import CustomerDetail from "components/Customer/CustomerDetail";
@@ -22,7 +23,7 @@ import {
   
   function CustomerTable({}) {
     const [customers, setCustomers] = useState([]);
-    const [modalUser, setModalUser] = useState(false);
+    const [modalCustomer, setModalCustomer] = useState(false);
     const [modalQuestion, setModalQuestion] = useState(false);
     const router = useRouter();
     const { customerId } = router.query;
@@ -239,7 +240,7 @@ import {
       handlecustomers();
     }, []);
   
-    const handleSuccessCreteUser = (data) => {
+    const handleSuccessCreateCustomer = (data) => {
       handlecustomers();
     };
   
@@ -264,7 +265,7 @@ import {
                 </Button>
               </Col>
               <Col span={11}>
-                <Button className="PullRight" type="primary" onClick={() => setModalUser(true)}>
+                <Button className="PullRight" type="primary" onClick={() => setModalCustomer(true)}>
                   Thêm người dùng
                 </Button>
               </Col>
@@ -288,10 +289,10 @@ import {
                 };
               }}
             />
-            <ModalAddUser
-              show={modalUser}
-              handleCancel={() => setModalUser(false)}
-              onSuccess={(data) => handleSuccessCreteUser(data)}
+            <ModalAddCustomer
+              show={modalCustomer}
+              handleCancel={() => setModalCustomer(false)}
+              onSuccess={(data) => handleSuccessCreateCustomer(data)}
             />
           </div>
         )}

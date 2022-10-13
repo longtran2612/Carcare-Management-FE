@@ -8,8 +8,11 @@ import {
   Col,
   Row,
   InputNumber,
+  DatePicker,
+  message,
 } from "antd";
-import { createUser } from "pages/api/userAPI";
+// import { createUser } from "pages/api/userAPI";
+import { createCustomer } from "pages/api/customerAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 import {
@@ -21,7 +24,7 @@ import {
 const { TextArea } = Input;
 const { Option } = Select;
 
-const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
+const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -30,12 +33,13 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
   const [provinceSelected, setProvinceSelected] = useState("");
   const [districtSelected, setDistrictSelected] = useState("");
   const [wardSelected, setWardSelected] = useState("");
+  const formatDate = "YYYY/MM/DD";
 
   const onFinish = async (values) => {
     let dataUser = {
-      fullname: values.fullname,
+      name: values.fullname,
       email: values.email,
-      phone: values.phone,
+      phoneNumber: values.phone,
       address:
         provinceSelected +
         ", " +
@@ -44,11 +48,18 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
         wardSelected +
         ", " +
         values.address,
+        gender:values.gender,
+        dateOfBirth:values.dateOfBirth,
+        nationality:values.nationality,
+        identityType:2,
+        identityNumber:values.identityNumber
+
+
     };
     console.log(dataUser);
 
     try {
-      const res = await createUser(values);
+      const res = await createCustomer(dataUser);
       console.log(res);
       openNotification("Tạo người dùng thành công!", "");
       handleCancel();
@@ -119,8 +130,8 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
           onFinish={onFinish}
           autoComplete="off"
         >
-          <Row gutter={[16,4]}>
-            <Col span={24}>
+          <Row gutter={[16]}>
+            <Col span={18}>
               <Form.Item
                 rules={[
                   {
@@ -132,6 +143,22 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
                 name="fullname"
               >
                 <Input />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                name="gender"
+                label="Giới tính"
+              >
+                <Select>
+                  <Option value="Nam">Nam</Option>
+                  <Option value="Nữ">Nữ</Option>
+                </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -171,6 +198,47 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
+            <Col span={8}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                name="dateOfBirth"
+                label="Ngày sinh"
+              >
+                <DatePicker format={formatDate} />
+              </Form.Item>
+            </Col>
+           
+            <Col span={8}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                name="nationality"
+                label="Quốc gia"
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                name="indentityNumber"
+                label="Số CMND"
+              >
+                <InputNumber />
+              </Form.Item>
+            </Col>
+
             <Col span={8}>
               <Form.Item
                 rules={[
@@ -262,7 +330,7 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
                 name="address"
                 label="Địa chỉ chi tiết"
               >
-                <TextArea rows={3} />
+                <TextArea rows={2} />
               </Form.Item>
             </Col>
           </Row>
@@ -272,4 +340,4 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
   );
 };
 
-export default ModalAddUser;
+export default ModalAddCustomer;
