@@ -18,6 +18,8 @@ const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import ModalAddOrder from "components/Modal/ModalAddOrder";
+import {OrderDetail} from "components/Order/OrderDetail";
 const { Title } = Typography;
 
 function OrderTable({}) {
@@ -26,7 +28,7 @@ function OrderTable({}) {
   const [id, setId] = useState(null);
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
-  // const { priceHeaderId } = router.query;
+  const { orderId } = router.query;
   const [loading, setLoading] = useState(false);
 
   const [searchGlobal, setSearchGlobal] = useState("");
@@ -118,6 +120,8 @@ function OrderTable({}) {
         text
       ),
   });
+
+
   const columns = [
     {
       title: "STT",
@@ -244,7 +248,7 @@ function OrderTable({}) {
     handleGetorders();
   }, []);
 
-  // const handleSuccessCreatePriceHeader = (data) => {
+  // const handleSuccessCreateOrder = (data) => {
   //   let newArr = [...orders];
   //   newArr.push(data);
   //   setOrders(newArr);
@@ -290,12 +294,12 @@ function OrderTable({}) {
 
   return (
     <>
-      {/* {priceHeaderId ? (
-        <PriceHeaderDetail
-          priceHeaderId={priceHeaderId}
-          onUpdateorders={handleGetorders}
+      {orderId ? (
+        <OrderDetail
+          orderId={orderId}
+          onUpdateOrders={handleGetorders}
         />
-      ) : ( */}
+      ) : (
       <div>
         <Table
           bordered
@@ -322,7 +326,7 @@ function OrderTable({}) {
                   <Button
                     style={{ float: "right" }}
                     type="primary"
-                    onClick={() => setModalPrice(true)}
+                    onClick={() => setModalOrder(true)}
                   >
                     {" "}
                     Thêm mới yêu cầu
@@ -412,13 +416,14 @@ function OrderTable({}) {
           }}
         />
       </div>
-      {/* <ModalAddPriceHeader
+      )}
+       <ModalAddOrder
             show={modalOrder}
             handleCancel={() => setModalOrder(false)}
-            onSuccess={(data) => handleSuccessCreatePriceHeader(data)}
+            onSuccess={(data) => handleSuccessCreateOrder(data)}
           />
       
-      )} */}
+     
       <Loading loading={loading} />
     </>
   );

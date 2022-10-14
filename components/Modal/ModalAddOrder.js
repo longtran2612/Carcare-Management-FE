@@ -3,58 +3,49 @@ import {
   Modal,
   Row,
   Col,
-  Button,
   Form,
   Input,
   Select,
-  Switch,
-  InputNumber,
+  Steps,
+  Button,
+  DatePicker,
 } from "antd";
-import { getServices } from "pages/api/serviceAPI";
 import { getCustomers } from "pages/api/customerAPI";
-import { createOrder } from "pages/api/orderAPI"
+import { createOrder } from "pages/api/orderAPI";
 import { getCarbyCustomerId } from "pages/api/carAPI";
-import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
+import ServiceOrder from "./ModalService";
+import ModalAddCustomer from "./ModalAddCustomer";
+import ModalAddCar from "./ModalAddCar";
 
-const { TextArea } = Input;
 const { Option } = Select;
+const formatDate = "YYYY/MM/DD";
 
 const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
-  const [currency, setCurrency] = useState("VND");
-  const onFinish = async (values) => {
-    console.log(values);
-    let dataCreate = {
-      name: values.name,
-      description: values.description,
-      type: values.type,
-      categoryId: values.categoryId,
-      estimateTime: values.estimateTime,
-      servicePrice: {
-        price: values.price,
-        currency: currency
-      }
-    };
-    console.log(dataCreate);
+  const [customers, setCustomers] = useState([]);
+  const [cars, setCars] = useState([]);
+  const [customerSelected, setCustomerSelected] = useState(null);
+  const [carSelected, setCarSelected] = useState(null);
+
+  const [modalCar, setModalCar] = useState(false);
+  const [modalCustomer, setModalCustomer] = useState(false);
+
+  const [current, setCurrent] = useState(0);
+
+  const handleFetchUser = async () => {
     try {
-      console.log(dataCreate);
-      const res = await createService(dataCreate);
-      openNotification("Tạo dịch vụ thành công!", "");
-      handleCancel();
-      onSuccess(res.data);
+      const res = await getCustomers();
+      setCustomers(res.data.Data);
     } catch (error) {
       console.log(error);
     }
   };
-
-  const [listCategory, setListCategory] = useState([]);
-
-  const handleFetchCategory = async () => {
+  const handleFetchCar = async () => {
     try {
-      const res = await getCategories();
-      setListCategory(res.data.Data);
+      const res = await getCarbyCustomerId(customerSelected);
+      setCars(res.data.Data);
     } catch (error) {
       console.log(error);
     }
@@ -62,47 +53,67 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
 
   useEffect(() => {
     if (show) {
-      handleFetchCategory();
+      handleFetchUser();
     }
   }, [show]);
 
-  const selectCurrency = (
-    <Select
-      defaultValue="VND"
-      style={{
-        width: 60,
-      }}
-      value={currency}
-      onChange={(value) => setCurrency(value)}
-    >
-      <Option value="VND">Đ</Option>
-      <Option value="USD">$</Option>
-      <Option value="EUR">€</Option>
-      <Option value="GBP">£</Option>
-      <Option value="CNY">¥</Option>
-    </Select>
-  );
+  const handelChangeUser = async (value) => {
+    setCustomerSelected(value);
+    handleFetchCar();
+  };
+
+  const next = () => {
+    setCurrent(current + 1);
+  };
+  const prev = () => {
+    setCurrent(current - 1);
+  };
+
+  const handleSuccessCreateCar = () => {
+    handleFetchCar();
+  };
+  const handleSuccessCreateCustomer = () => {
+    handleFetchUser();
+  };
 
   return (
     <>
       <Modal
-        title="Thêm dịch vụ"
+        title="Tạo mới yêu cầu"
         visible={show}
-        onOk={() => {
-          form
-            .validateFields()
-            .then((values) => {
-              form.resetFields();
-              onFinish(values);
-            })
-            .catch((info) => {
-              console.log("Validate Failed:", info);
-            });
-        }}
+        width="90%"
+        closable
         onCancel={handleCancel}
-        width={700}
-        okText="Xác nhận"
         cancelText="Hủy bỏ"
+        footer={
+          <>
+            <div className="steps-action">
+              {current > 0 && (
+                <Button
+                  style={{
+                    margin: "0 8px",
+                  }}
+                  onClick={() => prev()}
+                >
+                  Quay lại
+                </Button>
+              )}
+              {current < 2 && (
+                <Button type="primary" onClick={() => next()}>
+                  Tiếp tục
+                </Button>
+              )}
+              {current === 2 && (
+                <Button
+                  type="primary"
+                  onClick={() => message.success("Processing complete!")}
+                >
+                  Hoàn thành
+                </Button>
+              )}
+            </div>
+          </>
+        }
       >
         <Form
           form={form}
@@ -110,105 +121,168 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Row gutter={[16,16]}>
-            <Col span={12} >
-              <Form.Item
-                label="Tên dịch vụ"
-                name="name"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={12} >
-              <Form.Item
-                label="Danh mục dịch vụ"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-                name="categoryId"
-              >
-                <Select
-                  showSearch
-                  placeholder="Chọn danh mục"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.includes(input)
-                  }
-                  filterSort={(optionA, optionB) =>
-                    optionA.children
-                      .toLowerCase()
-                      .localeCompare(optionB.children.toLowerCase())
-                  }
-                >
-                  {listCategory?.map((item) => {
-                    return (
-                      <Select.Option key={item.id} value={item.id}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8} >
-              <Form.Item
-                label="Kiểu dịch vụ"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-                name="type"
-              >
-                <Select>
-                  <Select.Option value="Làm sạch">Làm sạch</Select.Option>
-                  <Select.Option value="Tân trang">Tân trang</Select.Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8} >
-              <Form.Item
-                label="Giá dịch vụ"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-                name="price"
-              >
-                <InputNumber addonAfter={selectCurrency} style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label="Thời gian dự kiến"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-                name="estimateTime"
-              >
-                <InputNumber  />
-              </Form.Item>
-            </Col>
+          <Row gutter={[16]}>
             <Col span={24}>
-              <Form.Item label="Mô tả" name="description">
-                <TextArea />
-              </Form.Item>
+              <div style={{ margin: "10px" }}>
+                <Steps current={current}>
+                  <Steps.Step title="Chọn dịch vụ" />
+                  <Steps.Step title="Chọn khách hàng - xe - thời gian" />
+                  <Steps.Step title="Hoàn thành" />
+                </Steps>
+              </div>
             </Col>
+            {current === 0 && (
+              <Col span={24}>
+                <ServiceOrder />
+              </Col>
+            )}
+            {current === 1 && (
+              <>
+                <Col span={8}>
+                  <Form.Item
+                    label="Khách hàng"
+                    name="customerId"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Select
+                      showSearch
+                      placeholder="Chọn khách hàng"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.children.includes(input)
+                      }
+                      filterSort={(optionA, optionB) =>
+                        optionA.children
+                          .toLowerCase()
+                          .localeCompare(optionB.children.toLowerCase())
+                      }
+                      onChange={handelChangeUser}
+                    >
+                      {customers.map((item) => (
+                        <Option value={item.id}>{item.name}</Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col  style={{display:'flex',alignItems:'center'}} span={4}>
+                
+                    <Button
+                      type="primary"
+                      onClick={() => setModalCustomer(true)}
+                    >
+                      Thêm mới khách hàng
+                    </Button>
+                
+                </Col>
+                <Col   span={8}>
+                  <Form.Item
+                    label="Xe"
+                    name="carId"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <Select
+                      showSearch
+                      placeholder="Chọn xe"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.children.includes(input)
+                      }
+                      filterSort={(optionA, optionB) =>
+                        optionA.children
+                          .toLowerCase()
+                          .localeCompare(optionB.children.toLowerCase())
+                      }
+                      onChange={(value) => setCarSelected(value)}
+                    >
+                      {cars.map((item) => (
+                        <Option value={item.id}>{item.name}</Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col style={{display:'flex',alignItems:'center'}} span={4}>
+                  <Button type="primary" onClick={() => setModalCar(true)}>
+                    Thêm mới xe
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="Ngày nhận xe"
+                    name="receiveDate"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <DatePicker
+                      placeholder="Nhập ngày nhận xe dự kiến"
+                      format={formatDate}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="Ngày xử lý"
+                    name="executeDate"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <DatePicker
+                      placeholder="Nhập ngày xử lý dự kiến"
+                      format={formatDate}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    label="Ngày giao xe"
+                    name="deliverDate"
+                    rules={[
+                      {
+                        required: true,
+                      },
+                    ]}
+                  >
+                    <DatePicker
+                      placeholder="Nhập ngày giao xe dự kiến"
+                      format={formatDate}
+                    />
+                  </Form.Item>
+                </Col>
+              </>
+            )}
+            {current === 2 && (
+              <>
+                <Col span={24}></Col>
+              </>
+            )}
           </Row>
         </Form>
       </Modal>
+      <ModalAddCar
+        show={modalCar}
+        handleCancel={() => setModalCar(false)}
+        onSuccess={() => handleSuccessCreateCar()}
+      />
+      <ModalAddCustomer
+        show={modalCustomer}
+        handleCancel={() => setModalCustomer(false)}
+        onSuccess={() => handleSuccessCreateCustomer()}
+      />
     </>
   );
 };
 
-export default ModalAddService;
+export default ModalAddOrder;

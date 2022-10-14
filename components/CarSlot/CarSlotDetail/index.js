@@ -49,6 +49,12 @@ const CarSlotDetail = ({ carSlotId }) => {
     }, 0);
   };
 
+  const totalTimeService = () => {
+    return selectedRows.reduce((total, cur) => {
+      return (total += cur.estimateTime);
+    }, 0);
+  };
+
   useEffect(() => {
     if (carSlotId) {
       fetchCarSlotDetail();
