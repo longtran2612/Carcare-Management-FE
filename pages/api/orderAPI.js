@@ -2,10 +2,11 @@ import axios from "axios";
 
 import { API_URL } from "./url";
 
-const getOrders = () => {
+const getOrders = (data) => {
   return axios({
-    method: "GET",
-    url: API_URL + `/order`,
+    method: "POST",
+    url: API_URL + `/order/search-order`,
+    data: data,
   })
     .then((res) => {
       return res;

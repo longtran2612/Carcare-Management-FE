@@ -1,19 +1,29 @@
-import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
+import {
+  Table,
+  Tag,
+  Space,
+  Button,
+  Row,
+  Col,
+  Input,
+  Typography,
+  Timeline,
+  Divider
+} from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
+import { getOrders } from "pages/api/orderAPI";
 import moment from "moment";
-const formatDate = "DD/MM/YYYY";
+const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
-import {
-  ClearOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+const { Title } = Typography;
 
 function OrderTable({}) {
-  // const [priceHeaders, setPriceHeaders] = useState([]);
-  // const [modalPriceHeader, setModalPriceHeader] = useState(false);
-  // const [id, setId] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [modalOrder, setModalOrder] = useState(false);
+  const [id, setId] = useState(null);
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   // const { priceHeaderId } = router.query;
@@ -120,81 +130,104 @@ function OrderTable({}) {
     },
     {
       title: "Mã",
-      dataIndex: "id",
-      key: "id",
-      width: 70,
-      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
+      dataIndex: "orderCode",
+      key: "orderCode",
+
+      render: (orderCode) => <a style={{ color: "blue" }}>{orderCode}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.name).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.status).toLowerCase().includes(value.toLowerCase())
+          String(record.orderCode)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.customerName)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.carLicensePlate)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.totalEstimateTime)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.createDate)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.createDate).toLowerCase().includes(value.toLowerCase())
         );
       },
     },
-    {
-      title: "Dịch vụ",
-      dataIndex: "service",
-      key: "service",
-    },
+    // {
+    //   title: "Dịch vụ",
+    //   dataIndex: "services",
+    //   key: "services",
+    // },
     {
       title: "Khách hàng",
-      dataIndex: "customer",
-      key: "customer",
+      dataIndex: "customerName",
+      key: "customerName",
+      ...getColumnSearchProps("statusName"),
     },
     {
-      title: "Xe",
-      dataIndex: "car",
-      key: "car",
+      title: "Biên số",
+      dataIndex: "carLicensePlate",
+      key: "carLicensePlate",
+      ...getColumnSearchProps("statusName"),
     },
     {
-      title: "Nhân viên sử lý",
-      dataIndex: "employee",
-      key: "employee",
+      title: "Thời gian xử lý",
+      dataIndex: "totalEstimateTime",
+      key: "totalEstimateTime",
+      ...getColumnSearchProps("statusName"),
     },
+
     {
       title: "Thời gian tạo",
-      dataIndex: "toDate",
-      key: "toDate",
+      dataIndex: "createDate",
+      key: "createDate",
+      ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
-        return <div>{moment(record.toDate).format(formatDate)}</div>;
+        return <div>{moment(record.createDate).format(formatDate)}</div>;
       },
     },
     {
       title: "Trạng thái",
-      key: "status",
-      dataIndex: "status",
-      ...getColumnSearchProps("status"),
-      render: (status) => {
+      key: "statusName",
+      dataIndex: "statusName",
+      ...getColumnSearchProps("statusName"),
+      render: (text, record, dataIndex) => {
         return (
-          <>
-            {status === "ACTIVE" ? (
-              <Tag color={"green"}>{"Hoạt động"}</Tag>
-            ) : (
-              <Tag color={"red"}>{"Không hoạt động"}</Tag>
-            )}
-          </>
+          <div>
+            <Tag color="blue">{record.statusName}</Tag>
+          </div>
         );
       },
     },
   ];
 
-  // const handleGetPriceHeaders = async () => {
-  //   setLoading(true);
-  //   try {
-  //     getPriceHeaders().then((res) => {
-  //       if (res.data.StatusCode == 200) {
-  //         setPriceHeaders(res.data.Data);
-  //       } else {
-  //         message.error(res.data.message);
-  //       }
-  //       setLoading(false);
-  //     });
-  //   } catch (err) {
-  //     setLoading(false);
-  //     console.log(err);
-  //   }
+  const handleGetorders = async () => {
+    setLoading(true);
+    let dataGetOrder = {
+      keyword: "",
+      pageSize: 20,
+      pageNumber: 0,
+      sort: [
+        {
+          key: "createDate",
+          asc: false,
+        },
+      ],
+    };
+    try {
+      const res = await getOrders(dataGetOrder);
+      if (res.status === 200) {
+        setOrders(res.data.Data.content);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
   // };
   // // const handleRemoveService = async () => {
   // //   try {
@@ -207,92 +240,181 @@ function OrderTable({}) {
   // //   } catch (error) {}
   // // };
 
-  // useEffect(() => {
-  //   handleGetPriceHeaders();
-  // }, []);
+  useEffect(() => {
+    handleGetorders();
+  }, []);
 
   // const handleSuccessCreatePriceHeader = (data) => {
-  //   let newArr = [...priceHeaders];
+  //   let newArr = [...orders];
   //   newArr.push(data);
-  //   setPriceHeaders(newArr);
+  //   setOrders(newArr);
   // };
+
+  const columnService = [
+    {
+      title: "STT",
+      dataIndex: "key",
+      key: "key",
+      width: 70,
+      render: (text, record, dataIndex) => {
+        return <div>{dataIndex + 1}</div>;
+      },
+    },
+    {
+      title: "Tên dịch vụ",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Thời gian xử lí",
+      dataIndex: "estimateTime",
+      key: "estimateTime",
+    },
+    {
+      title: "Giá",
+      dataIndex: "servicePrice",
+      key: "servicePrice",
+      render: (servicePrice) => {
+        return (
+          <>
+            {servicePrice === null ? (
+              <Tag color={"red"}>{"Chưa có giá"}</Tag>
+            ) : (
+              <div>{servicePrice.price}</div>
+            )}
+          </>
+        );
+      },
+    },
+  ];
 
   return (
     <>
       {/* {priceHeaderId ? (
         <PriceHeaderDetail
           priceHeaderId={priceHeaderId}
-          onUpdatePriceHeaders={handleGetPriceHeaders}
+          onUpdateorders={handleGetorders}
         />
       ) : ( */}
       <div>
-          <Table
-            title={() => (
-              <>
-                <Row>
-                  <Col span={8} style={{ marginRight: "10px" }}>
-                    <Input.Search
-                      placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
-                      onChange={(e) => setSearchGlobal(e.target.value)}
-                      onSearch={(value) => setSearchGlobal(value)}
-                      value={searchGlobal}
-                    />
-                  </Col>
-                  <Col span={4}>
-                    <Button
-                      onClick={() => setSearchGlobal("")}
-                      icon={<ClearOutlined />}
-                    >
-                      Xóa bộ lọc
-                    </Button>
-                  </Col>
-                  <Col span={11}>
-                    <Button
-                      style={{ float: "right" }}
-                      type="primary"
-                      onClick={() => setModalPrice(true)}
-                    >
-                      {" "}
-                      Thêm mới yêu cầu
-                    </Button>
-                  </Col>
-                </Row>
-              </>
-            )}
-            columns={columns}
-            bordered
-            // dataSource={priceHeaders}
-            pagination={{
-              pageSize: 20,
-            }}
-            scroll={{
-              y: 450,
-            }}
-            expandable={{
-              expandedRowRender: (record) => (
-                <p
-                  style={{
-                    margin: 0,
-                  }}
-                >
-                  {record.description}
-                </p>
-              ),
-              rowExpandable: (record) => record.name !== "Not Expandable",
-            }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  router.push(`/admin?orderId=${record.id}`);
-                },
-              };
-            }}
-          />
-      
+        <Table
+          bordered
+          title={() => (
+            <>
+              <Row>
+                <Col span={8} style={{ marginRight: "10px" }}>
+                  <Input.Search
+                    placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
+                    onChange={(e) => setSearchGlobal(e.target.value)}
+                    onSearch={(value) => setSearchGlobal(value)}
+                    value={searchGlobal}
+                  />
+                </Col>
+                <Col span={4}>
+                  <Button
+                    onClick={() => setSearchGlobal("")}
+                    icon={<ClearOutlined />}
+                  >
+                    Xóa bộ lọc
+                  </Button>
+                </Col>
+                <Col span={11}>
+                  <Button
+                    style={{ float: "right" }}
+                    type="primary"
+                    onClick={() => setModalPrice(true)}
+                  >
+                    {" "}
+                    Thêm mới yêu cầu
+                  </Button>
+                </Col>
+              </Row>
+            </>
+          )}
+          columns={columns}
+          dataSource={orders}
+          pagination={{
+            pageSize: 20,
+          }}
+          scroll={{
+            y: 450,
+          }}
+          expandable={{
+            expandedRowRender: (record) => (
+              <p
+                style={{
+                  margin: 0,
+                }}
+              >
+                <>
+                  <Row gutter={4}>
+                    <Col span={12}>
+                      <Table
+                        bordered
+                        title={() => "Dịch vụ"}
+                        dataSource={record.services}
+                        columns={columnService}
+                        pagination={false}
+                      ></Table>
+                    </Col>
+                    <Col span={12}>
+                      <div
+                        style={{
+                          backgroundColor: "#fff",
+                          padding: "10px",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        <Row gutter={32}>
+                          <Col style={{borderRight:'solid LightGray 1px'}} span={11}>
+                            <Title style={{ textAlign: "center" }} level={4}>
+                              Khách hàng
+                            </Title>
+                            <Divider />
+                            <Timeline style={{ marginTop: "20px" }}>
+                              <Timeline.Item>
+                                Tên: {record?.customerName}
+                              </Timeline.Item>
+                              <Timeline.Item>
+                                Số điện thoại: {record?.customerPhoneNumber}
+                              </Timeline.Item>
+                            </Timeline>
+                          </Col>
+                          <Col span={12}>
+                            <Title style={{ textAlign: "center" }} level={4}>
+                              Xe
+                            </Title>
+                            <Divider />
+                            <Timeline style={{ marginTop: "20px" }}>
+                              <Timeline.Item>
+                                Xe: {record?.carName}
+                              </Timeline.Item>
+                              <Timeline.Item>
+                                Biển số: {record?.carLicensePlate}
+                              </Timeline.Item>
+                            </Timeline>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Col>
+                  </Row>
+                </>
+              </p>
+            ),
+            rowExpandable: (record) => record.name !== "Not Expandable",
+          }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                router.push(`/admin?orderId=${record.id}`);
+              },
+            };
+          }}
+        />
       </div>
       {/* <ModalAddPriceHeader
-            show={modalPriceHeader}
-            handleCancel={() => setModalPriceHeader(false)}
+            show={modalOrder}
+            handleCancel={() => setModalOrder(false)}
             onSuccess={(data) => handleSuccessCreatePriceHeader(data)}
           />
       

@@ -229,6 +229,12 @@ function ServiceTable({}) {
       ...getColumnSearchProps("type"),
     },
     {
+      title: "Thời gian xử lí",
+      dataIndex: "estimateTime",
+      key: "estimateTime",
+      ...getColumnSearchProps("estimateTime"),
+    },
+    {
       title: "Giá",
       dataIndex: "servicePrice",
       key: "servicePrice",
