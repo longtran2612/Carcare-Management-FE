@@ -21,11 +21,11 @@ const { Option } = Select;
 const { Column, ColumnGroup } = Table;
 const formatDate = "HH:mm DD/MM/YYYY";
 
-export const OrderDetail = ({ orderRequestId }) => {
+export const OrderNotRequestDetail = ({ orderId }) => {
   const [order, setOrder] = useState(null);
 
   const getOrder = async () => {
-    const res = await getOrderById(orderRequestId);
+    const res = await getOrderById(orderId);
     setOrder(res.data.Data);
   };
 
@@ -47,7 +47,7 @@ export const OrderDetail = ({ orderRequestId }) => {
   return (
     <>
       <Col span={24}>
-        <Title level={4}>Thông tin yêu cầu</Title>
+        <Title level={4}>Thông tin hóa đơn</Title>
         <Row gutter={16}>
           <Col span={24}>
             <Tag className="PullRight" color="blue">

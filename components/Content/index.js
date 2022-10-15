@@ -8,12 +8,15 @@ import PriceHeaderPage from "components/PriceHeader";
 import CarSlot from "components/CarSlot";
 import OrderPage from "components/Order";
 import CustomerPage from "components/Customer";
+import OrderNotRequestPage from "components/OrderNotRequest";
 
 const MyContent = ({ keyMenu }) => {
   const renderViewByKey = () => {
     switch (keyMenu) {
       case "order":
         return <OrderPage />;
+      case "order-not-request":
+        return <OrderNotRequestPage />;
       case "service":
         return <ServicePage />;
       case "category":

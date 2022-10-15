@@ -19,16 +19,13 @@ import Loading from "components/Loading";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
-import { OrderDetail } from "components/Order/OrderDetail";
 const { Title } = Typography;
 
-function OrderTable({}) {
+function ModalSelectOrder({ onSelectOrder }) {
   const [orders, setOrders] = useState([]);
   const [modalOrder, setModalOrder] = useState(false);
-  const [id, setId] = useState(null);
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
-  const { orderRequestId } = router.query;
   const [loading, setLoading] = useState(false);
 
   const [searchGlobal, setSearchGlobal] = useState("");
@@ -121,10 +118,6 @@ function OrderTable({}) {
       ),
   });
 
-  const handleSuccessCreateOrder = async () => {
-    handleGetorders();
-  }
-
   const columns = [
     {
       title: "STT",
@@ -197,15 +190,18 @@ function OrderTable({}) {
       },
     },
     {
-      title: "Trạng thái",
-      key: "statusName",
-      dataIndex: "statusName",
-      ...getColumnSearchProps("statusName"),
+    title: "Hành động",
+    dataIndex: "action",
       render: (text, record, dataIndex) => {
         return (
-          <div>
-            <Tag color="blue">{record.statusName}</Tag>
-          </div>
+          <Button
+            type="primary"
+            onClick={() => {
+              onSelectOrder(record.id);
+            }}
+          >
+            Xử lý
+          </Button>
         );
       },
     },
@@ -235,27 +231,9 @@ function OrderTable({}) {
       setLoading(false);
     }
   };
-  // };
-  // // const handleRemoveService = async () => {
-  // //   try {
-  // //     const res = await removeServiceApi(id);
-  // //     if (res.data.StatusCode == 200) {
-  // //       handleGetServices();
-  // //       setModalQuestion(false);
-  // //       setId(null);
-  // //     }
-  // //   } catch (error) {}
-  // // };
-
   useEffect(() => {
     handleGetorders();
   }, []);
-
-  // const handleSuccessCreateOrder = (data) => {
-  //   let newArr = [...orders];
-  //   newArr.push(data);
-  //   setOrders(newArr);
-  // };
 
   const columnService = [
     {
@@ -294,123 +272,114 @@ function OrderTable({}) {
       },
     },
   ];
+  const handleSuccessCreateOrder = async () => {
+    handleGetorders();
+  }
 
   return (
     <>
-      {orderRequestId ? (
-        <OrderDetail orderRequestId={orderRequestId} onUpdateOrders={handleGetorders} />
-      ) : (
-        <div>
-          <Table
-            rowKey="id"
-            bordered
-            title={() => (
-              <>
-                <Row>
-                  <Col span={8} style={{ marginRight: "10px" }}>
-                    <Input.Search
-                      placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
-                      onChange={(e) => setSearchGlobal(e.target.value)}
-                      onSearch={(value) => setSearchGlobal(value)}
-                      value={searchGlobal}
-                    />
-                  </Col>
-                  <Col span={4}>
-                    <Button
-                      onClick={() => setSearchGlobal("")}
-                      icon={<ClearOutlined />}
+      <Table
+        rowKey="id"
+        bordered
+        title={() => (
+          <>
+            <Row>
+              <Col span={8} style={{ marginRight: "10px" }}>
+                <Input.Search
+                  placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
+                  onChange={(e) => setSearchGlobal(e.target.value)}
+                  onSearch={(value) => setSearchGlobal(value)}
+                  value={searchGlobal}
+                />
+              </Col>
+              <Col span={4}>
+                <Button
+                  onClick={() => setSearchGlobal("")}
+                  icon={<ClearOutlined />}
+                >
+                  Xóa bộ lọc
+                </Button>
+              </Col>
+              <Col span={11}>
+                <Button
+                  style={{ float: "right" }}
+                  type="primary"
+                  onClick={() => setModalOrder(true)}
+                >
+                  {" "}
+                  Thêm mới yêu cầu
+                </Button>
+              </Col>
+            </Row>
+          </>
+        )}
+        columns={columns}
+        dataSource={orders}
+        pagination={{
+          pageSize: 20,
+        }}
+        scroll={{
+          y: 450,
+        }}
+        expandable={{
+          expandedRowRender: (record) => (
+            <Row gutter={4}>
+              <Col span={12}>
+                <Table
+                  bordered
+                  title={() => "Dịch vụ"}
+                  dataSource={record.services}
+                  columns={columnService}
+                  pagination={false}
+                ></Table>
+              </Col>
+              <Col span={12}>
+                <div
+                  style={{
+                    backgroundColor: "#fff",
+                    padding: "10px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <Row gutter={32}>
+                    <Col
+                      style={{ borderRight: "solid LightGray 1px" }}
+                      span={11}
                     >
-                      Xóa bộ lọc
-                    </Button>
-                  </Col>
-                  <Col span={11}>
-                    <Button
-                      style={{ float: "right" }}
-                      type="primary"
-                      onClick={() => setModalOrder(true)}
-                    >
-                      {" "}
-                      Thêm mới yêu cầu
-                    </Button>
-                  </Col>
-                </Row>
-              </>
-            )}
-            columns={columns}
-            dataSource={orders}
-            pagination={{
-              pageSize: 20,
-            }}
-            scroll={{
-              y: 450,
-            }}
-            expandable={{
-              expandedRowRender: (record) => (
-                <Row gutter={4}>
-                  <Col span={12}>
-                    <Table
-                      bordered
-                      title={() => "Dịch vụ"}
-                      dataSource={record.services}
-                      columns={columnService}
-                      pagination={false}
-                    ></Table>
-                  </Col>
-                  <Col span={12}>
-                    <div
-                      style={{
-                        backgroundColor: "#fff",
-                        padding: "10px",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      <Row gutter={32}>
-                        <Col
-                          style={{ borderRight: "solid LightGray 1px" }}
-                          span={11}
-                        >
-                          <Title style={{ textAlign: "center" }} level={4}>
-                            Khách hàng
-                          </Title>
-                          <Divider />
-                          <Timeline style={{ marginTop: "20px" }}>
-                            <Timeline.Item>
-                              Tên: {record?.customerName}
-                            </Timeline.Item>
-                            <Timeline.Item>
-                              Số điện thoại: {record?.customerPhoneNumber}
-                            </Timeline.Item>
-                          </Timeline>
-                        </Col>
-                        <Col span={12}>
-                          <Title style={{ textAlign: "center" }} level={4}>
-                            Xe
-                          </Title>
-                          <Divider />
-                          <Timeline style={{ marginTop: "20px" }}>
-                            <Timeline.Item>Xe: {record?.carName}</Timeline.Item>
-                            <Timeline.Item>
-                              Biển số: {record?.carLicensePlate}
-                            </Timeline.Item>
-                          </Timeline>
-                        </Col>
-                      </Row>
-                    </div>
-                  </Col>
-                </Row>
-              ),
-              rowExpandable: (record) => record.name !== "Not Expandable",
-            }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  router.push(`/admin?orderRequestId=${record.id}`);
-                },
-              };
-            }}
-          />
-        </div>
-      )}
+                      <Title style={{ textAlign: "center" }} level={4}>
+                        Khách hàng
+                      </Title>
+                      <Divider />
+                      <Timeline style={{ marginTop: "20px" }}>
+                        <Timeline.Item>
+                          Tên: {record?.customerName}
+                        </Timeline.Item>
+                        <Timeline.Item>
+                          Số điện thoại: {record?.customerPhoneNumber}
+                        </Timeline.Item>
+                      </Timeline>
+                    </Col>
+                    <Col span={12}>
+                      <Title style={{ textAlign: "center" }} level={4}>
+                        Xe
+                      </Title>
+                      <Divider />
+                      <Timeline style={{ marginTop: "20px" }}>
+                        <Timeline.Item>Xe: {record?.carName}</Timeline.Item>
+                        <Timeline.Item>
+                          Biển số: {record?.carLicensePlate}
+                        </Timeline.Item>
+                      </Timeline>
+                    </Col>
+                  </Row>
+                </div>
+              </Col>
+            </Row>
+          ),
+          rowExpandable: (record) => record.name !== "Not Expandable",
+        }}
+      />
+
       <ModalAddOrder
         show={modalOrder}
         handleCancel={() => setModalOrder(false)}
@@ -422,4 +391,4 @@ function OrderTable({}) {
   );
 }
 
-export default OrderTable;
+export default ModalSelectOrder;

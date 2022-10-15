@@ -14,16 +14,18 @@ const getCarSlotDetail = (id) => {
     url: API_URL + `/car-slots/${id}`,
   });
 };
-const executeCarSlot = (id) => {
+const executeCarSlot = (id,data) => {
   return axios({
     method: "POST",
     url: API_URL + `/car-slots/execute/${id}`,
+    data: data,
   });
 };
-const completeCarSlot = (id) => {
+const completeCarSlot = (id,data) => {
   return axios({
     method: "POST",
     url: API_URL + `/car-slots/complete/${id}`,
+    data: data,
   });
 };
 const createCarSlot = (data) => {

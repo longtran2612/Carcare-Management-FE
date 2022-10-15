@@ -6,20 +6,28 @@ import {
   Form,
   Input,
   Select,
+  Typography,
   Steps,
   Button,
   DatePicker,
+  Divider ,Timeline,
+  Table,
 } from "antd";
 import { getCustomers } from "pages/api/customerAPI";
+import { getCustomerById } from "pages/api/customerAPI";
+import { getCarById } from "pages/api/carAPI";
 import { createOrder } from "pages/api/orderAPI";
 import { getCarbyCustomerId } from "pages/api/carAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 import ServiceOrder from "./ModalService";
+import { formatMoney } from "utils/format";
 import ModalAddCustomer from "./ModalAddCustomer";
 import ModalAddCar from "./ModalAddCar";
 
+const { Title } = Typography;
 const { Option } = Select;
+const { Column, ColumnGroup } = Table;
 const formatDate = "YYYY/MM/DD";
 
 const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
@@ -28,6 +36,12 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   const [cars, setCars] = useState([]);
   const [customerSelected, setCustomerSelected] = useState(null);
   const [carSelected, setCarSelected] = useState(null);
+
+  const [customerOrder, setCustomerOrder] = useState(null);
+  const [carOrder, setCarOrder] = useState(null);
+
+  const [services, setServices] = useState([]);
+  const [serviceIds, setServiceIds] = useState(0);
 
   const [modalCar, setModalCar] = useState(false);
   const [modalCustomer, setModalCustomer] = useState(false);
@@ -55,18 +69,31 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     if (show) {
       handleFetchUser();
     }
-  }, [show]);
+    if(current ==2){
+      handleGetData();
+    }
+    
+  }, [show,current]);
 
   const handelChangeUser = async (value) => {
     setCustomerSelected(value);
     handleFetchCar();
   };
 
+  const handleGetData = async () => {
+      const resCustomer = await getCustomerById(customerSelected);
+      setCustomerOrder(resCustomer.data.Data);
+      console.log(resCustomer.data.Data);
+      const resCar = await getCarById(carSelected);
+      setCarOrder(resCar.data.Data);
+      console.log(resCar.data.Data);
+  };
   const next = () => {
     setCurrent(current + 1);
   };
   const prev = () => {
     setCurrent(current - 1);
+   
   };
 
   const handleSuccessCreateCar = () => {
@@ -76,6 +103,38 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     handleFetchUser();
   };
 
+  const totalPriceService = () => {
+    return services.reduce((total, cur) => {
+      return (total += cur.servicePrice.price);
+    }, 0);
+  };
+  const totalTimeService = () => {
+    return services.reduce((total, cur) => {
+      return (total += cur.estimateTime);
+    }, 0);
+  };
+
+  const onFinish = async ()=>{
+    const values = form.getFieldsValue(['receiveDate','executeDate','deliverDate']);
+    const dataCreateOrder = {
+      carId: carSelected,
+      customerId: customerSelected,
+      serviceIds: services.map((item) => item.id),
+      receiveDate: values.receiveDate,
+      executeDate: values.executeDate,
+      deliverDate: values.deliverDate
+  }
+  try {
+    const res = await createOrder(dataCreateOrder);
+    openNotification("Tạo danh mục dịch vụ thành công!", "");
+    handleCancel();
+    onSuccess(res.data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+console.log(form.getFieldsValue(['receiveDate','executeDate','deliverDate']));
   return (
     <>
       <Modal
@@ -106,7 +165,11 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
               {current === 2 && (
                 <Button
                   type="primary"
-                  onClick={() => message.success("Processing complete!")}
+                  onClick={() => form
+                    .validateFields()
+                    .then((values) => {
+                      onFinish(values);
+                    })}
                 >
                   Hoàn thành
                 </Button>
@@ -133,7 +196,10 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
             </Col>
             {current === 0 && (
               <Col span={24}>
-                <ServiceOrder />
+                <ServiceOrder
+                  selectedService={(value) => setServices(value)}
+                  onSelected={(value) => setServiceIds(value)}
+                />
               </Col>
             )}
             {current === 1 && (
@@ -168,17 +234,12 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col  style={{display:'flex',alignItems:'center'}} span={4}>
-                
-                    <Button
-                      type="primary"
-                      onClick={() => setModalCustomer(true)}
-                    >
-                      Thêm mới khách hàng
-                    </Button>
-                
+                <Col style={{ display: "flex", alignItems: "center" }} span={4}>
+                  <Button type="primary" onClick={() => setModalCustomer(true)}>
+                    Thêm mới khách hàng
+                  </Button>
                 </Col>
-                <Col   span={8}>
+                <Col span={8}>
                   <Form.Item
                     label="Xe"
                     name="carId"
@@ -208,7 +269,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col style={{display:'flex',alignItems:'center'}} span={4}>
+                <Col style={{ display: "flex", alignItems: "center" }} span={4}>
                   <Button type="primary" onClick={() => setModalCar(true)}>
                     Thêm mới xe
                   </Button>
@@ -265,7 +326,119 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
             )}
             {current === 2 && (
               <>
-                <Col span={24}></Col>
+                <Col span={24}>
+                  <Title level={4}>Thông tin yêu cầu</Title>
+                  <Row gutter={16}>
+                    <Col span={24}>
+                      <Table
+                      pagination={false}
+                        summary={() => {
+                          return (
+                            <>
+                              <Table.Summary.Row>
+                                <Table.Summary.Cell
+                                  index={0}
+                                ></Table.Summary.Cell>
+                                <Table.Summary.Cell
+                                  index={1}
+                                ></Table.Summary.Cell>
+                                <Table.Summary.Cell index={2}>
+                                  {totalTimeService() || 0} phút
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={3}>
+                                  {formatMoney(totalPriceService() || 0)}
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                            </>
+                          );
+                        }}
+                        dataSource={services}
+                        bordered
+                      >
+                        <ColumnGroup title="Dịch vụ sử dụng">
+                          <Column
+                            title="STT"
+                            dataIndex="stt"
+                            key="stt"
+                            width={70}
+                            render={(text, record, dataIndex) => {
+                              return <div>{dataIndex + 1}</div>;
+                            }}
+                          />
+                          <Column
+                            title="Tên dịch vụ"
+                            dataIndex="name"
+                            key="name"
+                          />
+                          <Column
+                            dataIndex="estimateTime"
+                            key="estimateTime"
+                            title="Thời gian sử lý"
+                          ></Column>
+                          <Column
+                            title="Giá dịch vụ"
+                            dataIndex="price"
+                            key="price"
+                            render={(text, record, dataIndex) => {
+                              return (
+                                <div>
+                                  {formatMoney(record.servicePrice.price)}
+                                </div>
+                              );
+                            }}
+                          />
+                        </ColumnGroup>
+                      </Table>
+                    </Col>
+                    <Col span={24}>
+                      <div
+                        style={{
+                          backgroundColor: "#fff",
+                          padding: "10px",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        <Row gutter={32}>
+                          <Col style={{borderRight:'solid LightGray 1px'}} span={12}>
+                            <Title style={{ textAlign: "center" }} level={4}>
+                              Khách hàng
+                            </Title>
+                            <Divider />
+                            <Timeline style={{ marginTop: "20px" }}>
+                            <Timeline.Item>
+                                Mã: {customerOrder?.customerCode}
+                              
+                              </Timeline.Item>
+                              <Timeline.Item>
+                                Tên: {customerOrder?.name}
+                              </Timeline.Item>
+                              <Timeline.Item>
+                                Số điện thoại: {customerOrder?.phoneNumber}
+                              </Timeline.Item>
+                            </Timeline>
+                          </Col>
+                          <Col span={12}>
+                            <Title style={{ textAlign: "center" }} level={4}>
+                              Xe
+                            </Title>
+                            <Divider />
+                            <Timeline style={{ marginTop: "20px" }}>
+                            <Timeline.Item>
+                                Mã: {carOrder?.carCode}
+                              </Timeline.Item>
+                              <Timeline.Item>
+                                Xe: {carOrder?.name}
+                              </Timeline.Item>
+                              <Timeline.Item>
+                                Biển số: {carOrder?.licensePlate}
+                              </Timeline.Item>
+                            </Timeline>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Col>
+                  </Row>
+                </Col>
               </>
             )}
           </Row>

@@ -73,7 +73,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         email: values.email,
         address: values.address,
         status: values.status,
-        image: imageS3,
+        image:imageS3||  userDetail?.image,
         birthDay: values.birthDay,
       };
       const res = await updateUserById(body, userId);

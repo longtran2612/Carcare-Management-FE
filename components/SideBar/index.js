@@ -30,7 +30,8 @@ function getItem(label, key, icon, children, type) {
 const items = [
   getItem("Cửa hàng", "car-slot", <ShopOutlined />),
   getItem("Hóa đơn", "2", <BookOutlined  />, [
-    getItem("Danh sách hóa đơn", "order"),
+    getItem("Danh sách yêu cầu", "order"),
+    getItem("Danh sách hóa đơn", "order-not-request"),
   ]),
 
   getItem("Dịch vụ", "3", <ClearOutlined />, [

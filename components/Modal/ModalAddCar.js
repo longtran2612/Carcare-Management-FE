@@ -33,7 +33,7 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
     "Ford",
     "Mercedes-Benz",
     "BMW",
-    "Cadillac"
+    "Cadillac",
   ]);
 
   const onFinish = async (values) => {
@@ -112,7 +112,15 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item label="Người sở hữu" name="customerId">
+              <Form.Item
+                label="Người sở hữu"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                name="customerId"
+              >
                 <Select
                   showSearch
                   placeholder="Chọn Người sở hữu"
@@ -130,8 +138,8 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
             </Col>
             <Col span={8}>
               <Form.Item
-                label="Model"
-                name="model"
+                label="Biển số xe"
+                name="licensePlate"
                 rules={[
                   {
                     required: true,
@@ -142,15 +150,12 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                label="Thương hiệu"
-                name="brand"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="Model" name="model">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Thương hiệu" name="brand">
                 <Select
                   showSearch
                   placeholder="Chọn thương hiệu"
@@ -170,97 +175,34 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
                 </Select>
               </Form.Item>
             </Col>
-
             <Col span={8}>
-              <Form.Item
-                label="Màu sắc"
-                name="color"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label="Biển số xe"
-                name="licensePlate"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="Màu sắc" name="color">
                 <Input />
               </Form.Item>
             </Col>
 
             <Col span={8}>
-              <Form.Item
-                label="Số nghế ngồi"
-                name="seats"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="Số nghế ngồi" name="seats">
                 <InputNumber min={1} max={16} />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                label="Năm sản xuất"
-                name="year"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber min={1900} max={moment().year()} />
+              <Form.Item label="Năm sản xuất" name="year">
+                <InputNumber min={1800} max={moment().year()} />
               </Form.Item>
             </Col>
-
             <Col span={8}>
-              <Form.Item
-                label="Đông cơ"
-                name="engine"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="Đông cơ" name="engine">
                 <Input />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                label="Truyền động"
-                name="transmission"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="Truyền động" name="transmission">
                 <Input />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                label="Nhiên liệu"
-                name="fuel"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="Nhiên liệu" name="fuel">
                 <Select
                   showSearch
                   placeholder="Chọn nhiên liệu"
@@ -282,7 +224,7 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
             </Col>
             <Col span={24}>
               <Form.Item label="Mô tả" name="description">
-                <TextArea rows={4} />
+                <TextArea rows={2} />
               </Form.Item>
             </Col>
           </Row>

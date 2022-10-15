@@ -8,7 +8,7 @@ import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
 const { Step } = Steps;
 
-function ServiceOrder({}) {
+function ServiceOrder({onSelected,selectedService}) {
   const [services, setServices] = useState([]);
   const router = useRouter();
   const { serviceId } = router.query;
@@ -207,6 +207,8 @@ function ServiceOrder({}) {
         "selectedRows: ",
         selectedRows
       );
+      onSelected(selectedRowKeys);
+      selectedService(selectedRows);
     },
   };
   const totalPriceService = () => {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Modal,
-  Button,
   Form,
   Input,
   Select,
@@ -9,9 +8,7 @@ import {
   Row,
   InputNumber,
   DatePicker,
-  message,
 } from "antd";
-// import { createUser } from "pages/api/userAPI";
 import { createCustomer } from "pages/api/customerAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
@@ -147,11 +144,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
             </Col>
             <Col span={6}>
               <Form.Item
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+
                 name="gender"
                 label="Giới tính"
               >
@@ -188,7 +181,6 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
                     pattern: new RegExp(
                       "^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$"
                     ),
-                    required: true,
                     message: "Email không hợp lệ!",
                   },
                 ]}
@@ -200,25 +192,14 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
             </Col>
             <Col span={8}>
               <Form.Item
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
                 name="dateOfBirth"
                 label="Ngày sinh"
               >
                 <DatePicker format={formatDate} />
               </Form.Item>
-            </Col>
-           
+            </Col>        
             <Col span={8}>
               <Form.Item
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
                 name="nationality"
                 label="Quốc gia"
               >
@@ -230,6 +211,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
                 rules={[
                   {
                     required: true,
+                    message: "Vui lòng nhập số CMND!",
                   },
                 ]}
                 name="indentityNumber"
@@ -238,15 +220,8 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
                 <InputNumber />
               </Form.Item>
             </Col>
-
             <Col span={8}>
               <Form.Item
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng chọn tỉnh/thành phố!",
-                  },
-                ]}
                 name="province"
                 label="Tỉnh/Thành phố"
               >
@@ -268,12 +243,6 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
             </Col>
             <Col span={8}>
               <Form.Item
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng chọn quận/huyện!",
-                  },
-                ]}
                 name="district"
                 label="Quận/Huyện"
               >
@@ -295,12 +264,6 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
             </Col>
             <Col span={8}>
               <Form.Item
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng chọn phường/xã!",
-                  },
-                ]}
                 name="ward"
                 label="Phường/Xã"
               >
@@ -322,11 +285,6 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
             </Col>
             <Col span={24}>
               <Form.Item
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
                 name="address"
                 label="Địa chỉ chi tiết"
               >

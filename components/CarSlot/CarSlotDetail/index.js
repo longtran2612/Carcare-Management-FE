@@ -11,21 +11,30 @@ import {
   Card,
   Steps,
 } from "antd";
-import { getCarSlotDetail } from "pages/api/carSlotApi";
+import {
+  getCarSlotDetail,
+  executeCarSlot,
+  completeCarSlot,
+} from "pages/api/carSlotApi";
 import { SyncOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
+import { getCarById } from "pages/api/carAPI";
+import { getOrderById } from "pages/api/orderAPI";
+import { getCustomerByCode } from "pages/api/customerAPI";
 import Loading from "components/Loading";
 import Image from "next/image";
-// import slot_active from "public/images/slot_active.png";
-import select_order from "public/images/select_order.png";
-import OrderTable from "components/Order/OrderTable";
+import ModalSelectOrder from "components/Modal/ModalSelectOrder";
 
 const CarSlotDetail = ({ carSlotId }) => {
   const { Title } = Typography;
   const { Column, ColumnGroup } = Table;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
+  const [order, setOrder] = useState(null);
+  const [car, setCar] = useState(null);
+  const [customer, setCustomer] = useState(null);
 
   const [step, setStep] = useState(1);
 
@@ -36,6 +45,45 @@ const CarSlotDetail = ({ carSlotId }) => {
     try {
       const response = await getCarSlotDetail(carSlotId);
       setCarSlotDetail(response.data.Data);
+      setLoading(false);
+      fetchCarDetail();
+      fetchOrderDetail();
+      fetchCustomerDetail();
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchCarDetail = async () => {
+    setLoading(true);
+    try {
+      const response = await getCarById(carSlotDetail?.carId);
+      setCar(response.data.Data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchCustomerDetail = async () => {
+    setLoading(true);
+    try {
+      const response = await getCustomerByCode(carSlotDetail?.customerCode);
+      setCustomer(response.data.Data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchOrderDetail = async () => {
+    setLoading(true);
+    try {
+      const response = await getOrderById(carSlotDetail?.orderId);
+      setOrder(response.data.Data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -111,12 +159,23 @@ const CarSlotDetail = ({ carSlotId }) => {
   };
   console.log(carSlotDetail?.status);
 
+  const handleExecuteOrder = async (data) => {
+    let dataExecute = {
+      orderId: data,
+    };
+    try {
+      const response = await executeCarSlot(carSlotId, dataExecute);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
         Trở lại
       </Button>
-
       <div className="carslot">
         <div className="carslot-content">
           <div className="carslot-content--header">
@@ -268,11 +327,13 @@ const CarSlotDetail = ({ carSlotId }) => {
             <Row className="content-white" span={24}>
               <Col span={24}>
                 <Typography.Title className="content-center" level={2}>
-                Vị trí đang trống !!! vui lòng chọn yêu cầu sử lý
+                  Vị trí đang trống !!! vui lòng chọn yêu cầu sử lý
                 </Typography.Title>
               </Col>
               <Col span={24}>
-                <OrderTable />
+                <ModalSelectOrder
+                  onSelectOrder={(value) => handleExecuteOrder(value)}
+                />
               </Col>
             </Row>
 
