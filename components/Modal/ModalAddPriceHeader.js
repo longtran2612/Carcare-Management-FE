@@ -11,7 +11,7 @@ import { createPriceHeader } from "pages/api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 const { TextArea } = Input;
-const formatDate = "YYYY/MM/DD";
+const formatDate = "HH:mm DD/MM/YYYY";
 
 const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();

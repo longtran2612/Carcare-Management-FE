@@ -30,11 +30,11 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
   const [provinceSelected, setProvinceSelected] = useState("");
   const [districtSelected, setDistrictSelected] = useState("");
   const [wardSelected, setWardSelected] = useState("");
-  const formatDate = "YYYY/MM/DD";
+  const formatDate = "HH:mm DD/MM/YYYY";
 
   const onFinish = async (values) => {
     let dataUser = {
-      name: values.fullname,
+      name: values.name,
       email: values.email,
       phoneNumber: values.phone,
       address:
@@ -51,7 +51,6 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
         identityType:2,
         identityNumber:values.identityNumber
 
-
     };
     console.log(dataUser);
 
@@ -60,7 +59,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
       console.log(res);
       openNotification("Tạo người dùng thành công!", "");
       handleCancel();
-      onSuccess(res.data);
+      onSuccess(res.data.Data);
     } catch (error) {
       console.log(error);
     }
@@ -137,7 +136,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
                   },
                 ]}
                 label="Tên người dùng"
-                name="fullname"
+                name="name"
               >
                 <Input />
               </Form.Item>
@@ -214,7 +213,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
                     message: "Vui lòng nhập số CMND!",
                   },
                 ]}
-                name="indentityNumber"
+                name="identityNumber"
                 label="Số CMND"
               >
                 <InputNumber />

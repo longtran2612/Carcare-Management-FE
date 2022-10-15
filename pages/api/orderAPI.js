@@ -29,6 +29,19 @@ const getOrderById = (id) => {
     });
 };
 
+const getAllExecuteOrder = () => {
+  return axios({
+    method: "GET",
+    url: API_URL + `/order/get-all-executed-order`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 const createOrder = (data) => {
   return axios({
     method: "POST",
@@ -47,5 +60,6 @@ const createOrder = (data) => {
 export {
     createOrder,
     getOrderById,
-    getOrders
+    getOrders,
+    getAllExecuteOrder
 };

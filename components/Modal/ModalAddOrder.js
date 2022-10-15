@@ -10,7 +10,8 @@ import {
   Steps,
   Button,
   DatePicker,
-  Divider ,Timeline,
+  Divider,
+  Timeline,
   Table,
 } from "antd";
 import { getCustomers } from "pages/api/customerAPI";
@@ -24,6 +25,7 @@ import ServiceOrder from "./ModalService";
 import { formatMoney } from "utils/format";
 import ModalAddCustomer from "./ModalAddCustomer";
 import ModalAddCar from "./ModalAddCar";
+import moment from "moment";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -48,7 +50,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
 
   const [current, setCurrent] = useState(0);
 
-  const handleFetchUser = async () => {
+  const handleFetchCustomer = async () => {
     try {
       const res = await getCustomers();
       setCustomers(res.data.Data);
@@ -67,13 +69,16 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
 
   useEffect(() => {
     if (show) {
-      handleFetchUser();
+      handleFetchCustomer();
     }
-    if(current ==2){
+    if (customerSelected) {
+      handleFetchCar();
+    }
+
+    if (current == 2) {
       handleGetData();
     }
-    
-  }, [show,current]);
+  }, [show, current, customerSelected]);
 
   const handelChangeUser = async (value) => {
     setCustomerSelected(value);
@@ -81,26 +86,31 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   };
 
   const handleGetData = async () => {
-      const resCustomer = await getCustomerById(customerSelected);
-      setCustomerOrder(resCustomer.data.Data);
-      console.log(resCustomer.data.Data);
-      const resCar = await getCarById(carSelected);
-      setCarOrder(resCar.data.Data);
-      console.log(resCar.data.Data);
+    const resCustomer = await getCustomerById(customerSelected);
+    setCustomerOrder(resCustomer.data.Data);
+    console.log(resCustomer.data.Data);
+    const resCar = await getCarById(carSelected);
+    setCarOrder(resCar.data.Data);
+    console.log(resCar.data.Data);
   };
   const next = () => {
     setCurrent(current + 1);
   };
   const prev = () => {
     setCurrent(current - 1);
-   
   };
 
-  const handleSuccessCreateCar = () => {
-    handleFetchCar();
+  const handleSuccessCreateCar = async (data) => {
+    await handleFetchCar();
+    form.setFieldsValue({
+      carId: data.id,
+    });
   };
-  const handleSuccessCreateCustomer = () => {
-    handleFetchUser();
+  const handleSuccessCreateCustomer = async (data) => {
+    await handleFetchCustomer();
+    form.setFieldsValue({
+      customerId: data.id,
+    });
   };
 
   const totalPriceService = () => {
@@ -114,27 +124,33 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     }, 0);
   };
 
-  const onFinish = async ()=>{
-    const values = form.getFieldsValue(['receiveDate','executeDate','deliverDate']);
+  const onFinish = async () => {
+    const values = form.getFieldsValue([
+      "receiveDate",
+      "executeDate",
+      "deliverDate",
+    ]);
     const dataCreateOrder = {
       carId: carSelected,
       customerId: customerSelected,
       serviceIds: services.map((item) => item.id),
       receiveDate: values.receiveDate,
       executeDate: values.executeDate,
-      deliverDate: values.deliverDate
-  }
-  try {
-    const res = await createOrder(dataCreateOrder);
-    openNotification("Tạo danh mục dịch vụ thành công!", "");
-    handleCancel();
-    onSuccess(res.data);
-  } catch (error) {
-    console.log(error);
-  }
-}
+      deliverDate: values.deliverDate,
+    };
+    try {
+      const res = await createOrder(dataCreateOrder);
+      openNotification("Tạo danh mục dịch vụ thành công!", "");
+      handleCancel();
+      onSuccess(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-console.log(form.getFieldsValue(['receiveDate','executeDate','deliverDate']));
+  console.log(
+    form.getFieldsValue(["receiveDate", "executeDate", "deliverDate"])
+  );
   return (
     <>
       <Modal
@@ -165,11 +181,11 @@ console.log(form.getFieldsValue(['receiveDate','executeDate','deliverDate']));
               {current === 2 && (
                 <Button
                   type="primary"
-                  onClick={() => form
-                    .validateFields()
-                    .then((values) => {
+                  onClick={() =>
+                    form.validateFields().then((values) => {
                       onFinish(values);
-                    })}
+                    })
+                  }
                 >
                   Hoàn thành
                 </Button>
@@ -331,7 +347,7 @@ console.log(form.getFieldsValue(['receiveDate','executeDate','deliverDate']));
                   <Row gutter={16}>
                     <Col span={24}>
                       <Table
-                      pagination={false}
+                        pagination={false}
                         summary={() => {
                           return (
                             <>
@@ -399,15 +415,17 @@ console.log(form.getFieldsValue(['receiveDate','executeDate','deliverDate']));
                         }}
                       >
                         <Row gutter={32}>
-                          <Col style={{borderRight:'solid LightGray 1px'}} span={12}>
+                          <Col
+                            style={{ borderRight: "solid LightGray 1px" }}
+                            span={8}
+                          >
                             <Title style={{ textAlign: "center" }} level={4}>
                               Khách hàng
                             </Title>
                             <Divider />
                             <Timeline style={{ marginTop: "20px" }}>
-                            <Timeline.Item>
+                              <Timeline.Item>
                                 Mã: {customerOrder?.customerCode}
-                              
                               </Timeline.Item>
                               <Timeline.Item>
                                 Tên: {customerOrder?.name}
@@ -417,13 +435,16 @@ console.log(form.getFieldsValue(['receiveDate','executeDate','deliverDate']));
                               </Timeline.Item>
                             </Timeline>
                           </Col>
-                          <Col span={12}>
+                          <Col
+                            style={{ borderRight: "solid LightGray 1px" }}
+                            span={8}
+                          >
                             <Title style={{ textAlign: "center" }} level={4}>
                               Xe
                             </Title>
                             <Divider />
                             <Timeline style={{ marginTop: "20px" }}>
-                            <Timeline.Item>
+                              <Timeline.Item>
                                 Mã: {carOrder?.carCode}
                               </Timeline.Item>
                               <Timeline.Item>
@@ -431,6 +452,39 @@ console.log(form.getFieldsValue(['receiveDate','executeDate','deliverDate']));
                               </Timeline.Item>
                               <Timeline.Item>
                                 Biển số: {carOrder?.licensePlate}
+                              </Timeline.Item>
+                            </Timeline>
+                          </Col>
+                          <Col span={8}>
+                            <Title style={{ textAlign: "center" }} level={4}>
+                              Thông tin
+                            </Title>
+
+                            <Divider />
+                            <Timeline style={{ marginTop: "20px" }}>
+                              <Timeline.Item>
+                                Thời gian nhận xe dự kiến:{" "}
+                                {moment(
+                                  form.getFieldsValue([
+                                    "receiveDate"
+                                  ]).receiveDate
+                                ).format(formatDate)}{" "}
+                              </Timeline.Item>
+                              <Timeline.Item>
+                                Thời gian sử lý dự kiến:{" "}
+                                {moment(
+                                  form.getFieldsValue([
+                                    "executeDate"
+                                  ]).executeDate
+                                ).format(formatDate)}{" "}
+                              </Timeline.Item>
+                              <Timeline.Item>
+                                Thời gian hoàn thành dự kiến:
+                                {moment(
+                                  form.getFieldsValue([
+                                    "deliverDate"
+                                  ]).deliverDate
+                                ).format(formatDate)}{" "}
                               </Timeline.Item>
                             </Timeline>
                           </Col>
@@ -447,12 +501,12 @@ console.log(form.getFieldsValue(['receiveDate','executeDate','deliverDate']));
       <ModalAddCar
         show={modalCar}
         handleCancel={() => setModalCar(false)}
-        onSuccess={() => handleSuccessCreateCar()}
+        onSuccess={(value) => handleSuccessCreateCar(value)}
       />
       <ModalAddCustomer
         show={modalCustomer}
         handleCancel={() => setModalCustomer(false)}
-        onSuccess={() => handleSuccessCreateCustomer()}
+        onSuccess={(value) => handleSuccessCreateCustomer(value)}
       />
     </>
   );

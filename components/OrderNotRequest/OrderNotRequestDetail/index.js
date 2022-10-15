@@ -129,8 +129,8 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                   </Title>
                   <Divider />
                   <Timeline style={{ marginTop: "20px" }}>
-                    <Timeline.Item>Mã: {order?.carId}</Timeline.Item>
-                    <Timeline.Item>Xe: {order?.carId}</Timeline.Item>
+                    <Timeline.Item>Mã: {order?.carCode}</Timeline.Item>
+                    <Timeline.Item>Xe: {order?.carName}</Timeline.Item>
                     <Timeline.Item>
                       Biển số: {order?.carLicensePlate}
                     </Timeline.Item>

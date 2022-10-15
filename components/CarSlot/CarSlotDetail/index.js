@@ -12,6 +12,7 @@ import {
   Steps,
 } from "antd";
 import {
+  getCarSlotByCode,
   getCarSlotDetail,
   executeCarSlot,
   completeCarSlot,
@@ -46,7 +47,7 @@ const CarSlotDetail = ({ carSlotId }) => {
   const fetchCarSlotDetail = async () => {
     setLoading(true);
     try {
-      const response = await getCarSlotDetail(carSlotId);
+      const response = await getCarSlotByCode(carSlotId);
       setCarSlotDetail(response.data.Data);
       fetchOrderDetail(response.data.Data?.orderId);
       setLoading(false);
@@ -143,7 +144,7 @@ const CarSlotDetail = ({ carSlotId }) => {
             Đã đặt trước
           </Tag>
         );
-      case "ACTIVE":
+      case "IN_USE":
         return (
           <Tag
             style={{
@@ -167,8 +168,22 @@ const CarSlotDetail = ({ carSlotId }) => {
       orderId: data,
     };
     try {
-      const response = await executeCarSlot(carSlotId, dataExecute);
+      const response = await executeCarSlot(carSlotDetail?.id, dataExecute);
       console.log(response);
+      fetchCarSlotDetail();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleCompleteOrder = async () => {
+    let dataComplete = {
+      orderId: order?.id,
+      totalExecuteTime: 30,
+    };
+    try {
+      const response = await completeCarSlot(carSlotDetail?.id, dataComplete);
+      console.log(response);
+      fetchCarSlotDetail();
     } catch (error) {
       console.log(error);
     }
@@ -189,7 +204,7 @@ const CarSlotDetail = ({ carSlotId }) => {
             <Title level={3}>{carSlotDetail?.name}</Title>
             <div> {convertStatusCarSlot(carSlotDetail?.status)}</div>
           </div>
-          {carSlotDetail?.status == "ACTIVE" && (
+          {carSlotDetail?.status == "IN_USE" && (
             <Row>
               <Col span={6}>
                 <div className="carslot-customer content-white">
@@ -207,15 +222,9 @@ const CarSlotDetail = ({ carSlotId }) => {
                     <Timeline.Item>Nhãn hiệu: {car?.brand}</Timeline.Item>
                     <Timeline.Item>Loại xe: {car?.model}</Timeline.Item>
                     <Timeline.Item>Nhiên liệu: {car?.fuel}</Timeline.Item>
-                    {/* <Timeline.Item>
-                    Hộp số: {carSlotDetail?.car?.carModel?.transmission}
-                  </Timeline.Item> */}
                     <Timeline.Item>Chỗ ngồi: {car?.seats}</Timeline.Item>
                     <Timeline.Item>Biển số: {car?.licensePlate}</Timeline.Item>
                     <Timeline.Item>Màu xe: {car?.color}</Timeline.Item>
-                    {/* <Timeline.Item>
-                    Mô tả: {carSlotDetail?.car?.description}
-                  </Timeline.Item> */}
                   </Timeline>
                 </div>
               </Col>
@@ -226,23 +235,24 @@ const CarSlotDetail = ({ carSlotId }) => {
                     style={{ marginBottom: "1rem" }}
                     span={24}
                   >
-                    <Steps
-                      // type="navigation"
-                      // size="small"
-                      current={step}
-                      // onChange={onChange}
-                      className="site-navigation-steps"
-                    >
+                    <Steps current={step} className="site-navigation-steps">
                       <Steps.Step
                         title="Tiếp nhận"
                         status="finish"
-                        description={moment(order?.carReceivedDate).format(formatDate) || ""}
+                        description={
+                          moment(order?.createDate).format(formatDate) ||
+                          ""
+                        }
                       />
                       <Steps.Step
                         title="Xử lý"
                         status="process"
                         icon={<LoadingOutlined />}
-                        description={moment(carSlotDetail?.orderStartExecuting).format(formatDate) || ""}
+                        description={
+                          moment(carSlotDetail?.orderStartExecuting).format(
+                            formatDate
+                          ) || ""
+                        }
                       />
                       <Steps.Step
                         title="Hoàn thành"
@@ -253,6 +263,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                   </Col>
                   <Col span={24}>
                     <Table
+                      pagination={false}
                       dataSource={order?.services}
                       summary={() => {
                         return (
@@ -264,10 +275,8 @@ const CarSlotDetail = ({ carSlotId }) => {
                               <Table.Summary.Cell
                                 index={1}
                               ></Table.Summary.Cell>
-                              <Table.Summary.Cell
-                                index={2}
-                              >
-                                {totalTimeService()||0} phút
+                              <Table.Summary.Cell index={2}>
+                                {totalTimeService() || 0} phút
                               </Table.Summary.Cell>
                               <Table.Summary.Cell index={3}>
                                 {formatMoney(totalPriceService() || 0)}
@@ -315,15 +324,11 @@ const CarSlotDetail = ({ carSlotId }) => {
                       </ColumnGroup>
                     </Table>
                   </Col>
-                </Row>
-                <Row>
-                  <Button
-                    style={{ position: "absolute", right: "20px", bottom: "0" }}
-                    type="primary"
-                    size="large"
-                  >
+                <Col span={24}>
+                  <Button onClick={()=>handleCompleteOrder()} style={{ marginTop: "3rem",position:'absolute',right:'0' }} type="primary"  size="large">
                     Hoàn thành - Xuất hóa đơn
                   </Button>
+                  </Col>
                 </Row>
               </Col>
             </Row>

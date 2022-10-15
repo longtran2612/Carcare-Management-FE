@@ -52,7 +52,7 @@ const CarSlot = () => {
       case "AVAILABLE":
         return <Image height={200} width={200} src={slot_available} />;
       case "IN_USE":
-        return <Image height={200} width={200} src={slot_unavailable} />;
+        return <Image height={200} width={200} src={slot_active} />;
       default:
         break;
     }
@@ -78,7 +78,9 @@ const CarSlot = () => {
                   md={12}
                   lg={8}
                   style={{ marginBottom: "10px" }}
-                  onClick={() => router.push(`/admin?carSlotId=${carSlot.id}`)}
+                  onClick={() =>
+                    router.push(`/admin?carSlotId=${carSlot.carSlotCode}`)
+                  }
                 >
                   <Card
                     headStyle={{
@@ -99,7 +101,7 @@ const CarSlot = () => {
                     title={carSlot.name}
                     bordered={false}
                   >
-                    {carSlot.status == "ACTIVE" ? (
+                    {carSlot.status == "IN_USE" ? (
                       <div className="card-slot">
                         <div>
                           <div
@@ -116,24 +118,16 @@ const CarSlot = () => {
                         <div>
                           <Timeline>
                             <Timeline.Item dot={<UserOutlined />}>
-                              {carSlot?.orderCustomerName} -{" "}
+                              {carSlot?.orderCustomerName}
+                            </Timeline.Item>
+                            <Timeline.Item>
                               {carSlot?.orderCustomerPhoneNumber}
                             </Timeline.Item>
                             <Timeline.Item dot={<CarOutlined />}>
                               {carSlot?.orderCarLicensePlate}
                             </Timeline.Item>
-                            <Timeline.Item>
-                              {carSlot?.serviceProfileList?.map((item) => {
-                                return (
-                                  <>
-                                    {item?.name}
-                                    {", "}
-                                  </>
-                                );
-                              })}
-                            </Timeline.Item>
                             <Timeline.Item dot={<FieldTimeOutlined />}>
-                              Thời gian:{carSlot?.orderTotalEstimateTime} phút
+                              {carSlot?.orderTotalEstimateTime} phút
                             </Timeline.Item>
                           </Timeline>
                         </div>

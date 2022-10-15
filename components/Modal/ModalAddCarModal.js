@@ -45,7 +45,7 @@ const ModalAddCarModel = ({ show, onSuccess, handleCancel }) => {
       const res = await createCarModel(values);
       openNotification("Tạo mẫu xe thành công thành công!", "");
       handleCancel();
-      onSuccess(res.data);
+      onSuccess(res.data.Data);
     } catch (error) {
       console.log(error);
     }

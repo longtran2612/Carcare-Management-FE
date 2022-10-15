@@ -41,7 +41,7 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
       const res = await createCar(values);
       openNotification("Tạo xe thành công thành công!", "");
       handleCancel();
-      onSuccess(res.data);
+      onSuccess(res.data.Data);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +68,7 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
   useEffect(() => {
     getCarModels();
     getUsersData();
-  }, []);
+  }, [show]);
 
   return (
     <>
