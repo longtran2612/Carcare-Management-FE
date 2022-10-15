@@ -28,7 +28,7 @@ import ModalAddCar from "./ModalAddCar";
 const { Title } = Typography;
 const { Option } = Select;
 const { Column, ColumnGroup } = Table;
-const formatDate = "YYYY/MM/DD";
+const formatDate = "HH:mm DD/MM/YYYY";
 
 const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();

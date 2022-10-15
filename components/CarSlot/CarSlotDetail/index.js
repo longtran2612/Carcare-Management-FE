@@ -21,10 +21,13 @@ import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
 import { getCarById } from "pages/api/carAPI";
 import { getOrderById } from "pages/api/orderAPI";
-import { getCustomerByCode } from "pages/api/customerAPI";
+import { getCustomerById } from "pages/api/customerAPI";
 import Loading from "components/Loading";
 import Image from "next/image";
+import moment from "moment";
 import ModalSelectOrder from "components/Modal/ModalSelectOrder";
+
+const formatDate = "HH:mm DD/MM/YYYY";
 
 const CarSlotDetail = ({ carSlotId }) => {
   const { Title } = Typography;
@@ -45,20 +48,18 @@ const CarSlotDetail = ({ carSlotId }) => {
     try {
       const response = await getCarSlotDetail(carSlotId);
       setCarSlotDetail(response.data.Data);
+      fetchOrderDetail(response.data.Data?.orderId);
       setLoading(false);
-      fetchCarDetail();
-      fetchOrderDetail();
-      fetchCustomerDetail();
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
 
-  const fetchCarDetail = async () => {
+  const fetchCarDetail = async (data) => {
     setLoading(true);
     try {
-      const response = await getCarById(carSlotDetail?.carId);
+      const response = await getCarById(data);
       setCar(response.data.Data);
       setLoading(false);
     } catch (error) {
@@ -67,10 +68,10 @@ const CarSlotDetail = ({ carSlotId }) => {
     }
   };
 
-  const fetchCustomerDetail = async () => {
+  const fetchCustomerDetail = async (data) => {
     setLoading(true);
     try {
-      const response = await getCustomerByCode(carSlotDetail?.customerCode);
+      const response = await getCustomerById(data);
       setCustomer(response.data.Data);
       setLoading(false);
     } catch (error) {
@@ -79,11 +80,13 @@ const CarSlotDetail = ({ carSlotId }) => {
     }
   };
 
-  const fetchOrderDetail = async () => {
+  const fetchOrderDetail = async (data) => {
     setLoading(true);
     try {
-      const response = await getOrderById(carSlotDetail?.orderId);
+      const response = await getOrderById(data);
       setOrder(response.data.Data);
+      fetchCarDetail(response.data.Data.carId);
+      fetchCustomerDetail(response.data.Data.customerId);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -92,14 +95,14 @@ const CarSlotDetail = ({ carSlotId }) => {
   };
 
   const totalPriceService = () => {
-    return carSlotDetail?.serviceProfileList?.reduce((total, cur) => {
-      return (total += cur.price.price);
+    return order?.services?.reduce((total, cur) => {
+      return (total += cur?.servicePrice?.price);
     }, 0);
   };
 
   const totalTimeService = () => {
-    return selectedRows.reduce((total, cur) => {
-      return (total += cur.estimateTime);
+    return order?.services?.reduce((total, cur) => {
+      return (total += cur?.estimateTime);
     }, 0);
   };
 
@@ -171,6 +174,10 @@ const CarSlotDetail = ({ carSlotId }) => {
     }
   };
 
+  console.log("customer", customer);
+  console.log("order", order);
+  console.log("car", car);
+
   return (
     <>
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
@@ -188,39 +195,24 @@ const CarSlotDetail = ({ carSlotId }) => {
                 <div className="carslot-customer content-white">
                   <Title level={4}>Thông tin khách hàng</Title>
                   <Timeline>
+                    <Timeline.Item>Mã: {customer?.customerCode}</Timeline.Item>
+                    <Timeline.Item>Tên: {customer?.name}</Timeline.Item>
                     <Timeline.Item>
-                      Tên: {carSlotDetail?.car?.user?.name}
-                    </Timeline.Item>
-                    <Timeline.Item>
-                      Số điện thoại: {carSlotDetail?.car?.user?.phone}
+                      Số điện thoại: {customer?.phoneNumber}
                     </Timeline.Item>
                   </Timeline>
                   <Title level={4}>Thông tin xe</Title>
                   <Timeline>
-                    <Timeline.Item>
-                      Tên xe: {carSlotDetail?.car?.carModel?.name}
-                    </Timeline.Item>
-                    <Timeline.Item>
-                      Nhãn hiệu: {carSlotDetail?.car?.carModel?.brand}
-                    </Timeline.Item>
-                    <Timeline.Item>
-                      Loại xe: {carSlotDetail?.car?.carModel?.model}
-                    </Timeline.Item>
-                    <Timeline.Item>
-                      Nhiên liệu: {carSlotDetail?.car?.carModel?.fuel}
-                    </Timeline.Item>
+                    <Timeline.Item>Tên xe: {car?.name}</Timeline.Item>
+                    <Timeline.Item>Nhãn hiệu: {car?.brand}</Timeline.Item>
+                    <Timeline.Item>Loại xe: {car?.model}</Timeline.Item>
+                    <Timeline.Item>Nhiên liệu: {car?.fuel}</Timeline.Item>
                     {/* <Timeline.Item>
                     Hộp số: {carSlotDetail?.car?.carModel?.transmission}
                   </Timeline.Item> */}
-                    <Timeline.Item>
-                      Chỗ ngồi: {carSlotDetail?.car?.carModel?.seats}
-                    </Timeline.Item>
-                    <Timeline.Item>
-                      Biển số: {carSlotDetail?.car?.licensePlate}
-                    </Timeline.Item>
-                    <Timeline.Item>
-                      Màu xe: {carSlotDetail?.car?.color}
-                    </Timeline.Item>
+                    <Timeline.Item>Chỗ ngồi: {car?.seats}</Timeline.Item>
+                    <Timeline.Item>Biển số: {car?.licensePlate}</Timeline.Item>
+                    <Timeline.Item>Màu xe: {car?.color}</Timeline.Item>
                     {/* <Timeline.Item>
                     Mô tả: {carSlotDetail?.car?.description}
                   </Timeline.Item> */}
@@ -244,13 +236,13 @@ const CarSlotDetail = ({ carSlotId }) => {
                       <Steps.Step
                         title="Tiếp nhận"
                         status="finish"
-                        description="Thời gian tiếp nhận yêu cầu"
+                        description={moment(order?.carReceivedDate).format(formatDate) || ""}
                       />
                       <Steps.Step
                         title="Xử lý"
                         status="process"
                         icon={<LoadingOutlined />}
-                        description="Thời gian sử lý yêu cầu"
+                        description={moment(carSlotDetail?.orderStartExecuting).format(formatDate) || ""}
                       />
                       <Steps.Step
                         title="Hoàn thành"
@@ -261,7 +253,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                   </Col>
                   <Col span={24}>
                     <Table
-                      dataSource={carSlotDetail?.serviceProfileList}
+                      dataSource={order?.services}
                       summary={() => {
                         return (
                           <>
@@ -274,7 +266,9 @@ const CarSlotDetail = ({ carSlotId }) => {
                               ></Table.Summary.Cell>
                               <Table.Summary.Cell
                                 index={2}
-                              ></Table.Summary.Cell>
+                              >
+                                {totalTimeService()||0} phút
+                              </Table.Summary.Cell>
                               <Table.Summary.Cell index={3}>
                                 {formatMoney(totalPriceService() || 0)}
                               </Table.Summary.Cell>
@@ -298,13 +292,24 @@ const CarSlotDetail = ({ carSlotId }) => {
                           dataIndex="name"
                           key="name"
                         />
-                        <Column title="Thời gian sử lý"></Column>
+                        <Column
+                          dataIndex="estimateTime"
+                          key="estimateTime"
+                          render={(text, record) => {
+                            return <div>{record.estimateTime} phút</div>;
+                          }}
+                          title="Thời gian sử lý"
+                        ></Column>
                         <Column
                           title="Giá dịch vụ"
                           dataIndex="price"
                           key="price"
                           render={(text, record, dataIndex) => {
-                            return <div>{formatMoney(record.price.price)}</div>;
+                            return (
+                              <div>
+                                {formatMoney(record?.servicePrice?.price || 0)}
+                              </div>
+                            );
                           }}
                         />
                       </ColumnGroup>
@@ -336,30 +341,6 @@ const CarSlotDetail = ({ carSlotId }) => {
                 />
               </Col>
             </Row>
-
-            // <Row style={{display:'flex',justifyContent:"center",alignItems:'center',marginTop:'50px'}}>
-            //   <Card  headStyle={{
-
-            //           textAlign: "center",
-            //           fontSize:'20px'
-            //         }}
-            //         bodyStyle={{ height: "35vh", borderRadius: "5px" }}
-            //         hoverable
-            //         title="Sử lý yêu cầu chăm sóc xe mới"
-            //         bordered={false}
-            //       >
-            //     <div
-            //       style={{
-            //         display: "flex",
-            //         justifyContent: "center",
-            //         alignContent: "center",
-            //       }}
-
-            //     >
-            //        <Image height={200} width={200} src={slot_active} />;
-            //     </div>
-            //   </Card>
-            // </Row>
           )}
         </div>
       </div>

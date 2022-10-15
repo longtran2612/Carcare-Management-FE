@@ -8,7 +8,11 @@ import slot_active from "public/images/slot_active.png";
 import slot_available from "public/images/slot_available.png";
 import slot_unavailable from "public/images/slot_unavailable.png";
 import Loading from "components/Loading";
-import { UserOutlined, CarOutlined,FieldTimeOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  CarOutlined,
+  FieldTimeOutlined,
+} from "@ant-design/icons";
 
 const CarSlot = () => {
   const router = useRouter();
@@ -64,12 +68,15 @@ const CarSlot = () => {
         <CarSlotDetail carSlotId={carSlotId} />
       ) : (
         <div className="site-card-border-less-wrapper">
-          <Row gutter={[8, 8]}>
+          <Row gutter={[16, 16]}>
             {carSlots?.map((carSlot) => {
               return (
                 <Col
                   key={carSlot.id}
-                  span={8}
+                  xs={24}
+                  sm={24}
+                  md={12}
+                  lg={8}
                   style={{ marginBottom: "10px" }}
                   onClick={() => router.push(`/admin?carSlotId=${carSlot.id}`)}
                 >
@@ -77,16 +84,17 @@ const CarSlot = () => {
                     headStyle={{
                       backgroundColor: "#8CB3F1",
                       color: "white",
-                      height:"50px",
+                      height: "50px",
                       textAlign: "center",
                       fontSize: "20px",
                     }}
-                    style={{        
+                    style={{
                       margin: "10px",
                       borderRadius: "20px",
-                      overflow: "hidden"
+                      overflow: "hidden",
+                      cursor: "pointer",
+                      height: "300px",
                     }}
-               
                     hoverable
                     title={carSlot.name}
                     bordered={false}
@@ -108,23 +116,24 @@ const CarSlot = () => {
                         <div>
                           <Timeline>
                             <Timeline.Item dot={<UserOutlined />}>
-                              {carSlot?.car?.user?.name} -{" "}
-                              {carSlot?.car?.user?.phone}
+                              {carSlot?.orderCustomerName} -{" "}
+                              {carSlot?.orderCustomerPhoneNumber}
                             </Timeline.Item>
                             <Timeline.Item dot={<CarOutlined />}>
-                              {carSlot?.car?.name}  {carSlot?.car?.color}  {carSlot?.car?.licensePlate}
+                              {carSlot?.orderCarLicensePlate}
                             </Timeline.Item>
                             <Timeline.Item>
                               {carSlot?.serviceProfileList?.map((item) => {
                                 return (
                                   <>
-                                    {item?.name}{", "}
+                                    {item?.name}
+                                    {", "}
                                   </>
                                 );
                               })}
                             </Timeline.Item>
                             <Timeline.Item dot={<FieldTimeOutlined />}>
-                              Thời gian ước tính:
+                              Thời gian:{carSlot?.orderTotalEstimateTime} phút
                             </Timeline.Item>
                           </Timeline>
                         </div>

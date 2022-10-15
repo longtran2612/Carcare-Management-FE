@@ -28,6 +28,8 @@ a {
   /* align-self: start; */
   flex-basis: 50%;
   padding-left: 1rem;
+  align-items: center;
+  padding-top: 0.5rem;
   
   /* text-align: right; */
 }
