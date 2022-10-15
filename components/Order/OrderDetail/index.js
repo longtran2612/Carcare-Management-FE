@@ -23,10 +23,13 @@ const formatDate = "HH:mm DD/MM/YYYY";
 
 export const OrderDetail = ({ orderRequestId }) => {
   const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getOrder = async () => {
+    setLoading(true);
     const res = await getOrderById(orderRequestId);
     setOrder(res.data.Data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -162,6 +165,7 @@ export const OrderDetail = ({ orderRequestId }) => {
           </Col>
         </Row>
       </Col>
+      <Loading loading={loading} />
     </>
   );
 };

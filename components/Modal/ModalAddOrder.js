@@ -43,7 +43,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   const [carOrder, setCarOrder] = useState(null);
 
   const [services, setServices] = useState([]);
-  const [serviceIds, setServiceIds] = useState(0);
+  const [serviceIds, setServiceIds] = useState([]);
 
   const [modalCar, setModalCar] = useState(false);
   const [modalCustomer, setModalCustomer] = useState(false);
@@ -142,11 +142,24 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
       const res = await createOrder(dataCreateOrder);
       openNotification("Tạo danh mục dịch vụ thành công!", "");
       handleCancel();
+      handleReset();
       onSuccess(res.data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleReset = () => {
+    form.resetFields();
+    setCustomerSelected(null);
+    setCarSelected(null);
+    setCarOrder(null);
+    setCustomerOrder(null);
+    setServices([]);
+    setServiceIds([]);
+    setCurrent(0);
+  };
+
 
   console.log(
     form.getFieldsValue(["receiveDate", "executeDate", "deliverDate"])

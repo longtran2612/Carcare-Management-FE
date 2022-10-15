@@ -68,7 +68,7 @@ const CarSlot = () => {
         <CarSlotDetail carSlotId={carSlotId} />
       ) : (
         <div className="site-card-border-less-wrapper">
-          <Row gutter={[16, 16]}>
+          <Row gutter={[16]}>
             {carSlots?.map((carSlot) => {
               return (
                 <Col

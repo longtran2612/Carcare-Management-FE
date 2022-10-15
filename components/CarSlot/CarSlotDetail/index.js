@@ -333,7 +333,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                   </Col>
                 <Col span={24}>
                   <Button onClick={()=>handleCompleteOrder()} style={{ marginTop: "3rem",position:'absolute',right:'0' }} type="primary"  size="large">
-                    Hoàn thành - Xuất hóa đơn
+                    Hoàn thành xử lý
                   </Button>
                   </Col>
                 </Row>

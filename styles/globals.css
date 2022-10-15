@@ -39,7 +39,7 @@ a {
 }
 
 .content{
-  background: linear-gradient(to top right, #f0e4f4, #e7ebf4);
+  background: linear-gradient(to top right, #f0e7f3, #cfd7ea);
   border-radius: 5px;
   min-height: 110vh;
   overflow: initial;
