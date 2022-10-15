@@ -34,12 +34,12 @@ export const OrderNotRequestDetail = ({ orderId }) => {
   }, []);
   const totalPriceService = () => {
     return order?.services.reduce((total, cur) => {
-      return (total += cur.servicePrice.price);
+      return (total += cur?.servicePrice?.price);
     }, 0);
   };
   const totalTimeService = () => {
     return order?.services.reduce((total, cur) => {
-      return (total += cur.estimateTime);
+      return (total += cur?.estimateTime);
     }, 0);
   };
 
@@ -95,7 +95,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                   dataIndex="price"
                   key="price"
                   render={(text, record, dataIndex) => {
-                    return <div>{formatMoney(record.servicePrice.price)}</div>;
+                    return <div>{formatMoney(record?.servicePrice?.price)}</div>;
                   }}
                 />
               </ColumnGroup>
@@ -136,7 +136,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                     </Timeline.Item>
                   </Timeline>
                 </Col>
-                <Col style={{ borderRight: "solid LightGray 1px" }} span={8}>
+                <Col  span={8}>
                   <Title style={{ textAlign: "center" }} level={4}>
                     Thông tin
                   </Title>

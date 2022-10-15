@@ -4,10 +4,10 @@ const openNotification = (message = "", description = "") => {
   notification.open({
     message: message,
     description: description,
-    icon:  <SmileOutlined style={{ color: '#440C37' }} />,
+    icon:  <SmileOutlined style={{ color: '#A31983' }} />,
   
     style: {
-     backgroundColor: "#C0DDF1",
+     backgroundColor: "#D2E8F6",
       color: "white",
       // textAlign: "center",
       borderRadius: "10px",

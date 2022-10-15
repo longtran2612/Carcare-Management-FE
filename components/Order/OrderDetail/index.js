@@ -34,12 +34,12 @@ export const OrderDetail = ({ orderRequestId }) => {
   }, []);
   const totalPriceService = () => {
     return order?.services.reduce((total, cur) => {
-      return (total += cur.servicePrice.price);
+      return (total += cur?.servicePrice?.price);
     }, 0);
   };
   const totalTimeService = () => {
     return order?.services.reduce((total, cur) => {
-      return (total += cur.estimateTime);
+      return (total += cur?.estimateTime);
     }, 0);
   };
 
@@ -129,14 +129,14 @@ export const OrderDetail = ({ orderRequestId }) => {
                   </Title>
                   <Divider />
                   <Timeline style={{ marginTop: "20px" }}>
-                    <Timeline.Item>Mã: {order?.carId}</Timeline.Item>
-                    <Timeline.Item>Xe: {order?.carId}</Timeline.Item>
+                    <Timeline.Item>Mã: {order?.carCode}</Timeline.Item>
+                    <Timeline.Item>Xe: {order?.carName}</Timeline.Item>
                     <Timeline.Item>
                       Biển số: {order?.carLicensePlate}
                     </Timeline.Item>
                   </Timeline>
                 </Col>
-                <Col style={{ borderRight: "solid LightGray 1px" }} span={8}>
+                <Col  span={8}>
                   <Title style={{ textAlign: "center" }} level={4}>
                     Thông tin
                   </Title>

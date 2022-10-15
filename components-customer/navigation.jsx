@@ -113,7 +113,7 @@ export const CustomerNavigation = () => {
             <span className="icon-bar"></span>{" "}
           </button>
           <a className="navbar-brand page-scroll">
-            <Link href="/">
+            <Link href="/home">
               <Image src={logo} width={120} height={90} />
             </Link>
             {/* VLCARCARE */}

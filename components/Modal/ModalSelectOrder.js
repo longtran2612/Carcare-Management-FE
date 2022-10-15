@@ -216,7 +216,7 @@ function ModalSelectOrder({ onSelectOrder }) {
       sort: [
         {
           key: "createDate",
-          asc: false,
+          asc: true,
         },
       ],
     };

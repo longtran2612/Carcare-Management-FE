@@ -23,12 +23,12 @@ const MyContent = ({ keyMenu }) => {
         return <CategoryPage />;
       case "user":
         return <UserPage />;
-      case "user-group":
-        return <UserPage />;
+      // case "user-group":
+      //   return <UserPage />;
       case "car":
         return <CarPage />;
-      case "car-model":
-        return <CarModelPage />;
+      // case "car-model":
+      //   return <CarModelPage />;
       case "price":
         return <PriceHeaderPage />;
       case "car-slot":

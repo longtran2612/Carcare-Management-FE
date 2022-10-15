@@ -27,6 +27,7 @@ import Loading from "components/Loading";
 import Image from "next/image";
 import moment from "moment";
 import ModalSelectOrder from "components/Modal/ModalSelectOrder";
+import { openNotification } from "utils/notification";
 
 const formatDate = "HH:mm DD/MM/YYYY";
 
@@ -164,28 +165,34 @@ const CarSlotDetail = ({ carSlotId }) => {
   console.log(carSlotDetail?.status);
 
   const handleExecuteOrder = async (data) => {
+    setLoading(true);
     let dataExecute = {
       orderId: data,
     };
     try {
       const response = await executeCarSlot(carSlotDetail?.id, dataExecute);
-      console.log(response);
+      openNotification("Xử lý yêu cầu thành công!", "");
       fetchCarSlotDetail();
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   const handleCompleteOrder = async () => {
+    setLoading(true);
     let dataComplete = {
       orderId: order?.id,
       totalExecuteTime: 30,
     };
     try {
       const response = await completeCarSlot(carSlotDetail?.id, dataComplete);
-      console.log(response);
+      openNotification("Hoàn thành xử lý thành công!", "");
       fetchCarSlotDetail();
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 

@@ -60,7 +60,7 @@ const CarSlot = () => {
 
   useEffect(() => {
     fetchCarSlots();
-  }, []);
+  }, [carSlotId]);
 
   return (
     <>
