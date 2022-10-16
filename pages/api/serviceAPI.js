@@ -82,9 +82,21 @@ const searchService = (params) => {
       throw err;
     });
 };
-
+const disableService = (id) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/services/disable-service/${id}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
 export {
+  disableService,
   getServices,
   getServiceById,
   getServiceByCode,

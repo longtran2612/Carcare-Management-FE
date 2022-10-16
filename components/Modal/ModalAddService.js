@@ -165,9 +165,11 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 name="type"
               >
                 <Select>
-                  <Select.Option value="Làm sạch">Làm sạch</Select.Option>
-                  <Select.Option value="Tân trang">Tân trang</Select.Option>
-                </Select>
+                    <Select.Option value="HOT">HOT</Select.Option>
+                    <Select.Option value="LIKE">Yêu thích</Select.Option>
+                    <Select.Option value="NEW">Mới</Select.Option>
+                    <Select.Option value="NEW">Thông thường</Select.Option>
+                  </Select>
               </Form.Item>
             </Col>
             <Col span={8} >
@@ -185,7 +187,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
             </Col>
             <Col span={8}>
               <Form.Item
-                label="Thời gian dự kiến"
+                label="Thời gian xử lý"
                 rules={[
                   {
                     required: true,

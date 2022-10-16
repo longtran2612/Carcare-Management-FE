@@ -21,6 +21,7 @@ import { openNotification } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
+import { disableService } from "pages/api/serviceAPI";
 import Loading from "components/Loading";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 
@@ -69,6 +70,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         estimateTime: response.data.Data.estimateTime,
         status: response.data.Data.status,
         statusName: response.data.Data.statusName,
+        price: response.data.Data.servicePrice?.price,
       });
       setLoading(false);
     } catch (error) {
@@ -93,8 +95,10 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         categoryId: values.categoryId,
         estimateTime: values.estimateTime,
         imageUrl: imageS3||  serviceDetail?.image,
-      
       };
+      if(values.statusName ==="INACTIVE"){
+        disableService(serviceId);
+      }
       const res = await updateService(body, serviceDetail.id);
       if (res.data.StatusCode == "200") {
         openNotification("Thành công!", "Cập nhật dịch vụ thành công");
@@ -210,28 +214,13 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                 >
                   <Select>
                     <Select.Option value="HOT">HOT</Select.Option>
-                    <Select.Option value="LIKE">LIKE</Select.Option>
+                    <Select.Option value="LIKE">Yêu thích</Select.Option>
+                    <Select.Option value="NEW">Mới</Select.Option>
+                    <Select.Option value="NEW">Thông thường</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={6} >
-                <Form.Item
-                  label="Trạng thái"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                  name="statusName"
-                >
-                  <Select>
-                    <Select.Option value="ACTIVE">Hoạt động</Select.Option>
-                    <Select.Option value="INACTIVE">
-                      Không hoạt động
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col>
+            
               <Col span={6} >
                 <Form.Item
                   label="Danh mục dịch vụ"
@@ -267,15 +256,23 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   <InputNumber/>
                 </Form.Item>
               </Col>
-              <Col span={23}>
+              <Col span={6} >
                 <Form.Item
-                  label="Mô tả"
-                  name="description"
+                  label="Giá"
                   rules={[
                     {
                       required: true,
                     },
                   ]}
+                  name="price"
+                >
+                  <InputNumber disabled='true'/>
+                </Form.Item>
+              </Col>
+              <Col span={23}>
+                <Form.Item
+                  label="Mô tả"
+                  name="description"
                 >
                   <TextArea rows={4} />
                 </Form.Item>
