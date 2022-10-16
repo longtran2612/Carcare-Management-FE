@@ -168,7 +168,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                     <Select.Option value="HOT">HOT</Select.Option>
                     <Select.Option value="LIKE">Yêu thích</Select.Option>
                     <Select.Option value="NEW">Mới</Select.Option>
-                    <Select.Option value="NEW">Thông thường</Select.Option>
+                    <Select.Option value="NORMAL">Thông thường</Select.Option>
                   </Select>
               </Form.Item>
             </Col>
