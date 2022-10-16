@@ -43,7 +43,7 @@ const items = [
   getItem("Bảng giá", "4", <DollarOutlined />, [getItem("Bảng giá", "price")]),
   getItem("Xe", "5", <CarOutlined />, [
     getItem("Xe khách hàng", "car"),
-    getItem("Mẫu xe", "car-model"),
+    // getItem("Mẫu xe", "car-model"),
   ]),
   getItem("Người dùng", "6", <UserOutlined />, [
     getItem("Người dùng", "user"),

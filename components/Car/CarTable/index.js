@@ -136,9 +136,12 @@ function CarTable({}) {
           String(record.color).toLowerCase().includes(value.toLowerCase()) ||
           String(record.brand).toLowerCase().includes(value.toLowerCase()) ||
           String(record.model).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.licensePlate).toLowerCase().includes(value.toLowerCase())  ||
-          String(record.customerName).toLowerCase().includes(value.toLowerCase())
-
+          String(record.licensePlate)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
+          String(record.customerName)
+            .toLowerCase()
+            .includes(value.toLowerCase())
         );
       },
     },
@@ -153,6 +156,19 @@ function CarTable({}) {
         </Tooltip>
       ),
     },
+
+    {
+      title: "Biển số xe",
+      dataIndex: "licensePlate",
+      key: "licensePlate",
+      ...getColumnSearchProps("licensePlate"),
+    },
+    {
+      title: "Sở hữu",
+      dataIndex: "customerName",
+      key: "customerName",
+      ...getColumnSearchProps("customerName"),
+    },
     {
       title: "Thương hiệu",
       dataIndex: "brand",
@@ -166,22 +182,40 @@ function CarTable({}) {
       ...getColumnSearchProps("model"),
     },
     {
-      title: "Biển số xe",
-      dataIndex: "licensePlate",
-      key: "licensePlate",
-      ...getColumnSearchProps("licensePlate"),
-    },
-    {
       title: "Màu xe",
       dataIndex: "color",
       key: "color",
       ...getColumnSearchProps("color"),
     },
     {
-      title: "Sở hữu",
-      dataIndex: "customerName",
-      key: "customerName",
-      ...getColumnSearchProps("customerName"),
+      title: "Động cơ",
+      dataIndex: "engine",
+      key: "engine",
+      ...getColumnSearchProps("engine"),
+    },
+    {
+      title: "Truyền động",
+      dataIndex: "transmission",
+      key: "transmission",
+      ...getColumnSearchProps("transmission"),
+    },
+    {
+      title: "Chỗ ngồi",
+      dataIndex: "seats",
+      key: "seats",
+      ...getColumnSearchProps("seats"),
+    },
+    {
+      title: "Nhiên liệu",
+      dataIndex: "fuel",
+      key: "fuel",
+      ...getColumnSearchProps("fuel"),
+    },
+    {
+      title: "Màu xe",
+      dataIndex: "color",
+      key: "color",
+      ...getColumnSearchProps("color"),
     },
   ];
 
@@ -196,16 +230,6 @@ function CarTable({}) {
       setLoading(false);
     }
   };
-  // const handleRemoveService = async () => {
-  //   try {
-  //     const res = await removeServiceApi(id);
-  //     if (res.data.StatusCode == 200) {
-  //       handleGetServices();
-  //       setModalQuestion(false);
-  //       setId(null);
-  //     }
-  //   } catch (error) {}
-  // };
 
   useEffect(() => {
     handleGetCar();
@@ -221,7 +245,6 @@ function CarTable({}) {
         <CarDetail carId={carId} onUpdateCar={handleGetCar} />
       ) : (
         <div>
-         
           <Row style={{ margin: "20px 0px" }}>
             <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
@@ -237,7 +260,11 @@ function CarTable({}) {
               </Button>
             </Col>
             <Col span={11}>
-              <Button style={{float:"right"}} type="primary" onClick={() => setModalCar(true)}>
+              <Button
+                style={{ float: "right" }}
+                type="primary"
+                onClick={() => setModalCar(true)}
+              >
                 Thêm Xe
               </Button>
             </Col>
@@ -252,6 +279,7 @@ function CarTable({}) {
             }}
             scroll={{
               y: 450,
+              x: 2000,
             }}
             onRow={(record, rowIndex) => {
               return {

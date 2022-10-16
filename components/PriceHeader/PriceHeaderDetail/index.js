@@ -249,6 +249,9 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
 
   return (
     <>
+          <Button type="link" size="small" onClick={() => router.push("/admin")}>
+        Trở lại
+      </Button>
       <Row gutter={[16,16]}>
         <Col span={24}>
           <Form

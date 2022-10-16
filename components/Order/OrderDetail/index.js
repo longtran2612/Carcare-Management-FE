@@ -9,6 +9,7 @@ import {
   Divider,
   Timeline,
   Table,
+  Button,
   Tag,
 } from "antd";
 import { getOrderById } from "pages/api/orderAPI";
@@ -49,6 +50,9 @@ export const OrderDetail = ({ orderRequestId }) => {
   console.log("order", order);
   return (
     <>
+          <Button type="link" size="small" onClick={() => router.push("/admin")}>
+        Trở lại
+      </Button>
       <Col span={24}>
         <Title level={4}>Thông tin yêu cầu</Title>
         <Row gutter={16}>

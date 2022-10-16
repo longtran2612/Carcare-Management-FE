@@ -103,6 +103,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
   // };
   return (
     <>
+          <Button type="link" size="small" onClick={() => router.push("/admin")}>
+        Trở lại
+      </Button>
       <Row gutter={[16,16]}>
         <Col span={6}>
           <Image width={300} height={250} src={serviceDetail.imageUrl} />

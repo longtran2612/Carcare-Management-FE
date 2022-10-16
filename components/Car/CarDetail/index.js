@@ -12,9 +12,9 @@ import {
   InputNumber,
 } from "antd";
 import { useRouter } from "next/router";
+import { uploadImage } from "pages/api/uploadAPI";
 import { openNotification } from "utils/notification";
-import { getCarByCode,updateCar } from "pages/api/carAPI";
-import { getUsers } from "pages/api/userAPI";
+import { getCarByCode, updateCar } from "pages/api/carAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
@@ -30,12 +30,12 @@ const CarDetail = ({ carId, onUpdateCar }) => {
   const [carModels, setCarModels] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [imageS3, setImageS3] = useState(null);
   const [listFiles, setListFiles] = useState({
     images: [],
     imageBlob: [],
   });
   const [modalQuestion, setModalQuestion] = useState(false);
-  console.log(carDetail);
   const fetchcarDetail = async () => {
     setLoading(true);
     try {
@@ -74,7 +74,6 @@ const CarDetail = ({ carId, onUpdateCar }) => {
     }
   }, [carId]);
 
-
   const onFinish = async (values) => {
     try {
       let body = {
@@ -89,8 +88,9 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         seats: values.seats,
         fuel: values.fuel,
         year: values.year,
-        imageUrl: values.imageUrl,
+        imageUrl: imageS3||  carDetail?.imageUrl,
       };
+      console.log(body);
       const res = await updateCar(body, carDetail?.id);
       if (res.data.StatusCode == "200") {
         openNotification("Thành công", "Cập nhật thành công");
@@ -100,10 +100,9 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       console.log(error);
     }
   };
-  // handle upload image
+   // handle upload image
 
-  const handleFileChosen = (info) => {
-    console.log(info);
+   const handleFileChosen = (info) => {
     const result = info.fileList.map((file) => {
       const blob = new Blob([file.originFileObj], {
         type: file.type,
@@ -120,8 +119,11 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       listFiles.images.map((image) => {
         formData.append("files", image.originFileObj);
       });
-
-      const response = await uploadImagesUser(formData);
+      const response = await uploadImage(formData);
+      setImageS3(response.data.Data[0]);
+      setCarDetail((prevState) => {
+        return { ...prevState, image: response.data.Data[0] };
+      });
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
@@ -131,6 +133,9 @@ const CarDetail = ({ carId, onUpdateCar }) => {
 
   return (
     <>
+      <Button type="link" size="small" onClick={() => router.push("/admin")}>
+        Trở lại
+      </Button>
       <Row gutter={[4, 4]}>
         <Col span={6}>
           <Image width={300} height={250} src={carDetail.imageUrl} />

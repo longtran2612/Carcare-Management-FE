@@ -15,8 +15,8 @@ import { openNotification } from "utils/notification";
 import {
   getUserById,
   updateUserById,
-  uploadImagesUser,
 } from "pages/api/userAPI";
+import { uploadImage } from "pages/api/uploadAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
@@ -66,6 +66,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
     }
   }, [userId]);
 
+
   const onFinish = async (values) => {
     try {
       let body = {
@@ -105,7 +106,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       listFiles.images.map((image) => {
         formData.append("files", image.originFileObj);
       });
-      const response = await uploadImagesUser(formData);
+      const response = await uploadImage(formData);
       setImageS3(response.data.Data[0]);
       setUserDetail((prevState) => {
         return { ...prevState, image: response.data.Data[0] };
