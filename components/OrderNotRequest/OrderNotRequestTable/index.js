@@ -16,6 +16,7 @@ import { getAllExecuteOrder } from "pages/api/orderAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
+import { formatMoney } from "utils/format";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
@@ -186,6 +187,13 @@ function OrderNotRequestTable({}) {
       dataIndex: "totalEstimateTime",
       key: "totalEstimateTime",
       ...getColumnSearchProps("statusName"),
+      render: (totalEstimateTime) => {
+        return (
+          <div>
+            {totalEstimateTime ? `${totalEstimateTime} phút` : "Chưa có"}
+          </div>
+        );
+      }
     },
 
     {
@@ -249,6 +257,9 @@ function OrderNotRequestTable({}) {
       title: "Thời gian xử lí",
       dataIndex: "estimateTime",
       key: "estimateTime",
+      render:(text,record,dataIndex)=>{
+        return <div>{record.estimateTime} phút</div>
+      }
     },
     {
       title: "Giá",
@@ -260,7 +271,7 @@ function OrderNotRequestTable({}) {
             {servicePrice === null ? (
               <Tag color={"red"}>{"Chưa có giá"}</Tag>
             ) : (
-              <div>{servicePrice.price}</div>
+              <div>{formatMoney(servicePrice.price)}</div>
             )}
           </>
         );
