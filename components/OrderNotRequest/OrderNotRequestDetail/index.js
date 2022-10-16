@@ -16,7 +16,7 @@ import { getOrderById } from "pages/api/orderAPI";
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
 import moment from "moment";
-
+import { useRouter } from "next/router";
 const { Title } = Typography;
 const { Option } = Select;
 const { Column, ColumnGroup } = Table;
@@ -25,6 +25,7 @@ const formatDate = "HH:mm DD/MM/YYYY";
 export const OrderNotRequestDetail = ({ orderId }) => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const getOrder = async () => {
     setLoading(true);
     const res = await getOrderById(orderId);
@@ -149,17 +150,21 @@ export const OrderNotRequestDetail = ({ orderId }) => {
 
                   <Divider />
                   <Timeline style={{ marginTop: "20px" }}>
-                    <Timeline.Item>
-                      Thời gian nhận xe dự kiến:{" "}
-                      {moment(order?.estimateReceiveDate).format(formatDate)}{" "}
+                  <Timeline.Item>
+                      Tổng thời gian sử lý :
+                      {order?.totalExecuteTime} phút
                     </Timeline.Item>
                     <Timeline.Item>
-                      Thời gian sử lý dự kiến:{" "}
-                      {moment(order?.estimateExecuteDate).format(formatDate)}
+                      Thời gian nhận xe :{" "}
+                      {order?.carReceivedDate ? moment(order?.carReceivedDate).format(formatDate) :""}
                     </Timeline.Item>
                     <Timeline.Item>
-                      Thời gian hoàn thành dự kiến:
-                      {moment(order?.estimateDeliverDate).format(formatDate)}
+                      Thời gian sử lý :{" "}
+                      {moment(order?.carExecutingDate).format(formatDate)}
+                    </Timeline.Item>
+                    <Timeline.Item>
+                      Thời gian hoàn thành :
+                      {moment(order?.carExecutedDate).format(formatDate)}
                     </Timeline.Item>
                   </Timeline>
                 </Col>

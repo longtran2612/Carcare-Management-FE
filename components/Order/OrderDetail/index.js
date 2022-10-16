@@ -16,7 +16,7 @@ import { getOrderById } from "pages/api/orderAPI";
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
 import moment from "moment";
-
+import { useRouter } from "next/router";
 const { Title } = Typography;
 const { Option } = Select;
 const { Column, ColumnGroup } = Table;
@@ -25,6 +25,7 @@ const formatDate = "HH:mm DD/MM/YYYY";
 export const OrderDetail = ({ orderRequestId }) => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const getOrder = async () => {
     setLoading(true);

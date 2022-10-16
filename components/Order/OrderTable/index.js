@@ -33,6 +33,7 @@ function OrderTable({}) {
   const { orderRequestId } = router.query;
   const [loading, setLoading] = useState(false);
 
+
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
