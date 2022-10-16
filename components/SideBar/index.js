@@ -46,7 +46,7 @@ const items = [
     // getItem("Mẫu xe", "car-model"),
   ]),
   getItem("Người dùng", "6", <UserOutlined />, [
-    getItem("Người dùng", "user"),
+    getItem("Nhân viên", "user"),
     getItem("Khách hàng", "customer"),
     // getItem("Nhóm người dùng", "user-group"),
   ]),

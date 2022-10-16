@@ -12,7 +12,7 @@ const UserPage = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item href="">
           <UserOutlined />
-          Quản lý người dùng
+          Quản lý nhân viên
         </Breadcrumb.Item>
       </Breadcrumb>
 
