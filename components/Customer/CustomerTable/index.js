@@ -20,6 +20,7 @@ import {
   import CustomerDetail from "components/Customer/CustomerDetail";
   import Loading from "components/Loading";
   import Highlighter from "react-highlight-words";
+  import { openNotification } from "utils/notification";
   
   function CustomerTable({}) {
     const [customers, setCustomers] = useState([]);
@@ -236,7 +237,7 @@ import {
         setLoading(false);
       } catch (err) {
         setLoading(false);
-        console.log(err);
+        openNotification(err.response.data.message[0]);
       }
     };
     useEffect(() => {

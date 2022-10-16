@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import CarDetail from "../CarDetail";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
+import { openNotification } from "utils/notification";
 
 function CarTable({}) {
   const [cars, setCars] = useState([]);
@@ -226,7 +227,7 @@ function CarTable({}) {
       setCars(res.data.Data);
       setLoading(false);
     } catch (err) {
-      console.log(err);
+      openNotification(err.response.data.message[0]);
       setLoading(false);
     }
   };
@@ -235,7 +236,7 @@ function CarTable({}) {
     handleGetCar();
   }, []);
 
-  const handleSuccessCreateCar = (data) => {
+  const handleSuccessCreateCar = () => {
     handleGetCar();
   };
 

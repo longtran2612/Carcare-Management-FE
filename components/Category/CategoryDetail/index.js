@@ -39,7 +39,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(error.response.data);
+      console.log(error);
     }
   };
 
@@ -62,7 +62,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
         onUpdateCategory();
       }
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
   return (

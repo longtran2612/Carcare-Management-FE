@@ -1,20 +1,14 @@
 import { Table, Tag, Button, Input, Row, Col, Space, Select } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { SearchOutlined, ClearOutlined } from "@ant-design/icons";
-import {
-  getServices,
-  searchService,
-} from "pages/api/serviceAPI";
-import {
-  getCategories,
-} from "pages/api/categoryAPI";
+import { getServices, searchService } from "pages/api/serviceAPI";
+import { getCategories } from "pages/api/categoryAPI";
 import ModalAddService from "components/Modal/ModalAddService";
 import { useRouter } from "next/router";
 import ServiceDetail from "../ServiceDetail";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
-
 
 function ServiceTable({}) {
   const [services, setServices] = useState([]);
@@ -190,7 +184,9 @@ function ServiceTable({}) {
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.serviceCode).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.serviceCode)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.type).toLowerCase().includes(value.toLowerCase()) ||
           String(record.status).toLowerCase().includes(value.toLowerCase()) ||
@@ -220,7 +216,7 @@ function ServiceTable({}) {
       ...getColumnSearchProps("estimateTime"),
       render: (estimateTime) => {
         return <div>{estimateTime} phút</div>;
-      }
+      },
     },
     {
       title: "Giá",
@@ -299,7 +295,11 @@ function ServiceTable({}) {
               </Button>
             </Col>
             <Col span={11}>
-              <Button style={{float:"right"}} type="primary" onClick={() => setModalService(true)}>
+              <Button
+                style={{ float: "right" }}
+                type="primary"
+                onClick={() => setModalService(true)}
+              >
                 Thêm dịch vụ
               </Button>
             </Col>

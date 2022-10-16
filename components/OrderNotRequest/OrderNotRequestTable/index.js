@@ -20,6 +20,7 @@ import { formatMoney } from "utils/format";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
+import { openNotification } from "utils/notification";
 
 import { OrderNotRequestDetail } from "../OrderNotRequestDetail";
 const { Title } = Typography;
@@ -229,7 +230,7 @@ function OrderNotRequestTable({}) {
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
+      openNotification("error", "Lỗi", "Không thể lấy dữ liệu");
       setLoading(false);
     }
   };

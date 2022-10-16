@@ -14,6 +14,7 @@ import OtpInput from "react-otp-input";
 const { Title } = Typography;
 import logo from "public/images/logo.png";
 import Image from "next/image";
+import { openNotification } from "utils/notification";
 
 export default function ForgotPassword() {
   const dispatch = useDispatch();
@@ -49,7 +50,7 @@ export default function ForgotPassword() {
       setStep(1);
       setLoading(false);
     } catch (err) {
-      message.error(err.message);
+      openNotification(err.response.data.message[0]);
       setLoading(false);
     }
   };

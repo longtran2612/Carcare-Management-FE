@@ -8,6 +8,7 @@ import slot_active from "public/images/slot_active.png";
 import slot_available from "public/images/slot_available.png";
 import slot_unavailable from "public/images/slot_unavailable.png";
 import Loading from "components/Loading";
+import { openNotification } from "utils/notification";
 import {
   UserOutlined,
   CarOutlined,
@@ -28,23 +29,11 @@ const CarSlot = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      openNotification(err.response.data.message[0]);
     }
   };
   console.log("carSlots", carSlots);
 
-  const convertStatusCarSlot = (status) => {
-    switch (status) {
-      case "ACTIVE":
-        return <Tag color="green">Chưa sử dụng</Tag>;
-      case "AVAILABLE":
-        return <Tag color="red">Đã đặt trước</Tag>;
-      case "IN_USE":
-        return <Tag color="blue">Đang sử dụng</Tag>;
-      default:
-        break;
-    }
-  };
   const convertStatusCarSlotImg = (status) => {
     switch (status) {
       case "ACTIVE":

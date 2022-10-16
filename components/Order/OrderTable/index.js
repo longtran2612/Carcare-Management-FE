@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { getOrders } from "pages/api/orderAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
+import { openNotification } from "utils/notification";
 
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
@@ -236,7 +237,7 @@ function OrderTable({}) {
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
       setLoading(false);
     }
   };

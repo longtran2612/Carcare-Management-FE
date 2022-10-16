@@ -47,7 +47,7 @@ const ModalAddCarModel = ({ show, onSuccess, handleCancel }) => {
       handleCancel();
       onSuccess(res.data.Data);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
 

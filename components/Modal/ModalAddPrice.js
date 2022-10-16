@@ -24,7 +24,7 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
     let priceCreateData = {
       name: serviceSelected.name,
       currency: currency,
-      type:'New',
+      type: "New",
       price: values.price,
       priceHeaderId: priceHeaderId,
       serviceId: values.serviceId,
@@ -36,7 +36,7 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
       handleCancel();
       onSuccess(res.data.Data);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
 
@@ -116,7 +116,7 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
                 name="serviceId"
               >
                 <Select
-                onChange={handleChangedService}
+                  onChange={handleChangedService}
                   showSearch
                   placeholder="Chọn dịch vụ"
                   optionFilterProp="children"
@@ -136,7 +136,7 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12} >
+            <Col span={12}>
               <Form.Item
                 label="Giá"
                 name="price"

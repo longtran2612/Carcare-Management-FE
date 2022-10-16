@@ -42,7 +42,8 @@ export default function LoginPage() {
       })
       .catch((err) => {
         setLoading(false);
-        message.error(err.response.data.message);
+        message.error(err.response.data.message[0]);
+        message.error("Tài khoản hoặc mật khẩu không chính xác");
       });
   };
 

@@ -25,6 +25,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
 
+
 const UserDetail = ({ userId, onUpdateUser }) => {
   const router = useRouter();
   const [form] = Form.useForm();
@@ -84,7 +85,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         onUpdateUser();
       }
     } catch (error) {
-      console.log(error);
+       openNotification(error.response.data.message[0]);
     }
   };
   // handle upload image
@@ -114,7 +115,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
 

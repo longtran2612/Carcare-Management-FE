@@ -23,6 +23,7 @@ import Loading from "components/Loading";
 const { Title } = Typography;
 import logo from "public/images/logo.png";
 import Image from "next/image";
+import { openNotification } from "utils/notification";
 
 export default function RegistryPage() {
   const router = useRouter();
@@ -42,6 +43,7 @@ export default function RegistryPage() {
       })
       .catch((err) => {
         setLoading(false);
+        openNotification(err.response.data.message[0]);
         message.error("Đăng ký thất bại! Số điện thoại đã tồn tại");
         message.error("Vui lòng nhập số điện thoại khác");
       });

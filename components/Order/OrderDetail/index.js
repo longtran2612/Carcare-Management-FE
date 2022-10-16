@@ -17,6 +17,8 @@ import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
 import moment from "moment";
 import { useRouter } from "next/router";
+import { openNotification } from "utils/notification";
+
 const { Title } = Typography;
 const { Option } = Select;
 const { Column, ColumnGroup } = Table;
@@ -29,9 +31,14 @@ export const OrderDetail = ({ orderRequestId }) => {
 
   const getOrder = async () => {
     setLoading(true);
-    const res = await getOrderById(orderRequestId);
-    setOrder(res.data.Data);
-    setLoading(false);
+    try {
+      const res = await getOrderById(orderRequestId);
+      setOrder(res.data.Data);
+      setLoading(false);
+    } catch (error) {
+      openNotification(error.response.data.message[0]);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -51,7 +58,7 @@ export const OrderDetail = ({ orderRequestId }) => {
   console.log("order", order);
   return (
     <>
-          <Button type="link" size="small" onClick={() => router.push("/admin")}>
+      <Button type="link" size="small" onClick={() => router.push("/admin")}>
         Trở lại
       </Button>
       <Col span={24}>
@@ -144,7 +151,7 @@ export const OrderDetail = ({ orderRequestId }) => {
                     </Timeline.Item>
                   </Timeline>
                 </Col>
-                <Col  span={8}>
+                <Col span={8}>
                   <Title style={{ textAlign: "center" }} level={4}>
                     Thông tin
                   </Title>

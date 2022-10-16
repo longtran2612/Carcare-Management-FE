@@ -17,6 +17,8 @@ import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
 import moment from "moment";
 import { useRouter } from "next/router";
+import { openNotification } from "utils/notification";
+
 const { Title } = Typography;
 const { Option } = Select;
 const { Column, ColumnGroup } = Table;
@@ -27,10 +29,15 @@ export const OrderNotRequestDetail = ({ orderId }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const getOrder = async () => {
-    setLoading(true);
-    const res = await getOrderById(orderId);
-    setOrder(res.data.Data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const res = await getOrderById(orderId);
+      setOrder(res.data.Data);
+      setLoading(false);
+    } catch (error) {
+      openNotification(error.response.data.message[0]);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -50,7 +57,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
   console.log("order", order);
   return (
     <>
-          <Button type="link" size="small" onClick={() => router.push("/admin")}>
+      <Button type="link" size="small" onClick={() => router.push("/admin")}>
         Trở lại
       </Button>
       <Col span={24}>
@@ -102,7 +109,9 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                   dataIndex="price"
                   key="price"
                   render={(text, record, dataIndex) => {
-                    return <div>{formatMoney(record?.servicePrice?.price)}</div>;
+                    return (
+                      <div>{formatMoney(record?.servicePrice?.price)}</div>
+                    );
                   }}
                 />
               </ColumnGroup>
@@ -143,20 +152,21 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                     </Timeline.Item>
                   </Timeline>
                 </Col>
-                <Col  span={8}>
+                <Col span={8}>
                   <Title style={{ textAlign: "center" }} level={4}>
                     Thông tin
                   </Title>
 
                   <Divider />
                   <Timeline style={{ marginTop: "20px" }}>
-                  <Timeline.Item>
-                      Tổng thời gian sử lý :
-                      {order?.totalExecuteTime} phút
+                    <Timeline.Item>
+                      Tổng thời gian sử lý :{order?.totalExecuteTime} phút
                     </Timeline.Item>
                     <Timeline.Item>
                       Thời gian nhận xe :{" "}
-                      {order?.carReceivedDate ? moment(order?.carReceivedDate).format(formatDate) :""}
+                      {order?.carReceivedDate
+                        ? moment(order?.carReceivedDate).format(formatDate)
+                        : ""}
                     </Timeline.Item>
                     <Timeline.Item>
                       Thời gian sử lý :{" "}

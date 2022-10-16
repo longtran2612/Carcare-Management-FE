@@ -36,14 +36,7 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
       fullname: values.fullname,
       email: values.email,
       phone: values.phone,
-      address:
-        provinceSelected +
-        ", " +
-        districtSelected +
-        ", " +
-        wardSelected +
-        ", " +
-        values.address,
+      address:  values.address + ", " + wardSelected + ", " + districtSelected + ", " + provinceSelected,
     };
     console.log(dataUser);
 
@@ -54,7 +47,7 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
       handleCancel();
       onSuccess(res.data);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
   useEffect(() => {

@@ -135,7 +135,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
       handleReset();
       onSuccess(res.data);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
 

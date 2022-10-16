@@ -62,7 +62,7 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(error.response.Message);
+      openNotification(error.response.data.message[0]);
     }
   };
 
@@ -89,7 +89,7 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
         onUpdateCustomer();
       }
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
   // handle upload image
@@ -119,7 +119,7 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
 

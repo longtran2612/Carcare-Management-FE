@@ -22,7 +22,7 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
       handleCancel();
       onSuccess(res.data);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
 

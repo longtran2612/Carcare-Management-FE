@@ -175,7 +175,7 @@ const CarSlotDetail = ({ carSlotId }) => {
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      openNotification(err.response.data.message[0]);
       setLoading(false);
     }
   };
@@ -191,7 +191,7 @@ const CarSlotDetail = ({ carSlotId }) => {
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      openNotification(err.response.data.message[0]);
       setLoading(false);
     }
   };

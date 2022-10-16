@@ -16,7 +16,7 @@ import { openNotification } from "utils/notification";
 import { getPricesByHeader } from "pages/api/priceAPI";
 import {
   getPriceHeaderById,
-  updatePriceHeader
+  updatePriceHeader,
 } from "pages/api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -138,7 +138,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(error.response.data);
+      openNotification(error.response.data.message[0]);
     }
   };
 
@@ -185,9 +185,13 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.serviceCode).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.serviceCode)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.statusName).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.statusName)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.price).toLowerCase().includes(value.toLowerCase())
         );
       },
@@ -203,7 +207,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       dataIndex: "price",
       key: "price",
       ...getColumnSearchProps("price"),
-      render:(price) =>{
+      render: (price) => {
         return <div>{formatMoney(price)}</div>;
       },
     },
@@ -224,35 +228,36 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   ];
 
   const onFinish = async (values) => {
+    loading(true);
+    let body = {
+      id: priceHeaderDetail.id,
+      type: values.type,
+      name: values.name,
+      description: values.description,
+      categoryId: values.categoryId,
+      status: values.status,
+    };
     try {
-      let body = {
-        id: priceHeaderDetail.id,
-        type: values.type,
-        name: values.name,
-        description: values.description,
-        categoryId: values.categoryId,
-        status: values.status,
-      };
       const res = await updatePriceHeader(body, priceHeaderDetail.id);
-      if (res.data.StatusCode == "200") {
-        openNotification("Cập nhật dịch vụ thành công!", "");
-        onUpdatePriceHeader();
-      }
+      openNotification("Cập nhật dịch vụ thành công!", "");
+      onUpdatePriceHeader();
+      setLoading(false);
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      openNotification(error.response.data.message[0]);
     }
   };
 
-  const handleSuccessCreatePrice = (data) => {
+  const handleSuccessCreatePrice = () => {
     fetchPrice();
   };
 
   return (
     <>
-          <Button type="link" size="small" onClick={() => router.push("/admin")}>
+      <Button type="link" size="small" onClick={() => router.push("/admin")}>
         Trở lại
       </Button>
-      <Row gutter={[16,16]}>
+      <Row gutter={[16, 16]}>
         <Col span={24}>
           <Form
             form={form}
@@ -260,8 +265,8 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row gutter={[32,8]}>
-              <Col span={6} >
+            <Row gutter={[32, 8]}>
+              <Col span={6}>
                 <Form.Item
                   label="Tên bảng giá"
                   name="name"

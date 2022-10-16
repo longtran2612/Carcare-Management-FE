@@ -180,32 +180,20 @@ function PriceHeaderTable({}) {
       getPriceHeaders().then((res) => {
         if (res.data.StatusCode == 200) {
           setPriceHeaders(res.data.Data);
-        } else {
-          message.error(res.data.message);
-        }
+        } 
         setLoading(false);
       });
     } catch (err) {
       setLoading(false);
-      console.log(err);
+      openNotification(err.response.data.message[0]);
     }
   };
-  // const handleRemoveService = async () => {
-  //   try {
-  //     const res = await removeServiceApi(id);
-  //     if (res.data.StatusCode == 200) {
-  //       handleGetServices();
-  //       setModalQuestion(false);
-  //       setId(null);
-  //     }
-  //   } catch (error) {}
-  // };
 
   useEffect(() => {
     handleGetPriceHeaders();
   }, []);
 
-  const handleSuccessCreatePriceHeader = (data) => {
+  const handleSuccessCreatePriceHeader = () => {
     handleGetPriceHeaders();
   };
 

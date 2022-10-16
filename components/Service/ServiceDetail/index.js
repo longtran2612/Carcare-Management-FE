@@ -73,7 +73,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(error.response.data);
+      openNotification(error.response.data.message[0]);
     }
   };
 
@@ -91,6 +91,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         name: values.name,
         description: values.description,
         categoryId: values.categoryId,
+        estimateTime: values.estimateTime,
         imageUrl: imageS3||  serviceDetail?.image,
       
       };
@@ -100,7 +101,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         onUpdateService();
       }
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
    // handle upload image
@@ -130,7 +131,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
   return (

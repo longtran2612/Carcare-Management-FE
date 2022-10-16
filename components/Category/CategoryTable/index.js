@@ -9,6 +9,7 @@ import CategoryDetail from "../CategoryDetail";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
+import { openNotification } from "utils/notification";
 
 function CategoryTable({}) {
   const [categories, setCategories] = useState([]);
@@ -121,7 +122,7 @@ function CategoryTable({}) {
       });
     } catch (err) {
       setLoading(false);
-      console.log(err);
+     console.log(err);
     }
   };
 

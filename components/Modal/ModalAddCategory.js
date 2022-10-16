@@ -23,11 +23,11 @@ const ModalAddCategory = ({ show, onSuccess, handleCancel }) => {
   const onFinish = async (values) => {
     try {
       const res = await createCategory(values);
-      openNotification("Thành công", "Tạo mơi danh mục thành công");
+      openNotification("Thành công", "Tạo mới danh mục thành công");
       handleCancel();
       onSuccess(res.data.Data);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
 

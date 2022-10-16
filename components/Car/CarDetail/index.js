@@ -63,8 +63,8 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       });
       setLoading(false);
     } catch (error) {
+      openNotification(error.response.data.message[0]);
       setLoading(false);
-      openNotification(error.response.Message);
     }
   };
 
@@ -97,7 +97,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         onUpdateCar();
       }
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
    // handle upload image
@@ -127,7 +127,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
 

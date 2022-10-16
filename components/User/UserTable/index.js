@@ -239,14 +239,14 @@ function UserTable({}) {
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      console.log(err);
+      openNotification(err.response.data.message[0]);
     }
   };
   useEffect(() => {
     handleUsers();
   }, []);
 
-  const handleSuccessCreteUser = (data) => {
+  const handleSuccessCreteUser = () => {
     handleUsers();
   };
 

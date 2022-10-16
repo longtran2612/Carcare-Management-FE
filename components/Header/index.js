@@ -36,12 +36,12 @@ const MyHeader = () => {
           router.push("/login");
         } else {
           if (res.status == 422) {
-            message.error(res.data.message);
+            openNotification(err.response.data.message[0]);
           }
         }
       })
       .catch((err) => {
-        message.error(err.message);
+        openNotification(err.response.data.message[0]);
       });
   };
   const headerStyle = {
