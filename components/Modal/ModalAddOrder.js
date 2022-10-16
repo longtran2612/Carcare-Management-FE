@@ -36,8 +36,6 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
   const [customers, setCustomers] = useState([]);
   const [cars, setCars] = useState([]);
-  const [customerSelected, setCustomerSelected] = useState(null);
-  const [carSelected, setCarSelected] = useState(null);
 
   const [customerOrder, setCustomerOrder] = useState(null);
   const [carOrder, setCarOrder] = useState(null);
@@ -60,7 +58,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   };
   const handleFetchCar = async () => {
     try {
-      const res = await getCarbyCustomerId(customerSelected);
+      const res = await getCarbyCustomerId(form.getFieldValue("customerId"));
       setCars(res.data.Data);
     } catch (error) {
       console.log(error);
@@ -71,25 +69,21 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     if (show) {
       handleFetchCustomer();
     }
-    if (customerSelected) {
-      handleFetchCar();
-    }
-
+      handleFetchCar();  
     if (current == 2) {
       handleGetData();
     }
-  }, [show, current, customerSelected]);
+  }, [show, current, form]);
 
-  const handelChangeUser = async (value) => {
-    setCustomerSelected(value);
+  const handelChangeUser = async () => {
     handleFetchCar();
   };
 
   const handleGetData = async () => {
-    const resCustomer = await getCustomerById(customerSelected);
+    const resCustomer = await getCustomerById(form.getFieldValue("customerId"));
     setCustomerOrder(resCustomer.data.Data);
     console.log(resCustomer.data.Data);
-    const resCar = await getCarById(carSelected);
+    const resCar = await getCarById(form.getFieldValue("carId"));
     setCarOrder(resCar.data.Data);
     console.log(resCar.data.Data);
   };
@@ -125,18 +119,14 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   };
 
   const onFinish = async () => {
-    const values = form.getFieldsValue([
-      "receiveDate",
-      "executeDate",
-      "deliverDate",
-    ]);
+
     const dataCreateOrder = {
-      carId: carSelected,
-      customerId: customerSelected,
+      carId: form.getFieldValue("carId"),
+      customerId: form.getFieldValue("customerId"),
       serviceIds: services.map((item) => item.id),
-      receiveDate: values.receiveDate,
-      executeDate: values.executeDate,
-      deliverDate: values.deliverDate,
+      receiveDate: form.getFieldValue("receiveDate"),
+      executeDate:  form.getFieldValue("executeDate"),
+      deliverDate:  form.getFieldValue("deliverDate"),
     };
     try {
       const res = await createOrder(dataCreateOrder);
@@ -151,8 +141,6 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
 
   const handleReset = () => {
     form.resetFields();
-    setCustomerSelected(null);
-    setCarSelected(null);
     setCarOrder(null);
     setCustomerOrder(null);
     setServices([]);
@@ -290,7 +278,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                           .toLowerCase()
                           .localeCompare(optionB.children.toLowerCase())
                       }
-                      onChange={(value) => setCarSelected(value)}
+                    
                     >
                       {cars.map((item) => (
                         <Option value={item.id}>{item.name}</Option>

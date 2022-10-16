@@ -8,18 +8,21 @@ import {
   Select,
   Input,
   InputNumber,
+  Upload,
 } from "antd";
 import { useRouter } from "next/router";
 import {
   getServiceById,
   updateService,
 } from "pages/api/serviceAPI";
+import {UploadOutlined } from "@ant-design/icons";
+import { uploadImage } from "pages/api/uploadAPI";
 import { openNotification } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import Loading from "components/Loading";
-
+import ModalUploadImage from "components/Modal/ModalUploadImage";
 
 
 const ServiceDetail = ({ serviceId, onUpdateService }) => {
@@ -30,6 +33,13 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
   const [categoryServices, setCategoryServices] = useState({});
   const [modalQuestion, setModalQuestion] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [modalUpload, setModalUpload] = useState(false);
+  const [listFiles, setListFiles] = useState({
+    images: [],
+    imageBlob: [],
+  });
+  const [imageS3, setImageS3] = useState(null);
 
   const fetchCategoryService = async () => {
     setLoading(true);
@@ -81,26 +91,48 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         name: values.name,
         description: values.description,
         categoryId: values.categoryId,
-        imageUrl: values.imageUrl,
-        status: values.status,
+        imageUrl: imageS3||  serviceDetail?.image,
+      
       };
       const res = await updateService(body, serviceDetail.id);
       if (res.data.StatusCode == "200") {
-        openNotification("Cập nhật dịch vụ thành công!", "");
+        openNotification("Thành công!", "Cập nhật dịch vụ thành công");
         onUpdateService();
       }
     } catch (error) {
       console.log(error);
     }
   };
-  // const handleRemoveService = async () => {
-  //   try {
-  //     await re(serviceDetail.id);
-  //     router.push("/admin");
-  //     onUpdateService();
-  //     setModalQuestion(false);
-  //   } catch (error) {}
-  // };
+   // handle upload image
+
+   const handleFileChosen = (info) => {
+    const result = info.fileList.map((file) => {
+      const blob = new Blob([file.originFileObj], {
+        type: file.type,
+      });
+      return (window.URL || window.webkitURL).createObjectURL(blob);
+    });
+    setListFiles({ images: info.fileList, imageBlob: result });
+    setModalUpload(true);
+  };
+
+  const handleUploadImages = async () => {
+    try {
+      const formData = new FormData();
+      listFiles.images.map((image) => {
+        formData.append("files", image.originFileObj);
+      });
+      const response = await uploadImage(formData);
+      setImageS3(response.data.Data[0]);
+      setServiceDetail((prevState) => {
+        return { ...prevState, image: response.data.Data[0] };
+      });
+      setListFiles({ images: [], imageBlob: [] });
+      setModalUpload(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
           <Button type="link" size="small" onClick={() => router.push("/admin")}>
@@ -116,14 +148,14 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
               justifyContent: "center",
             }}
           >
-            {/* <Upload
+             <Upload
               onChange={(info) => handleFileChosen(info)}
               multiple
               showUploadList={false}
               fileList={listFiles.imageBlob}
             >
-              <Button icon={<UploadOutlined />}>Tải hình lên</Button>
-            </Upload> */}
+              <Button icon={<UploadOutlined />}>Thay đổi ảnh đại diện</Button>
+            </Upload>
           </div>
         </Col>
         <Col span={18}>
@@ -284,12 +316,12 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
           </Form>
         </Col>
       </Row>
-      {/* <ModalQuestion
-        title="Bạn có chắc chắn muốn xóa dịch vụ này không?"
-        visible={modalQuestion}
-        handleCancel={() => setModalQuestion(false)}
-        handleOk={() => handleRemoveService()}
-      /> */}
+      <ModalUploadImage
+        visible={modalUpload}
+        handleCancel={() => setModalUpload(false)}
+        handleOk={() => handleUploadImages()}
+        listImage={listFiles.imageBlob}
+      />
       <Loading loading={loading} />
     </>
   );

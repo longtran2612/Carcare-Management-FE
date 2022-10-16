@@ -80,7 +80,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       const res = await updateUserById(body, userId);
       setUserDetail(res.data.Data);
       if (res.data.StatusCode == "200") {
-        openNotification("Cập nhật người dùng thành công!", "");
+        openNotification("Thành công!", "Cập nhật người dùng thành công");
         onUpdateUser();
       }
     } catch (error) {

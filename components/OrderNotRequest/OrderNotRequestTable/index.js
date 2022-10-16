@@ -190,8 +190,8 @@ function OrderNotRequestTable({}) {
       render: (totalEstimateTime) => {
         return (
           <div>
-            {totalEstimateTime ? `${totalEstimateTime} phút` : "Chưa có"}
-          </div>
+            {totalEstimateTime} phút
+          </div> 
         );
       }
     },
@@ -213,7 +213,7 @@ function OrderNotRequestTable({}) {
       render: (text, record, dataIndex) => {
         return (
           <div>
-            <Tag color="blue">{record.statusName}</Tag>
+            <Tag color="green">{record.statusName}</Tag>
           </div>
         );
       },
