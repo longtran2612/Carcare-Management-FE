@@ -32,7 +32,7 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
     try {
       console.log(priceCreateData);
       const res = await createPrice(priceCreateData);
-      openNotification("Tạo giá thành công thành công!", "");
+      openNotification("Thành công!", "tạo mới giá thành công");
       handleCancel();
       onSuccess(res.data.Data);
     } catch (error) {

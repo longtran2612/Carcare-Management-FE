@@ -38,7 +38,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
     try {
       console.log(dataCreate);
       const res = await createService(dataCreate);
-      openNotification("Tạo dịch vụ thành công!", "");
+      openNotification("Thành công!", "Tạo mới dịch vụ thành công");
       handleCancel();
       onSuccess(res.data);
     } catch (error) {

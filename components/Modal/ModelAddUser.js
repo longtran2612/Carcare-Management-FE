@@ -50,7 +50,7 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
     try {
       const res = await createUser(values);
       console.log(res);
-      openNotification("Tạo người dùng thành công!", "");
+      openNotification("Thành công!", "Tạo mới người dùng thành công");
       handleCancel();
       onSuccess(res.data);
     } catch (error) {

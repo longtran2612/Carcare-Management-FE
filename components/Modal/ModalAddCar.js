@@ -39,7 +39,7 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
   const onFinish = async (values) => {
     try {
       const res = await createCar(values);
-      openNotification("Tạo xe thành công thành công!", "");
+      openNotification("Thành công", "Thêm mới xe thành công");
       handleCancel();
       onSuccess(res.data.Data);
     } catch (error) {

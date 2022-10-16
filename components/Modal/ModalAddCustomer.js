@@ -57,7 +57,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
     try {
       const res = await createCustomer(dataUser);
       console.log(res);
-      openNotification("Tạo người dùng thành công!", "");
+      openNotification("Thành công", "Tạo mới khách hàng thành công");
       handleCancel();
       onSuccess(res.data.Data);
     } catch (error) {

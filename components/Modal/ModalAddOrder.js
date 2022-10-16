@@ -140,7 +140,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     };
     try {
       const res = await createOrder(dataCreateOrder);
-      openNotification("Tạo danh mục dịch vụ thành công!", "");
+      openNotification("Thành công!", "Tạo yêu cầu thành công");
       handleCancel();
       handleReset();
       onSuccess(res.data);
@@ -305,7 +305,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Ngày nhận xe"
+                    label="Nhập ngày nhận xe dự kiến"
                     name="receiveDate"
                     rules={[
                       {
@@ -321,7 +321,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Ngày xử lý"
+                    label="Nhập ngày xử lý dự kiến"
                     name="executeDate"
                     rules={[
                       {
@@ -337,7 +337,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Ngày giao xe"
+                    label="Nhập ngày giao xe dự kiến"
                     name="deliverDate"
                     rules={[
                       {
