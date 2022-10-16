@@ -84,7 +84,7 @@ export const CustomerNavigation = () => {
           </Link>
         </Menu.Item>
         <Menu.Item key="1">
-          <Link href="/register">
+          <Link href="/registry">
             <a>
               <HighlightOutlined /> Đăng ký
             </a>
