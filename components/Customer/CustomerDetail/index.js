@@ -24,7 +24,7 @@ import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
-const formatDate = "HH:mm DD/MM/YYYY";
+const formatDate = "DD/MM/YYYY";
 
 const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
   const router = useRouter();
@@ -205,7 +205,7 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
                       required: true,
                     },
                   ]}
-                  name="status"
+                  name="statusName"
                 >
                   <Select>
                     <Select.Option value="ACTIVE">Hoạt động</Select.Option>

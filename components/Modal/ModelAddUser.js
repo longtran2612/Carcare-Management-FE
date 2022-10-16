@@ -51,12 +51,23 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
     }
   };
   useEffect(() => {
-    const fetchProvinces = async () => {
-      const provinces = getProvinces();
-      setProvinces(provinces);
-    };
     fetchProvinces();
+    // fetchDistricts();
+    // fetchWards();
   }, []);
+
+  const fetchProvinces = async () => {
+    const provinces = getProvinces();
+    setProvinces(provinces);
+  };
+  // const fetchDistricts = async () => {
+  //   const districts = getDistrictsByProvinceCode(value);
+  //   setDistricts(districts);
+  // };
+  // const fetchWards = async () => {
+  //   const ward = getWardsByDistrictCode(value);
+  //   setWards(ward);
+  // };
 
   const handleProvinceChange = async (value) => {
     const districts = getDistrictsByProvinceCode(value);
