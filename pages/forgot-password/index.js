@@ -10,6 +10,7 @@ import Loading from "components/Loading";
 import { auth } from "config/firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { changePassword, checkExistPhone } from "pages/api/authAPI";
+import {LockOutlined} from "@ant-design/icons";
 import OtpInput from "react-otp-input";
 const { Title } = Typography;
 import logo from "public/images/logo.png";
@@ -36,8 +37,9 @@ export default function ForgotPassword() {
       return res.data;
     });
     console.log("checkExist:", checkExist);
-    if (checkExist.data === false) {
+    if (checkExist.Data === false) {
       message.error("Số điện thoại chưa được đăng ký");
+      setLoading(false);
       return;
     }
     const number = "+84" + values.phone;
@@ -151,11 +153,11 @@ export default function ForgotPassword() {
         }}
       >
         <Col
-          span={18}
-          xs={18}
-          sm={18}
-          md={18}
-          lg={10}
+          span={20}
+          xs={20}
+          sm={20}
+          md={20}
+          lg={12}
           className="background-login-white"
           style={{
            
@@ -310,24 +312,34 @@ export default function ForgotPassword() {
                 },
                 ]}
               >
-                <Input.Password placeholder="Nhập vào mật khẩu mới" />
+                <Input.Password     prefix={<LockOutlined className="site-form-item-icon" />} placeholder="Nhập vào mật khẩu mới" />
               </Form.Item>
               <Form.Item
-                label="Nhập lại mật khẩu"
-                name="confirmPassword"
-                rules={[
-                  {
-                    pattern: new RegExp(
-                      "^([0-9a-zA-Z]*[.!@$%^&(){}[]:;<>,.?/~_+-=|]*).{6,32}$"
-                    ),
-                    required: true,
-                    message:
-                      "Mật khẩu không hợp lệ! Mật khẩu bao gồm 6-32 ký tự bao gồm chữ, số và ký tự đặc biệt",
+              label=" Xác nhận"
+              name="confirmPassword"
+              dependencies={['password']}
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message:
+                    "Mật khẩu không hợp lệ! Mật khẩu bao gồm 6-32 ký tự bao gồm chữ, số và ký tự đặc biệt",
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Xác nhận mật khẩu phải trùng nhau!'));
                   },
-                ]}
-              >
-                <Input.Password placeholder="Nhập vào mật khẩu mới" />
-              </Form.Item>
+                }),
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                placeholder="Xác nhận mật khẩu"
+              />
+            </Form.Item>
 
               <Button
                 className="btn-login"
@@ -351,7 +363,7 @@ export default function ForgotPassword() {
           <p className="text-center">
             Đã có tài khoản? <Link href="/login">Đăng nhập</Link>
           </p>
-          Đăng ký tài khoản mới?<Link href="/forgot-password"> Đăng ký</Link>
+          Đăng ký tài khoản mới?<Link href="/registry"> Đăng ký</Link>
         </Col>
       </Row>
       

@@ -24,7 +24,7 @@ import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
-const formatDate = "YYYY/MM/DD";
+const formatDate = "HH:mm DD/MM/YYYY";
 
 const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
   const router = useRouter();

@@ -138,6 +138,7 @@ export default function RegistryPage() {
             <Form.Item
               label="Mật khẩu"
               name="password"
+              hasFeedback
               rules={[
                 {
                   pattern: new RegExp(
@@ -157,15 +158,22 @@ export default function RegistryPage() {
             <Form.Item
               label=" Xác nhận"
               name="confirmPassword"
+              dependencies={['password']}
+              hasFeedback
               rules={[
                 {
-                  pattern: new RegExp(
-                    "^([0-9a-zA-Z]*[.!@$%^&(){}[]:;<>,.?/~_+-=|]*).{6,32}$"
-                  ),
                   required: true,
                   message:
                     "Mật khẩu không hợp lệ! Mật khẩu bao gồm 6-32 ký tự bao gồm chữ, số và ký tự đặc biệt",
                 },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Xác nhận mật khẩu phải trùng nhau!'));
+                  },
+                }),
               ]}
             >
               <Input.Password
