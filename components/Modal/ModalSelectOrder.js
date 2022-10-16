@@ -13,6 +13,7 @@ import {
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { getOrders } from "pages/api/orderAPI";
+import { formatMoney } from "utils/format";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
@@ -178,6 +179,14 @@ function ModalSelectOrder({ onSelectOrder }) {
       dataIndex: "totalEstimateTime",
       key: "totalEstimateTime",
       ...getColumnSearchProps("statusName"),
+      render: (totalEstimateTime) => {
+        return (
+          <div>
+            {totalEstimateTime ? `${totalEstimateTime} phút` : "Chưa có"}
+          </div>
+        );
+      }
+      
     },
 
     {
@@ -254,6 +263,13 @@ function ModalSelectOrder({ onSelectOrder }) {
       title: "Thời gian xử lí",
       dataIndex: "estimateTime",
       key: "estimateTime",
+      render: (estimateTime) => {
+        return (
+          <div>
+            {estimateTime} phút
+          </div>
+        );
+      }
     },
     {
       title: "Giá",
@@ -265,7 +281,7 @@ function ModalSelectOrder({ onSelectOrder }) {
             {servicePrice === null ? (
               <Tag color={"red"}>{"Chưa có giá"}</Tag>
             ) : (
-              <div>{servicePrice.price}</div>
+              <div>{formatMoney(servicePrice.price)}</div>
             )}
           </>
         );
@@ -326,11 +342,15 @@ function ModalSelectOrder({ onSelectOrder }) {
             <Row gutter={4}>
               <Col span={12}>
                 <Table
+
                   bordered
                   title={() => "Dịch vụ"}
                   dataSource={record.services}
                   columns={columnService}
                   pagination={false}
+                  scroll={{
+                    y: 200,
+                  }}
                 ></Table>
               </Col>
               <Col span={12}>

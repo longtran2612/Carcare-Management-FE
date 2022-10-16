@@ -197,11 +197,14 @@ import {
         title: "Giới tính",
         dataIndex: "gender",
         key: "gender",
+        with: 100,
         ...getColumnSearchProps("gender"),
         render: (gender) => (
-          <Tooltip placement="topLeft" title={gender}>
-            {gender}
-          </Tooltip>
+         <>
+         {
+          gender==='Nam' ? <Tag color="blue">Nam</Tag> : <Tag color="pink">Nữ</Tag>
+         }
+         </>
         ),
       },
   

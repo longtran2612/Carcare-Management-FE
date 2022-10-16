@@ -83,12 +83,9 @@ const AdminPage = () => {
           <MyHeader />
           <Content
             className="site-layout-background content"
-            // style={{
-            //   margin: "10px 10px",
-            //   padding: 10,
-            //   minHeight: 500,
-            //   backgroundColor: "#f2f3f5",
-            // }}
+            style={{
+              minHeight: '80vh'
+            }}
           >
             <MyContent
               keyMenu={key}

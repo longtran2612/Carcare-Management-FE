@@ -13,6 +13,8 @@ import { useRouter } from "next/router";
 import ServiceDetail from "../ServiceDetail";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
+import { formatMoney } from "utils/format";
+
 
 function ServiceTable({}) {
   const [services, setServices] = useState([]);
@@ -204,23 +206,6 @@ function ServiceTable({}) {
       key: "name",
       ...getColumnSearchProps("name"),
     },
-    // {
-    //   title: "Danh mục dịch vụ",
-    //   dataIndex: "category",
-    //   key: "category",
-    //   ...getColumnSearchProps("category"),
-    //   render: (category) => {
-    //     return (
-    //       <>
-    //         {category === null ? (
-    //           <Tag color={"red"}>{"Chưa có danh mục"}</Tag>
-    //         ) : (
-    //           <div>{category.name}</div>
-    //         )}
-    //       </>
-    //     );
-    //   },
-    // },
 
     {
       title: "Loại dịch vụ",
@@ -233,6 +218,9 @@ function ServiceTable({}) {
       dataIndex: "estimateTime",
       key: "estimateTime",
       ...getColumnSearchProps("estimateTime"),
+      render: (estimateTime) => {
+        return <div>{estimateTime} phút</div>;
+      }
     },
     {
       title: "Giá",
@@ -244,7 +232,7 @@ function ServiceTable({}) {
             {servicePrice === null ? (
               <Tag color={"red"}>{"Chưa có giá"}</Tag>
             ) : (
-              <div>{servicePrice.price}</div>
+              <div>{formatMoney(servicePrice.price)}</div>
             )}
           </>
         );

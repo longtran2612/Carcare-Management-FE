@@ -36,8 +36,9 @@ const items = [
     getItem("Danh sách hóa đơn", "order-not-request"),
   ]),
   getItem("Dịch vụ", "3", <ClearOutlined />, [
-    getItem("Danh mục", "category"),
     getItem("Dịch vụ", "service"),
+    getItem("Danh mục", "category"),
+  
   ]),
   getItem("Bảng giá", "4", <DollarOutlined />, [getItem("Bảng giá", "price")]),
   getItem("Xe", "5", <CarOutlined />, [
@@ -47,7 +48,7 @@ const items = [
   getItem("Người dùng", "6", <UserOutlined />, [
     getItem("Người dùng", "user"),
     getItem("Khách hàng", "customer"),
-    getItem("Nhóm người dùng", "user-group"),
+    // getItem("Nhóm người dùng", "user-group"),
   ]),
   getItem("Trương trình khuyến mãi", "7", <TagsOutlined />, [
     getItem("Trương trình khuyến mãi", "promotion"),

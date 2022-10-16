@@ -180,12 +180,12 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
     },
     {
       title: "Mã dịch vụ",
-      dataIndex: "parentId",
-      key: "parentId",
+      dataIndex: "serviceCode",
+      key: "serviceCode",
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.parentId).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.serviceCode).toLowerCase().includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.statusName).toLowerCase().includes(value.toLowerCase()) ||
           String(record.price).toLowerCase().includes(value.toLowerCase())
@@ -202,10 +202,10 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       title: "Giá dịch vụ",
       dataIndex: "price",
       key: "price",
+      ...getColumnSearchProps("price"),
       render:(price) =>{
         return <div>{formatMoney(price)}</div>;
       },
-      ...getColumnSearchProps("price"),
     },
     {
       title: "Trạng thái",
@@ -220,15 +220,6 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
         );
       },
       ...getColumnSearchProps("statusName"),
-    },
-    {
-      title: "Hành động",
-      key: "action",
-      render: (_, record) => (
-        <Space size={8}>
-          <Button type="primary">Cập nhật</Button>
-        </Space>
-      ),
     },
   ];
 
