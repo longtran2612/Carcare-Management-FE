@@ -16,6 +16,8 @@ import {
   getDistrictsByProvinceCode,
   getProvinces,
   getWardsByDistrictCode,
+  getDistricts,
+  getWards,
 } from "@do-kevin/pc-vn";
 
 const { TextArea } = Input;
@@ -24,8 +26,8 @@ const { Option } = Select;
 const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
   const [provinces, setProvinces] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
+  const [districts, setDistricts] = useState(getDistricts());
+  const [wards, setWards] = useState(getWards());
 
   const [provinceSelected, setProvinceSelected] = useState("");
   const [districtSelected, setDistrictSelected] = useState("");
@@ -45,12 +47,11 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
         wardSelected +
         ", " +
         values.address,
-        gender:values.gender,
-        dateOfBirth:values.dateOfBirth,
-        nationality:values.nationality,
-        identityType:2,
-        identityNumber:values.identityNumber
-
+      gender: values.gender,
+      dateOfBirth: values.dateOfBirth,
+      nationality: values.nationality,
+      identityType: 2,
+      identityNumber: values.identityNumber,
     };
     console.log(dataUser);
 
@@ -65,12 +66,21 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
     }
   };
   useEffect(() => {
-    const fetchProvinces = async () => {
-      const provinces = getProvinces();
-      setProvinces(provinces);
-    };
     fetchProvinces();
   }, []);
+  const fetchProvinces = async () => {
+    const provinces = getProvinces();
+    setProvinces(provinces);
+  };
+
+  // const fetchDistricts = async () => {
+  //   const districts = getDistricts();
+  //   setDistricts(districts);
+  // };
+  // const fetchWards = async () => {
+  //   const ward = getwards();
+  //   setWards(ward);
+  // };
 
   const handleProvinceChange = async (value) => {
     const districts = getDistrictsByProvinceCode(value);
@@ -85,6 +95,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
   const handleWardChange = async (value) => {
     setWardSelected(getWardByCode(value));
   };
+  
 
   const getProvinceByCode = (code) => {
     const province = provinces.find((item) => item.code === code);
@@ -142,11 +153,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item
-
-                name="gender"
-                label="Giới tính"
-              >
+              <Form.Item name="gender" label="Giới tính">
                 <Select>
                   <Option value="Nam">Nam</Option>
                   <Option value="Nữ">Nữ</Option>
@@ -190,18 +197,12 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                name="dateOfBirth"
-                label="Ngày sinh"
-              >
+              <Form.Item name="dateOfBirth" label="Ngày sinh">
                 <DatePicker format={formatDate} />
               </Form.Item>
-            </Col>        
+            </Col>
             <Col span={8}>
-              <Form.Item
-                name="nationality"
-                label="Quốc gia"
-              >
+              <Form.Item name="nationality" label="Quốc gia">
                 <Input />
               </Form.Item>
             </Col>
@@ -220,10 +221,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                name="province"
-                label="Tỉnh/Thành phố"
-              >
+              <Form.Item name="province" label="Tỉnh/Thành phố">
                 <Select
                   onChange={handleProvinceChange}
                   placeholder="Chọn tỉnh/thành phố"
@@ -241,10 +239,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                name="district"
-                label="Quận/Huyện"
-              >
+              <Form.Item name="district" label="Quận/Huyện">
                 <Select
                   placeholder="Chọn quận/huyện"
                   showSearch
@@ -262,10 +257,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                name="ward"
-                label="Phường/Xã"
-              >
+              <Form.Item name="ward" label="Phường/Xã">
                 <Select
                   onChange={handleWardChange}
                   placeholder="Chọn phường/xã"
@@ -283,10 +275,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item
-                name="address"
-                label="Địa chỉ chi tiết"
-              >
+              <Form.Item name="address" label="Địa chỉ chi tiết">
                 <TextArea rows={2} />
               </Form.Item>
             </Col>
