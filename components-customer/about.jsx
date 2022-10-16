@@ -1,11 +1,12 @@
+import Image from "next/image";
 export const About = (props) => {
   return (
     <div id="about">
       <div className="container">
         <div className="row">
           <div className="col-xs-12 col-md-6">
-            {" "}
-            <img src="img/about.jpg" className="img-responsive" alt="" />{" "}
+            <img src="img/rua-xe2.jpg" className="img-responsive" alt="" />{" "}
+            {/* <Image src="/img/about.jpg" width={500} height={500} /> */}
           </div>
           <div className="col-xs-12 col-md-6">
             <div className="about-text">

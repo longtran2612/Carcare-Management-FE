@@ -234,6 +234,24 @@ a:focus,
   background-size: cover;
   -o-background-size: cover;
 }
+.bg4{
+  background: url(/img/rua-xe.jpg) center center no-repeat;
+  background-color: #e5e5e5;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+
+.bg5{
+  background: url(/img/danh-bong.jpg) center center no-repeat;
+  background-color: #e5e5e5;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+
 
 .intro .overlay {
   background: rgba(0, 0, 0, 0.2);

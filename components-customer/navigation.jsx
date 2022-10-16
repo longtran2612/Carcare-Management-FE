@@ -47,7 +47,7 @@ export const CustomerNavigation = () => {
       return(
         <Menu>
         <Menu.Item key="0">
-          <Link href="/profile">
+          <Link href="/my-account">
             <a>
               <UserOutlined /> Trang cá nhân
             </a>

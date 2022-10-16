@@ -10,6 +10,7 @@ import {
   DatePicker,
   Upload,
   Layout,
+  Tabs,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
@@ -30,8 +31,9 @@ const formatDate = "YYYY/MM/DD";
 import MyHeader from "components/Header";
 import MyFooter from "components/Footer";
 import { CustomerNavigation } from "components-customer/navigation";
+import { UserOutlined,LockOutlined,ClearOutlined } from "@ant-design/icons";
 
-const UserDetail = () => {
+const CustomerProfile = () => {
   const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -127,13 +129,21 @@ const UserDetail = () => {
     <>
       <Layout>
         <CustomerNavigation />
-        <Layout.Content style={{paddingTop:'5rem',paddingLeft:'5rem',paddingRight:'5rem' ,minHeight:'100vh'}} className="content">
-          <Row>
+        <Layout.Content
+          style={{
+            paddingTop: "7rem",
+            paddingLeft: "5rem",
+            paddingRight: "5rem",
+            minHeight: "100vh",
+          }}
+          className="content"
+        >
+          <Row className="content-white">
             <Col span={6}>
               <Image width={300} height={250} src={userDetail.image} />
               <div
                 style={{
-                  marginTop: "10px",
+                  marginTop: "2rem",
                   display: "flex",
                   justifyContent: "center",
                 }}
@@ -277,4 +287,4 @@ const UserDetail = () => {
   );
 };
 
-export default UserDetail;
+export default CustomerProfile;
