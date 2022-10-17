@@ -362,9 +362,10 @@ function OrderTable({}) {
             }}
             expandable={{
               expandedRowRender: (record) => (
-                <Row gutter={4}>
-                  <Col span={12}>
+                <Row style={{backgroundColor:'#AEAEAE'}} gutter={4}>
+                  <Col style={{padding:'5px'}} span={12}>
                     <Table
+                      size="small"
                       bordered
                       title={() => "Dịch vụ"}
                       dataSource={record.services}
@@ -376,8 +377,9 @@ function OrderTable({}) {
                     <div
                       style={{
                         backgroundColor: "#fff",
-                        padding: "10px",
-                        borderRadius: "10px",
+                        padding: "5px",
+                        borderRadius: "3px",
+                        margin: '5px'
                       }}
                     >
                       <Row gutter={32}>
@@ -385,10 +387,7 @@ function OrderTable({}) {
                           style={{ borderRight: "solid LightGray 1px" }}
                           span={11}
                         >
-                          <Title style={{ textAlign: "center" }} level={4}>
-                            Khách hàng
-                          </Title>
-                          <Divider />
+                          <Divider> Thông tin khách hàng</Divider>
                           <Timeline style={{ marginTop: "20px" }}>
                             <Timeline.Item>
                               Tên: {record?.customerName}
@@ -399,10 +398,7 @@ function OrderTable({}) {
                           </Timeline>
                         </Col>
                         <Col span={12}>
-                          <Title style={{ textAlign: "center" }} level={4}>
-                            Xe
-                          </Title>
-                          <Divider />
+                          <Divider> Thông tin xe</Divider>
                           <Timeline style={{ marginTop: "20px" }}>
                             <Timeline.Item>Xe: {record?.carName}</Timeline.Item>
                             <Timeline.Item>

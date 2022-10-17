@@ -26,7 +26,11 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
     console.log(data);
     try {
       const response = await executeCarSlot(data);
-      openNotification("Thành công!", "Bắt đầu sử lý yêu cầu ở vị trí: "+ carSlots.find((item) => item.id === values).name);
+      openNotification(
+        "Thành công!",
+        "Bắt đầu sử lý yêu cầu ở vị trí: " +
+          carSlots.find((item) => item.id === values).name
+      );
       handleCancel();
       onSuccess();
       setLoading(false);
@@ -85,7 +89,13 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
                 md={12}
                 lg={8}
                 style={{ marginBottom: "10px" }}
-                onClick={() => onFinish(carSlot.id)}
+                onClick={() => {
+                  if (carSlot.status === "AVAILABLE") {
+                    onFinish(carSlot.id);
+                  } else {
+                    openNotification("Thất bại","Vị trí này đang được sử dụng!");
+                  }
+                }}
               >
                 <Card
                   headStyle={{
@@ -95,14 +105,25 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
                     textAlign: "center",
                     fontSize: "20px",
                   }}
-                  style={{
-                    margin: "10px",
-                    borderRadius: "20px",
-                    overflow: "hidden",
-                    cursor: "pointer",
-                    height: "200px",
-                  }}
-                  hoverable
+                  style={
+                    carSlot.status === "IN_USE"
+                      ? {
+                          margin: "10px",
+                          borderRadius: "20px",
+                          overflow: "hidden",
+                          cursor: "pointer",
+                          height: "200px",
+                          pointerEvents: "none",
+                        }
+                      : {
+                          margin: "10px",
+                          borderRadius: "20px",
+                          overflow: "hidden",
+                          cursor: "pointer",
+                          height: "200px",
+                        }
+                  }
+                  hoverable={carSlot.status === "IN_USE" ? false : true}
                   title={carSlot.name}
                   bordered={false}
                 >
