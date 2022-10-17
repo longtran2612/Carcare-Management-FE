@@ -19,7 +19,7 @@ const getPromotionHeaders = () => {
 const getPromotionHeaderById = (data) => {
   return axios({
     method: "GET",
-    url: API_URL + `/promotion-headers/${data}`,
+    url: API_URL + `/promotion-headers/find-promotion-header-by-id/${data}`,
   })
     .then((res) => {
       return res;
@@ -31,7 +31,7 @@ const getPromotionHeaderById = (data) => {
 const getPromotionHeaderByCode = (data) => {
   return axios({
     method: "GET",
-    url: API_URL + `/promotion-headers/code/${data}`,
+    url: API_URL + `/promotion-headers/find-promotion-header-by-code/${data}`,
   })
     .then((res) => {
       return res;

@@ -13,11 +13,10 @@ import {
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
-import { getPricesByHeader } from "pages/api/priceAPI";
-import {
-  getPriceHeaderById,
-  updatePriceHeader,
-} from "pages/api/PriceHeaderAPI";
+
+import { getPromotionLineByHeaderId } from "pages/api/promotionLineAPI";
+import { getPromotionHeaderByCode,getPromotionHeaderById } from "pages/api/promotionHeaderAPI";
+
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";
@@ -25,18 +24,24 @@ import moment from "moment";
 import Loading from "components/Loading";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import {EditOutlined} from "@ant-design/icons";
 import { formatMoney } from "utils/format";
+import DrawerPromorionDetail from "components/Drawer/DrawerPromotionDetail";
+
 
 const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) => {
   const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  const [priceHeaderDetail, setPriceHeaderDetail] = useState({});
-  const [prices, setPrices] = useState([]);
+  const [promotionHeaderDetail, setPromotionHeaderDetail] = useState({});
+  const [promotionLine, setPromotionLine] = useState([]);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [modalPrice, setModalPrice] = useState(false);
   const formatDate = "YYYY/MM/DD";
   const [loading, setLoading] = useState(false);
+
+  const[showDrawer, setShowDrawer] = useState(false);
+  const [promotionLineSelected, setPromotionLineSelected] = useState(null);
 
   const [searchText, setSearchText] = useState("");
   const [searchGlobal, setSearchGlobal] = useState("");
@@ -129,12 +134,12 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
       ),
   });
 
-  const fetchPrice = async () => {
+  const fetchPromotionLine = async () => {
     setLoading(true);
     try {
-      const response = await getPricesByHeader(promotionHeaderId);
+      const response = await getPromotionLineByHeaderId(promotionHeaderId);
       console.log(response.data.Data);
-      setPrices(response.data.Data);
+      setPromotionLine(response.data.Data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -142,29 +147,29 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
     }
   };
 
-  const fetchPriceHeaderDetail = async () => {
+  const fetchPromotionHeaderDetail = async () => {
     setLoading(true);
     try {
-      const response = await getPriceHeaderById(promotionHeaderId);
-      setPriceHeaderDetail(response.data.Data);
+      const response = await getPromotionHeaderById(promotionHeaderId);
+      setPromotionHeaderDetail(response.data.Data);
+      console.log(response.data.Data);
       form.setFieldsValue({
-        name: response.data.Data.name,
-        description: response.data.Data.description,
+        name: response.data.Data.description,
         fromDate: moment(moment(response.data.Data.fromDate), formatDate),
         toDate: moment(moment(response.data.Data.toDate), formatDate),
         status: response.data.Data.status,
       });
+     
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      // openNotification(error.response.data);
     }
   };
 
   useEffect(() => {
     if (promotionHeaderId) {
-      fetchPriceHeaderDetail();
-      fetchPrice();
+     fetchPromotionHeaderDetail();
+     fetchPromotionLine();
     }
   }, [promotionHeaderId]);
 
@@ -179,58 +184,68 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
       },
     },
     {
-      title: "Mã dịch vụ",
-      dataIndex: "serviceCode",
-      key: "serviceCode",
+      title: "Mã",
+      dataIndex: "promotionLineCode",
+      key: "promotionLineCode",
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.serviceCode)
+          String(record.promotionLineCode)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.name).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.description).toLowerCase().includes(value.toLowerCase()) ||
           String(record.statusName)
             .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.price).toLowerCase().includes(value.toLowerCase())
+            .includes(value.toLowerCase())
         );
       },
     },
     {
-      title: "Tên dịch vụ",
-      dataIndex: "name",
-      key: "name",
-      ...getColumnSearchProps("name"),
-    },
-    {
-      title: "Giá dịch vụ",
-      dataIndex: "price",
-      key: "price",
-      ...getColumnSearchProps("price"),
-      render: (price) => {
-        return <div>{formatMoney(price)}</div>;
-      },
+      title: "Mô tả",
+      dataIndex: "description",
+      key: "description",
+      ...getColumnSearchProps("description"),
     },
     {
       title: "Trạng thái",
-      dataIndex: "statusName",
-      key: "statusName",
-      render: (statusName) => {
+      dataIndex: "status",
+      key: "status",
+      render: (status) => {
         return (
           <>
             {" "}
-            <Tag color={"green"}>{statusName}</Tag>{" "}
+            <Tag color={"green"}>{status}</Tag>{" "}
           </>
         );
       },
-      ...getColumnSearchProps("statusName"),
+      ...getColumnSearchProps("status"),
+    },
+    {
+      dataIndex: "action",
+      key: "action",
+      render : (text, record) => {
+        return (
+          <div>
+            <Button
+              type="primary"
+              icon={<EditOutlined />}
+              onClick={() => {
+                setPromotionLineSelected(record.id);
+                setShowDrawer(true);
+              }}
+            >
+              Sửa
+            </Button>
+          </div>
+        );
+      }
     },
   ];
 
   const onFinish = async (values) => {
     loading(true);
     let body = {
-      id: priceHeaderDetail.id,
+      id: promotionHeaderDetail.id,
       type: values.type,
       name: values.name,
       description: values.description,
@@ -238,7 +253,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
       status: values.status,
     };
     try {
-      const res = await updatePriceHeader(body, priceHeaderDetail.id);
+      const res = await updatePriceHeader(body, promotionHeaderDetail.id);
       openNotification("Cập nhật dịch vụ thành công!", "");
       onUpdatePromotionHeader();
       setLoading(false);
@@ -249,7 +264,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
   };
 
   const handleSuccessCreatePrice = () => {
-    fetchPrice();
+    fetchPromotionLine();
   };
 
   return (
@@ -268,7 +283,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
             <Row gutter={[32, 8]}>
               <Col span={6}>
                 <Form.Item
-                  label="Tên bảng giá"
+                  label="Tên chương trình"
                   name="name"
                   rules={[
                     {
@@ -325,19 +340,6 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={24}>
-                <Form.Item
-                  label="Mô tả"
-                  name="description"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <TextArea rows={2} />
-                </Form.Item>
-              </Col>
             </Row>
             <Row className="PullRight">
               <div
@@ -347,7 +349,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
                 <div style={{ marginRight: "20px" }}>
                   <Button
                     onClick={() => {
-                      fetchPriceHeaderDetail();
+                      fetchPromotionHeaderDetail();
                     }}
                   >
                     Đặt lại
@@ -382,7 +384,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
                 <Row>
                   <Col span={8} style={{ marginRight: "10px" }}>
                     <Input.Search
-                      placeholder="Tìm kiếm mã/tên/giá dịch vụ"
+                      placeholder="Tìm kiếm mã/tên"
                       onChange={(e) => setSearchGlobal(e.target.value)}
                       onSearch={(value) => setSearchGlobal(value)}
                       value={searchGlobal}
@@ -410,7 +412,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
               </>
             )}
             columns={columns}
-            dataSource={prices}
+            dataSource={promotionLine}
             pagination={{
               pageSize: 10,
             }}
@@ -421,7 +423,11 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
           />
         </Col>
       </Row>
-
+      <DrawerPromorionDetail
+        show={showDrawer}
+        handleCancel={() => setShowDrawer(false)}
+        lineId={promotionLineSelected}
+      />
       <ModalAddPrice
         show={modalPrice}
         handleCancel={() => setModalPrice(false)}

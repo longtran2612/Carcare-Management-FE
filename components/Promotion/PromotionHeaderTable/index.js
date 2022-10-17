@@ -22,6 +22,8 @@ function PromotionHeaderTable({}) {
   const { promotionHeaderId } = router.query;
   const [loading, setLoading] = useState(false);
 
+
+
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -254,6 +256,7 @@ function PromotionHeaderTable({}) {
           />
         </div>
       )}
+  
       <Loading loading={loading} />
     </>
   );
