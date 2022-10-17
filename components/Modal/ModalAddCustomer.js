@@ -8,26 +8,20 @@ import {
   Row,
   InputNumber,
   DatePicker,
+  Cascader,
 } from "antd";
 import { createCustomer } from "pages/api/customerAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
-import {
-  getDistrictsByProvinceCode,
-  getProvinces,
-  getWardsByDistrictCode,
-  getDistricts,
-  getWards,
-} from "@do-kevin/pc-vn";
+import JsonData from "data/address-vn.json";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
 const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
-  const [provinces, setProvinces] = useState([]);
-  const [districts, setDistricts] = useState(getDistricts());
-  const [wards, setWards] = useState(getWards());
+
+  const [addressData, setAddressData] = useState({});
 
   const [provinceSelected, setProvinceSelected] = useState("");
   const [districtSelected, setDistrictSelected] = useState("");
@@ -40,13 +34,13 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
       email: values.email,
       phoneNumber: values.phone,
       address:
-        provinceSelected +
-        ", " +
-        districtSelected +
+        values.address +
         ", " +
         wardSelected +
         ", " +
-        values.address,
+        districtSelected +
+        ", " +
+        provinceSelected,
       gender: values.gender,
       dateOfBirth: values.dateOfBirth,
       nationality: values.nationality,
@@ -66,49 +60,21 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
     }
   };
   useEffect(() => {
-    fetchProvinces();
+    setAddressData(JsonData);
   }, []);
-  const fetchProvinces = async () => {
-    const provinces = getProvinces();
-    setProvinces(provinces);
-  };
 
-  // const fetchDistricts = async () => {
-  //   const districts = getDistricts();
-  //   setDistricts(districts);
-  // };
-  // const fetchWards = async () => {
-  //   const ward = getwards();
-  //   setWards(ward);
-  // };
-
-  const handleProvinceChange = async (value) => {
-    const districts = getDistrictsByProvinceCode(value);
-    setDistricts(districts);
-    setProvinceSelected(getProvinceByCode(value));
+  const onChange = (value, selectedOptions) => {
+    if (selectedOptions) {
+      setProvinceSelected(selectedOptions[0]?.label);
+      setDistrictSelected(selectedOptions[1]?.label);
+      setWardSelected(selectedOptions[2]?.label);
+    }
   };
-  const handleDistrictChange = async (value) => {
-    const ward = getWardsByDistrictCode(value);
-    setWards(ward);
-    setDistrictSelected(getDistrictByCode(value));
-  };
-  const handleWardChange = async (value) => {
-    setWardSelected(getWardByCode(value));
-  };
-  
-
-  const getProvinceByCode = (code) => {
-    const province = provinces.find((item) => item.code === code);
-    return province.name;
-  };
-  const getDistrictByCode = (code) => {
-    const district = districts.find((item) => item.code === code);
-    return district.name;
-  };
-  const getWardByCode = (code) => {
-    const ward = wards.find((item) => item.code === code);
-    return ward.name;
-  };
+  const filter = (inputValue, path) =>
+    path.some(
+      (option) =>
+        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+    );
 
   return (
     <>
@@ -220,58 +186,17 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
                 <InputNumber />
               </Form.Item>
             </Col>
-            <Col span={8}>
-              <Form.Item name="province" label="Tỉnh/Thành phố">
-                <Select
-                  onChange={handleProvinceChange}
-                  placeholder="Chọn tỉnh/thành phố"
-                  showSearch
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  {provinces.map((province) => (
-                    <Option value={province.code}>{province.name}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item name="district" label="Quận/Huyện">
-                <Select
-                  placeholder="Chọn quận/huyện"
-                  showSearch
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                  onChange={handleDistrictChange}
-                >
-                  {districts.map((district) => (
-                    <Option value={district.code}>{district.name}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item name="ward" label="Phường/Xã">
-                <Select
-                  onChange={handleWardChange}
-                  placeholder="Chọn phường/xã"
-                  showSearch
-                  filterOption={(input, option) =>
-                    option.children
-                      .toLowerCase()
-                      .indexOf(input.toLowerCase()) >= 0
-                  }
-                >
-                  {wards.map((ward) => (
-                    <Option value={ward.code}>{ward.name}</Option>
-                  ))}
-                </Select>
+            <Col span={24}>
+              <Form.Item name="adressvn" label="Tỉnh/Thành phố - Quận - Huyện">
+                <Cascader
+                  options={addressData}
+                  onChange={onChange}
+                  placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                  showSearch={{
+                    filter,
+                  }}
+                  onSearch={(value) => console.log(value)}
+                />
               </Form.Item>
             </Col>
             <Col span={24}>
