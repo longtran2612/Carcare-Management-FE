@@ -9,6 +9,7 @@ import CarSlot from "components/CarSlot";
 import OrderPage from "components/Order";
 import CustomerPage from "components/Customer";
 import OrderNotRequestPage from "components/OrderNotRequest";
+import PromotionHeaderPage from "components/Promotion";
 
 const MyContent = ({ keyMenu }) => {
   const renderViewByKey = () => {
@@ -35,6 +36,8 @@ const MyContent = ({ keyMenu }) => {
         return <CarSlot />;
       case "customer":
         return <CustomerPage />;
+      case "promotion":
+        return <PromotionHeaderPage />;
       default:
         break;
     }

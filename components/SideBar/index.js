@@ -48,10 +48,10 @@ const items = [
   getItem("Người dùng", "6", <UserOutlined />, [
     getItem("Nhân viên", "user"),
     getItem("Khách hàng", "customer"),
-    // getItem("Nhóm người dùng", "user-group"),
+    getItem("Nhóm người dùng", "user-group"),
   ]),
-  getItem("Trương trình khuyến mãi", "7", <TagsOutlined />, [
-    getItem("Trương trình khuyến mãi", "promotion"),
+  getItem("Khuyến mãi", "7", <TagsOutlined />, [
+    getItem("Khuyến mãi", "promotion"),
   ]),
   getItem("Thống kê - Báo cáo", "8", <BarChartOutlined />, [
     getItem("Doanh số", "sell-report"),
