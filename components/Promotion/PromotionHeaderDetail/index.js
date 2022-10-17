@@ -19,13 +19,14 @@ import { getPromotionHeaderByCode,getPromotionHeaderById } from "pages/api/promo
 
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
-import ModalAddPrice from "components/Modal/ModalAddPrice";
+import ModalAddPromotionLine from "components/Modal/ModalAddPromotionLine";
 import moment from "moment";
 import Loading from "components/Loading";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import {EditOutlined} from "@ant-design/icons";
 import { formatMoney } from "utils/format";
+const formatDate = "DD/MM/YYYY";
 import DrawerPromorionDetail from "components/Drawer/DrawerPromotionDetail";
 
 
@@ -37,7 +38,6 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
   const [promotionLine, setPromotionLine] = useState([]);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [modalPrice, setModalPrice] = useState(false);
-  const formatDate = "YYYY/MM/DD";
   const [loading, setLoading] = useState(false);
 
   const[showDrawer, setShowDrawer] = useState(false);
@@ -194,17 +194,33 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
             .toLowerCase()
             .includes(value.toLowerCase()) ||
           String(record.description).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.statusName)
+          String(record.status)
             .toLowerCase()
             .includes(value.toLowerCase())
         );
       },
     },
     {
-      title: "Mô tả",
+      title: "Tên",
       dataIndex: "description",
       key: "description",
       ...getColumnSearchProps("description"),
+    },
+    {
+      title: "Từ ngày",
+      dataIndex: "fromDate",
+      key: "fromDate",
+      render: (text, record) => {
+        return <div>{moment(record.fromDate).format(formatDate)}</div>;
+      }
+    },
+    {
+      title: "Đến ngày",
+      dataIndex: "toDate",
+      key: "toDate",
+      render: (text, record) => {
+        return <div>{moment(record.toDate).format(formatDate)}</div>;
+      }
     },
     {
       title: "Trạng thái",
@@ -263,7 +279,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
     }
   };
 
-  const handleSuccessCreatePrice = () => {
+  const handleSuccessCreatePromotionLine = () => {
     fetchPromotionLine();
   };
 
@@ -405,7 +421,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
                       onClick={() => setModalPrice(true)}
                     >
                       {" "}
-                      Thêm giá
+                     Thêm dòng khuyến mãi
                     </Button>
                   </Col>
                 </Row>
@@ -428,10 +444,10 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
         handleCancel={() => setShowDrawer(false)}
         lineId={promotionLineSelected}
       />
-      <ModalAddPrice
+      <ModalAddPromotionLine
         show={modalPrice}
         handleCancel={() => setModalPrice(false)}
-        onSuccess={(data) => handleSuccessCreatePrice(data)}
+        onSuccess={(data) => handleSuccessCreatePromotionLine(data)}
         promotionHeaderId={promotionHeaderId}
       />
       <Loading show={loading} />

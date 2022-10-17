@@ -6,21 +6,27 @@ import {
   Row,
   Col,
   DatePicker,
+  Select,
 } from "antd";
-import { createPromotionHeader } from "pages/api/promotionHeaderAPI";
+import moment from "moment";
+import { createPromotionLine } from "pages/api/promotionLineAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 const formatDate = "DD/MM/YYYY";
 
-const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
+const ModalAddPromotionLine = ({promotionHeaderId, show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
   const onFinish = async (values) => {
+    let dataCreate = {
+      promotionHeaderId: promotionHeaderId,
+      ...values,
+    }
     try {
-      console.log(values);
-      const res = await createPromotionHeader(values);
-      openNotification("Thành công", "tạo mới chương trình khuyến mãi thành công");
+      console.log(dataCreate);
+      const res = await createPromotionLine(dataCreate);
+      openNotification("Thành công", "tạo mới dòng khuyến mãi thành công");
       handleCancel();
-      onSuccess(res.data);
+      onSuccess(res.data.Data);
     } catch (error) {
       openNotification(error.response.data.message[0]);
     }
@@ -53,8 +59,8 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Row gutter={[16,16]}>
-            <Col span={12}>
+          <Row gutter={[16]}>
+            <Col span={18}>
               <Form.Item
                 label="Tên chương trình khuyến mãi"
                 name="description"
@@ -67,7 +73,27 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={6} >
+            <Col span={6}>
+              <Form.Item
+                label="Loại khuyến mãi"
+                name="type"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                 <Select>
+                  <Select.Option value="MONEY">Giảm tiền</Select.Option>
+                  <Select.Option value="PERCENTAGE">
+                    Giảm tiền theo %
+                  </Select.Option>
+                  <Select.Option value="GIFT">Tặng quà</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            
+            <Col span={12} >
               <Form.Item
                 label="Ngày bắt đầu"
                 name="fromDate"
@@ -80,7 +106,7 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
                 <DatePicker placeholder="bắt đầu" format={formatDate} />
               </Form.Item>
             </Col>
-            <Col span={6} >
+            <Col span={12} >
               <Form.Item
                 label="Ngày kết thúc"
                 name="toDate"
@@ -100,4 +126,4 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
   );
 };
 
-export default ModalAddPromotionHeader;
+export default ModalAddPromotionLine;

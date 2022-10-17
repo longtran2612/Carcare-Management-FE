@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { getPromotionDetailByLineId } from "pages/api/promotionDetail";
-import { Drawer, Form,Row ,Col,Button,Input  } from "antd";
+import {
+  Drawer,
+  Form,
+  Row,
+  Col,
+  Button,
+  Input,
+  Select,
+  Space,
+  InputNumber,
+  Typography,
+  Divider,
+} from "antd";
 import Loading from "components/Loading";
 import { validateMessages } from "utils/messageForm";
 
@@ -9,7 +21,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const getPromotionDetail = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await getPromotionDetailByLineId(lineId);
       setPromotionDetail(response.data.Data[0]);
@@ -22,11 +34,14 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         maximumDiscount: response.data.Data[0].maximumDiscount,
         minimumSpend: response.data.Data[0].minimumSpend,
       });
-      setLoading(false);
+      // setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false);
+      // setLoading(false);
     }
+  };
+  const onFinish = (values) => {
+    console.log(values);
   };
 
   useEffect(() => {
@@ -40,9 +55,19 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
       <Drawer
         width={640}
         placement="right"
-        closable={false}
+        closable
         onClose={handleCancel}
         open={show}
+        visible={show}
+        bodyStyle={{ padding:40 }}
+        extra={
+          <Space>
+            <Button onClick={handleCancel}>Hủy</Button>
+            <Button onClick={onFinish} type="primary">
+              Lưu
+            </Button>
+          </Space>
+        }
       >
         <Form
           form={form}
@@ -50,8 +75,9 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
           autoComplete="off"
           validateMessages={validateMessages}
         >
+          <Divider><Typography.Title level={4} > Chi tiết khuyến mãi</Typography.Title> </Divider>
           <Row gutter={[16, 4]}>
-            <Col span={18}>
+            <Col span={24}>
               <Form.Item
                 label="Mô tả"
                 name="description"
@@ -64,56 +90,62 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col span={12}>
               <Form.Item
                 label="Loại khuyến mãi"
-                name="description"
+                name="type"
                 rules={[
                   {
                     required: true,
                   },
                 ]}
               >
-                <Input />
+                <Select disabled='true'>
+                  <Select.Option value="MONEY">Giảm tiền</Select.Option>
+                  <Select.Option value="PERCENTAGE">
+                    Giảm tiền theo %
+                  </Select.Option>
+                  <Select.Option value="GIFT">Tặng quà</Select.Option>
+                </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                label="Mô tả"
-                name="description"
+                label="Giá trị"
+                name="amount"
                 rules={[
                   {
                     required: true,
                   },
                 ]}
               >
-                <Input />
+                <InputNumber min={0} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                label="Mô tả"
-                name="description"
+                label="Giá trị đơn hàng tối thiểu"
+                name="minimumSpend"
                 rules={[
                   {
                     required: true,
                   },
                 ]}
               >
-                <Input />
+                <InputNumber min={0} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                label="Mô tả"
-                name="description"
+                label="Số tiền tối đa được giảm"
+                name="maximumDiscount"
                 rules={[
                   {
                     required: true,
                   },
                 ]}
               >
-                <Input />
+                <InputNumber min={0} />
               </Form.Item>
             </Col>
           </Row>
