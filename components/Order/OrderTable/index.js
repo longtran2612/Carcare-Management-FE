@@ -23,17 +23,19 @@ import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
 import { OrderDetail } from "components/Order/OrderDetail";
+import ModalSelectSlot from "components/Modal/ModalSelectSlot";
 const { Title } = Typography;
 
 function OrderTable({}) {
   const [orders, setOrders] = useState([]);
   const [modalOrder, setModalOrder] = useState(false);
+  const [modalSelectSlot, setModalSelectSlot] = useState(false);
   const [id, setId] = useState(null);
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const { orderRequestId } = router.query;
   const [loading, setLoading] = useState(false);
-
+  const [orderSelected, setOrderSelected] = useState(null);
 
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -127,7 +129,9 @@ function OrderTable({}) {
 
   const handleSuccessCreateOrder = async () => {
     handleGetorders();
-  }
+  };
+
+  const onSelectOrder = (id = {});
 
   const columns = [
     {
@@ -143,7 +147,6 @@ function OrderTable({}) {
       title: "Mã",
       dataIndex: "orderCode",
       key: "orderCode",
-
       render: (orderCode) => <a style={{ color: "blue" }}>{orderCode}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
@@ -183,21 +186,18 @@ function OrderTable({}) {
       title: "Thời gian xử lý",
       dataIndex: "totalEstimateTime",
       key: "totalEstimateTime",
-      ...getColumnSearchProps("statusName"),
       render: (totalEstimateTime) => {
         return (
           <div>
             {totalEstimateTime ? `${totalEstimateTime} phút` : "Chưa có"}
           </div>
         );
-      }
+      },
     },
-
     {
       title: "Thời gian tạo",
       dataIndex: "createDate",
       key: "createDate",
-      ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
         return <div>{moment(record.createDate).format(formatDate)}</div>;
       },
@@ -215,6 +215,23 @@ function OrderTable({}) {
         );
       },
     },
+    {
+      title: "Hành động",
+      dataIndex: "action",
+      render: (text, record, dataIndex) => {
+        return (
+          <Button
+            type="primary"
+            onClick={() => {
+              setOrderSelected(record.id);
+              setModalSelectSlot(true);
+            }}
+          >
+            Xử lý
+          </Button>
+        );
+      },
+    },
   ];
 
   const handleGetorders = async () => {
@@ -226,7 +243,7 @@ function OrderTable({}) {
       sort: [
         {
           key: "createDate",
-          asc: false,
+          asc: true,
         },
       ],
     };
@@ -241,27 +258,10 @@ function OrderTable({}) {
       setLoading(false);
     }
   };
-  // };
-  // // const handleRemoveService = async () => {
-  // //   try {
-  // //     const res = await removeServiceApi(id);
-  // //     if (res.data.StatusCode == 200) {
-  // //       handleGetServices();
-  // //       setModalQuestion(false);
-  // //       setId(null);
-  // //     }
-  // //   } catch (error) {}
-  // // };
 
   useEffect(() => {
     handleGetorders();
   }, []);
-
-  // const handleSuccessCreateOrder = (data) => {
-  //   let newArr = [...orders];
-  //   newArr.push(data);
-  //   setOrders(newArr);
-  // };
 
   const columnService = [
     {
@@ -282,9 +282,9 @@ function OrderTable({}) {
       title: "Thời gian xử lí",
       dataIndex: "estimateTime",
       key: "estimateTime",
-      render:(text,record,dataIndex)=>{
-        return <div>{record.estimateTime} phút</div>
-      }
+      render: (text, record, dataIndex) => {
+        return <div>{record.estimateTime} phút</div>;
+      },
     },
     {
       title: "Giá",
@@ -304,10 +304,17 @@ function OrderTable({}) {
     },
   ];
 
+  const handkeSuccessSelectSlot = async () => {
+    handleGetorders();
+  };
+
   return (
     <>
       {orderRequestId ? (
-        <OrderDetail orderRequestId={orderRequestId} onUpdateOrders={handleGetorders} />
+        <OrderDetail
+          orderRequestId={orderRequestId}
+          onUpdateOrders={handleGetorders}
+        />
       ) : (
         <div>
           <Table
@@ -424,6 +431,12 @@ function OrderTable({}) {
         show={modalOrder}
         handleCancel={() => setModalOrder(false)}
         onSuccess={(data) => handleSuccessCreateOrder(data)}
+      />
+      <ModalSelectSlot
+        show={modalSelectSlot}
+        onSelectOrder={orderSelected}
+        handleCancel={() => setModalSelectSlot(false)}
+        onSuccess={() => handkeSuccessSelectSlot()}
       />
 
       <Loading loading={loading} />

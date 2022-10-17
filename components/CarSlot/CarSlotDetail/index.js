@@ -168,10 +168,11 @@ const CarSlotDetail = ({ carSlotId }) => {
     setLoading(true);
     let dataExecute = {
       orderId: data,
+      carSlotId: carSlotDetail?.id,
     };
     try {
-      const response = await executeCarSlot(carSlotDetail?.id, dataExecute);
-      openNotification("Xử lý yêu cầu thành công!", "");
+      const response = await executeCarSlot(dataExecute);
+      openNotification("Thành công!", "Bắt đầu sử lý yêu cầu");
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
@@ -183,15 +184,16 @@ const CarSlotDetail = ({ carSlotId }) => {
     setLoading(true);
     let dataComplete = {
       orderId: order?.id,
+      carSlotId: carSlotDetail?.id,
       totalExecuteTime: 30,
     };
     try {
-      const response = await completeCarSlot(carSlotDetail?.id, dataComplete);
+      const response = await completeCarSlot(dataComplete);
       openNotification("Hoàn thành xử lý thành công!", "");
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
-      openNotification(err.response.data.message[0]);
+      openNotification(error.response.data.message);
       setLoading(false);
     }
   };

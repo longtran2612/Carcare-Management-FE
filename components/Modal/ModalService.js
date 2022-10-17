@@ -262,6 +262,7 @@ function ServiceOrder({onSelected,selectedService}) {
             scroll={{
               y: 150,
             }}
+            size="small"
             footer={() => {
               return (
                 <>

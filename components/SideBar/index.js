@@ -29,8 +29,8 @@ function getItem(label, key, icon, children, type) {
 
 const items = [
   getItem("Cửa hàng", "1", <ShopOutlined />,[
-    getItem("Vị trí xử lí", "car-slot"),
     getItem("Danh sách yêu cầu", "order"),
+    getItem("Vị trí xử lí", "car-slot"),
   ]),
   getItem("Hóa đơn", "2", <BookOutlined  />, [
     getItem("Danh sách hóa đơn", "order-not-request"),
@@ -43,7 +43,7 @@ const items = [
   getItem("Bảng giá", "4", <DollarOutlined />, [getItem("Bảng giá", "price")]),
   getItem("Xe", "5", <CarOutlined />, [
     getItem("Xe khách hàng", "car"),
-    // getItem("Mẫu xe", "car-model"),
+    getItem("Mẫu xe", "car-model"),
   ]),
   getItem("Người dùng", "6", <UserOutlined />, [
     getItem("Nhân viên", "user"),

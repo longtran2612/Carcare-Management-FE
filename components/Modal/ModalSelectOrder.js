@@ -157,43 +157,36 @@ function ModalSelectOrder({ onSelectOrder }) {
         );
       },
     },
-    // {
-    //   title: "Dịch vụ",
-    //   dataIndex: "services",
-    //   key: "services",
-    // },
     {
       title: "Khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      ...getColumnSearchProps("statusName"),
+      ...getColumnSearchProps("customerName"),
     },
     {
       title: "Biên số",
       dataIndex: "carLicensePlate",
       key: "carLicensePlate",
-      ...getColumnSearchProps("statusName"),
+      ...getColumnSearchProps("carLicensePlate"),
     },
     {
       title: "Thời gian xử lý",
       dataIndex: "totalEstimateTime",
       key: "totalEstimateTime",
-      ...getColumnSearchProps("statusName"),
+      ...getColumnSearchProps("totalEstimateTime"),
       render: (totalEstimateTime) => {
         return (
           <div>
-            {totalEstimateTime ? `${totalEstimateTime} phút` : "Chưa có"}
+            {totalEstimateTime} phút
           </div>
         );
       }
-      
     },
 
     {
       title: "Thời gian tạo",
       dataIndex: "createDate",
       key: "createDate",
-      ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
         return <div>{moment(record.createDate).format(formatDate)}</div>;
       },

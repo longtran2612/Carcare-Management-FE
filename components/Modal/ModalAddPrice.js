@@ -3,11 +3,8 @@ import {
   Modal,
   Row,
   Col,
-  Button,
   Form,
-  Input,
   Select,
-  Switch,
   InputNumber,
 } from "antd";
 import { createPrice } from "pages/api/priceAPI";

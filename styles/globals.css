@@ -83,6 +83,11 @@ a {
   border-radius: 5px !important;
   height: 40px;
 }
+.ant-timeline-item {
+  padding-bottom: 10px !important;
+}
+
+
 .background-login{
   background: linear-gradient(to top right, #AE9CE1, #F5E7DB);
 }
