@@ -1,4 +1,14 @@
-import { Table, Tag, Button, Input, Row, Col, Space, Select,Steps } from "antd";
+import {
+  Table,
+  Tag,
+  Button,
+  Input,
+  Row,
+  Col,
+  Space,
+  Select,
+  Steps,
+} from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { SearchOutlined, ClearOutlined } from "@ant-design/icons";
 import { getServices } from "pages/api/serviceAPI";
@@ -8,14 +18,13 @@ import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
 const { Step } = Steps;
 
-function ServiceOrder({onSelected,selectedService}) {
+function ServiceOrder({ onSelected, selectedService }) {
   const [services, setServices] = useState([]);
   const router = useRouter();
   const { serviceId } = router.query;
   const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
-
 
   // search
   const [searchText, setSearchText] = useState("");
@@ -179,7 +188,7 @@ function ServiceOrder({onSelected,selectedService}) {
       ...getColumnSearchProps("estimateTime"),
       render: (estimateTime) => {
         return <div>{estimateTime} phút</div>;
-      }
+      },
     },
     {
       title: "Giá",
@@ -231,7 +240,7 @@ function ServiceOrder({onSelected,selectedService}) {
         />
       ) : (
         <div>
-          <Row style={{ margin: "20px 0px" }}>
+          <Row style={{ margin: "10px 0px" }}>
             <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
                 placeholder="Tìm kiếm"
@@ -260,21 +269,16 @@ function ServiceOrder({onSelected,selectedService}) {
               pageSize: 20,
             }}
             scroll={{
-              y: 150,
+              y: 200,
             }}
             size="small"
             footer={() => {
               return (
                 <>
                   <Row gutter={16}>
-                    <Col span={12}>
-                    </Col>
-                    <Col span={6}>
-                    Tổng thời gian: {totalTimeService() ||0} phút
-                    </Col>
-                    <Col span={6}>
-                    Tổng tiền: {formatMoney(totalPriceService() || 0)}
-                    </Col>
+                    <Col style={{marginRight:'10px'}} span={15}></Col>
+                    <Col style={{marginRight:'13px'}} span={4}>{totalTimeService() || 0} phút</Col>
+                    <Col span={4}>{formatMoney(totalPriceService() || 0)}</Col>
                   </Row>
                 </>
               );

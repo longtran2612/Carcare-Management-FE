@@ -26,7 +26,7 @@ import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
-import { ClearOutlined , SearchOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
 const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
@@ -144,11 +144,19 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
 
   return (
     <>
-     
-      <Row>
+      <Button type="link" size="small" onClick={() => router.push("/admin")}>
+        Trở lại
+      </Button>
+      <Row gutter={16}>
         <Col span={6}>
           <Image width={300} height={250} src={carModelDetail.imageUrl} />
-          <div style={{ marginTop: "10px" ,display:'flex',justifyContent:'center' }}>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <Upload
               onChange={(info) => handleFileChosen(info)}
               multiple
@@ -159,153 +167,157 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
             </Upload>
           </div>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Form
             form={form}
             layout="vertical"
             autoComplete="off"
             validateMessages={validateMessages}
           >
-             <Row>
-            <Col span={11} className="MarRight20">
-              <Form.Item
-                label="Tên mẫu xe"
-                name="name"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={5} className="MarRight20">
-              <Form.Item
-                label="Số nghế ngồi"
-                name="seats"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber style={{width:'100%'}} min={1} max={16} />
-              </Form.Item>
-            </Col>
-            <Col span={5} className="MarRight20">
-              <Form.Item
-                label="Năm sản xuất"
-                name="year"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber style={{width:'100%'}} min={1900} max={moment().year()} />
-              </Form.Item>
-            </Col>
-            <Col span={11}  className="MarRight20">
-              <Form.Item
-                label="Model"
-                name="model"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={10}>
-              <Form.Item
-                label="Thương hiệu"
-                name="brand"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Select
-                  showSearch
-                  placeholder="Chọn thương hiệu"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.includes(input)
-                  }
-                  filterSort={(optionA, optionB) =>
-                    optionA.children
-                      .toLowerCase()
-                      .localeCompare(optionB.children.toLowerCase())
-                  }
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  label="Tên mẫu xe"
+                  name="name"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
                 >
-                  {brands.map((brand) => (
-                    <Option key={brand}>{brand}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-        
-            <Col span={7}  className="MarRight20">
-              <Form.Item
-                label="Đông cơ"
-                name="engine"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={7} className="MarRight20"  >
-              <Form.Item
-                label="Truyền động"
-                name="transmission"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={7} className="MarRight20">
-              <Form.Item
-                label="Nhiên liệu"
-                name="fuel"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Select 
-                  showSearch
-                  placeholder="Chọn nhiên liệu"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.includes(input)
-                  }
-                  filterSort={(optionA, optionB) =>
-                    optionA.children
-                      .toLowerCase()
-                      .localeCompare(optionB.children.toLowerCase())
-                  }
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Số nghế ngồi"
+                  name="seats"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
                 >
-                  <Option value="Xăng">Xăng</Option>
-                  <Option value="Dầu">Dầu</Option>
-                  <Option value="Điện">Điện</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row className="PullRight">
+                  <InputNumber style={{ width: "100%" }} min={1} max={16} />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Năm sản xuất"
+                  name="year"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    style={{ width: "100%" }}
+                    min={1900}
+                    max={moment().year()}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Model"
+                  name="model"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Thương hiệu"
+                  name="brand"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Select
+                    showSearch
+                    placeholder="Chọn thương hiệu"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.includes(input)
+                    }
+                    filterSort={(optionA, optionB) =>
+                      optionA.children
+                        .toLowerCase()
+                        .localeCompare(optionB.children.toLowerCase())
+                    }
+                  >
+                    {brands.map((brand) => (
+                      <Option key={brand}>{brand}</Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+
+              <Col span={8}>
+                <Form.Item
+                  label="Đông cơ"
+                  name="engine"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  label="Truyền động"
+                  name="transmission"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  label="Nhiên liệu"
+                  name="fuel"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Select
+                    showSearch
+                    placeholder="Chọn nhiên liệu"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.includes(input)
+                    }
+                    filterSort={(optionA, optionB) =>
+                      optionA.children
+                        .toLowerCase()
+                        .localeCompare(optionB.children.toLowerCase())
+                    }
+                  >
+                    <Option value="Xăng">Xăng</Option>
+                    <Option value="Dầu">Dầu</Option>
+                    <Option value="Điện">Điện</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row className="PullRight">
               <div
                 style={{ bottom: "0", right: "20px", margin: "10px" }}
                 className="service-action"

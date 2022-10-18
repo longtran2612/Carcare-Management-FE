@@ -15,7 +15,10 @@ import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
 
 import { getPromotionLineByHeaderId } from "pages/api/promotionLineAPI";
-import { getPromotionHeaderByCode,getPromotionHeaderById } from "pages/api/promotionHeaderAPI";
+import {
+  getPromotionHeaderByCode,
+  getPromotionHeaderById,
+} from "pages/api/promotionHeaderAPI";
 
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -24,13 +27,15 @@ import moment from "moment";
 import Loading from "components/Loading";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import {EditOutlined} from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 import { formatMoney } from "utils/format";
 const formatDate = "DD/MM/YYYY";
 import DrawerPromorionDetail from "components/Drawer/DrawerPromotionDetail";
 
-
-const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) => {
+const PromotionHeaderDetail = ({
+  promotionHeaderId,
+  onUpdatePromotionHeader,
+}) => {
   const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -40,7 +45,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
   const [modalPrice, setModalPrice] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const[showDrawer, setShowDrawer] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
   const [promotionLineSelected, setPromotionLineSelected] = useState(null);
 
   const [searchText, setSearchText] = useState("");
@@ -159,7 +164,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
         toDate: moment(moment(response.data.Data.toDate), formatDate),
         status: response.data.Data.status,
       });
-     
+
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -168,8 +173,8 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
 
   useEffect(() => {
     if (promotionHeaderId) {
-     fetchPromotionHeaderDetail();
-     fetchPromotionLine();
+      fetchPromotionHeaderDetail();
+      fetchPromotionLine();
     }
   }, [promotionHeaderId]);
 
@@ -193,10 +198,10 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
           String(record.promotionLineCode)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.description).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.status)
+          String(record.description)
             .toLowerCase()
-            .includes(value.toLowerCase())
+            .includes(value.toLowerCase()) ||
+          String(record.status).toLowerCase().includes(value.toLowerCase())
         );
       },
     },
@@ -212,7 +217,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
       key: "fromDate",
       render: (text, record) => {
         return <div>{moment(record.fromDate).format(formatDate)}</div>;
-      }
+      },
     },
     {
       title: "Đến ngày",
@@ -220,7 +225,17 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
       key: "toDate",
       render: (text, record) => {
         return <div>{moment(record.toDate).format(formatDate)}</div>;
-      }
+      },
+    },
+    {
+      title: "Loại",
+      dataIndex: "type",
+      key: "type",
+      render: (text,record) => {
+        return handleType(record.type);
+        
+        
+      },
     },
     {
       title: "Trạng thái",
@@ -228,10 +243,13 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
       key: "status",
       render: (status) => {
         return (
-          <>
-            {" "}
-            <Tag color={"green"}>{status}</Tag>{" "}
-          </>
+          <div>
+            {status === "ACTIVE" ? (
+              <Tag color="green">Hoạt động</Tag>
+            ) : (
+              <Tag color="red">Không hoạt động</Tag>
+            )}
+          </div>
         );
       },
       ...getColumnSearchProps("status"),
@@ -239,7 +257,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
     {
       dataIndex: "action",
       key: "action",
-      render : (text, record) => {
+      render: (text, record) => {
         return (
           <div>
             <Button
@@ -254,9 +272,21 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
             </Button>
           </div>
         );
-      }
+      },
     },
   ];
+
+  const handleType = (value) => {
+    switch (value) {
+      case "MONEY":
+        return <Tag color='blue'>Giảm tiền</Tag>;
+      case "PERCENTAGE":
+        return <Tag color='green'>Giảm theo %</Tag>;
+      case "GIFT":
+        return <Tag color='gold'>Tặng quà</Tag>;
+      default:
+    }
+  };
 
   const onFinish = async (values) => {
     loading(true);
@@ -421,7 +451,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
                       onClick={() => setModalPrice(true)}
                     >
                       {" "}
-                     Thêm dòng khuyến mãi
+                      Thêm dòng khuyến mãi
                     </Button>
                   </Col>
                 </Row>
@@ -433,7 +463,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId, onUpdatePromotionHeader }) =
               pageSize: 10,
             }}
             scroll={{
-              y: 200,
+              y: 280,
             }}
             rowKey="id"
           />

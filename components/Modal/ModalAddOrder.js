@@ -72,6 +72,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     handleFetchCar();
     if (current == 2) {
       handleGetData();
+      form.setFieldValue("deliverDate", moment(form.getFieldValue("executeDate")).add(30,'m').format(formatDate));
     }
   }, [show, current, form]);
 
@@ -125,8 +126,8 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
       serviceIds: services.map((item) => item.id),
       receiveDate: form.getFieldValue("receiveDate"),
       executeDate: form.getFieldValue("executeDate"),
-      deliverDate: form.getFieldValue("deliverDate"),
     };
+
     try {
       const res = await createOrder(dataCreateOrder);
       openNotification("Thành công!", "Tạo yêu cầu thành công");
@@ -281,7 +282,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                     Thêm mới xe
                   </Button>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                   <Form.Item
                     label="Nhập ngày nhận xe dự kiến"
                     name="receiveDate"
@@ -297,7 +298,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                     />
                   </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                   <Form.Item
                     label="Nhập ngày xử lý dự kiến"
                     name="executeDate"
@@ -309,22 +310,6 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                   >
                     <DatePicker
                       placeholder="Nhập ngày xử lý dự kiến"
-                      format={formatDate}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item
-                    label="Nhập ngày giao xe dự kiến"
-                    name="deliverDate"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                    ]}
-                  >
-                    <DatePicker
-                      placeholder="Nhập ngày giao xe dự kiến"
                       format={formatDate}
                     />
                   </Form.Item>
@@ -428,7 +413,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                             style={{ borderRight: "solid LightGray 1px" }}
                             span={8}
                           >
-                            <Divider >Khách hàng </Divider>
+                            <Divider>Khách hàng </Divider>
                             <Timeline style={{ marginTop: "5px" }}>
                               <Timeline.Item>
                                 Mã: {customerOrder?.customerCode}
@@ -445,7 +430,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                             style={{ borderRight: "solid LightGray 1px" }}
                             span={8}
                           >
-                            <Divider >Xe </Divider>
+                            <Divider>Xe </Divider>
                             <Timeline style={{ marginTop: "5px" }}>
                               <Timeline.Item>
                                 Mã: {carOrder?.carCode}
@@ -459,7 +444,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                             </Timeline>
                           </Col>
                           <Col span={8}>
-                          <Divider >Thông tin</Divider>
+                            <Divider>Thông tin</Divider>
                             <Timeline style={{ marginTop: "5px" }}>
                               <Timeline.Item>
                                 Thời gian nhận xe dự kiến:{" "}
@@ -477,10 +462,9 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                               </Timeline.Item>
                               <Timeline.Item>
                                 Thời gian hoàn thành dự kiến:
-                                {moment(
-                                  form.getFieldsValue(["deliverDate"])
-                                    .deliverDate
-                                ).format(formatDate)}{" "}
+                              
+                                  {/* {form.getFieldsValue(["deliverDate"]).deliverDate} */}
+                                {moment(form.getFieldValue("executeDate")).add(totalTimeService(),'m').format(formatDate)}
                               </Timeline.Item>
                             </Timeline>
                           </Col>

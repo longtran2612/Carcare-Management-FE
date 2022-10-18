@@ -12,13 +12,20 @@ import {
   InputNumber,
   Typography,
   Divider,
+  
+
 } from "antd";
+import { getServices } from "pages/api/serviceAPI";
+import { getCategories } from "pages/api/categoryAPI";
 import Loading from "components/Loading";
 import { validateMessages } from "utils/messageForm";
+import TextArea from "antd/lib/input/TextArea";
 
 function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
   const [promotionDetail, setPromotionDetail] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [services, setServices] = useState([]);
   const [form] = Form.useForm();
   const getPromotionDetail = async () => {
     // setLoading(true);
@@ -43,10 +50,28 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
   const onFinish = (values) => {
     console.log(values);
   };
+  const fetchCategories = async () => {
+    try {
+      const response = await getCategories();
+      setCategories(response.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchService = async () => {
+    try {
+      const response = await getServices();
+      setServices(response.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (show) {
       getPromotionDetail();
+      fetchCategories();
+      fetchService();
     }
   }, [show]);
 
@@ -59,7 +84,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         onClose={handleCancel}
         open={show}
         visible={show}
-        bodyStyle={{ padding:40 }}
+        bodyStyle={{ padding: 40 }}
         extra={
           <Space>
             <Button onClick={handleCancel}>Hủy</Button>
@@ -75,19 +100,16 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Divider><Typography.Title level={4} > Chi tiết khuyến mãi</Typography.Title> </Divider>
+          <Divider>
+            <Typography.Title level={4}> Chi tiết khuyến mãi</Typography.Title>{" "}
+          </Divider>
           <Row gutter={[16, 4]}>
             <Col span={24}>
               <Form.Item
                 label="Mô tả"
                 name="description"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
               >
-                <Input />
+               <TextArea rows={2} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -100,7 +122,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   },
                 ]}
               >
-                <Select disabled='true'>
+                <Select disabled="true">
                   <Select.Option value="MONEY">Giảm tiền</Select.Option>
                   <Select.Option value="PERCENTAGE">
                     Giảm tiền theo %
@@ -109,19 +131,26 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item
-                label="Giá trị"
-                name="amount"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber min={0} />
-              </Form.Item>
-            </Col>
+            {promotionDetail?.type === "MONEY" ? (
+              <Col span={12}>
+                <Form.Item label="Giá trị" name="amount">
+                  <InputNumber addonAfter="Đ" min={0} />
+                </Form.Item>
+              </Col>
+            ) : (
+              promotionDetail?.type === "PERCENTAGE" && (
+                <Col span={12}>
+                  <Form.Item label="Giá trị" name="amount">
+                    <InputNumber
+                      addonAfter="%"
+                      min={0}
+                      max={100}
+                      maxLength={3}
+                    />
+                  </Form.Item>
+                </Col>
+              )
+            )}
             <Col span={12}>
               <Form.Item
                 label="Giá trị đơn hàng tối thiểu"
@@ -132,22 +161,67 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   },
                 ]}
               >
-                <InputNumber min={0} />
+                <InputNumber addonAfter="Đ" min={0} />
+              </Form.Item>
+            </Col>
+            {promotionDetail?.type != "MONEY" && (
+              <Col span={12}>
+                <Form.Item
+                  label="Số tiền tối đa được giảm"
+                  name="maximumDiscount"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <InputNumber min={0} />
+                </Form.Item>
+              </Col>
+            )}
+            <Col span={12}>
+              <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
+                <Select mode="multiple">
+                  {categories.map((category) => (
+                    <Select.Option value={category.id}>
+                      {category.name}
+                    </Select.Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                label="Số tiền tối đa được giảm"
-                name="maximumDiscount"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber min={0} />
+              <Form.Item label="Nhóm người dùng áp dụng" name="groupIds">
+                <Select mode="multiple">
+                  <Select.Option value="1">Thân thiết</Select.Option>
+                  <Select.Option value="2">VIP</Select.Option>
+                </Select>
               </Form.Item>
             </Col>
+            <Col span={12}>
+              <Form.Item label="Dịch vụ áp dụng" name="serviceIds">
+                <Select mode="multiple">
+                  {services.map((service) => (
+                    <Select.Option value={service.id}>
+                      {service.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            {promotionDetail?.type === "GIFT" && (
+              <Col span={12}>
+                <Form.Item label="Dịch vụ khuyến mãi" name="serviveReceive">
+                  <Select>
+                    {services.map((service) => (
+                      <Select.Option value={service.id}>
+                        {service.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+            )}
           </Row>
         </Form>
       </Drawer>
