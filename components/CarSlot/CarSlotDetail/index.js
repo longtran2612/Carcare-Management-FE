@@ -29,6 +29,7 @@ import Image from "next/image";
 import moment from "moment";
 import ModalSelectOrder from "components/Modal/ModalSelectOrder";
 import { openNotification } from "utils/notification";
+import ModalCreateBill from "components/Modal/ModalCreateBill";
 
 const formatDate = "HH:mm DD/MM/YYYY";
 
@@ -37,6 +38,7 @@ const CarSlotDetail = ({ carSlotId }) => {
   const { Column, ColumnGroup } = Table;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [showCreateBill, setShowCreateBill] = useState(false);
 
   const [order, setOrder] = useState(null);
   const [car, setCar] = useState(null);
@@ -211,7 +213,9 @@ const CarSlotDetail = ({ carSlotId }) => {
       setLoading(false);
     }
   };
-
+  
+  const handleSuccessBill = () => {
+  }
   console.log("customer", customer);
   console.log("order", order);
   console.log("car", car);
@@ -277,11 +281,11 @@ const CarSlotDetail = ({ carSlotId }) => {
                         }
                       />
                       <Steps.Step
-                        title="Hoàn thành"
+                        title="Dự kiến hoàn thành"
                         status="wait"
                         description={moment(carSlotDetail?.orderStartExecuting)
                           .add(totalTimeService(), "m")
-                          .format(formatDate)}
+                          .format(formatDate)} 
                       />
                     </Steps>
                   </Col>
@@ -348,6 +352,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                       </ColumnGroup>
                     </Table>
                   </Col>
+             
                   <Col span={24}>
                     <Row className="PullRight">
                       <div
@@ -370,9 +375,9 @@ const CarSlotDetail = ({ carSlotId }) => {
                           <Button
                             type="primary"
                             size="large"
-                            onClick={() => handleCompleteOrder()}
+                            onClick={() => setShowCreateBill(true)}
                           >
-                            Cập nhật
+                            Hoàn thành - Xuất hóa đơn
                           </Button>
                         </div>
                       </div>
@@ -398,6 +403,13 @@ const CarSlotDetail = ({ carSlotId }) => {
           )}
         </div>
       </div>
+
+      <ModalCreateBill
+        order={order}
+        show={showCreateBill}
+        handleCancel={() => setShowCreateBill(false)}
+        onSuccess={(data) => handleSuccessBill(data)}
+      />
 
       <Loading loading={loading} />
     </>

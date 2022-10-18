@@ -40,16 +40,35 @@ const getBillByCode = (data) => {
 };
 
 const getAllBillsByCustomerId = (data) => {
-    return axios({
-        method: "GET",
-        url: API_URL + `/bills/find-all-bills-by-customer-id/${data}`,
+  return axios({
+    method: "GET",
+    url: API_URL + `/bills/find-all-bills-by-customer-id/${data}`,
+  })
+    .then((res) => {
+      return res;
     })
-        .then((res) => {
-            return res;
-        })
-        .catch((err) => {
-            throw err;
-        });
+    .catch((err) => {
+      throw err;
+    });
+};
+const createBill = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + "/bills/create",
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
 };
 
-export { getBills, getBillById, getBillByCode, getAllBillsByCustomerId };
+export {
+  getBills,
+  createBill,
+  getBillById,
+  getBillByCode,
+  getAllBillsByCustomerId,
+};
