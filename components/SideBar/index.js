@@ -6,7 +6,7 @@ import {
   ShopOutlined,
   CarOutlined,
   BookOutlined,
-  ClearOutlined
+  ClearOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { Typography } from "antd";
@@ -28,17 +28,17 @@ function getItem(label, key, icon, children, type) {
 }
 
 const items = [
-  getItem("Cửa hàng", "1", <ShopOutlined />,[
+  getItem("Cửa hàng", "1", <ShopOutlined />, [
     getItem("Danh sách yêu cầu", "order"),
     getItem("Vị trí xử lí", "car-slot"),
+    getItem("Hóa đơn", "bills"),
   ]),
-  getItem("Hóa đơn", "2", <BookOutlined  />, [
-    getItem("Danh sách hóa đơn", "order-not-request"),
+  getItem("Đơn hàng ", "2", <BookOutlined />, [
+    getItem("Danh sách đơn hàng", "order-not-request"),
   ]),
   getItem("Dịch vụ", "3", <ClearOutlined />, [
     getItem("Dịch vụ", "service"),
     getItem("Danh mục", "category"),
-  
   ]),
   getItem("Bảng giá", "4", <DollarOutlined />, [getItem("Bảng giá", "price")]),
   getItem("Xe", "5", <CarOutlined />, [
@@ -69,20 +69,17 @@ const SideBar = ({ handleOpenKey }) => {
   };
 
   return (
-    <div style={{ height:'100%'}}>
-      <div className="logo" style={{textAlign:"center"}}>
-      <Link href="/admin">
-        <Image
-          
-          style={{ alignItems: "center" }}
-          width={75}
-          height={75}
-          src={logo}
-          alt="VLCARSERVICE"
-        />
+    <div style={{ height: "100%" }}>
+      <div className="logo" style={{ textAlign: "center" }}>
+        <Link href="/admin">
+          <Image
+            style={{ alignItems: "center" }}
+            width={75}
+            height={75}
+            src={logo}
+            alt="VLCARSERVICE"
+          />
         </Link>
-    
-    
       </div>
       <Menu
         mode="inline"

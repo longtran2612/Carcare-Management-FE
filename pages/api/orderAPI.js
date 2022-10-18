@@ -67,11 +67,24 @@ const cancelOrder = (data) => {
       throw err;
     });
 };
+const getAllOrder = () => {
+  return axios({
+    method: "GET",
+    url: API_URL + `/order`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
 export {
-    createOrder,
-    getOrderById,
-    getOrders,
-    getAllExecuteOrder,
-    cancelOrder
+  getAllOrder,
+  createOrder,
+  getOrderById,
+  getOrders,
+  getAllExecuteOrder,
+  cancelOrder,
 };

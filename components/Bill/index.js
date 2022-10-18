@@ -1,19 +1,19 @@
 import React from "react";
 import { Breadcrumb } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
-import OrderNotRequestTable from "./OrderNotRequestTable";
-
-const OrderNotRequestPage = () => {
+// import OrderTable from "./OrderTable";
+import BillTable from "./BillTable";
+const BillPage = () => {
   return (
     <>
      <Breadcrumb style={{ margin: "10px", alignItems: "center" }}>
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item href="">Quản lý đơn hàng</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Quản lý hóa đơn</Breadcrumb.Item>
       </Breadcrumb>
-      <OrderNotRequestTable />
+      <BillTable />
     </>
   );
 };
-export default OrderNotRequestPage;
+export default BillPage;

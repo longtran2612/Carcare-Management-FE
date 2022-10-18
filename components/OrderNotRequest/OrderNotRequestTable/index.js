@@ -12,7 +12,7 @@ import {
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { getAllExecuteOrder } from "pages/api/orderAPI";
+import { getAllExecuteOrder, getAllOrder } from "pages/api/orderAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
@@ -189,12 +189,8 @@ function OrderNotRequestTable({}) {
       key: "totalEstimateTime",
       ...getColumnSearchProps("statusName"),
       render: (totalEstimateTime) => {
-        return (
-          <div>
-            {totalEstimateTime} phút
-          </div> 
-        );
-      }
+        return <div>{totalEstimateTime} phút</div>;
+      },
     },
 
     {
@@ -212,11 +208,14 @@ function OrderNotRequestTable({}) {
       dataIndex: "statusName",
       ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
-        return (
-          <div>
-            <Tag color="green">{record.statusName}</Tag>
-          </div>
-        );
+        switch (record.statusName) {
+          case "Đang xử lý":
+            return <Tag color="blue">{record.statusName}</Tag>;
+          case "Hoàn thành":
+            return <Tag color="green">{record.statusName}</Tag>;
+          case "Đã hủy":
+            return <Tag color="red">{record.statusName}</Tag>;
+        }
       },
     },
   ];
@@ -224,7 +223,7 @@ function OrderNotRequestTable({}) {
   const handleGetorders = async () => {
     setLoading(true);
     try {
-      const res = await getAllExecuteOrder();
+      const res = await getAllOrder();
       if (res.status === 200) {
         setOrders(res.data.Data);
         setLoading(false);
@@ -258,9 +257,9 @@ function OrderNotRequestTable({}) {
       title: "Thời gian xử lí",
       dataIndex: "estimateTime",
       key: "estimateTime",
-      render:(text,record,dataIndex)=>{
-        return <div>{record.estimateTime} phút</div>
-      }
+      render: (text, record, dataIndex) => {
+        return <div>{record.estimateTime} phút</div>;
+      },
     },
     {
       title: "Giá",
