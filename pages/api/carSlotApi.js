@@ -41,4 +41,17 @@ const getCarSlotByCode = (code) => {
     url: API_URL + `/car-slots/find-car-slot-by-code/${code}`,
   });
 };
-export { getCarSlots, getCarSlotDetail, executeCarSlot, completeCarSlot, createCarSlot, getCarSlotByCode };
+const cancelCarSlot = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/car-slots/cancel/${data}`,
+  })
+  .then((res) => {
+    return res;
+  })
+  .catch((err) => {
+    throw err;
+  });
+};
+
+export { cancelCarSlot,getCarSlots, getCarSlotDetail, executeCarSlot, completeCarSlot, createCarSlot, getCarSlotByCode };

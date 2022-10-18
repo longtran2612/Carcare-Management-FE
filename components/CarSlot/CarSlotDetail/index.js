@@ -15,6 +15,7 @@ import {
   getCarSlotByCode,
   getCarSlotDetail,
   executeCarSlot,
+  cancelCarSlot,
   completeCarSlot,
 } from "pages/api/carSlotApi";
 import { SyncOutlined, LoadingOutlined } from "@ant-design/icons";
@@ -198,6 +199,19 @@ const CarSlotDetail = ({ carSlotId }) => {
     }
   };
 
+  const handleCancelOrder = async () => {
+    setLoading(true);
+    try {
+      const response = await cancelCarSlot(carSlotDetail?.id);
+      openNotification("Hủy yêu cầu thành công!", "");
+      fetchCarSlotDetail();
+      setLoading(false);
+    } catch (error) {
+      openNotification(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
   console.log("customer", customer);
   console.log("order", order);
   console.log("car", car);
@@ -249,8 +263,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                         title="Tiếp nhận"
                         status="finish"
                         description={
-                          moment(order?.createDate).format(formatDate) ||
-                          ""
+                          moment(order?.createDate).format(formatDate) || ""
                         }
                       />
                       <Steps.Step
@@ -266,7 +279,9 @@ const CarSlotDetail = ({ carSlotId }) => {
                       <Steps.Step
                         title="Hoàn thành"
                         status="wait"
-                        description={moment(carSlotDetail?.orderStartExecuting).add(totalTimeService(),'m').format(formatDate)}
+                        description={moment(carSlotDetail?.orderStartExecuting)
+                          .add(totalTimeService(), "m")
+                          .format(formatDate)}
                       />
                     </Steps>
                   </Col>
@@ -333,10 +348,35 @@ const CarSlotDetail = ({ carSlotId }) => {
                       </ColumnGroup>
                     </Table>
                   </Col>
-                <Col span={24}>
-                  <Button onClick={()=>handleCompleteOrder()} style={{ marginTop: "3rem",position:'absolute',right:'0' }} type="primary"  size="large">
-                    Hoàn thành xử lý
-                  </Button>
+                  <Col span={24}>
+                    <Row className="PullRight">
+                      <div
+                        style={{ bottom: "0", right: "20px", margin: "10px" }}
+                        className="service-action"
+                      >
+                        <div style={{ marginRight: "20px" }}>
+                          <Button
+                            onClick={() => {
+                              handleCancelOrder();
+                            }}
+                            size="large"
+                            type="primary"
+                            danger={true}
+                          >
+                            Hủy yêu cầu
+                          </Button>
+                        </div>
+                        <div>
+                          <Button
+                            type="primary"
+                            size="large"
+                            onClick={() => handleCompleteOrder()}
+                          >
+                            Cập nhật
+                          </Button>
+                        </div>
+                      </div>
+                    </Row>
                   </Col>
                 </Row>
               </Col>

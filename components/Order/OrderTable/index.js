@@ -12,7 +12,7 @@ import {
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { getOrders } from "pages/api/orderAPI";
+import { getOrders, cancelOrder } from "pages/api/orderAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import { openNotification } from "utils/notification";
@@ -131,6 +131,19 @@ function OrderTable({}) {
     handleGetorders();
   };
 
+  const handleCancelOrder = async (id) => {
+    setLoading(true);
+    try {
+      const res = await cancelOrder(id);
+      openNotification("Thành công", "Hủy đơn hàng thành công");
+      handleGetorders();
+      
+    } catch (err) {
+      openNotification("Thất bại", "Hủy đơn hàng thất bại");
+      setLoading(false);
+    }
+  };
+
   const onSelectOrder = (id = {});
 
   const columns = [
@@ -220,15 +233,27 @@ function OrderTable({}) {
       dataIndex: "action",
       render: (text, record, dataIndex) => {
         return (
-          <Button
-            type="primary"
-            onClick={() => {
-              setOrderSelected(record.id);
-              setModalSelectSlot(true);
-            }}
-          >
-            Xử lý
-          </Button>
+          <>
+            <Button
+              type="primary"
+              danger='true'
+              onClick={() => {
+                handleCancelOrder(record.id);
+              }}
+            >
+              Hủy
+            </Button>
+
+            <Button
+              type="primary"
+              onClick={() => {
+                setOrderSelected(record.id);
+                setModalSelectSlot(true);
+              }}
+            >
+              Xử lý
+            </Button>
+          </>
         );
       },
     },
@@ -362,8 +387,8 @@ function OrderTable({}) {
             }}
             expandable={{
               expandedRowRender: (record) => (
-                <Row style={{backgroundColor:'#AEAEAE'}} gutter={4}>
-                  <Col style={{padding:'5px'}} span={12}>
+                <Row style={{ backgroundColor: "#AEAEAE" }} gutter={4}>
+                  <Col style={{ padding: "5px" }} span={12}>
                     <Table
                       size="small"
                       bordered
@@ -379,7 +404,7 @@ function OrderTable({}) {
                         backgroundColor: "#fff",
                         padding: "5px",
                         borderRadius: "3px",
-                        margin: '5px'
+                        margin: "5px",
                       }}
                     >
                       <Row gutter={32}>

@@ -55,11 +55,23 @@ const createOrder = (data) => {
       throw err;
     });
 };
-
+const cancelOrder = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/order/cancel/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
 export {
     createOrder,
     getOrderById,
     getOrders,
-    getAllExecuteOrder
+    getAllExecuteOrder,
+    cancelOrder
 };
