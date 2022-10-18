@@ -462,8 +462,6 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                               </Timeline.Item>
                               <Timeline.Item>
                                 Thời gian hoàn thành dự kiến:
-                              
-                                  {/* {form.getFieldsValue(["deliverDate"]).deliverDate} */}
                                 {moment(form.getFieldValue("executeDate")).add(totalTimeService(),'m').format(formatDate)}
                               </Timeline.Item>
                             </Timeline>

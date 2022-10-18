@@ -266,7 +266,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                       <Steps.Step
                         title="Hoàn thành"
                         status="wait"
-                        description="Thời gian hoàn thành"
+                        description={moment(carSlotDetail?.orderStartExecuting).add(totalTimeService(),'m').format(formatDate)}
                       />
                     </Steps>
                   </Col>
