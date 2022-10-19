@@ -161,9 +161,12 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
                   </Button>
                 </div>
                 <div>
-                  <Button
-                    type="primary"
-                    onClick={() => {
+                <Popconfirm
+                    title="Xác nhận?"
+                    placement="topLeft"
+                    okText="Đồng ý"
+                    cancelText="Hủy"
+                    onConfirm={() => {
                       form
                         .validateFields()
                         .then((values) => {
@@ -174,20 +177,15 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
                         });
                     }}
                   >
-                    Cập nhật
-                  </Button>
+                    <Button type="primary">Cập nhật</Button>
+                  </Popconfirm>
                 </div>
               </div>
             </Row>
           </Form>
         </Col>
       </Row>
-      <ModalQuestion
-        title="Bạn có chắc chắn muốn xóa dịch vụ này không?"
-        visible={modalQuestion}
-        handleCancel={() => setModalQuestion(false)}
-        handleOk={() => handleRemoveService()}
-      />
+     
       <Loading loading={loading} />
     </>
   );

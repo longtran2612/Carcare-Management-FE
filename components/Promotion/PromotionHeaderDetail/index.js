@@ -231,10 +231,8 @@ const PromotionHeaderDetail = ({
       title: "Loại",
       dataIndex: "type",
       key: "type",
-      render: (text,record) => {
+      render: (text, record) => {
         return handleType(record.type);
-        
-        
       },
     },
     {
@@ -279,11 +277,11 @@ const PromotionHeaderDetail = ({
   const handleType = (value) => {
     switch (value) {
       case "MONEY":
-        return <Tag color='blue'>Giảm tiền</Tag>;
+        return <Tag color="blue">Giảm tiền</Tag>;
       case "PERCENTAGE":
-        return <Tag color='green'>Giảm theo %</Tag>;
+        return <Tag color="green">Giảm theo %</Tag>;
       case "GIFT":
-        return <Tag color='gold'>Tặng quà</Tag>;
+        return <Tag color="gold">Tặng quà</Tag>;
       default:
     }
   };
@@ -402,9 +400,12 @@ const PromotionHeaderDetail = ({
                   </Button>
                 </div>
                 <div>
-                  <Button
-                    type="primary"
-                    onClick={() => {
+                  <Popconfirm
+                    title="Xác nhận?"
+                    placement="topLeft"
+                    okText="Đồng ý"
+                    cancelText="Hủy"
+                    onConfirm={() => {
                       form
                         .validateFields()
                         .then((values) => {
@@ -415,8 +416,8 @@ const PromotionHeaderDetail = ({
                         });
                     }}
                   >
-                    Cập nhật
-                  </Button>
+                    <Button type="primary">Cập nhật</Button>
+                  </Popconfirm>
                 </div>
               </div>
             </Row>

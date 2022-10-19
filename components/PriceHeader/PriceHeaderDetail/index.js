@@ -10,6 +10,7 @@ import {
   Input,
   DatePicker,
   Table,
+  Popconfirm
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
@@ -354,9 +355,12 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   </Button>
                 </div>
                 <div>
-                  <Button
-                    type="primary"
-                    onClick={() => {
+                <Popconfirm
+                    title="Cập nhật?"
+                    placement="topLeft"
+                    okText="Xác nhận"
+                    cancelText="Hủy"
+                    onConfirm={() => {
                       form
                         .validateFields()
                         .then((values) => {
@@ -367,8 +371,8 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                         });
                     }}
                   >
-                    Cập nhật
-                  </Button>
+                    <Button type="primary">Cập nhật</Button>
+                  </Popconfirm>
                 </div>
               </div>
             </Row>

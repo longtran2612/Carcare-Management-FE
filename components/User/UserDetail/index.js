@@ -9,13 +9,11 @@ import {
   Input,
   DatePicker,
   Upload,
+  Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
-import {
-  getUserById,
-  updateUserById,
-} from "pages/api/userAPI";
+import { getUserById, updateUserById } from "pages/api/userAPI";
 import { uploadImage } from "pages/api/uploadAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -24,7 +22,6 @@ import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
-
 
 const UserDetail = ({ userId, onUpdateUser }) => {
   const router = useRouter();
@@ -67,7 +64,6 @@ const UserDetail = ({ userId, onUpdateUser }) => {
     }
   }, [userId]);
 
-
   const onFinish = async (values) => {
     try {
       let body = {
@@ -75,7 +71,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         email: values.email,
         address: values.address,
         status: values.status,
-        image:imageS3||  userDetail?.image,
+        image: imageS3 || userDetail?.image,
         birthDay: values.birthDay,
       };
       const res = await updateUserById(body, userId);
@@ -85,7 +81,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         onUpdateUser();
       }
     } catch (error) {
-       openNotification(error.response.data.message[0]);
+      openNotification(error.response.data.message[0]);
     }
   };
   // handle upload image
@@ -126,7 +122,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       </Button>
       <br />
       <br />
-      <Row gutter={[16,16]}>
+      <Row gutter={[16, 16]}>
         <Col span={6}>
           <Image width={300} height={250} src={userDetail.image} />
           <div
@@ -153,8 +149,8 @@ const UserDetail = ({ userId, onUpdateUser }) => {
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row gutter={[32,32]}>
-              <Col span={12} >
+            <Row gutter={[32, 32]}>
+              <Col span={12}>
                 <Form.Item
                   label="Tên"
                   name="name"
@@ -167,7 +163,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={6} >
+              <Col span={6}>
                 <Form.Item
                   label="Ngày sinh"
                   name="birthDay"
@@ -198,7 +194,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={12} >
+              <Col span={12}>
                 <Form.Item
                   label="Email"
                   name="email"
@@ -253,9 +249,12 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                   </Button>
                 </div>
                 <div>
-                  <Button
-                    type="primary"
-                    onClick={() => {
+                  <Popconfirm
+                    title="Xác nhận?"
+                    placement="topLeft"
+                    okText="Đồng ý"
+                    cancelText="Hủy"
+                    onConfirm={() => {
                       form
                         .validateFields()
                         .then((values) => {
@@ -266,8 +265,8 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                         });
                     }}
                   >
-                    Cập nhật
-                  </Button>
+                    <Button type="primary">Cập nhật</Button>
+                  </Popconfirm>
                 </div>
               </div>
             </Row>

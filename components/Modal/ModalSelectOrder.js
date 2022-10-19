@@ -175,12 +175,8 @@ function ModalSelectOrder({ onSelectOrder }) {
       key: "totalEstimateTime",
       ...getColumnSearchProps("totalEstimateTime"),
       render: (totalEstimateTime) => {
-        return (
-          <div>
-            {totalEstimateTime} phút
-          </div>
-        );
-      }
+        return <div>{totalEstimateTime} phút</div>;
+      },
     },
 
     {
@@ -192,18 +188,21 @@ function ModalSelectOrder({ onSelectOrder }) {
       },
     },
     {
-    title: "Hành động",
-    dataIndex: "action",
+      title: "Hành động",
+      dataIndex: "action",
       render: (text, record, dataIndex) => {
         return (
-          <Button
-            type="primary"
-            onClick={() => {
+          <Popconfirm
+            title="Xác nhận?"
+            placement="topLeft"
+            okText="Đồng ý"
+            cancelText="Hủy"
+            onConfirm={() => {
               onSelectOrder(record.id);
             }}
           >
-            Xử lý
-          </Button>
+            <Button type="primary">Xử lý</Button>
+          </Popconfirm>
         );
       },
     },
@@ -257,12 +256,8 @@ function ModalSelectOrder({ onSelectOrder }) {
       dataIndex: "estimateTime",
       key: "estimateTime",
       render: (estimateTime) => {
-        return (
-          <div>
-            {estimateTime} phút
-          </div>
-        );
-      }
+        return <div>{estimateTime} phút</div>;
+      },
     },
     {
       title: "Giá",
@@ -283,7 +278,7 @@ function ModalSelectOrder({ onSelectOrder }) {
   ];
   const handleSuccessCreateOrder = async () => {
     handleGetorders();
-  }
+  };
 
   return (
     <>
@@ -335,7 +330,6 @@ function ModalSelectOrder({ onSelectOrder }) {
             <Row gutter={4}>
               <Col span={12}>
                 <Table
-
                   bordered
                   title={() => "Dịch vụ"}
                   dataSource={record.services}

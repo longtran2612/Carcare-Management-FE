@@ -9,13 +9,11 @@ import {
   Input,
   InputNumber,
   Upload,
+  Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
-import {
-  getServiceById,
-  updateService,
-} from "pages/api/serviceAPI";
-import {UploadOutlined } from "@ant-design/icons";
+import { getServiceById, updateService } from "pages/api/serviceAPI";
+import { UploadOutlined } from "@ant-design/icons";
 import { uploadImage } from "pages/api/uploadAPI";
 import { openNotification } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
@@ -24,7 +22,6 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import { disableService } from "pages/api/serviceAPI";
 import Loading from "components/Loading";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
-
 
 const ServiceDetail = ({ serviceId, onUpdateService }) => {
   const router = useRouter();
@@ -94,9 +91,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         description: values.description,
         categoryId: values.categoryId,
         estimateTime: values.estimateTime,
-        imageUrl: imageS3||  serviceDetail?.image,
+        imageUrl: imageS3 || serviceDetail?.image,
       };
-      if(values.statusName ==="INACTIVE"){
+      if (values.statusName === "INACTIVE") {
         disableService(serviceId);
       }
       const res = await updateService(body, serviceDetail.id);
@@ -108,9 +105,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       openNotification(error.response.data.message[0]);
     }
   };
-   // handle upload image
+  // handle upload image
 
-   const handleFileChosen = (info) => {
+  const handleFileChosen = (info) => {
     const result = info.fileList.map((file) => {
       const blob = new Blob([file.originFileObj], {
         type: file.type,
@@ -140,10 +137,10 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
   };
   return (
     <>
-          <Button type="link" size="small" onClick={() => router.push("/admin")}>
+      <Button type="link" size="small" onClick={() => router.push("/admin")}>
         Trở lại
       </Button>
-      <Row gutter={[16,16]}>
+      <Row gutter={[16, 16]}>
         <Col span={6}>
           <Image width={300} height={250} src={serviceDetail.imageUrl} />
           <div
@@ -153,7 +150,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
               justifyContent: "center",
             }}
           >
-             <Upload
+            <Upload
               onChange={(info) => handleFileChosen(info)}
               multiple
               showUploadList={false}
@@ -170,8 +167,8 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row gutter={[32,32]}>
-              <Col span={18} >
+            <Row gutter={[32, 32]}>
+              <Col span={18}>
                 <Form.Item
                   label="Tên dịch vụ"
                   name="name"
@@ -184,7 +181,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={6} >
+              <Col span={6}>
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -202,7 +199,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={6} >
+              <Col span={6}>
                 <Form.Item
                   label="Kiểu dịch vụ"
                   rules={[
@@ -220,8 +217,8 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   </Select>
                 </Form.Item>
               </Col>
-            
-              <Col span={6} >
+
+              <Col span={6}>
                 <Form.Item
                   label="Danh mục dịch vụ"
                   rules={[
@@ -243,7 +240,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={6} >
+              <Col span={6}>
                 <Form.Item
                   label="Thời gian xử lý"
                   rules={[
@@ -253,10 +250,10 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   ]}
                   name="estimateTime"
                 >
-                  <InputNumber/>
+                  <InputNumber />
                 </Form.Item>
               </Col>
-              <Col span={6} >
+              <Col span={6}>
                 <Form.Item
                   label="Giá"
                   rules={[
@@ -266,14 +263,11 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   ]}
                   name="price"
                 >
-                  <InputNumber disabled='true'/>
+                  <InputNumber disabled="true" />
                 </Form.Item>
               </Col>
               <Col span={23}>
-                <Form.Item
-                  label="Mô tả"
-                  name="description"
-                >
+                <Form.Item label="Mô tả" name="description">
                   <TextArea rows={4} />
                 </Form.Item>
               </Col>
@@ -293,9 +287,12 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   </Button>
                 </div>
                 <div>
-                  <Button
-                    type="primary"
-                    onClick={() => {
+                  <Popconfirm
+                    title="Xác nhận?"
+                    placement="topLeft"
+                    okText="Đồng ý"
+                    cancelText="Hủy"
+                    onConfirm={() => {
                       form
                         .validateFields()
                         .then((values) => {
@@ -306,8 +303,8 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                         });
                     }}
                   >
-                    Cập nhật
-                  </Button>
+                    <Button type="primary">Cập nhật</Button>
+                  </Popconfirm>
                 </div>
               </div>
             </Row>

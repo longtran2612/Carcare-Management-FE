@@ -9,6 +9,7 @@ import {
   Typography,
   Timeline,
   Divider,
+  Popconfirm
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
@@ -137,7 +138,6 @@ function OrderTable({}) {
       const res = await cancelOrder(id);
       openNotification("Thành công", "Hủy đơn hàng thành công");
       handleGetorders();
-      
     } catch (err) {
       openNotification("Thất bại", "Hủy đơn hàng thất bại");
       setLoading(false);
@@ -160,6 +160,7 @@ function OrderTable({}) {
       title: "Mã",
       dataIndex: "orderCode",
       key: "orderCode",
+      width: 130,
       render: (orderCode) => <a style={{ color: "blue" }}>{orderCode}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
@@ -234,25 +235,32 @@ function OrderTable({}) {
       render: (text, record, dataIndex) => {
         return (
           <>
-            <Button
-              type="primary"
-              danger='true'
-              onClick={() => {
+            <Popconfirm
+              title="Xác nhận?"
+              placement="topLeft"
+              okText="Đồng ý"
+              cancelText="Hủy"
+              onConfirm={() => {
                 handleCancelOrder(record.id);
               }}
             >
-              Hủy
-            </Button>
+              <Button style={{marginRight:'5px'}} type="primary" danger="true">
+                Hủy
+              </Button>
+            </Popconfirm>
 
-            <Button
-              type="primary"
-              onClick={() => {
+            <Popconfirm
+              title="Xác nhận?"
+              placement="topLeft"
+              okText="Đồng ý"
+              cancelText="Hủy"
+              onConfirm={() => {
                 setOrderSelected(record.id);
                 setModalSelectSlot(true);
               }}
             >
-              Xử lý
-            </Button>
+              <Button type="primary">Xử lý</Button>
+            </Popconfirm>
           </>
         );
       },
@@ -440,7 +448,7 @@ function OrderTable({}) {
             }}
             onRow={(record, rowIndex) => {
               return {
-                onClick: (event) => {
+                onDoubleClick: (event) => {
                   router.push(`/admin?orderRequestId=${record.id}`);
                 },
               };

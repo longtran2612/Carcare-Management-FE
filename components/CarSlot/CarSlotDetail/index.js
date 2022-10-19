@@ -30,7 +30,7 @@ import moment from "moment";
 import ModalSelectOrder from "components/Modal/ModalSelectOrder";
 import { openNotification } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
-
+import ModalQuestion from "components/Modal/ModalQuestion";
 
 const formatDate = "HH:mm DD/MM/YYYY";
 
@@ -44,6 +44,12 @@ const CarSlotDetail = ({ carSlotId }) => {
   const [order, setOrder] = useState(null);
   const [car, setCar] = useState(null);
   const [customer, setCustomer] = useState(null);
+
+  const [orderSelected, setOrderSelected] = useState(null);
+
+  const [showConfimCancel, setShowConfimCancel] = useState(false);
+  const [showConfimComplete, setShowConfimComplete] = useState(false);
+  const [showConfimExecute, setShowConfimExecute] = useState(false);
 
   const [step, setStep] = useState(1);
 
@@ -168,15 +174,16 @@ const CarSlotDetail = ({ carSlotId }) => {
   };
   console.log(carSlotDetail?.status);
 
-  const handleExecuteOrder = async (data) => {
+  const handleExecuteOrder = async () => {
     setLoading(true);
     let dataExecute = {
-      orderId: data,
+      orderId: orderSelected,
       carSlotId: carSlotDetail?.id,
     };
     try {
       const response = await executeCarSlot(dataExecute);
       openNotification("Thành công!", "Bắt đầu sử lý yêu cầu");
+
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
@@ -364,7 +371,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                         <div style={{ marginRight: "20px" }}>
                           <Button
                             onClick={() => {
-                              handleCancelOrder();
+                              setShowConfimCancel(true);
                             }}
                             size="large"
                             type="primary"
@@ -378,8 +385,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                             type="primary"
                             size="large"
                             onClick={() => {
-                              handleCompleteOrder();
-                              setShowCreateBill(true);
+                              setShowConfimComplete(true);
                             }}
                           >
                             Hoàn thành - Xuất hóa đơn
@@ -401,7 +407,10 @@ const CarSlotDetail = ({ carSlotId }) => {
               </Col>
               <Col span={24}>
                 <ModalSelectOrder
-                  onSelectOrder={(value) => handleExecuteOrder(value)}
+                  onSelectOrder={(value) => {
+                    setOrderSelected(value);
+                    setShowConfimExecute(true);
+                  }}
                 />
               </Col>
             </Row>
@@ -413,11 +422,36 @@ const CarSlotDetail = ({ carSlotId }) => {
         order={order}
         show={showCreateBill}
         handleCancel={() => setShowCreateBill(false)}
-        onSuccess={(data) => handleSuccessBill(data)}
+        onSuccess={() => handleSuccessBill()}
       />
-      {/* <div ref ={}>
-
-      </div> */}
+      <ModalQuestion
+        title="Bạn có chắc chắn xử lý yêu cầu này?"
+        visible={showConfimExecute}
+        handleCancel={() => setShowConfimExecute(false)}
+        handleOk={() => {
+          handleExecuteOrder();
+          setShowConfimExecute(false);
+        }}
+      />
+      <ModalQuestion
+        title="Bạn có chắc chắn hủy yêu cầu xử lý này?"
+        visible={showConfimCancel}
+        handleCancel={() => setShowConfimCancel(false)}
+        handleOk={() => {
+          handleCancelOrder();
+          setShowConfimCancel(false);
+        }}
+      />
+      <ModalQuestion
+        title="Bạn có chắc chắn hoàn thành xử lý yêu cầu này?"
+        visible={showConfimComplete}
+        handleCancel={() => setShowConfimComplete(false)}
+        handleOk={() => {
+          handleCompleteOrder();
+          setShowConfimComplete(false);
+          setShowCreateBill(true);
+        }}
+      />
 
       <Loading loading={loading} />
     </>

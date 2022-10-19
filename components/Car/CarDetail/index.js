@@ -10,6 +10,7 @@ import {
   Timeline,
   Upload,
   InputNumber,
+  Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
 import { uploadImage } from "pages/api/uploadAPI";
@@ -88,7 +89,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         seats: values.seats,
         fuel: values.fuel,
         year: values.year,
-        imageUrl: imageS3||  carDetail?.imageUrl,
+        imageUrl: imageS3 || carDetail?.imageUrl,
       };
       console.log(body);
       const res = await updateCar(body, carDetail?.id);
@@ -100,9 +101,9 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       openNotification(error.response.data.message[0]);
     }
   };
-   // handle upload image
+  // handle upload image
 
-   const handleFileChosen = (info) => {
+  const handleFileChosen = (info) => {
     const result = info.fileList.map((file) => {
       const blob = new Blob([file.originFileObj], {
         type: file.type,
@@ -330,13 +331,16 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                       fetchcarDetail();
                     }}
                   >
-                    Đặt lại
+                    Hủy
                   </Button>
                 </div>
                 <div>
-                  <Button
-                    type="primary"
-                    onClick={() => {
+                  <Popconfirm
+                    title="Cập nhật?"
+                    placement="topLeft"
+                    okText="Xác nhận"
+                    cancelText="Hủy"
+                    onConfirm={() => {
                       form
                         .validateFields()
                         .then((values) => {
@@ -347,8 +351,8 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                         });
                     }}
                   >
-                    Cập nhật
-                  </Button>
+                    <Button type="primary">Cập nhật</Button>
+                  </Popconfirm>
                 </div>
               </div>
             </Row>

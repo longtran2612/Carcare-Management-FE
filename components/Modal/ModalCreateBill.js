@@ -42,10 +42,10 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
 
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [promotionSelected, setPromotionSelected] = useState(null);
-  const [paymentAmount, setPaymentAmount] = useState(0);
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
 
   const componentRef = useRef();
+
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -133,7 +133,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       const res = await createBill(dataCreateBill);
       openNotification("Thành công!", "Tạo hóa đơn thành công!");
       handleCancel();
-      // onSuccess(res.data);
+      onSuccess(res.data);
       handlePrint();
     } catch (error) {
       openNotification(error.response.data.message[0]);

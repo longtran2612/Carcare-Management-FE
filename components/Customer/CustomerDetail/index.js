@@ -9,6 +9,7 @@ import {
   Input,
   DatePicker,
   Upload,
+  Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
@@ -314,9 +315,12 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
                   </Button>
                 </div>
                 <div>
-                  <Button
-                    type="primary"
-                    onClick={() => {
+                  <Popconfirm
+                    title="Xác nhận?"
+                    placement="topLeft"
+                    okText="Đồng ý"
+                    cancelText="Hủy"
+                    onConfirm={() => {
                       form
                         .validateFields()
                         .then((values) => {
@@ -327,8 +331,8 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
                         });
                     }}
                   >
-                    Cập nhật
-                  </Button>
+                    <Button type="primary">Cập nhật</Button>
+                  </Popconfirm>
                 </div>
               </div>
             </Row>

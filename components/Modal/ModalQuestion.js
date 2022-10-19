@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal } from "antd";
+import { Modal, Typography } from "antd";
 
 const ModalQuestion = ({ visible, handleCancel, handleOk, title }) => {
   return (
@@ -11,7 +11,7 @@ const ModalQuestion = ({ visible, handleCancel, handleOk, title }) => {
         okText="Xác nhận"
         cancelText="Hủy bỏ"
       >
-        <p>{title}</p>
+        <Typography.Title level={4}>{title}</Typography.Title>
       </Modal>
     </>
   );

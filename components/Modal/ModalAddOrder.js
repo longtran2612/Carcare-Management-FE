@@ -24,6 +24,7 @@ import { openNotification } from "utils/notification";
 import ServiceOrder from "./ModalService";
 import { formatMoney } from "utils/format";
 import ModalAddCustomer from "./ModalAddCustomer";
+import ModalAddCarWithCustomer from "./ModalAddCarWithCustomer";
 import ModalAddCar from "./ModalAddCar";
 import moment from "moment";
 
@@ -72,7 +73,12 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     handleFetchCar();
     if (current == 2) {
       handleGetData();
-      form.setFieldValue("deliverDate", moment(form.getFieldValue("executeDate")).add(30,'m').format(formatDate));
+      form.setFieldValue(
+        "deliverDate",
+        moment(form.getFieldValue("executeDate"))
+          .add(30, "m")
+          .format(formatDate)
+      );
     }
   }, [show, current, form]);
 
@@ -238,7 +244,13 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                       onChange={handelChangeUser}
                     >
                       {customers.map((item) => (
-                        <Option value={item.id}>{item.name}</Option>
+                        <Option value={item.id}>
+                          {item.customerCode +
+                            " - " +
+                            item.name +
+                            " - " +
+                            item.phoneNumber}
+                        </Option>
                       ))}
                     </Select>
                   </Form.Item>
@@ -462,7 +474,9 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                               </Timeline.Item>
                               <Timeline.Item>
                                 Thời gian hoàn thành dự kiến:
-                                {moment(form.getFieldValue("executeDate")).add(totalTimeService(),'m').format(formatDate)}
+                                {moment(form.getFieldValue("executeDate"))
+                                  .add(totalTimeService(), "m")
+                                  .format(formatDate)}
                               </Timeline.Item>
                             </Timeline>
                           </Col>
@@ -476,15 +490,21 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
           </Row>
         </Form>
       </Modal>
-      <ModalAddCar
+      {/* <ModalAddCar
         show={modalCar}
         handleCancel={() => setModalCar(false)}
         onSuccess={(value) => handleSuccessCreateCar(value)}
-      />
+      /> */}
       <ModalAddCustomer
         show={modalCustomer}
         handleCancel={() => setModalCustomer(false)}
         onSuccess={(value) => handleSuccessCreateCustomer(value)}
+      />
+      <ModalAddCarWithCustomer
+        customerId={form.getFieldValue("customerId")}
+        show={modalCar}
+        handleCancel={() => setModalCar(false)}
+        onSuccess={(value) => handleSuccessCreateCar(value)}
       />
     </>
   );
