@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Modal,
   Row,
   Col,
   Form,
-  Input,
   Select,
   Typography,
-  Steps,
-  Button,
-  DatePicker,
-  Divider,
-  Timeline,
   Card,
   Table,
+  Drawer,
+  Divider,
+  Button,
+  Avatar,
+  Tag,
+  List,
 } from "antd";
 import { getPromotionDetail } from "pages/api/promotionDetail";
 import { createBill } from "pages/api/billAPI";
@@ -25,6 +25,12 @@ import { formatMoney } from "utils/format";
 import moment from "moment";
 import promotion_gif from "public/images/promotion.gif";
 import Image from "next/image";
+import { TagsOutlined } from "@ant-design/icons";
+// import BillPDF from "components/BillPrint";
+import ReactToPrint, { PrintContextConsumer } from "react-to-print";
+// import {BillPDF} from "components/Bill/BillPDF";
+import { useReactToPrint } from "react-to-print";
+import logo from "public/images/logo-footer-customer.png";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -37,6 +43,12 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [promotionSelected, setPromotionSelected] = useState(null);
   const [paymentAmount, setPaymentAmount] = useState(0);
+  const [showSelectPromotion, setShowSelectPromotion] = useState(false);
+
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   const handleFetchPromotion = async () => {
     try {
@@ -66,23 +78,63 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       return (total += cur.servicePrice.price);
     }, 0);
   };
-  const totalPromotionAmount = () => {};
+  const totalPromotionAmount = () => {
+    if (promotionSelected) {
+      if (promotionSelected?.type === "PERCENTAGE") {
+        let total = (totalPriceService() * promotionSelected?.amount) / 100;
+        if (total > promotionSelected?.maximumDiscount) {
+          return promotionSelected?.maximumDiscount;
+        }
+        return total;
+      } else {
+        if (promotionSelected?.type === "MONEY") {
+          return promotionSelected.amount;
+        }
+      }
+    }
+  };
+  const finalTotalPrice = () => {
+    if (
+      promotionSelected?.type === "PERCENTAGE" ||
+      promotionSelected?.type === "MONEY"
+    ) {
+      return totalPriceService() - totalPromotionAmount();
+    }
+    return totalPriceService();
+  };
+
+  const handleType = (value) => {
+    switch (value) {
+      case "MONEY":
+        return <Tag color="blue">Giảm tiền</Tag>;
+      case "PERCENTAGE":
+        return <Tag color="green">Giảm theo %</Tag>;
+      case "GIFT":
+        return <Tag color="gold">Tặng quà</Tag>;
+      default:
+    }
+  };
 
   const onFinish = async (values) => {
     const dataCreateBill = {
       orderId: order.id,
-      promotionCodes: values.promotion,
-      totalPromotionAmount: totalPromotionAmount(),
-      paymentAmount: paymentAmount,
+      // promotionCodes: [promotionSelected?.promotionDetailCode],
+      // totalPromotionAmount: totalPromotionAmount(),
+      paymentAmount: finalTotalPrice(),
       paymentType: values.paymentType,
-      cardNumber: values.cardNumber,
+      cardNumber: "",
     };
-
+    if(promotionSelected !=undefined){
+      dataCreateBill.promotionCodes = [promotionSelected?.promotionDetailCode];
+      dataCreateBill.totalPromotionAmount = totalPromotionAmount();
+    }
+    console.log(dataCreateBill);
     try {
       const res = await createBill(dataCreateBill);
       openNotification("Thành công!", "Tạo hóa đơn thành công!");
       handleCancel();
-      onSuccess(res.data);
+      // onSuccess(res.data);
+      handlePrint();
     } catch (error) {
       openNotification(error.response.data.message[0]);
     }
@@ -117,7 +169,9 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
           <Row gutter={[16]}>
             <Col span={24}>
               <Col span={24}>
-                <Title level={4}>Thông tin yêu cầu</Title>
+                <Divider>
+                  <Title level={4}>Thông tin hóa đơn</Title>
+                </Divider>
                 <Row gutter={16}>
                   <Col span={24}>
                     <Table
@@ -133,26 +187,38 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                               <Table.Summary.Cell
                                 index={1}
                               ></Table.Summary.Cell>
-                              <Table.Summary.Cell
-                                index={2}
-                              >Tổng tiền dịch vụ</Table.Summary.Cell>
+                              <Table.Summary.Cell index={2}>
+                                Tổng tiền dịch vụ
+                              </Table.Summary.Cell>
                               <Table.Summary.Cell index={3}>
                                 {formatMoney(totalPriceService() || 0)}
                               </Table.Summary.Cell>
                             </Table.Summary.Row>
                             <Table.Summary.Row>
-                              <Table.Summary.Cell
-                                index={0}
-                              ></Table.Summary.Cell>
-                              <Table.Summary.Cell
-                                index={1}
-                              ></Table.Summary.Cell>
-                              <Table.Summary.Cell
-                                index={2}
-                              >Triết khấu</Table.Summary.Cell>
+                              <Table.Summary.Cell index={0}>
+                                <Button
+                                  icon={<TagsOutlined />}
+                                  type="ghost"
+                                  style={{
+                                    backgroundColor: "yellow",
+                                    color: "black",
+                                  }}
+                                  onClick={() => setShowSelectPromotion(true)}
+                                >
+                                  Khuyến mãi
+                                </Button>
+                              </Table.Summary.Cell>
+                              <Table.Summary.Cell index={1}>
+                                {promotionSelected?.description}{" "}
+                              </Table.Summary.Cell>
+                              <Table.Summary.Cell index={2}>
+                                {handleType(promotionSelected?.type)}
+                              </Table.Summary.Cell>
 
                               <Table.Summary.Cell index={3}>
-                                - {formatMoney(paymentAmount || 0)}
+                                <span style={{ color: "yellow" }}>
+                                  - {formatMoney(totalPromotionAmount() || 0)}
+                                </span>
                               </Table.Summary.Cell>
                             </Table.Summary.Row>
                             <Table.Summary.Row>
@@ -162,12 +228,16 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                               <Table.Summary.Cell
                                 index={1}
                               ></Table.Summary.Cell>
-                              <Table.Summary.Cell
-                                index={2}
-                              >Tổng</Table.Summary.Cell>
+                              <Table.Summary.Cell index={2}>
+                                Tổng
+                              </Table.Summary.Cell>
 
                               <Table.Summary.Cell index={3}>
-                                {formatMoney(paymentAmount || 0)}
+                                <span
+                                  style={{ color: "red", fontWeight: "bold" }}
+                                >
+                                  {formatMoney(finalTotalPrice() || 0)}
+                                </span>
                               </Table.Summary.Cell>
                             </Table.Summary.Row>
                           </>
@@ -183,7 +253,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                         title="STT"
                         dataIndex="stt"
                         key="stt"
-                        width={70}
+                        width={170}
                         render={(text, record, dataIndex) => {
                           return <div>{dataIndex + 1}</div>;
                         }}
@@ -206,52 +276,21 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                       />
                     </Table>
                   </Col>
-                  <Col span={24}>
-                    <Row gutter={16}>
-                      {promotionDetails.map((item, index) => {
-                        return (
-                          <Col
-                            key={item.id}
-                            span={6}
-                            style={{ marginBottom: "10px" }}
-                            onClick={() =>
-                              router.push(
-                                `/admin?carSlotId=${carSlot.carSlotCode}`
-                              )
-                            }
-                          >
-                            <Card
-                              headStyle={{
-                                backgroundColor: "#8CB3F1",
-                                color: "white",
-                                height: "20px",
-                                textAlign: "center",
-                                fontSize: "13px",
-                              }}
-                              style={{
-                                margin: "10px",
-                                borderRadius: "20px",
-                                overflow: "hidden",
-                                cursor: "pointer",
-                                height: "150px",
-                                alignContent: "center",
-                              }}
-                              hoverable
-                              title={item.description}
-                              bordered={false}
-                            >
-                              <div>
-                                <Image
-                                  src={promotion_gif}
-                                  width={120}
-                                  height={120}
-                                />
-                              </div>
-                            </Card>
-                          </Col>
-                        );
-                      })}
-                    </Row>
+                  <Col span={6}>
+                    <Form.Item
+                      label="Hình thức thanh toán"
+                      name="paymentType"
+                      rules={[{ required: true }]}
+                    >
+                      <Select defaultValue="CASH">
+                        <Option value="CASH">Tiền mặt</Option>
+                        <Option value="DEBIT">Thẻ</Option>
+                      </Select>
+                      {/* <Switch >
+                        <Route path="/cash" component={Cash} />
+                        <Route path="/debit" component={Debit} />
+                        </Switch> */}
+                    </Form.Item>
                   </Col>
                 </Row>
               </Col>
@@ -259,6 +298,217 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
           </Row>
         </Form>
       </Modal>
+      <Drawer
+        title="Chọn khuyến mãi"
+        placement="right"
+        onClose={() => setShowSelectPromotion(false)}
+        visible={showSelectPromotion}
+        width={700}
+      >
+        <>
+          <List
+            dataSource={promotionDetails}
+            itemLayout="vertical"
+            size="large"
+            renderItem={(item) => (
+              <Row gutter={16}>
+                <Col
+                  style={{
+                    border: "solid gray 1px",
+                    borderRadius: "5px",
+                    margin: "10px",
+                  }}
+                  span={24}
+                >
+                  <List.Item
+                    key={item.id}
+                    onClick={() => {
+                      if (totalPriceService() > item.minimumSpend) {
+                        setPromotionSelected(item);
+                        setShowSelectPromotion(false);
+                      } else {
+                        openNotification(
+                          "Đơn hàng chưa đạt giá trị tối thiểu để sử dụng mã khuyến mãi này"
+                        );
+                      }
+                    }}
+                    // actions={[
+                    //   <Button
+                    //     type="primary"
+                    //     onClick={() => {
+                    //       setPromotionSelected(item);
+                    //       setShowSelectPromotion(false);
+                    //     }}
+                    //   >
+                    //     Áp dụng
+                    //   </Button>,
+                    // ]}
+                  >
+                    <List.Item.Meta
+                      avatar={
+                        <Avatar
+                          size={{
+                            xs: 24,
+                            sm: 32,
+                            md: 40,
+                            lg: 64,
+                            xl: 80,
+                            xxl: 100,
+                          }}
+                          icon={<TagsOutlined />}
+                        />
+                      }
+                      title={<a>{item.name}</a>}
+                      description={<Title level={5}>{item.description}</Title>}
+                    />
+                    <Row>
+                      {item.type === "PERCENTAGE" ? (
+                        <Col span={24}>
+                          {" "}
+                          <span style={{ fontWeight: "bold" }}>
+                            Giảm {item.amount}%{" "}
+                          </span>
+                        </Col>
+                      ) : (
+                        <Col span={24}>
+                          <span style={{ fontWeight: "bold" }}>
+                            Giảm {formatMoney(item.amount || 0)}{" "}
+                          </span>
+                        </Col>
+                      )}
+
+                      <Col span={12}>
+                        <span style={{ fontWeight: "bold" }}>
+                          Số tiền đơn hàng tối thiểu:{" "}
+                        </span>
+                        {formatMoney(item.minimumSpend || 0)}
+                      </Col>
+                      <Col span={12}>
+                        <span style={{ fontWeight: "bold" }}>
+                          Giảm tối đa:{" "}
+                        </span>
+                        {formatMoney(item.maximumDiscount || 0)}
+                      </Col>
+                      <Col span={12}>
+                        <span style={{ fontWeight: "bold" }}>
+                          Ngày bắt đầu:{" "}
+                        </span>
+                        {moment(item.fromDate).format("DD/MM/YYYY")}
+                      </Col>
+                      <Col span={12}>
+                        <span style={{ fontWeight: "bold" }}>Kết thúc: </span>
+                        {moment(item.toDate).format("DD/MM/YYYY")}
+                      </Col>
+                    </Row>
+                  </List.Item>
+                </Col>
+              </Row>
+            )}
+          />
+        </>
+      </Drawer>
+      <div ref={componentRef}>
+        <br />
+        <div className="invoice-box">
+          <table>
+            <tr className="top">
+              <td colspan="2">
+                <table>
+                  <tr>
+                    <td className="title">
+                      <Image
+                        src={logo}
+                        width={150}
+                        height={100}
+                        alt="Company logo"
+                      />
+                    </td>
+                    <td>
+                      Order #: {order?.orderCode}
+                      <br />
+                      Ngày tạo:{" "}
+                      {moment(order?.createDate).format("HH:ss DD/MM/YYYY")}
+                      <br />
+                      Ngày thanh toán: {moment().format("HH:ss DD/MM/YYYY")}
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr className="information">
+              <td colspan="2">
+                <table>
+                  <tr>
+                    <td>
+                      VLCareCare
+                      <br />
+                      0772555445
+                      <br />
+                      12 Nguyễn Văn bảo
+                      <br />
+                      Phường 5,Gò Vấp, Hồ Chí Minh
+                    </td>
+
+                    <td>
+                      Khách hàng : {order?.customerName}
+                      <br />
+                      Số điện thoại : {order?.customerPhoneNumber}
+                      <br />
+                      Xe : {order?.carName} - {order?.carLicensePlate}
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr className="heading">
+              <td>Thanh Toán</td>
+
+              <td>
+                {form.getFieldValue("paymentType") == "CASH"
+                  ? "Tiền mặt"
+                  : "Chuyển khoản"}
+              </td>
+            </tr>
+            <tr className="heading">
+              <td>Dịch vụ</td>
+
+              <td>Thành tiền</td>
+            </tr>
+
+            {order?.services?.map((item) => (
+              <>
+                <tr className="item">
+                  <td>{item?.name}</td>
+
+                  <td>{formatMoney(item?.servicePrice?.price)}</td>
+                </tr>
+              </>
+            ))}
+            {promotionSelected && (
+              <>
+                <tr className="item">
+                  <td>Khuyến mãi</td>
+                  <td><a style={{color:'red'}}>-{formatMoney(totalPromotionAmount() || 0)}</a></td>
+                </tr>
+              </>
+            )}
+
+            <tr className="total">
+              <td></td>
+
+              <td>Tổng: {formatMoney(finalTotalPrice() || 0)}</td>
+            </tr>
+          </table>
+          <Divider style={{paddingTop:'50px'}}>
+            {" "}
+          
+              Cảm ơn quý khách vì đã sử dụng dịch vụ của chúng tôi
+           
+          </Divider>
+        </div>
+      </div>
     </>
   );
 };

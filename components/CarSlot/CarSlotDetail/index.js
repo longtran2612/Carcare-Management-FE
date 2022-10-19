@@ -31,6 +31,7 @@ import ModalSelectOrder from "components/Modal/ModalSelectOrder";
 import { openNotification } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 
+
 const formatDate = "HH:mm DD/MM/YYYY";
 
 const CarSlotDetail = ({ carSlotId }) => {
@@ -193,7 +194,6 @@ const CarSlotDetail = ({ carSlotId }) => {
     try {
       const response = await completeCarSlot(dataComplete);
       openNotification("Hoàn thành xử lý thành công!", "");
-      fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
       openNotification(error.response.data.message);
@@ -213,9 +213,11 @@ const CarSlotDetail = ({ carSlotId }) => {
       setLoading(false);
     }
   };
-  
+
   const handleSuccessBill = () => {
-  }
+    setShowCreateBill(false);
+    fetchCarSlotDetail();
+  };
   console.log("customer", customer);
   console.log("order", order);
   console.log("car", car);
@@ -285,7 +287,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                         status="wait"
                         description={moment(carSlotDetail?.orderStartExecuting)
                           .add(totalTimeService(), "m")
-                          .format(formatDate)} 
+                          .format(formatDate)}
                       />
                     </Steps>
                   </Col>
@@ -352,7 +354,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                       </ColumnGroup>
                     </Table>
                   </Col>
-             
+
                   <Col span={24}>
                     <Row className="PullRight">
                       <div
@@ -375,7 +377,10 @@ const CarSlotDetail = ({ carSlotId }) => {
                           <Button
                             type="primary"
                             size="large"
-                            onClick={() => setShowCreateBill(true)}
+                            onClick={() => {
+                              handleCompleteOrder();
+                              setShowCreateBill(true);
+                            }}
                           >
                             Hoàn thành - Xuất hóa đơn
                           </Button>
@@ -410,6 +415,9 @@ const CarSlotDetail = ({ carSlotId }) => {
         handleCancel={() => setShowCreateBill(false)}
         onSuccess={(data) => handleSuccessBill(data)}
       />
+      {/* <div ref ={}>
+
+      </div> */}
 
       <Loading loading={loading} />
     </>
