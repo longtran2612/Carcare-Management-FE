@@ -266,7 +266,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   <InputNumber disabled="true" />
                 </Form.Item>
               </Col>
-              <Col span={23}>
+              <Col span={24}>
                 <Form.Item label="Mô tả" name="description">
                   <TextArea rows={4} />
                 </Form.Item>

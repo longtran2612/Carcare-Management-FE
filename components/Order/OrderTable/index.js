@@ -9,7 +9,7 @@ import {
   Typography,
   Timeline,
   Divider,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
@@ -144,8 +144,6 @@ function OrderTable({}) {
     }
   };
 
-  const onSelectOrder = (id = {});
-
   const columns = [
     {
       title: "STT",
@@ -244,7 +242,11 @@ function OrderTable({}) {
                 handleCancelOrder(record.id);
               }}
             >
-              <Button style={{marginRight:'5px'}} type="primary" danger="true">
+              <Button
+                style={{ marginRight: "5px" }}
+                type="primary"
+                danger="true"
+              >
                 Hủy
               </Button>
             </Popconfirm>
@@ -282,10 +284,8 @@ function OrderTable({}) {
     };
     try {
       const res = await getOrders(dataGetOrder);
-      if (res.status === 200) {
-        setOrders(res.data.Data.content);
-        setLoading(false);
-      }
+      setOrders(res.data.Data.content);
+      setLoading(false);
     } catch (error) {
       openNotification(error.response.data.message[0]);
       setLoading(false);
