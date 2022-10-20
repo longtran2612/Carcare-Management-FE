@@ -2,6 +2,7 @@ import { Table, Tag, Space, Button, Row, Col, Input, Tooltip } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { ClearOutlined } from "@ant-design/icons";
 import { getCars } from "pages/api/carAPI";
+import {PlusOutlined } from "@ant-design/icons";
 import { SearchOutlined } from "@ant-design/icons";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCar from "components/Modal/ModalAddCar";
@@ -264,6 +265,7 @@ function CarTable({}) {
               <Button
                 style={{ float: "right" }}
                 type="primary"
+                icon={<PlusOutlined />}
                 onClick={() => setModalCar(true)}
               >
                 Thêm Xe

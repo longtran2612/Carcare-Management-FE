@@ -14,7 +14,7 @@ import { ClearOutlined } from "@ant-design/icons";
 import { getUsers } from "pages/api/userAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddUser from "components/Modal/ModelAddUser";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined ,PlusOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import UserDetail from "../UserDetail";
 import Loading from "components/Loading";
@@ -271,8 +271,8 @@ function UserTable({}) {
               </Button>
             </Col>
             <Col span={11}>
-              <Button className="PullRight" type="primary" onClick={() => setModalUser(true)}>
-                Thêm người dùng
+              <Button className="PullRight" icon={<PlusOutlined />} type="primary" onClick={() => setModalUser(true)}>
+                Thêm nhân viên
               </Button>
             </Col>
           </Row>

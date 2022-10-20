@@ -9,7 +9,7 @@ import ModalAddPromotionHeader from "components/Modal/ModalAddPromotionHeader";
 import moment from "moment";
 const formatDate = "DD/MM/YYYY";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined,PlusOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { openNotification } from "utils/notification";
 
@@ -226,7 +226,7 @@ function PromotionHeaderTable({}) {
               </Button>
             </Col>
             <Col span={11}>
-              <Button style={{float:"right"}} type="primary" onClick={() => setModalPromotionHeader(true)}>
+              <Button style={{float:"right"}} type="primary" icon={<PlusOutlined />} onClick={() => setModalPromotionHeader(true)}>
                 Thêm chương trình khuyến mãi
               </Button>
             </Col>

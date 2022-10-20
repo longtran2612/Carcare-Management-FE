@@ -24,7 +24,7 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";
 import moment from "moment";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined,PlusOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
 
@@ -404,6 +404,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                     <Button
                       style={{ float: "right" }}
                       type="primary"
+                      icon={<PlusOutlined />}
                       onClick={() => setModalPrice(true)}
                     >
                       {" "}

@@ -8,7 +8,7 @@ import ModalAddPriceHeader from "components/Modal/ModalAddPriceHeader";
 import moment from "moment";
 const formatDate = "DD/MM/YYYY";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined ,PlusOutlined} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
 function PriceHeaderTable({}) {
@@ -224,7 +224,7 @@ function PriceHeaderTable({}) {
               </Button>
             </Col>
             <Col span={11}>
-              <Button style={{float:"right"}} type="primary" onClick={() => setModalPriceHeader(true)}>
+              <Button style={{float:"right"}} icon={<PlusOutlined />} type="primary" onClick={() => setModalPriceHeader(true)}>
                 Thêm bảng giá
               </Button>
             </Col>

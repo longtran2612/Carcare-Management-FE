@@ -1,6 +1,6 @@
 import { Table, Tag, Button, Input, Row, Col, Space, Select } from "antd";
 import React, { useState, useEffect, useRef } from "react";
-import { SearchOutlined, ClearOutlined } from "@ant-design/icons";
+import { SearchOutlined, ClearOutlined,PlusOutlined } from "@ant-design/icons";
 import { getServices, searchService } from "pages/api/serviceAPI";
 import { getCategories } from "pages/api/categoryAPI";
 import ModalAddService from "components/Modal/ModalAddService";
@@ -298,6 +298,7 @@ function ServiceTable({}) {
               <Button
                 style={{ float: "right" }}
                 type="primary"
+                icon={<PlusOutlined />}
                 onClick={() => setModalService(true)}
               >
                 Thêm dịch vụ

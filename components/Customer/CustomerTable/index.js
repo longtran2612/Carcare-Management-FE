@@ -10,7 +10,7 @@ import {
   Input,
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
-import { ClearOutlined } from "@ant-design/icons";
+import { ClearOutlined,PlusOutlined } from "@ant-design/icons";
 import { getCustomers } from "pages/api/customerAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddUser from "components/Modal/ModelAddUser";
@@ -305,9 +305,10 @@ function CustomerTable({}) {
               <Button
                 className="PullRight"
                 type="primary"
+                icon={<PlusOutlined />}
                 onClick={() => setModalCustomer(true)}
               >
-                Thêm người dùng
+                Thêm khách hàng mới
               </Button>
             </Col>
           </Row>

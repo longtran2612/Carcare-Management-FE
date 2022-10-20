@@ -1,6 +1,11 @@
 import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
 import React, { useState, useEffect, useRef } from "react";
-import { getCarModel } from "pages/api/carModel";
+import {
+  getCarModel,
+  importExcelCarModel,
+  exportExcelCarModel,
+} from "pages/api/carModel";
+import {VerticalAlignBottomOutlined,VerticalAlignTopOutlined,PlusOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCarModel from "components/Modal/ModalAddCarModal";
@@ -16,6 +21,7 @@ function CarModelTable({}) {
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [file, setFile] = useState(null);
   const { carModelId } = router.query;
 
   const [searchGlobal, setSearchGlobal] = useState("");
@@ -197,24 +203,18 @@ function CarModelTable({}) {
       console.log(err);
     }
   };
-  // const handleRemoveService = async () => {
-  //   try {
-  //     const res = await removeServiceApi(id);
-  //     if (res.data.StatusCode == 200) {
-  //       handleGetServices();
-  //       setModalQuestion(false);
-  //       setId(null);
-  //     }
-  //   } catch (error) {}
-  // };
-
   useEffect(() => {
     handleGetCarModel();
   }, []);
 
-  const handleSuccessCarModel = (data) => {
+  const handleSuccessCarModel = () => {
     handleGetCarModel();
   };
+
+  const handleExportExcel = async () => {
+    const response = await exportCarModelExcel();
+  };
+  const handleImportExcel = async () => {};
 
   return (
     <>
@@ -242,8 +242,34 @@ function CarModelTable({}) {
                 Xóa bộ lọc
               </Button>
             </Col>
-            <Col span={11}>
-              <Button  style={{float:"right"}} type="primary" onClick={() => setModalCarModel(true)}>
+            <Col span={2}></Col>
+            <Col span={3}>
+              <Button
+                style={{ float: "right" }}
+                icon={<VerticalAlignTopOutlined />}
+                
+                onClick={() => exportExcelCarModel()}
+              >
+                Export Excel
+              </Button>
+            </Col>
+            <Col span={3}>
+              <Button
+                style={{ float: "right" }}
+                icon={<VerticalAlignBottomOutlined />}
+             
+                onClick={() => importExcelCarModel()}
+              >
+                Import Excel
+              </Button>
+            </Col>
+            <Col span={3}>
+              <Button
+                style={{ float: "right" }}
+                icon={<PlusOutlined />}
+                type="primary"
+                onClick={() => setModalCarModel(true)}
+              >
                 Thêm mẫu xe
               </Button>
             </Col>

@@ -2,7 +2,7 @@ import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import { message } from "antd";
-import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined ,PlusOutlined} from "@ant-design/icons";
 import { getCategories } from "pages/api/categoryAPI";
 import ModalAddCategory from "components/Modal/ModalAddCategory";
 import CategoryDetail from "../CategoryDetail";
@@ -216,7 +216,7 @@ function CategoryTable({}) {
               </Button>
             </Col>
             <Col span={11}>
-              <Button style={{float:"right"}} type="primary" onClick={() => setModalCategory(true)}>
+              <Button style={{float:"right"}} type="primary" icon={<PlusOutlined />}  onClick={() => setModalCategory(true)}>
                 Thêm danh mục
               </Button>
             </Col>

@@ -17,6 +17,7 @@ import { getOrders, cancelOrder } from "pages/api/orderAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import { openNotification } from "utils/notification";
+import { PlusOutlined } from "@ant-design/icons";
 
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
@@ -376,6 +377,7 @@ function OrderTable({}) {
                     <Button
                       style={{ float: "right" }}
                       type="primary"
+                      icon={PlusOutlined}
                       onClick={() => setModalOrder(true)}
                     >
                       {" "}

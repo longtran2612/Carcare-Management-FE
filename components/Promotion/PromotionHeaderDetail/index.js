@@ -26,7 +26,7 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPromotionLine from "components/Modal/ModalAddPromotionLine";
 import moment from "moment";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined ,PlusOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { EditOutlined } from "@ant-design/icons";
 import { formatMoney } from "utils/format";
@@ -450,6 +450,7 @@ const PromotionHeaderDetail = ({
                     <Button
                       style={{ float: "right" }}
                       type="primary"
+                      icon={<PlusOutlined />}
                       onClick={() => setModalPrice(true)}
                     >
                       {" "}
