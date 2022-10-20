@@ -47,30 +47,31 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
     }
   };
   const onFinish = async (values) => {
+    console.log(values);
     const dataUpdate = {
       description: values.description,
       type: values.type,
       amount: values.amount,
       maximumDiscount: values.maximumDiscount,
       minimumSpend: values.minimumSpend,
-      categoryIds: values.categoryIds,
-      groupIds: values.groupIds,
-      serviceIds: values.serviceIds,
+      categoryIds: values.categoryIds.join(","),
+      groupIds: values.groupIds.join(","),
+      serviceIds: values.serviceIds.join(","),
     };
-    if(values.type === "PERCENTAGE"){
+    if (values.type === "PERCENTAGE") {
       dataUpdate.serviceReceip = null;
     }
-    if(values.type === "MONEY"){
+    if (values.type === "MONEY") {
       dataUpdate.maximumDiscount = 0;
       dataUpdate.serviceReceip = null;
     }
-    if(values.type === "GIFT"){
+    if (values.type === "GIFT") {
       dataUpdate.maximumDiscount = 0;
       dataUpdate.serviceReceip = values.serviveReceive;
     }
 
     try {
-      console.log("data update", dataUpdate)
+      console.log("data update", dataUpdate);
       const response = await updatePromotionDetail(
         dataUpdate,
         promotionDetail.id
@@ -113,7 +114,10 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         width={640}
         placement="right"
         closable
-        onClose={handleCancel}
+        onClose={() => {
+          handleCancel();
+          form.resetFields();
+        }}
         open={show}
         visible={show}
         bodyStyle={{ padding: 40 }}
