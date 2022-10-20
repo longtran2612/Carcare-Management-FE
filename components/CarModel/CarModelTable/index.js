@@ -1,4 +1,4 @@
-import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
+import { Table, Tag, Space, Button, Row, Col, Input ,Popconfirm} from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import {
   getCarModel,
@@ -207,7 +207,12 @@ function CarModelTable({}) {
   };
 
   const handleExportExcel = async () => {
-    const response = await exportCarModelExcel();
+    try{
+      const response = await exportCarModelExcel();
+    }catch(err){
+      console.log(err);
+    }
+
   };
   const handleImportExcel = async () => {};
 
@@ -239,21 +244,26 @@ function CarModelTable({}) {
             </Col>
             <Col span={2}></Col>
             <Col span={3}>
+            <a download="dowload" href="https://khoa-luan-gl.herokuapp.com/car-models/export-to-excel">
+
               <Button
                 style={{ float: "right" }}
                 icon={<VerticalAlignTopOutlined />}
                 
-                onClick={() => exportExcelCarModel()}
+                // onClick={() => handleExportExcel()}
               >
                 Export Excel
               </Button>
+           
+                 
+              </a>
             </Col>
             <Col span={3}>
               <Button
                 style={{ float: "right" }}
                 icon={<VerticalAlignBottomOutlined />}
              
-                onClick={() => importExcelCarModel()}
+                onClick={() => handleImportExcel()}
               >
                 Import Excel
               </Button>
