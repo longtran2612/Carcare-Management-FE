@@ -285,15 +285,7 @@ function BillTable({}) {
                     Xóa bộ lọc
                   </Button>
                 </Col>
-                <Col span={11}>
-                  <Button
-                    style={{ float: "right" }}
-                    type="primary"
-                    onClick={() => setModalCar(true)}
-                  >
-                    Thêm Xe
-                  </Button>
-                </Col>
+              
               </Row>
             </>
           )}

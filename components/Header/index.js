@@ -7,12 +7,14 @@ import {
   LoginOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import {  Menu, message } from "antd";
+import { Menu, message } from "antd";
 import Link from "next/link";
 import { logout } from "pages/api/authAPI";
 import { setLogout } from "redux/slices/authSlice";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import { openNotification } from "utils/notification";
+import ModalQuestion from "components/Modal/ModalQuestion";
 
 const { SubMenu } = Menu;
 
@@ -22,6 +24,8 @@ const MyHeader = () => {
   const { user } = useSelector((state) => state.authSlice);
   const router = useRouter();
 
+  const[showComfirm, setShowComfirm] = useState(false)
+
   const accessToken = Cookies.get("accessToken");
 
   const handleOnClick = (e) => {
@@ -29,20 +33,8 @@ const MyHeader = () => {
   };
 
   const handleLogout = () => {
-    logout()
-      .then((res) => {
-        if (res.data.StatusCode == 200) {
-          dispatch(setLogout());
-          router.push("/login");
-        } else {
-          if (res.status == 422) {
-            openNotification(err.response.data.message[0]);
-          }
-        }
-      })
-      .catch((err) => {
-        openNotification(err.response.data.message[0]);
-      });
+    dispatch(setLogout());
+    router.push("/login");
   };
   const headerStyle = {
     display: "flex",
@@ -53,15 +45,14 @@ const MyHeader = () => {
     boxShadow: " 0 4px 4px -2px #CCD6FC",
   };
   return (
+    <>
     <div className="header">
-     
       <Menu
         mode="horizontal"
         style={headerStyle}
         onClick={handleOnClick}
         selectedKeys={keyMenu}
       >
-         
         {user.roles === "ROLE_USER" && (
           <>
             {/* <Menu.Item key={1} icon={<HomeOutlined />}>
@@ -84,7 +75,7 @@ const MyHeader = () => {
             </Menu.Item>
             <Menu.Item key="10_1" icon={<LogoutOutlined />}>
               {/* <Link a>Đăng xuất</Button> */}
-              <a onClick={() => handleLogout()}>Đăng xuất</a>
+              <a onClick={() => setShowComfirm(true)}>Đăng xuất</a>
             </Menu.Item>
           </SubMenu>
         ) : (
@@ -98,8 +89,17 @@ const MyHeader = () => {
           </SubMenu>
         )}
       </Menu>
-      
-     </div>
+    </div>
+    <ModalQuestion
+        title="Bạn có chắc chắn đăng xuất?"
+        visible={showComfirm}
+        handleCancel={() => showComfirm(false)}
+        handleOk={() => {
+          handleLogout();
+          setShowComfirm(false);
+        }}
+      />
+    </>
   );
 };
 

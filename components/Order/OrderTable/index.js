@@ -377,7 +377,7 @@ function OrderTable({}) {
                     <Button
                       style={{ float: "right" }}
                       type="primary"
-                      icon={PlusOutlined}
+                      icon={<PlusOutlined />}
                       onClick={() => setModalOrder(true)}
                     >
                       {" "}
