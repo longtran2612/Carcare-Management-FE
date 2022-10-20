@@ -64,7 +64,7 @@ const AdminPage = () => {
           collapsible
           onCollapse={(value) => setCollapsed(value)}
           collapsed={collapsed}
-          theme="light"
+          theme="dark"
           style={{
             overflow: "auto",
             left: 0,

@@ -13,7 +13,7 @@ import { Typography } from "antd";
 import React, { useState } from "react";
 const { Title } = Typography;
 import { useRouter } from "next/router";
-import logo from "public/images/logo.png";
+import logo from "public/images/logo-sibar.svg";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -83,8 +83,8 @@ const SideBar = ({ handleOpenKey }) => {
       </div>
       <Menu
         mode="inline"
+        theme="dark"
         style={{ height: "100%" }}
-        theme="light"
         items={items}
         onClick={onClick}
         defaultSelectedKeys={["car-slot"]}
