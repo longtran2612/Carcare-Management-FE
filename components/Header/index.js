@@ -93,7 +93,7 @@ const MyHeader = () => {
     <ModalQuestion
         title="Bạn có chắc chắn đăng xuất?"
         visible={showComfirm}
-        handleCancel={() => showComfirm(false)}
+        handleCancel={() => setShowComfirm(false)}
         handleOk={() => {
           handleLogout();
           setShowComfirm(false);

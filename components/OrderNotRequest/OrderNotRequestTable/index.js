@@ -323,7 +323,7 @@ function OrderNotRequestTable({}) {
             }}
             expandable={{
               expandedRowRender: (record) => (
-                <Row gutter={4}>
+                <Row style={{ backgroundColor: "#ECE3E3" }} gutter={4}>
                   <Col span={12}>
                     <Table
                       bordered

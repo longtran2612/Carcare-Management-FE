@@ -330,7 +330,7 @@ function ModalSelectOrder({ onSelectOrder }) {
         }}
         expandable={{
           expandedRowRender: (record) => (
-            <Row gutter={4}>
+            <Row style={{ backgroundColor: "#ECE3E3" }} gutter={4}>
               <Col span={12}>
                 <Table
                   bordered
@@ -351,15 +351,15 @@ function ModalSelectOrder({ onSelectOrder }) {
                     borderRadius: "10px",
                   }}
                 >
-                  <Row gutter={32}>
+                  <Row  gutter={32}>
                     <Col
                       style={{ borderRight: "solid LightGray 1px" }}
                       span={11}
                     >
-                      <Title style={{ textAlign: "center" }} level={4}>
-                        Khách hàng
-                      </Title>
-                      <Divider />
+                   
+                   
+                     
+                      <Divider >      Khách hàng </Divider>
                       <Timeline style={{ marginTop: "20px" }}>
                         <Timeline.Item>
                           Tên: {record?.customerName}
@@ -370,10 +370,8 @@ function ModalSelectOrder({ onSelectOrder }) {
                       </Timeline>
                     </Col>
                     <Col span={12}>
-                      <Title style={{ textAlign: "center" }} level={4}>
-                        Xe
-                      </Title>
-                      <Divider />
+                     
+                      <Divider > Xe </Divider>
                       <Timeline style={{ marginTop: "20px" }}>
                         <Timeline.Item>Xe: {record?.carName}</Timeline.Item>
                         <Timeline.Item>

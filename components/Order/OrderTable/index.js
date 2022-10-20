@@ -397,7 +397,7 @@ function OrderTable({}) {
             }}
             expandable={{
               expandedRowRender: (record) => (
-                <Row style={{ backgroundColor: "#AEAEAE" }} gutter={4}>
+                <Row style={{ backgroundColor: "#ECE3E3" }} gutter={4}>
                   <Col style={{ padding: "5px" }} span={12}>
                     <Table
                       size="small"

@@ -93,10 +93,8 @@ const AdminPage = () => {
           </Content>
           <Footer style={{ backgroundColor: "white", textAlign: "center" }}>
             <Row justify="center">
-        
-              <Space />
               <Typography.Title
-                level={4}
+                level={5}
                 style={{
                   textAlign: "center",
                   display: "flex",
