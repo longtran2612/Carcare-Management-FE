@@ -109,9 +109,12 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   };
   const handleSuccessCreateCustomer = async (data) => {
     await handleFetchCustomer();
+
     form.setFieldsValue({
       customerId: data.id,
+      carId: null,
     });
+
   };
 
   const totalPriceService = () => {

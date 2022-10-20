@@ -10,14 +10,14 @@ import moment from "moment";
 import { async } from "@firebase/util";
 const formatDate = "HH:mm DD/MM/YYYY";
 
-const ModalAddCarWithCustomer = ({
-  customerId,
+const ModalAddCarWithoutCustomer = ({
   show,
   onSuccess,
   handleCancel,
 }) => {
   const [form] = Form.useForm();
   const [carModels, setCarModels] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const onFinish = async (values) => {
     let dataCreate = {
@@ -25,7 +25,7 @@ const ModalAddCarWithCustomer = ({
       name: values.name,
       carModelId: values.carModelId || null,
       licensePlate: values.licensePlate,
-      customerId: customerId,
+      customerId: values.customerId,
     };
 
 
@@ -47,11 +47,20 @@ const ModalAddCarWithCustomer = ({
       console.log(error);
     }
   };
+  const getUsersData = async () => {
+    try {
+      const res = await getCustomers();
+      setUsers(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   console.log(carModels);
 
   useEffect(() => {
     getCarModels();
+    getUsersData();
   }, [show]);
 
   return (
@@ -134,6 +143,31 @@ const ModalAddCarWithCustomer = ({
                 </Select>
               </Form.Item>
             </Col>
+            <Col span={24}>
+              <Form.Item
+                label="Người sở hữu"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                name="customerId"
+              >
+                <Select
+                  showSearch
+                  placeholder="Chọn Người sở hữu"
+                  optionFilterProp="children"
+                >
+                  {users.map((item, index) => {
+                    return (
+                      <Select.Option key={index} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
           </Row>
         </Form>
       </Modal>
@@ -141,4 +175,4 @@ const ModalAddCarWithCustomer = ({
   );
 };
 
-export default ModalAddCarWithCustomer;
+export default ModalAddCarWithoutCustomer;

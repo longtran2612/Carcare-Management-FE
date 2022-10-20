@@ -11,6 +11,8 @@ import CarDetail from "../CarDetail";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
 import { openNotification } from "utils/notification";
+import ModalAddCarWithCustomer from "components/Modal/ModalAddCarWithCustomer";
+import ModalAddCarWithoutCustomer from "components/Modal/ModalAddCarWithoutCustomer";
 
 function CarTable({}) {
   const [cars, setCars] = useState([]);
@@ -294,7 +296,12 @@ function CarTable({}) {
           />
         </div>
       )}
-      <ModalAddCar
+      {/* <ModalAddCar
+        show={modalCar}
+        handleCancel={() => setModalCar(false)}
+        onSuccess={(data) => handleSuccessCreateCar(data)}
+      /> */}
+        <ModalAddCarWithoutCustomer
         show={modalCar}
         handleCancel={() => setModalCar(false)}
         onSuccess={(data) => handleSuccessCreateCar(data)}
