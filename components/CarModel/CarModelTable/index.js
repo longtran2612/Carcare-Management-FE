@@ -125,13 +125,13 @@ function CarModelTable({}) {
     },
     {
       title: "Mã",
-      dataIndex: "id",
-      key: "id",
-      render: (id) => <a style={{ color: "blue" }}>{id}</a>,
+      dataIndex: "carModelCode",
+      key: "carModelCode",
+      render: (carModelCode) => <a style={{ color: "blue" }}>{carModelCode}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.id).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.carModelCode).toLowerCase().includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.brand).toLowerCase().includes(value.toLowerCase()) ||
           String(record.model).toLowerCase().includes(value.toLowerCase()) ||
@@ -147,10 +147,10 @@ function CarModelTable({}) {
       },
     },
     {
-      title: "Tên mẫu xe",
-      dataIndex: "name",
-      key: "name",
-      ...getColumnSearchProps("name"),
+      title: "Model",
+      dataIndex: "model",
+      key: "model",
+      ...getColumnSearchProps("model"),
     },
     {
       title: "Hãng xe",
@@ -158,12 +158,7 @@ function CarModelTable({}) {
       key: "brand",
       ...getColumnSearchProps("brand"),
     },
-    {
-      title: "Model",
-      dataIndex: "model",
-      key: "model",
-      ...getColumnSearchProps("model"),
-    },
+
     {
       title: "Động cơ",
       dataIndex: "engine",

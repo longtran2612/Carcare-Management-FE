@@ -280,9 +280,14 @@ function ModalSelectOrder({ onSelectOrder }) {
 
   return (
     <>
+    {/* <Row>
+        <Col span={24}>
+          
+    </Row> */}
       <Table
         rowKey="id"
         bordered
+      
         title={() => (
           <>
             <Row>
