@@ -8,12 +8,15 @@ import slot_active from "public/images/slot_active.png";
 import slot_available from "public/images/slot_available.png";
 import slot_unavailable from "public/images/slot_unavailable.png";
 import Loading from "components/Loading";
+import moment from "moment";
 import { openNotification } from "utils/notification";
 import {
   UserOutlined,
   CarOutlined,
   FieldTimeOutlined,
 } from "@ant-design/icons";
+
+const formatDate ='HH:mm'
 
 const CarSlot = () => {
   const router = useRouter();
@@ -116,7 +119,9 @@ const CarSlot = () => {
                               {carSlot?.orderCarLicensePlate}
                             </Timeline.Item>
                             <Timeline.Item dot={<FieldTimeOutlined />}>
-                              {carSlot?.orderTotalEstimateTime} phút
+                              {moment(carSlot?.orderStartExecuting)
+                                  .add(carSlot?.orderTotalEstimateTime, "m")
+                                  .format(formatDate)} 
                             </Timeline.Item>
                           </Timeline>
                         </div>

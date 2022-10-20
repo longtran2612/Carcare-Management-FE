@@ -84,9 +84,11 @@ a {
   height: 40px;
 }
 .ant-timeline-item {
-  padding-bottom: 10px !important;
+  padding-bottom: 5px !important;
 }
-
+/* .ant-timeline-item-content{
+  margin: 0 0 0 10px !important;
+} */
 
 .background-login{
   background: linear-gradient(to top right, #AE9CE1, #F5E7DB);

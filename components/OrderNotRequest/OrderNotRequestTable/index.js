@@ -17,7 +17,7 @@ import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
-import { ClearOutlined, SearchOutlined,PlusOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
 import { openNotification } from "utils/notification";
@@ -323,7 +323,10 @@ function OrderNotRequestTable({}) {
             }}
             expandable={{
               expandedRowRender: (record) => (
-                <Row style={{ backgroundColor: "#ECE3E3" }} gutter={4}>
+                <Row
+                  style={{ padding: "10px", backgroundColor: "#ECE3E3" }}
+                  gutter={16}
+                >
                   <Col span={12}>
                     <Table
                       bordered
@@ -331,6 +334,9 @@ function OrderNotRequestTable({}) {
                       dataSource={record.services}
                       columns={columnService}
                       pagination={false}
+                      scroll={{
+                        y: 200,
+                      }}
                     ></Table>
                   </Col>
                   <Col span={12}>
@@ -338,7 +344,6 @@ function OrderNotRequestTable({}) {
                       style={{
                         backgroundColor: "#fff",
                         padding: "10px",
-                        borderRadius: "10px",
                       }}
                     >
                       <Row gutter={32}>
@@ -346,10 +351,7 @@ function OrderNotRequestTable({}) {
                           style={{ borderRight: "solid LightGray 1px" }}
                           span={11}
                         >
-                          <Title style={{ textAlign: "center" }} level={4}>
-                            Khách hàng
-                          </Title>
-                          <Divider />
+                          <Divider> Khách hàng </Divider>
                           <Timeline style={{ marginTop: "20px" }}>
                             <Timeline.Item>
                               Tên: {record?.customerName}
@@ -360,10 +362,7 @@ function OrderNotRequestTable({}) {
                           </Timeline>
                         </Col>
                         <Col span={12}>
-                          <Title style={{ textAlign: "center" }} level={4}>
-                            Xe
-                          </Title>
-                          <Divider />
+                          <Divider> Xe </Divider>
                           <Timeline style={{ marginTop: "20px" }}>
                             <Timeline.Item>Xe: {record?.carName}</Timeline.Item>
                             <Timeline.Item>

@@ -65,10 +65,25 @@ const createBill = (data) => {
     });
 };
 
+const cancelBill =(data)=>{
+  return axios({
+    method: "POST",
+    url: API_URL + `/bills/cancel-bill/${data}`,
+  })
+  .then((res) => {
+    return res;
+  })
+  .catch((err) => {
+    throw err;
+  });
+};
+
+
 export {
   getBills,
   createBill,
   getBillById,
   getBillByCode,
   getAllBillsByCustomerId,
+  cancelBill
 };

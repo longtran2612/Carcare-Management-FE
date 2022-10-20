@@ -290,7 +290,7 @@ function ModalSelectOrder({ onSelectOrder }) {
       
         title={() => (
           <>
-            <Row>
+            <Row >
               <Col span={8} style={{ marginRight: "10px" }}>
                 <Input.Search
                   placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
@@ -330,7 +330,7 @@ function ModalSelectOrder({ onSelectOrder }) {
         }}
         expandable={{
           expandedRowRender: (record) => (
-            <Row style={{ backgroundColor: "#ECE3E3" }} gutter={4}>
+            <Row  style={{padding: '10px', backgroundColor: "#ECE3E3" }} gutter={16}>
               <Col span={12}>
                 <Table
                   bordered
@@ -348,7 +348,6 @@ function ModalSelectOrder({ onSelectOrder }) {
                   style={{
                     backgroundColor: "#fff",
                     padding: "10px",
-                    borderRadius: "10px",
                   }}
                 >
                   <Row  gutter={32}>
@@ -356,9 +355,6 @@ function ModalSelectOrder({ onSelectOrder }) {
                       style={{ borderRight: "solid LightGray 1px" }}
                       span={11}
                     >
-                   
-                   
-                     
                       <Divider >      Khách hàng </Divider>
                       <Timeline style={{ marginTop: "20px" }}>
                         <Timeline.Item>

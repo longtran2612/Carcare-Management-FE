@@ -10,10 +10,11 @@ import {
   Timeline,
   Divider,
   Drawer,
+  Popconfirm
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { getBills } from "pages/api/billAPI";
+import { getBills,cancelBill } from "pages/api/billAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
@@ -140,6 +141,20 @@ function BillTable({}) {
       return (total += cur?.estimateTime);
     }, 0);
   };
+  const handlePrintBill = async () => {
+  }
+  const handleCancelBill = async (id) => {
+    setLoading(true);
+    try {
+      const res = cancelBill(id);
+      openNotification("Thành công", "Hủy hóa đơn thành công");
+      handleGetbills();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  }
 
   const columns = [
     {
@@ -155,7 +170,7 @@ function BillTable({}) {
       title: "Mã",
       dataIndex: "billCode",
       key: "billCode",
-
+      width: 120,
       render: (billCode) => <a style={{ color: "blue" }}>{billCode}</a>,
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
@@ -187,12 +202,14 @@ function BillTable({}) {
       title: "Biển số xe",
       dataIndex: "carLicensePlate",
       key: "carLicensePlate",
+      width: 120,
       ...getColumnSearchProps("carLicensePlate"),
     },
     {
       title: "Tổng tiền dịch vụ",
       dataIndex: "totalServicePrice",
       key: "totalServicePrice",
+      width: 150,
       render: (text, record) => (
         <div>{formatMoney(record.totalServicePrice)}</div>
       ),
@@ -201,6 +218,7 @@ function BillTable({}) {
       title: "Loại thanh toán",
       dataIndex: "paymentType",
       key: "paymentType",
+      width: 120,
       ...getColumnSearchProps("paymentType"),
       render: (texr, record) => (
         <div>{record.paymentType == "CASH" ? "Tiền mặt" : "Thẻ"}</div>
@@ -210,6 +228,7 @@ function BillTable({}) {
       title: "Ngày thanh toán",
       dataIndex: "paymentDate",
       key: "paymentDate",
+      width: 120,
       render(paymentDate) {
         return <div>{moment(paymentDate).format(formatDate)}</div>;
       },
@@ -219,12 +238,52 @@ function BillTable({}) {
       title: "Trạng thái",
       key: "statusName",
       dataIndex: "statusName",
+      width: 120,
       ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
         return (
           <div>
             <Tag color="green">{record.statusName}</Tag>
           </div>
+        );
+      },
+    },
+    {
+      title: "Hành động",
+      dataIndex: "action",
+      render: (text, record, dataIndex) => {
+        return (
+          <>
+            <Popconfirm
+              title="Xác nhận?"
+              placement="topLeft"
+              okText="Đồng ý"
+              cancelText="Hủy"
+              onConfirm={() => {
+                handleCancelBill(record.id);
+              }}
+            >
+              <Button
+                style={{ marginRight: "5px" }}
+                type="primary"
+                danger="true"
+              >
+                Hủy
+              </Button>
+            </Popconfirm>
+
+            <Popconfirm
+              title="Xác nhận?"
+              placement="topLeft"
+              okText="Đồng ý"
+              cancelText="Hủy"
+              onConfirm={() => {
+                handlePrintBill()
+              }}
+            >
+              <Button type="primary">Xuất hóa đơn</Button>
+            </Popconfirm>
+          </>
         );
       },
     },
@@ -285,7 +344,6 @@ function BillTable({}) {
                     Xóa bộ lọc
                   </Button>
                 </Col>
-              
               </Row>
             </>
           )}
@@ -299,7 +357,7 @@ function BillTable({}) {
           }}
           onRow={(record, rowIndex) => {
             return {
-              onClick: (event) => {
+              onDoubleClick: (event) => {
                 setBillDetail(record);
                 setShowDetail(true);
               },
@@ -316,19 +374,14 @@ function BillTable({}) {
         footer={() => (
           <>
             <Divider>VLCARESERvice</Divider>
-            ádasds
           </>
         )}
       >
-        <p
-          className="site-description-item-profile-p"
-          style={{
-            marginBottom: 24,
-          }}
-        >
-          Hóa đơn mã: {billDetail.billCode}
-        </p>
-        <p className="site-description-item-profile-p">Personal</p>
+        <Divider>
+          <Title level={5}>Hóa đơn mã: {billDetail.billCode}</Title>
+        </Divider>
+
+        <p className="site-description-item-profile-p">Khách hàng</p>
         <Row>
           <Col span={8}>
             <DescriptionItem
@@ -381,7 +434,7 @@ function BillTable({}) {
               <Col span={6}>
                 <DescriptionItem
                   title="Thời gian sử lý"
-                  content={item?.estimateTime}
+                  content={item?.estimateTime+" phút"}
                 />
               </Col>
               <Col span={6}>
@@ -392,8 +445,14 @@ function BillTable({}) {
               </Col>
             </>
           ))}
-          {billDetail?.promotionDetails?.map((item, index) => (
-            <>
+        </Row>
+        {billDetail?.promotionDetails?.map((item, index) => (
+          <>
+            <Divider />
+            <p className="site-description-item-profile-p">
+              Khuyến mãi sử dụng
+            </p>
+            <Row>
               <Col span={6}>
                 <DescriptionItem
                   title="Mã khuyến mãi sử dụng"
@@ -415,16 +474,20 @@ function BillTable({}) {
                   content={formatMoney(billDetail?.totalPromotionAmount)}
                 />
               </Col>
-            </>
-          ))}
-          <Col span={12}></Col>
-          <Col span={6}>
+            </Row>
+          </>
+        ))}
+
+        <Divider />
+        <p className="site-description-item-profile-p">Thông tin thanh toán</p>
+        <Row>
+          <Col span={12}>
             <DescriptionItem
               title="Tổng Thời gian sử lý"
-              content={totalTimeService()}
+              content={totalTimeService()+" phút"}
             />
           </Col>
-          <Col span={6}>
+          <Col span={12}>
             <DescriptionItem
               title="Tổng tiền khách trả"
               content={formatMoney(
@@ -433,11 +496,7 @@ function BillTable({}) {
               )}
             />
           </Col>
-        </Row>
 
-        <Divider />
-        <p className="site-description-item-profile-p">Thông tin thanh toán</p>
-        <Row>
           <Col span={12}>
             <DescriptionItem
               title="Hình thức thanh toán"
