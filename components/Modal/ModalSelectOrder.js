@@ -9,6 +9,7 @@ import {
   Typography,
   Timeline,
   Divider,
+  Popconfirm,
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
@@ -192,17 +193,14 @@ function ModalSelectOrder({ onSelectOrder }) {
       dataIndex: "action",
       render: (text, record, dataIndex) => {
         return (
-          <Popconfirm
-            title="Xác nhận?"
-            placement="topLeft"
-            okText="Đồng ý"
-            cancelText="Hủy"
-            onConfirm={() => {
+          <Button
+            onClick={() => {
               onSelectOrder(record.id);
             }}
+            type="primary"
           >
-            <Button type="primary">Xử lý</Button>
-          </Popconfirm>
+            Xử lý
+          </Button>
         );
       },
     },

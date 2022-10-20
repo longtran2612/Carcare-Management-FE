@@ -12,9 +12,8 @@ import {
   InputNumber,
   Typography,
   Divider,
-  
-
 } from "antd";
+import { updatePromotionDetail } from "pages/api/promotionDetail";
 import { getServices } from "pages/api/serviceAPI";
 import { getCategories } from "pages/api/categoryAPI";
 import Loading from "components/Loading";
@@ -47,8 +46,41 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
       // setLoading(false);
     }
   };
-  const onFinish = (values) => {
-    console.log(values);
+  const onFinish = async (values) => {
+    const dataUpdate = {
+      description: values.description,
+      type: values.type,
+      amount: values.amount,
+      maximumDiscount: values.maximumDiscount,
+      minimumSpend: values.minimumSpend,
+      categoryIds: values.categoryIds,
+      groupIds: values.groupIds,
+      serviceIds: values.serviceIds,
+    };
+    if(values.type === "PERCENTAGE"){
+      dataUpdate.serviceReceip = null;
+    }
+    if(values.type === "MONEY"){
+      dataUpdate.maximumDiscount = 0;
+      dataUpdate.serviceReceip = null;
+    }
+    if(values.type === "GIFT"){
+      dataUpdate.maximumDiscount = 0;
+      dataUpdate.serviceReceip = values.serviveReceive;
+    }
+
+    try {
+      console.log("data update", dataUpdate)
+      const response = await updatePromotionDetail(
+        dataUpdate,
+        promotionDetail.id
+      );
+      // onSuccess(response.data.Data);
+      // handleCancel();
+      getPromotionDetail();
+    } catch (error) {
+      console.log(error);
+    }
   };
   const fetchCategories = async () => {
     try {
@@ -88,7 +120,19 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         extra={
           <Space>
             <Button onClick={handleCancel}>Hủy</Button>
-            <Button onClick={onFinish} type="primary">
+            <Button
+              onClick={() => {
+                form
+                  .validateFields()
+                  .then((values) => {
+                    onFinish(values);
+                  })
+                  .catch((info) => {
+                    console.log("Validate Failed:", info);
+                  });
+              }}
+              type="primary"
+            >
               Lưu
             </Button>
           </Space>
@@ -105,11 +149,8 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
           </Divider>
           <Row gutter={[16, 4]}>
             <Col span={24}>
-              <Form.Item
-                label="Mô tả"
-                name="description"
-              >
-               <TextArea rows={2} />
+              <Form.Item label="Mô tả" name="description">
+                <TextArea rows={2} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -203,7 +244,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 <Select mode="multiple">
                   {services.map((service) => (
                     <Select.Option value={service.id}>
-                      {service.name}
+                      {service.serviceCode + " - " + service.name}
                     </Select.Option>
                   ))}
                 </Select>
@@ -215,7 +256,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   <Select>
                     {services.map((service) => (
                       <Select.Option value={service.id}>
-                        {service.name}
+                        {service.serviceCode + " - " + service.name}
                       </Select.Option>
                     ))}
                   </Select>

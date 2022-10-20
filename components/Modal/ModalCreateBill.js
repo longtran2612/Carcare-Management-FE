@@ -42,12 +42,13 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
 
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [promotionSelected, setPromotionSelected] = useState(null);
-  const [showSelectPromotion, setShowSelectPromotion] = useState(false);
+  const [showSelectPromotion, setShowSelectPromotion] = useState(false)
+  const [showPrint, setShowPrint] = useState(false)
 
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    content: () => componentRef.current
   });
 
   const handleFetchPromotion = async () => {
@@ -134,7 +135,9 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       openNotification("Thành công!", "Tạo hóa đơn thành công!");
       handleCancel();
       onSuccess(res.data);
+      setShowPrint(true);
       handlePrint();
+      setShowPrint(false)
     } catch (error) {
       openNotification(error.response.data.message[0]);
     }
@@ -407,7 +410,8 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
           />
         </>
       </Drawer>
-      <div ref={componentRef}>
+      {
+        showPrint &&<div ref={componentRef}>
         <br />
         <div className="invoice-box">
           <table>
@@ -509,6 +513,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
           </Divider>
         </div>
       </div>
+      }
     </>
   );
 };

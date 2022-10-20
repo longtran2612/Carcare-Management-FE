@@ -54,10 +54,25 @@ const getPromotionDetailByLineId = (data) => {
       throw err;
     });
 };
+
 const createPromotionDetail = (data) => {
   return axios({
     method: "POST",
     url: API_URL + `/promotion-details/create`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+const updatePromotionDetail = (data,id) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/promotion-details/update/${id}`,
     data: data,
   })
     .then((res) => {
@@ -74,4 +89,5 @@ export {
   getPromotionDetailById,
   getPromotionDetailByCode,
   createPromotionDetail,
+  updatePromotionDetail,
 };
