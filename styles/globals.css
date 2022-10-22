@@ -22,14 +22,14 @@ a {
 }
 .card-slot div:first-child {
   border-right: 1px solid #ccc;
-  flex-basis: 50%;
+  flex-basis: 60%;
 }
 .card-slot div:last-child {
   /* align-self: start; */
   flex-basis: 50%;
   padding-left: 1rem;
   align-items: center;
-  padding-top: 0.2rem;
+  padding-top: 0.3rem;
   
   /* text-align: right; */
 }
@@ -86,9 +86,9 @@ a {
 .ant-timeline-item {
   padding-bottom: 5px !important;
 }
-/* .ant-timeline-item-content{
-  margin: 0 0 0 10px !important;
-} */
+.ant-timeline-item-content{
+  margin: 0 0 0 15px !important;
+}
 
 .background-login{
   background: linear-gradient(to top right, #AE9CE1, #F5E7DB);

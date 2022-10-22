@@ -4,8 +4,8 @@ import { getCarSlots } from "pages/api/carSlotApi";
 import { useRouter } from "next/router";
 import CarSlotDetail from "./CarSlotDetail";
 import Image from "next/image";
-import slot_active from "public/images/slot_active.png";
-import slot_available from "public/images/slot_available.png";
+import slot_active from "public/images/slot_active.gif";
+import slot_available from "public/images/slot_avaliable.png";
 import slot_unavailable from "public/images/slot_unavailable.png";
 import Loading from "components/Loading";
 import moment from "moment";
@@ -76,18 +76,22 @@ const CarSlot = () => {
                 >
                   <Card
                     headStyle={{
-                      backgroundColor: "#8CB3F1",
+                      backgroundColor: "#002140",
                       color: "white",
-                      height: "50px",
+                      height: "40px",
                       textAlign: "center",
+                      justifyContent: "center",
+                      alignContent: "center",
                       fontSize: "20px",
                     }}
                     style={{
                       margin: "10px",
-                      borderRadius: "20px",
+                      borderRadius: "15px",
                       overflow: "hidden",
                       cursor: "pointer",
                       height: "300px",
+                      border: "0.5px solid #002140",
+                      boxShadow: " 4px 4px 4px -2px #ADBBF3",
                     }}
                     hoverable
                     title={carSlot.name}
@@ -109,7 +113,7 @@ const CarSlot = () => {
 
                         <div>
                           <Timeline>
-                            <Timeline.Item dot={<UserOutlined />}>
+                            <Timeline.Item  dot={<UserOutlined />}>
                               {carSlot?.orderCustomerName}
                             </Timeline.Item>
                             <Timeline.Item>
