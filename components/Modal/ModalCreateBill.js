@@ -26,9 +26,7 @@ import moment from "moment";
 import promotion_gif from "public/images/promotion.gif";
 import Image from "next/image";
 import { TagsOutlined } from "@ant-design/icons";
-// import BillPDF from "components/BillPrint";
 import ReactToPrint, { PrintContextConsumer } from "react-to-print";
-// import {BillPDF} from "components/Bill/BillPDF";
 import { useReactToPrint } from "react-to-print";
 import logo from "public/images/logo-footer-customer.png";
 

@@ -7,14 +7,13 @@ import {
   Col,
   Input,
   Typography,
-  Timeline,
   Divider,
   Drawer,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { getBills,cancelBill } from "pages/api/billAPI";
+import { getBills, cancelBill } from "pages/api/billAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
@@ -22,7 +21,8 @@ import { formatMoney } from "utils/format";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { openNotification } from "utils/notification";
-
+import { useReactToPrint } from "react-to-print";
+import Image from "next/image";
 const { Title } = Typography;
 
 const DescriptionItem = ({ title, content }) => (
@@ -36,14 +36,21 @@ function BillTable({}) {
   const [bills, setBills] = useState([]);
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
-  const { billId } = router.query;
   const [loading, setLoading] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [billDetail, setBillDetail] = useState({});
 
+  const [showPrint, setShowPrint] = useState(false);
+
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current
+  });
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
@@ -141,8 +148,16 @@ function BillTable({}) {
       return (total += cur?.estimateTime);
     }, 0);
   };
+
+
+
   const handlePrintBill = async () => {
+    setShowPrint(true);
+    handlePrint();
+    setShowPrint(false);
   }
+
+
   const handleCancelBill = async (id) => {
     setLoading(true);
     try {
@@ -154,7 +169,7 @@ function BillTable({}) {
       console.log(error);
       setLoading(false);
     }
-  }
+  };
 
   const columns = [
     {
@@ -278,7 +293,8 @@ function BillTable({}) {
               okText="Đồng ý"
               cancelText="Hủy"
               onConfirm={() => {
-                handlePrintBill()
+                setBillDetail(record);
+                handlePrintBill();
               }}
             >
               <Button type="primary">Xuất hóa đơn</Button>
@@ -321,50 +337,48 @@ function BillTable({}) {
 
   return (
     <>
-      <div>
-        <Table
-          rowKey="id"
-          bordered
-          title={() => (
-            <>
-              <Row>
-                <Col span={8} style={{ marginRight: "10px" }}>
-                  <Input.Search
-                    placeholder="Tìm kiếm khách hàng/xe"
-                    onChange={(e) => setSearchGlobal(e.target.value)}
-                    onSearch={(value) => setSearchGlobal(value)}
-                    value={searchGlobal}
-                  />
-                </Col>
-                <Col span={4}>
-                  <Button
-                    onClick={() => setSearchGlobal("")}
-                    icon={<ClearOutlined />}
-                  >
-                    Xóa bộ lọc
-                  </Button>
-                </Col>
-              </Row>
-            </>
-          )}
-          columns={columns}
-          dataSource={bills}
-          pagination={{
-            pageSize: 20,
-          }}
-          scroll={{
-            y: 450,
-          }}
-          onRow={(record, rowIndex) => {
-            return {
-              onDoubleClick: (event) => {
-                setBillDetail(record);
-                setShowDetail(true);
-              },
-            };
-          }}
-        />
-      </div>
+      <Table
+        rowKey="id"
+        bordered
+        title={() => (
+          <>
+            <Row>
+              <Col span={8} style={{ marginRight: "10px" }}>
+                <Input.Search
+                  placeholder="Tìm kiếm khách hàng/xe"
+                  onChange={(e) => setSearchGlobal(e.target.value)}
+                  onSearch={(value) => setSearchGlobal(value)}
+                  value={searchGlobal}
+                />
+              </Col>
+              <Col span={4}>
+                <Button
+                  onClick={() => setSearchGlobal("")}
+                  icon={<ClearOutlined />}
+                >
+                  Xóa bộ lọc
+                </Button>
+              </Col>
+            </Row>
+          </>
+        )}
+        columns={columns}
+        dataSource={bills}
+        pagination={{
+          pageSize: 20,
+        }}
+        scroll={{
+          y: 450,
+        }}
+        onRow={(record, rowIndex) => {
+          return {
+            onDoubleClick: (event) => {
+              setBillDetail(record);
+              setShowDetail(true);
+            },
+          };
+        }}
+      />
       <Drawer
         title="Chi tiết hóa đơn"
         placement="right"
@@ -434,7 +448,7 @@ function BillTable({}) {
               <Col span={6}>
                 <DescriptionItem
                   title="Thời gian sử lý"
-                  content={item?.estimateTime+" phút"}
+                  content={item?.estimateTime + " phút"}
                 />
               </Col>
               <Col span={6}>
@@ -484,7 +498,7 @@ function BillTable({}) {
           <Col span={12}>
             <DescriptionItem
               title="Tổng Thời gian sử lý"
-              content={totalTimeService()+" phút"}
+              content={totalTimeService() + " phút"}
             />
           </Col>
           <Col span={12}>
@@ -511,8 +525,116 @@ function BillTable({}) {
           </Col>
         </Row>
       </Drawer>
+      {showPrint && (
+        <div ref={componentRef}>
+          <br />
+          <div className="invoice-box">
+            <table>
+              <tr className="top">
+                <td colspan="2">
+                  <table>
+                    <tr>
+                      <td className="title">
+                        <Image
+                          src={logo}
+                          width={150}
+                          height={100}
+                          alt="Company logo"
+                        />
+                      </td>
+                      <td>
+                        Bill #: {billDetail?.billCode}
+                        <br />
+                        Ngày tạo:{" "}
+                        {moment(billDetail?.createDate).format(
+                          "HH:ss DD/MM/YYYY"
+                        )}
+                        <br />
+                        Ngày thanh toán: {moment().format("HH:ss DD/MM/YYYY")}
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
 
-      <Loading loading={loading} />
+              <tr className="information">
+                <td colspan="2">
+                  <table>
+                    <tr>
+                      <td>
+                        VLCareCare
+                        <br />
+                        0772555445
+                        <br />
+                        12 Nguyễn Văn bảo
+                        <br />
+                        Phường 5,Gò Vấp, Hồ Chí Minh
+                      </td>
+
+                      <td>
+                        Khách hàng : {billDetail?.customerName}
+                        <br />
+                        Số điện thoại : {billDetail?.customerPhoneNumber}
+                        <br />
+                        Xe : {billDetail?.carName} -{" "}
+                        {billDetail?.carLicensePlate}
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <tr className="heading">
+                <td>Thanh Toán</td>
+
+                <td>
+                  {form.getFieldValue("paymentType") == "CASH"
+                    ? "Tiền mặt"
+                    : "Chuyển khoản"}
+                </td>
+              </tr>
+              <tr className="heading">
+                <td>Dịch vụ</td>
+
+                <td>Thành tiền</td>
+              </tr>
+
+              {billDetail?.services?.map((item) => (
+                <>
+                  <tr className="item">
+                    <td>{item?.name}</td>
+
+                    <td>{formatMoney(item?.servicePrice?.price)}</td>
+                  </tr>
+                </>
+              ))}
+              {billDetail?.totalPromotionAmount && (
+                <>
+                  <tr className="item">
+                    <td>Khuyến mãi</td>
+                    <td>
+                      <a style={{ color: "red" }}>
+                        -{formatMoney(billDetail?.totalPromotionAmount || 0)}
+                      </a>
+                    </td>
+                  </tr>
+                </>
+              )}
+
+              <tr className="total">
+                <td></td>
+
+                <td>Tổng: {formatMoney(billDetail?.paymentAmount || 0)}</td>
+              </tr>
+            </table>
+            <Divider style={{ paddingTop: "50px" }}>
+              {" "}
+              Cảm ơn quý khách vì đã sử dụng dịch vụ của chúng tôi
+            </Divider>
+          </div>
+        </div>
+      )}
+       <Loading loading={loading} />
     </>
   );
 }
