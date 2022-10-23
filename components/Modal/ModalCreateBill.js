@@ -302,7 +302,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                               </Table.Summary.Cell>
 
                               <Table.Summary.Cell index={3}>
-                                <span style={{ color: "yellow" }}>
+                                <span style={{ color: "#E34262" }}>
                                   - {formatMoney(totalPromotionAmount() || 0)}
                                 </span>
                               </Table.Summary.Cell>
@@ -315,7 +315,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                                 index={1}
                               ></Table.Summary.Cell>
                               <Table.Summary.Cell index={2}>
-                                Tổng
+                                Khách phải trả
                               </Table.Summary.Cell>
 
                               <Table.Summary.Cell index={3}>

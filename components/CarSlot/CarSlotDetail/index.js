@@ -192,12 +192,14 @@ const CarSlotDetail = ({ carSlotId }) => {
   };
   const handleCompleteOrder = async () => {
     setLoading(true);
+
     let dataComplete = {
       orderId: order?.id,
       carSlotId: carSlotDetail?.id,
-      totalExecuteTime: 30,
+      totalExecuteTime: moment().diff(moment(carSlotDetail?.orderStartExecuting), "minutes"),
     };
     try {
+      console.log(dataComplete)
       const response = await completeCarSlot(dataComplete);
       openNotification("Hoàn thành xử lý thành công!", "");
       setLoading(false);
