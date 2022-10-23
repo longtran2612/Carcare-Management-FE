@@ -180,7 +180,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                   }}
                   onClick={() => prev()}
                 >
-                  Quay lại
+                 Hủy
                 </Button>
               )}
               {current < 2 && (

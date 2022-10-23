@@ -24,7 +24,6 @@ import { openNotification } from "utils/notification";
 import { useReactToPrint } from "react-to-print";
 import Image from "next/image";
 import logo from "public/images/logo-footer-customer.png";
-import { async } from "@firebase/util";
 const { Title } = Typography;
 
 const DescriptionItem = ({ title, content }) => (
@@ -261,11 +260,13 @@ const BillTable = () => {
       width: 120,
       ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
-        return (
-          <div>
-            <Tag color="green">{record.statusName}</Tag>
-          </div>
-        );
+        switch (record.statusName) {
+
+          case "Đã thanh toán":
+            return <Tag color="green">{record.statusName}</Tag>;
+          case "Đã hủy":
+            return <Tag color="red">{record.statusName}</Tag>;
+        }
       },
     },
     {

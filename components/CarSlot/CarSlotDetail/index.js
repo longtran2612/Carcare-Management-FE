@@ -18,7 +18,7 @@ import {
   cancelCarSlot,
   completeCarSlot,
 } from "pages/api/carSlotApi";
-import { SyncOutlined, LoadingOutlined } from "@ant-design/icons";
+import { SyncOutlined, LoadingOutlined ,PrinterOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
 import { getCarById } from "pages/api/carAPI";
@@ -133,7 +133,6 @@ const CarSlotDetail = ({ carSlotId }) => {
             style={{
               width: "150px",
               height: "30px",
-              alignItems: "center",
               fontSize: "15px",
             }}
             color="green"
@@ -161,7 +160,7 @@ const CarSlotDetail = ({ carSlotId }) => {
             style={{
               width: "150px",
               height: "30px",
-              alignItems: "center",
+              padding:"5px",
               fontSize: "15px",
             }}
             icon={<SyncOutlined spin />}
@@ -301,6 +300,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                   <Col span={24}>
                     <Table
                       pagination={false}
+                      bordered
                       dataSource={order?.services}
                       summary={() => {
                         return (
@@ -308,7 +308,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                             <Table.Summary.Row>
                               <Table.Summary.Cell
                                 index={0}
-                              ></Table.Summary.Cell>
+                              >Tổng</Table.Summary.Cell>
                               <Table.Summary.Cell
                                 index={1}
                               ></Table.Summary.Cell>

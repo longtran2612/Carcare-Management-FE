@@ -13,6 +13,7 @@ import {
   Button,
   Avatar,
   Tag,
+  Input,
   List,
 } from "antd";
 import { getPromotionDetail } from "pages/api/promotionDetail";
@@ -23,7 +24,7 @@ import { openNotification } from "utils/notification";
 import { formatMoney } from "utils/format";
 import moment from "moment";
 import Image from "next/image";
-import { TagsOutlined } from "@ant-design/icons";
+import { TagsOutlined, PrinterOutlined } from "@ant-design/icons";
 import { useReactToPrint } from "react-to-print";
 import logo from "public/images/logo-footer-customer.png";
 
@@ -37,13 +38,14 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
 
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [promotionSelected, setPromotionSelected] = useState(null);
-  const [showSelectPromotion, setShowSelectPromotion] = useState(false)
-  const [showPrint, setShowPrint] = useState(false)
+  const [showSelectPromotion, setShowSelectPromotion] = useState(false);
+  const [showPrint, setShowPrint] = useState(false);
+  const [showCardId, setShowCardId] = useState(false);
 
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current
+    content: () => componentRef.current,
   });
 
   const handleFetchPromotion = async () => {
@@ -114,15 +116,15 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
   const onFinish = async (values) => {
     const dataCreateBill = {
       orderId: order.id,
-      // promotionCodes: [promotionSelected?.promotionDetailCode],
-      // totalPromotionAmount: totalPromotionAmount(),
       paymentAmount: finalTotalPrice(),
       paymentType: values.paymentType,
-      cardNumber: "",
     };
-    if(promotionSelected !=undefined){
+    if (promotionSelected != undefined) {
       dataCreateBill.promotionCodes = [promotionSelected?.promotionDetailCode];
       dataCreateBill.totalPromotionAmount = totalPromotionAmount();
+    }
+    if (values.paymentType === "CARD") {
+      dataCreateBill.cardId = values.cardId;
     }
     console.log(dataCreateBill);
     try {
@@ -132,11 +134,48 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       onSuccess(res.data);
       setShowPrint(true);
       handlePrint();
-      setShowPrint(false)
+      setShowPrint(false);
     } catch (error) {
       openNotification(error.response.data.message[0]);
     }
   };
+  const onFinishNoPrint = async (values) => {
+    const dataCreateBill = {
+      orderId: order.id,
+      paymentAmount: finalTotalPrice(),
+      paymentType: values.paymentType,
+    };
+    if (promotionSelected != undefined) {
+      dataCreateBill.promotionCodes = [promotionSelected?.promotionDetailCode];
+      dataCreateBill.totalPromotionAmount = totalPromotionAmount();
+    }
+    if (values.paymentType === "CARD") {
+      dataCreateBill.cardId = values.cardId;
+    }
+    console.log(dataCreateBill);
+    try {
+      const res = await createBill(dataCreateBill);
+      openNotification("Thành công!", "Tạo hóa đơn thành công!");
+      handleCancel();
+      onSuccess(res.data);
+    } catch (error) {
+      openNotification(error.response.data.message[0]);
+    }
+  };
+
+  const onchangePaymentType = (value) => {
+    console.log(value);
+    if (value === "CASH") {
+      form.setFieldsValue({
+        cardNumber: "",
+      });
+      setShowCardId(false);
+    }
+    if (value === "DEBIT") {
+      setShowCardId(true);
+    }
+  };
+
   return (
     <>
       <Modal
@@ -157,6 +196,55 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
         width={1000}
         okText="Xác nhận"
         cancelText="Hủy bỏ"
+        footer={
+          <>
+            <div className="steps-action">
+              <Button
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={() => {
+                  handleCancel();
+                }}
+              >
+                Hủy
+              </Button>
+              <Button
+                type="dashed"
+                icon={<PrinterOutlined />}
+                onClick={() => {
+                  form
+                    .validateFields()
+                    .then((values) => {
+                      form.resetFields();
+                      onFinish(values);
+                    })
+                    .catch((info) => {
+                      console.log("Validate Failed:", info);
+                    });
+                }}
+              >
+                Hoàn thành và in hóa đơn
+              </Button>
+              <Button
+                onClick={() => {
+                  form
+                    .validateFields()
+                    .then((values) => {
+                      form.resetFields();
+                      onFinishNoPrint(values);
+                    })
+                    .catch((info) => {
+                      console.log("Validate Failed:", info);
+                    });
+                }}
+                type="primary"
+              >
+                Hoàn thành
+              </Button>
+            </div>
+          </>
+        }
       >
         <Form
           form={form}
@@ -278,18 +366,22 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                     <Form.Item
                       label="Hình thức thanh toán"
                       name="paymentType"
+                      initialValue="CASH"
                       rules={[{ required: true }]}
                     >
-                      <Select defaultValue="CASH">
-                        <Option value="CASH">Tiền mặt</Option>
-                        <Option value="DEBIT">Thẻ</Option>
+                      <Select onChange={(value) => onchangePaymentType(value)}>
+                        <Select.Option value="CASH">Tiền mặt</Select.Option>
+                        <Select.Option value="DEBIT">Thẻ</Select.Option>
                       </Select>
-                      {/* <Switch >
-                        <Route path="/cash" component={Cash} />
-                        <Route path="/debit" component={Debit} />
-                        </Switch> */}
                     </Form.Item>
                   </Col>
+                  {showCardId && (
+                    <Col span={6}>
+                      <Form.Item label="Thông tin chuyển khoản" name="cardId">
+                        <Input />
+                      </Form.Item>
+                    </Col>
+                  )}
                 </Row>
               </Col>
             </Col>
@@ -405,110 +497,112 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
           />
         </>
       </Drawer>
-      {
-        showPrint && <div ref={componentRef}>
-        <br />
-        <div className="invoice-box">
-          <table>
-            <tr className="top">
-              <td colspan="2">
-                <table>
-                  <tr>
-                    <td className="title">
-                      <Image
-                        src={logo}
-                        width={150}
-                        height={100}
-                        alt="Company logo"
-                      />
-                    </td>
+      {showPrint && (
+        <div ref={componentRef}>
+          <br />
+          <div className="invoice-box">
+            <table>
+              <tr className="top">
+                <td colspan="2">
+                  <table>
+                    <tr>
+                      <td className="title">
+                        <Image
+                          src={logo}
+                          width={150}
+                          height={100}
+                          alt="Company logo"
+                        />
+                      </td>
+                      <td>
+                        Order #: {order?.orderCode}
+                        <br />
+                        Ngày tạo:{" "}
+                        {moment(order?.createDate).format("HH:ss DD/MM/YYYY")}
+                        <br />
+                        Ngày thanh toán: {moment().format("HH:ss DD/MM/YYYY")}
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <tr className="information">
+                <td colspan="2">
+                  <table>
+                    <tr>
+                      <td>
+                        VLCareCare
+                        <br />
+                        0772555445
+                        <br />
+                        12 Nguyễn Văn bảo
+                        <br />
+                        Phường 5,Gò Vấp, Hồ Chí Minh
+                      </td>
+
+                      <td>
+                        Khách hàng : {order?.customerName}
+                        <br />
+                        Số điện thoại : {order?.customerPhoneNumber}
+                        <br />
+                        Xe : {order?.carName} - {order?.carLicensePlate}
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <tr className="heading">
+                <td>Thanh Toán</td>
+
+                <td>
+                  {form.getFieldValue("paymentType") == "CASH"
+                    ? "Tiền mặt"
+                    : "Chuyển khoản"}
+                </td>
+              </tr>
+              <tr className="heading">
+                <td>Dịch vụ</td>
+
+                <td>Thành tiền</td>
+              </tr>
+
+              {order?.services?.map((item) => (
+                <>
+                  <tr className="item">
+                    <td>{item?.name}</td>
+
+                    <td>{formatMoney(item?.servicePrice?.price)}</td>
+                  </tr>
+                </>
+              ))}
+              {promotionSelected && (
+                <>
+                  <tr className="item">
+                    <td>Khuyến mãi</td>
                     <td>
-                      Order #: {order?.orderCode}
-                      <br />
-                      Ngày tạo:{" "}
-                      {moment(order?.createDate).format("HH:ss DD/MM/YYYY")}
-                      <br />
-                      Ngày thanh toán: {moment().format("HH:ss DD/MM/YYYY")}
+                      <a style={{ color: "red" }}>
+                        -{formatMoney(totalPromotionAmount() || 0)}
+                      </a>
                     </td>
                   </tr>
-                </table>
-              </td>
-            </tr>
+                </>
+              )}
 
-            <tr className="information">
-              <td colspan="2">
-                <table>
-                  <tr>
-                    <td>
-                      VLCareCare
-                      <br />
-                      0772555445
-                      <br />
-                      12 Nguyễn Văn bảo
-                      <br />
-                      Phường 5,Gò Vấp, Hồ Chí Minh
-                    </td>
+              <tr className="total">
+                <td></td>
 
-                    <td>
-                      Khách hàng : {order?.customerName}
-                      <br />
-                      Số điện thoại : {order?.customerPhoneNumber}
-                      <br />
-                      Xe : {order?.carName} - {order?.carLicensePlate}
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-
-            <tr className="heading">
-              <td>Thanh Toán</td>
-
-              <td>
-                {form.getFieldValue("paymentType") == "CASH"
-                  ? "Tiền mặt"
-                  : "Chuyển khoản"}
-              </td>
-            </tr>
-            <tr className="heading">
-              <td>Dịch vụ</td>
-
-              <td>Thành tiền</td>
-            </tr>
-
-            {order?.services?.map((item) => (
-              <>
-                <tr className="item">
-                  <td>{item?.name}</td>
-
-                  <td>{formatMoney(item?.servicePrice?.price)}</td>
-                </tr>
-              </>
-            ))}
-            {promotionSelected && (
-              <>
-                <tr className="item">
-                  <td>Khuyến mãi</td>
-                  <td><a style={{color:'red'}}>-{formatMoney(totalPromotionAmount() || 0)}</a></td>
-                </tr>
-              </>
-            )}
-
-            <tr className="total">
-              <td></td>
-
-              <td>Tổng: {formatMoney(finalTotalPrice() || 0)}</td>
-            </tr>
-          </table>
-          <Divider style={{paddingTop:'50px'}}>
-            {" "}
-          
+                <td>Tổng: {formatMoney(finalTotalPrice() || 0)}</td>
+              </tr>
+            </table>
+            <Divider style={{ paddingTop: "50px" }}>
+              {" "}
               Cảm ơn quý khách vì đã sử dụng dịch vụ của chúng tôi
-           
-          </Divider>
+            </Divider>
+          </div>
         </div>
-      </div>
-      }
+      )}
     </>
   );
 };
