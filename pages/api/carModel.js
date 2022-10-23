@@ -27,10 +27,22 @@ const getCarModelById = (data) => {
       throw err;
     });
 };
+const getCarModelByBrand = (data) => {
+  return axios({
+    method: "GET",
+    url: API_URL + `/car-models/find-car-model-by-brand/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 const createCarModel = (data) => {
   return axios({
     method: "POST",
-    url: API_URL + `/car-models`,
+    url: API_URL + `/car-models/create`,
     data: data,
   })
     .then((res) => {
@@ -84,4 +96,4 @@ const importExcelCarModel = (data) => {
     });
 };
 
-export { getCarModel, getCarModelById, deleteCarModel, createCarModel, exportExcelCarModel, importExcelCarModel };
+export { getCarModel, getCarModelById, deleteCarModel, createCarModel,getCarModelByBrand, exportExcelCarModel, importExcelCarModel };

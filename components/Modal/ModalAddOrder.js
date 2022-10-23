@@ -95,6 +95,22 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     console.log(resCar.data.Data);
   };
   const next = () => {
+    if(current == 0){
+      if(form.getFieldValue("customerId") == null){
+        openNotification("Vui lòng chọn khách hàng!");
+        return;
+      }
+      if(form.getFieldValue("carId") == null){
+        openNotification("Vui lòng chọn xe!");
+        return;
+      }
+    }
+    if(current == 1){
+      if(services.length == 0){
+        openNotification("Vui lòng chọn dịch vụ!");
+        return;
+      }
+    }
     setCurrent(current + 1);
   };
   const prev = () => {
@@ -114,7 +130,6 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
       customerId: data.id,
       carId: null,
     });
-
   };
 
   const totalPriceService = () => {
@@ -180,7 +195,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                   }}
                   onClick={() => prev()}
                 >
-                 Hủy
+                  Hủy
                 </Button>
               )}
               {current < 2 && (
@@ -293,7 +308,16 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                   </Form.Item>
                 </Col>
                 <Col style={{ display: "flex", alignItems: "center" }} span={4}>
-                  <Button type="primary" onClick={() => setModalCar(true)}>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      if (form.getFieldValue("customerId")) {
+                        setModalCar(true);
+                      }else{
+                        openNotification("Vui lòng chọn khách hàng!");
+                      }
+                    }}
+                  >
                     Thêm mới xe
                   </Button>
                 </Col>
@@ -301,6 +325,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                   <Form.Item
                     label="Nhập ngày nhận xe dự kiến"
                     name="receiveDate"
+                    initialValue={moment()}
                     rules={[
                       {
                         required: true,
@@ -317,6 +342,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                   <Form.Item
                     label="Nhập ngày xử lý dự kiến"
                     name="executeDate"
+                    initialValue={moment()}
                     rules={[
                       {
                         required: true,

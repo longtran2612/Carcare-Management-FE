@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Row,
-  Col,
-  Form,
-  Input,
-  Select,
- 
-  InputNumber,
-} from "antd";
+import { Modal, Row, Col, Form, Input, Select, InputNumber } from "antd";
 import { createCarModel } from "pages/api/carModel";
 
 import { validateMessages } from "utils/messageForm";
@@ -17,7 +8,7 @@ const { TextArea } = Input;
 import moment from "moment";
 const formatDate = "YYYY/MM/DD";
 
-const ModalAddCarModel = ({ show, onSuccess, handleCancel }) => {
+const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
   const [brands, setBrands] = useState([
     "Toyota",
@@ -50,6 +41,14 @@ const ModalAddCarModel = ({ show, onSuccess, handleCancel }) => {
       openNotification(error.response.data.message[0]);
     }
   };
+  console.log(brand);
+
+
+  useEffect(() => {
+    if (brand) {
+     form.setFieldsValue({ brand: brand });
+    }
+  }, [brand]);
 
   return (
     <>
@@ -78,47 +77,8 @@ const ModalAddCarModel = ({ show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Row>
-            <Col span={11} className="MarRight40">
-              <Form.Item
-                label="Tên mẫu xe"
-                name="name"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={5} className="MarRight20">
-              <Form.Item
-                label="Số nghế ngồi"
-                name="seats"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber min={1} max={16} />
-              </Form.Item>
-            </Col>
-            <Col span={5} className="MarRight20">
-              <Form.Item
-                label="Năm sản xuất"
-                name="year"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber min={1900} max={moment().year()} />
-              </Form.Item>
-            </Col>
-            <Col span={11}  className="MarRight40">
+          <Row gutter={16}>
+            <Col span={12}>
               <Form.Item
                 label="Model"
                 name="model"
@@ -131,10 +91,11 @@ const ModalAddCarModel = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={10}>
+            <Col span={12}>
               <Form.Item
                 label="Thương hiệu"
                 name="brand"
+                initialValue={brand}
                 rules={[
                   {
                     required: true,
@@ -160,8 +121,33 @@ const ModalAddCarModel = ({ show, onSuccess, handleCancel }) => {
                 </Select>
               </Form.Item>
             </Col>
-        
-            <Col span={7}  className="MarRight20">
+            <Col span={12}>
+              <Form.Item
+                label="Số nghế ngồi"
+                name="seats"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <InputNumber min={1} max={16} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Năm sản xuất"
+                name="year"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <InputNumber min={1900} max={moment().year()} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
               <Form.Item
                 label="Đông cơ"
                 name="engine"
@@ -174,7 +160,7 @@ const ModalAddCarModel = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={7} className="MarRight20"  >
+            <Col span={8}>
               <Form.Item
                 label="Truyền động"
                 name="transmission"
@@ -187,7 +173,7 @@ const ModalAddCarModel = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={7} className="MarRight20">
+            <Col span={8}>
               <Form.Item
                 label="Nhiên liệu"
                 name="fuel"
@@ -197,7 +183,7 @@ const ModalAddCarModel = ({ show, onSuccess, handleCancel }) => {
                   },
                 ]}
               >
-                <Select 
+                <Select
                   showSearch
                   placeholder="Chọn nhiên liệu"
                   optionFilterProp="children"
