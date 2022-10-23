@@ -1,34 +1,42 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Row, Col, Typography } from "antd";
-import { LockOutlined } from "@ant-design/icons";
-import { changePassword } from "pages/api/userAPI";
+import { Form, Input, Button, Row, Col, Typography,notification } from "antd";
+import { LockOutlined,SmileOutlined } from "@ant-design/icons";
+import { changePassword } from "pages/api/authAPI";
 import Loading from "components/Loading";
+import Cookies from "js-cookie";
+import { openNotification } from "utils/notification";
 
 function ChangePassword() {
   const [loading, setLoading] = useState(false);
 
   const handleChangePassword = async (values) => {
     setLoading(true);
-    const changePasswordRequets = {
-      username: phoneNumber,
+    const username = Cookies.get("username");
+    let changePasswordRequets = {
+      username: username,
       newPassword: values.password,
     };
     console.log(changePasswordRequets);
     try {
-      changePassword(changePasswordRequets).then((res) => {
-        console.log(res);
-        if (res.data.StatusCode == 200) {
-          message.success("Thay đổi mật khẩu thành công!");
-          success();
-          // router.push("/login");
-        } else {
-          message.error(res.data.message);
-        }
-        setLoading(false);
+      const res = await changePassword(changePasswordRequets);
+      notification.open({
+        message: "thành công",
+        description: "Đổi mật khẩu thành công",
+        icon:  <SmileOutlined style={{ color: '#4B31DE' }} />,
+        placement: "bottomRight",
+      
+        style: {
+         backgroundColor: "#D9EEE1",
+          color: "#4B31DE",
+          borderRadius: "10px",
+        },
+    
       });
+      setLoading(false);
+    
     } catch (err) {
       setLoading(false);
-      message.error(err.message);
+      console.log(err);
     }
   };
   return (

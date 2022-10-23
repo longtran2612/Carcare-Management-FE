@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getAllBillsByCustomerId } from "pages/api/billAPI";
+import { getOrders } from "pages/api/orderAPI";
 import Loading from "components/Loading";
 import {
   Avatar,
@@ -14,12 +15,13 @@ import {
 import { formatMoney } from "utils/format";
 import moment from "moment";
 import Image from "next/image";
+import Cookies from "js-cookie";
 import payment_completed from "public/images/payment_complete.gif";
 
 const { Title } = Typography;
 const formatDate = "HH:ss DD/MM/YYYY";
 
-const ServiceCustomer = ({ title, content }) => (
+const DescriptionItem = ({ title, content }) => (
   <div className="site-description-item-profile-wrapper">
     <p
       style={{ font: "bold" }}
@@ -30,18 +32,32 @@ const ServiceCustomer = ({ title, content }) => (
     {content}
   </div>
 );
-const BillCustomer = () => {
-  const [bills, setBills] = React.useState([]);
+const ServiceCustomer = () => {
+  const [orders, setOrders] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [showDetail, setShowDetail] = useState(false);
   const [billDetail, setBillDetail] = useState({});
+  
 
-  const getAllBill = async () => {
+  const handleGetOrders = async () => {
     setLoading(true);
+    const username = Cookies.get("username");
+    let dataGetOrder = {
+      keyword: "0395071370",
+      pageSize: 20,
+      pageNumber: 0,
+      status: 2,
+      sort: [
+        {
+          key: "createDate",
+          asc: true,
+        },
+      ],
+    };
     try {
-      const res = await getAllBillsByCustomerId("63510f855ac8423bc2f08fe9");
+      const res = await getOrders(dataGetOrder);
       console.log(res.data.Data);
-      setBills(res.data.Data);
+      setOrders(res.data.Data.content);
     } catch (error) {
       console.log(error);
     }
@@ -71,7 +87,7 @@ const BillCustomer = () => {
   };
 
   useEffect(() => {
-    getAllBill();
+    handleGetOrders();
   }, []);
 
   return (
@@ -85,7 +101,7 @@ const BillCustomer = () => {
           },
           pageSize: 5,
         }}
-        dataSource={bills}
+        dataSource={orders}
         renderItem={(item) => (
           <List.Item
             key={item.title}
