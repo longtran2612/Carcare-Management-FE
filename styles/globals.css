@@ -78,7 +78,9 @@ a {
 .ant-select-selector {
   height: 35px !important
 }
-
+ant-card-head-title{
+  padding: 0px !important;
+}
 .ant-btn{
   border-radius: 5px !important;
   height: 40px;

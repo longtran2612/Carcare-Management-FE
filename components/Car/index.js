@@ -6,7 +6,7 @@ import { HomeOutlined, CarOutlined } from "@ant-design/icons";
 const CarPage = () => {
   return (
     <>
-      <Breadcrumb style={{ margin: "10px", alignItems: "center" }}>
+  <Breadcrumb style={{ margin: "5px", alignItems: "center" }}>
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>

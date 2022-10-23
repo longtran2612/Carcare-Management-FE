@@ -5,7 +5,7 @@ import { HomeOutlined } from "@ant-design/icons";
 const ServicePage = () => {
   return (
     <>
-      <Breadcrumb style={{ margin: "10px", alignItems: "center" }}>
+   <Breadcrumb style={{ margin: "5px", alignItems: "center" }}>
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>

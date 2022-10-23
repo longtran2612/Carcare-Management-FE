@@ -6,7 +6,7 @@ import PromotionHeaderTable from "./PromotionHeaderTable";
 const PromotionHeaderPage = () => {
   return (
     <>
-     <Breadcrumb style={{ margin: "10px", alignItems: "center" }}>
+  <Breadcrumb style={{ margin: "5px", alignItems: "center" }}>
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>

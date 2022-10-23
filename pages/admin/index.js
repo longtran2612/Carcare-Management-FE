@@ -96,6 +96,7 @@ const AdminPage = () => {
               <Typography.Title
                 level={5}
                 style={{
+                  padding: "0px 0px 0px 0px",
                   textAlign: "center",
                   display: "flex",
                   justifyContent: "center",
