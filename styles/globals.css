@@ -91,6 +91,9 @@ ant-card-head-title{
 .ant-timeline-item-content{
   margin: 0 0 0 15px !important;
 }
+.ant-divider-horizontal{
+  margin: 5px !important;
+}
 
 .background-login{
   background: linear-gradient(to top right, #AE9CE1, #F5E7DB);

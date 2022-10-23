@@ -391,11 +391,6 @@ const BillTable = () => {
         onClose={() => setShowDetail(false)}
         visible={showDetail}
         width={1000}
-        footer={() => (
-          <>
-            <Divider>VLCARESERvice</Divider>
-          </>
-        )}
       >
         <Divider>
           <Title level={5}>Hóa đơn mã: {billDetail.billCode}</Title>
