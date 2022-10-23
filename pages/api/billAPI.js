@@ -42,7 +42,7 @@ const getBillByCode = (data) => {
 const getAllBillsByCustomerId = (data) => {
   return axios({
     method: "GET",
-    url: API_URL + `/bills/find-all-bills-by-customer-id/${data}`,
+    url: API_URL + `/bills/find-all-bill-by-customer-id/${data}`,
   })
     .then((res) => {
       return res;

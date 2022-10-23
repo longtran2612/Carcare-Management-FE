@@ -4,6 +4,7 @@ import { CustomerNavigation } from "components-customer/navigation";
 import { UserOutlined, LockOutlined, ClearOutlined } from "@ant-design/icons";
 import { ProfileCustomer } from "components-customer/Profile";
 import ChangePassword from "components-customer/ChangePassword/ChangePassword";
+import BillCustomer  from "components-customer/bill";
 
 const MyAccountPage = () => {
   const onChange = (key) => {};
@@ -27,7 +28,10 @@ const MyAccountPage = () => {
             <Tabs.TabPane tab="Dịch vụ đang sử dụng" key="item-2">
               Content 2
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Thay đổi mật khẩu" key="item-3">
+            <Tabs.TabPane tab="Lịch sử thanh toán" key="item-3">
+             <BillCustomer/>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Thay đổi mật khẩu" key="item-4">
               <ChangePassword/>
             </Tabs.TabPane>
           </Tabs>
