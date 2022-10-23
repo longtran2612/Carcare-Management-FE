@@ -20,13 +20,10 @@ import { createBill } from "pages/api/billAPI";
 import { getCarbyCustomerId } from "pages/api/carAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
-import ServiceOrder from "./ModalService";
 import { formatMoney } from "utils/format";
 import moment from "moment";
-import promotion_gif from "public/images/promotion.gif";
 import Image from "next/image";
 import { TagsOutlined } from "@ant-design/icons";
-import ReactToPrint, { PrintContextConsumer } from "react-to-print";
 import { useReactToPrint } from "react-to-print";
 import logo from "public/images/logo-footer-customer.png";
 
@@ -409,7 +406,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
         </>
       </Drawer>
       {
-        showPrint &&<div ref={componentRef}>
+        showPrint && <div ref={componentRef}>
         <br />
         <div className="invoice-box">
           <table>

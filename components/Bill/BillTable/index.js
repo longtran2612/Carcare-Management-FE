@@ -23,6 +23,8 @@ import Highlighter from "react-highlight-words";
 import { openNotification } from "utils/notification";
 import { useReactToPrint } from "react-to-print";
 import Image from "next/image";
+import logo from "public/images/logo-footer-customer.png";
+import { async } from "@firebase/util";
 const { Title } = Typography;
 
 const DescriptionItem = ({ title, content }) => (
@@ -32,24 +34,25 @@ const DescriptionItem = ({ title, content }) => (
   </div>
 );
 
-function BillTable({}) {
+const BillTable = () => {
   const [bills, setBills] = useState([]);
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [billDetail, setBillDetail] = useState({});
+  // const [showPrint, setShowPrint] = useState(false)
 
-  const [showPrint, setShowPrint] = useState(false);
+  const[printBill, setPrintBill] = useState(false)
 
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
 
-  const componentRef = useRef();
+  const componentRef = useRef(null);
 
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current
+    content: () => componentRef.current,
   });
 
   const handleSearch = (selectedKeys, dataIndex) => {
@@ -149,19 +152,21 @@ function BillTable({}) {
     }, 0);
   };
 
-
-
-  const handlePrintBill = async () => {
-    setShowPrint(true);
-    handlePrint();
-    setShowPrint(false);
-  }
-
+  const handlePrintBill = async (data) => {
+    try {
+      setBillDetail(data)
+      setPrintBill(true);
+      handlePrint();
+      // setPrintBill(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleCancelBill = async (id) => {
     setLoading(true);
     try {
-      const res = cancelBill(id);
+      const res = await cancelBill(id);
       openNotification("Thành công", "Hủy hóa đơn thành công");
       handleGetbills();
       setLoading(false);
@@ -293,8 +298,8 @@ function BillTable({}) {
               okText="Đồng ý"
               cancelText="Hủy"
               onConfirm={() => {
-                setBillDetail(record);
-                handlePrintBill();
+                setPrintBill(true);
+                handlePrintBill(record);
               }}
             >
               <Button type="primary">Xuất hóa đơn</Button>
@@ -525,7 +530,7 @@ function BillTable({}) {
           </Col>
         </Row>
       </Drawer>
-      {showPrint && (
+      {printBill && (
         <div ref={componentRef}>
           <br />
           <div className="invoice-box">
@@ -588,7 +593,7 @@ function BillTable({}) {
                 <td>Thanh Toán</td>
 
                 <td>
-                  {form.getFieldValue("paymentType") == "CASH"
+                  {billDetail?.paymentType == "CASH"
                     ? "Tiền mặt"
                     : "Chuyển khoản"}
                 </td>
@@ -634,9 +639,9 @@ function BillTable({}) {
           </div>
         </div>
       )}
-       <Loading loading={loading} />
+      <Loading loading={loading} />
     </>
   );
-}
+};
 
 export default BillTable;
