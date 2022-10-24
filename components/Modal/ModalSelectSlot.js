@@ -69,6 +69,40 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
         break;
     }
   };
+  const handleCss = (status) => {
+    switch (status) {
+      case "IN_USE":
+        return {
+          backgroundColor: "#002140",
+          color: "white",
+          height: "20px",
+          justifyContent: "center",
+          alignContent: "center",
+          textAlign: "center",
+          fontSize: "15px",
+        };
+      case "AVAILABLE":
+        return {
+          backgroundColor: "#004d00",
+          color: "white",
+          height: "20px",
+          justifyContent: "center",
+          alignContent: "center",
+          textAlign: "center",
+          fontSize: "15px",
+        };
+      case "UNAVAILABLE":
+        return {
+          backgroundColor: "#b38600",
+          color: "white",
+          height: "20px",
+          justifyContent: "center",
+          alignContent: "center",
+          textAlign: "center",
+          fontSize: "15px",
+        };
+    }
+  };
 
   return (
     <>
@@ -94,23 +128,12 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
                   if (carSlot.status === "AVAILABLE") {
                     onFinish(carSlot.id);
                   } else {
-                    openNotification(
-                      "Thất bại",
-                      "Vui lòng chọn vị trí trống!"
-                    );
+                    openNotification("Thất bại", "Vui lòng chọn vị trí trống!");
                   }
                 }}
               >
                 <Card
-                  headStyle={{
-                    backgroundColor: "#002140",
-                    color: "white",
-                    height: "25px",
-                    justifyContent: "center",
-                    alignContent: "center",
-                    textAlign: "center",
-                    fontSize: "15px",
-                  }}
+                  headStyle={handleCss(carSlot.status)}
                   style={
                     carSlot.status === "AVAILABLE"
                       ? {

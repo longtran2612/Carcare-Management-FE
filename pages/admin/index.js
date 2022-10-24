@@ -84,29 +84,13 @@ const AdminPage = () => {
           <Content
             className="site-layout-background content"
             style={{
-              minHeight: '80vh'
+              minHeight: "80vh",
             }}
           >
-            <MyContent
-              keyMenu={key}
-            />
+            <MyContent keyMenu={key} />
           </Content>
           <Footer style={{ backgroundColor: "white", textAlign: "center" }}>
-            <Row justify="center">
-              <Typography.Title
-                level={5}
-                style={{
-                  padding: "0px 0px 0px 0px",
-                  textAlign: "center",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "#1890ff",
-                }}
-              >
-                ©2022 Coppy right by VL-CARCARE
-              </Typography.Title>
-            </Row>
+            <Row justify="center">©2022 Coppy right by VL-CARCARE</Row>
           </Footer>
         </Layout>
       </Layout>

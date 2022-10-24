@@ -80,7 +80,23 @@ const getAllOrder = () => {
     });
 };
 
+const updateOrder = (id,data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/order/update/${id}`,
+    data: data,
+  })
+  .then((res) => {
+    return res;
+  })
+  .catch((err) => {
+    throw err;
+  });
+};
+
+
 export {
+  updateOrder,
   getAllOrder,
   createOrder,
   getOrderById,

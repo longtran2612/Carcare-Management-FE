@@ -178,7 +178,7 @@ function OrderNotRequestTable({}) {
       ...getColumnSearchProps("statusName"),
     },
     {
-      title: "Biên số",
+      title: "Biển số xe",
       dataIndex: "carLicensePlate",
       key: "carLicensePlate",
       ...getColumnSearchProps("statusName"),

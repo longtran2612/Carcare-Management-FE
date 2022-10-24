@@ -11,7 +11,11 @@ import {
   Form,
   Input,
 } from "antd";
-import { getCarSlots, createCarSlot,updateCarSlot } from "pages/api/carSlotApi";
+import {
+  getCarSlots,
+  createCarSlot,
+  updateCarSlot,
+} from "pages/api/carSlotApi";
 import { useRouter } from "next/router";
 import CarSlotDetail from "./CarSlotDetail";
 import Image from "next/image";
@@ -55,11 +59,11 @@ const CarSlot = () => {
   const convertStatusCarSlotImg = (status) => {
     switch (status) {
       case "UNAVAILABLE":
-        return <Image height={200} width={200} src={slot_unavailable} />;
+        return <Image height={220} width={220} src={slot_unavailable} />;
       case "AVAILABLE":
-        return <Image height={200} width={200} src={slot_available} />;
+        return <Image height={220} width={220} src={slot_available} />;
       case "IN_USE":
-        return <Image height={200} width={200} src={slot_active} />;
+        return <Image height={220} width={220} src={slot_active} />;
       default:
         break;
     }
@@ -147,20 +151,53 @@ const CarSlot = () => {
   const onUpdateSlot = async (values) => {
     console.log("values", values);
     let dataUpdate = {
-      name : values.name,
-      status : values.status,
-    }
+      name: values.name,
+      status: values.status,
+    };
     try {
-      const res = await updateCarSlot( dataUpdate,form.getFieldValue("id"));
+      const res = await updateCarSlot(dataUpdate, form.getFieldValue("id"));
       openNotification("Thành công", "Cập nhật vị trí thành công");
       fetchCarSlots();
-      
-    }
-    catch (error) {
+    } catch (error) {
       openNotification(error.response.data.message[0]);
     }
 
     setShowSetting(false);
+  };
+
+  const handleCss = (status) => {
+    switch (status) {
+      case "IN_USE":
+        return {
+          backgroundColor: "#002140",
+          color: "white",
+          height: "40px",
+          textAlign: "center",
+          justifyContent: "center",
+          alignContent: "center",
+          fontSize: "20px",
+        };
+      case "AVAILABLE":
+        return {
+          backgroundColor: "#004d00",
+          color: "white",
+          height: "40px",
+          textAlign: "center",
+          justifyContent: "center",
+          alignContent: "center",
+          fontSize: "20px",
+        };
+      case "UNAVAILABLE":
+        return {
+          backgroundColor: "#b38600",
+          color: "white",
+          height: "40px",
+          textAlign: "center",
+          justifyContent: "center",
+          alignContent: "center",
+          fontSize: "20px",
+        };
+    }
   };
 
   return (
@@ -200,15 +237,7 @@ const CarSlot = () => {
                   }}
                 >
                   <Card
-                    headStyle={{
-                      backgroundColor: "#002140",
-                      color: "white",
-                      height: "40px",
-                      textAlign: "center",
-                      justifyContent: "center",
-                      alignContent: "center",
-                      fontSize: "20px",
-                    }}
+                    headStyle={handleCss(carSlot.status)}
                     style={{
                       margin: "10px",
                       borderRadius: "15px",
@@ -286,12 +315,13 @@ const CarSlot = () => {
                     ]}
                     name="status"
                     label="Trạng thái"
-                    
                   >
                     <Select
-                    disabled={form.getFieldValue("status") === "IN_USE"}
+                      disabled={form.getFieldValue("status") === "IN_USE"}
                     >
-                      <Select.Option disabled value="IN_USE">Đang xử lý</Select.Option>
+                      <Select.Option disabled value="IN_USE">
+                        Đang xử lý
+                      </Select.Option>
                       <Select.Option value="AVAILABLE">
                         Đang trống
                       </Select.Option>

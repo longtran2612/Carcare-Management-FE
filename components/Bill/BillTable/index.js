@@ -155,7 +155,6 @@ const BillTable = () => {
   };
 
   const handlePrintBill = (data) => {
-    
       setBillDetail(data);
       // setPrintBill(true);
       handlePrint();

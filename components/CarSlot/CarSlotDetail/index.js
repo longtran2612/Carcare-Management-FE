@@ -18,7 +18,12 @@ import {
   cancelCarSlot,
   completeCarSlot,
 } from "pages/api/carSlotApi";
-import { SyncOutlined, LoadingOutlined ,PrinterOutlined } from "@ant-design/icons";
+import {
+  SyncOutlined,
+  LoadingOutlined,
+  PrinterOutlined,
+  PlusCircleFilled,
+} from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
 import { getCarById } from "pages/api/carAPI";
@@ -31,6 +36,7 @@ import ModalSelectOrder from "components/Modal/ModalSelectOrder";
 import { openNotification } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 import ModalQuestion from "components/Modal/ModalQuestion";
+import UpDateServiceOrder from "components/Modal/ModalUpdateServiceOrder";
 
 const formatDate = "HH:mm DD/MM/YYYY";
 
@@ -50,6 +56,7 @@ const CarSlotDetail = ({ carSlotId }) => {
   const [showConfimCancel, setShowConfimCancel] = useState(false);
   const [showConfimComplete, setShowConfimComplete] = useState(false);
   const [showConfimExecute, setShowConfimExecute] = useState(false);
+  const [showUpdateServiceOrder, setShowUpdateServiceOrder] = useState(false);
 
   const [step, setStep] = useState(1);
 
@@ -160,7 +167,7 @@ const CarSlotDetail = ({ carSlotId }) => {
             style={{
               width: "150px",
               height: "30px",
-              padding:"5px",
+              padding: "5px",
               fontSize: "15px",
             }}
             icon={<SyncOutlined spin />}
@@ -196,10 +203,13 @@ const CarSlotDetail = ({ carSlotId }) => {
     let dataComplete = {
       orderId: order?.id,
       carSlotId: carSlotDetail?.id,
-      totalExecuteTime: moment().diff(moment(carSlotDetail?.orderStartExecuting), "minutes"),
+      totalExecuteTime: moment().diff(
+        moment(carSlotDetail?.orderStartExecuting),
+        "minutes"
+      ),
     };
     try {
-      console.log(dataComplete)
+      console.log(dataComplete);
       const response = await completeCarSlot(dataComplete);
       openNotification("Hoàn thành xử lý thành công!", "");
       setLoading(false);
@@ -230,6 +240,11 @@ const CarSlotDetail = ({ carSlotId }) => {
   console.log("order", order);
   console.log("car", car);
 
+  const handleSuccessUPdateOrder = () => {
+    setShowUpdateServiceOrder(false);
+    fetchCarSlotDetail();
+  };
+
   return (
     <>
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
@@ -238,7 +253,7 @@ const CarSlotDetail = ({ carSlotId }) => {
       <div className="carslot">
         <div className="carslot-content">
           <div className="carslot-content--header">
-            <Title level={3}>{carSlotDetail?.name}</Title>
+            <Title style={{padding:'0px'}} level={3}>{carSlotDetail?.name}</Title>
             <div> {convertStatusCarSlot(carSlotDetail?.status)}</div>
           </div>
           {carSlotDetail?.status == "IN_USE" && (
@@ -308,9 +323,9 @@ const CarSlotDetail = ({ carSlotId }) => {
                         return (
                           <>
                             <Table.Summary.Row>
-                              <Table.Summary.Cell
-                                index={0}
-                              >Tổng</Table.Summary.Cell>
+                              <Table.Summary.Cell index={0}>
+                                Tổng
+                              </Table.Summary.Cell>
                               <Table.Summary.Cell
                                 index={1}
                               ></Table.Summary.Cell>
@@ -324,43 +339,57 @@ const CarSlotDetail = ({ carSlotId }) => {
                           </>
                         );
                       }}
+                      
+                      title={() => (
+                        <>
+                          <Row>
+                            <Col span={12}>
+                             <span style={{fontSize:'1rem',font:'bold'}}>Dịch vụ sử dụng</span>
+                            </Col>
+                            <Col span={12}>
+                              <Button
+                                style={{ float: "right" }}
+                                type="primary"
+                                icon={<PlusCircleFilled />}
+                                onClick={() => setShowUpdateServiceOrder(true)}
+                              >
+                                Thêm dịch vụ
+                              </Button>
+                            </Col>
+                          </Row>
+                        </>
+                      )}
                     >
-                      <ColumnGroup title="Dịch vụ sử dụng">
-                        <Column
-                          title="STT"
-                          dataIndex="stt"
-                          key="stt"
-                          width={70}
-                          render={(text, record, dataIndex) => {
-                            return <div>{dataIndex + 1}</div>;
-                          }}
-                        />
-                        <Column
-                          title="Tên dịch vụ"
-                          dataIndex="name"
-                          key="name"
-                        />
-                        <Column
-                          dataIndex="estimateTime"
-                          key="estimateTime"
-                          render={(text, record) => {
-                            return <div>{record.estimateTime} phút</div>;
-                          }}
-                          title="Thời gian sử lý"
-                        ></Column>
-                        <Column
-                          title="Giá dịch vụ"
-                          dataIndex="price"
-                          key="price"
-                          render={(text, record, dataIndex) => {
-                            return (
-                              <div>
-                                {formatMoney(record?.servicePrice?.price || 0)}
-                              </div>
-                            );
-                          }}
-                        />
-                      </ColumnGroup>
+                      <Column
+                        title="STT"
+                        dataIndex="stt"
+                        key="stt"
+                        width={70}
+                        render={(text, record, dataIndex) => {
+                          return <div>{dataIndex + 1}</div>;
+                        }}
+                      />
+                      <Column title="Tên dịch vụ" dataIndex="name" key="name" />
+                      <Column
+                        dataIndex="estimateTime"
+                        key="estimateTime"
+                        render={(text, record) => {
+                          return <div>{record.estimateTime} phút</div>;
+                        }}
+                        title="Thời gian sử lý"
+                      ></Column>
+                      <Column
+                        title="Giá dịch vụ"
+                        dataIndex="price"
+                        key="price"
+                        render={(text, record, dataIndex) => {
+                          return (
+                            <div>
+                              {formatMoney(record?.servicePrice?.price || 0)}
+                            </div>
+                          );
+                        }}
+                      />
                     </Table>
                   </Col>
 
@@ -453,6 +482,12 @@ const CarSlotDetail = ({ carSlotId }) => {
           setShowConfimComplete(false);
           setShowCreateBill(true);
         }}
+      />
+      <UpDateServiceOrder
+        show={showUpdateServiceOrder}
+        order={order}
+        handleCancel={() => setShowUpdateServiceOrder(false)}
+        onSuccess={() => handleSuccessUPdateOrder()}
       />
 
       <Loading loading={loading} />

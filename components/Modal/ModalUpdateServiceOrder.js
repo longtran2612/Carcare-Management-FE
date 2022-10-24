@@ -1,14 +1,4 @@
-import {
-  Table,
-  Tag,
-  Button,
-  Input,
-  Row,
-  Col,
-  Space,
-  Select,
-  Steps,
-} from "antd";
+import { Table, Tag, Button, Input, Row, Col, Modal, Space } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { SearchOutlined, ClearOutlined } from "@ant-design/icons";
 import { getServices } from "pages/api/serviceAPI";
@@ -16,12 +6,11 @@ import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
-const { Step } = Steps;
+import { updateOrder } from "pages/api/orderAPI";
+import { openNotification } from "utils/notification";
 
-function ServiceOrder({ onSelected, selectedService }) {
+function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
   const [services, setServices] = useState([]);
-  const router = useRouter();
-  const { serviceId } = router.query;
   const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -31,7 +20,6 @@ function ServiceOrder({ onSelected, selectedService }) {
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
-  const [filteredInfo, setFilteredInfo] = useState({});
 
   const handleGetServices = async () => {
     setLoading(true);
@@ -47,7 +35,11 @@ function ServiceOrder({ onSelected, selectedService }) {
 
   useEffect(() => {
     handleGetServices();
-  }, []);
+    if (order) {
+      setSelectedRowKeys(order?.services.map((item) => item.id));
+      setSelectedRows(order?.services);
+    }
+  }, [order]);
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
@@ -203,6 +195,7 @@ function ServiceOrder({ onSelected, selectedService }) {
     },
   ];
   const rowSelection = {
+    selectedRowKeys,
     onChange: (selectedRowKeys, selectedRows) => {
       setSelectedRowKeys(selectedRowKeys);
       setSelectedRows(selectedRows);
@@ -211,10 +204,9 @@ function ServiceOrder({ onSelected, selectedService }) {
         "selectedRows: ",
         selectedRows
       );
-      onSelected(selectedRowKeys);
-      selectedService(selectedRows);
     },
   };
+  console.log("rowSelection", rowSelection);
   const totalPriceService = () => {
     return selectedRows.reduce((total, cur) => {
       return (total += cur.servicePrice.price);
@@ -225,10 +217,35 @@ function ServiceOrder({ onSelected, selectedService }) {
       return (total += cur.estimateTime);
     }, 0);
   };
+  const onFinish = async () => {
+    setLoading(true);
+    let dataUpdate = {
+      serviceIds: selectedRowKeys,
+    };
+    try {
+      const res = await updateOrder(order.id, dataUpdate);
+      openNotification("Thành công", "cập nhật yêu cầu thành công");
+      onSuccess();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+   
+  };
 
   return (
     <>
-      <div>
+      <Modal
+        title="Danh sách dịch vụ"
+        visible={show}
+        onCancel={handleCancel}
+        width={1200}
+        okText="Xác nhận"
+        cancelText="Hủy bỏ"
+        onOk={() => {
+          onFinish();
+        }}
+      >
         <Row style={{ margin: "10px 0px" }}>
           <Col span={8} style={{ marginRight: "10px" }}>
             <Input.Search
@@ -275,10 +292,10 @@ function ServiceOrder({ onSelected, selectedService }) {
             );
           }}
         />
-      </div>
+      </Modal>
       <Loading loading={loading} />
     </>
   );
 }
 
-export default ServiceOrder;
+export default UpDateServiceOrder;
