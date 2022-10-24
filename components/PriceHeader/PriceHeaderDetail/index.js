@@ -212,20 +212,20 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
         return <div>{formatMoney(price)}</div>;
       },
     },
-    {
-      title: "Trạng thái",
-      dataIndex: "statusName",
-      key: "statusName",
-      render: (statusName) => {
-        return (
-          <>
-            {" "}
-            <Tag color={"green"}>{statusName}</Tag>{" "}
-          </>
-        );
-      },
-      ...getColumnSearchProps("statusName"),
-    },
+    // {
+    //   title: "Trạng thái",
+    //   dataIndex: "statusName",
+    //   key: "statusName",
+    //   render: (statusName) => {
+    //     return (
+    //       <>
+    //         {" "}
+    //         <Tag color={"green"}>{statusName}</Tag>{" "}
+    //       </>
+    //     );
+    //   },
+    //   ...getColumnSearchProps("statusName"),
+    // },
   ];
 
   const onFinish = async (values) => {

@@ -379,7 +379,7 @@ function OrderNotRequestTable({}) {
             }}
             onRow={(record, rowIndex) => {
               return {
-                onClick: (event) => {
+                onDoubleClick: (event) => {
                   router.push(`/admin?orderId=${record.id}`);
                 },
               };

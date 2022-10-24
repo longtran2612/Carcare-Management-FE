@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Row,
-  Col,
-  Form,
-  Select,
-  InputNumber,
-} from "antd";
+import { Modal, Row, Col, Form, Select, InputNumber } from "antd";
 import { createPrice } from "pages/api/priceAPI";
 import { getServices } from "pages/api/serviceAPI";
 
@@ -143,7 +136,13 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
                   },
                 ]}
               >
-                <InputNumber addonAfter={selectCurrency} />
+                <InputNumber
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  addonAfter={selectCurrency}
+                />
               </Form.Item>
             </Col>
           </Row>

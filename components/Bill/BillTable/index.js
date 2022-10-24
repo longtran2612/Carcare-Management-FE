@@ -18,7 +18,12 @@ import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
-import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  ClearOutlined,
+  SearchOutlined,
+  DeleteTwoTone,
+  PrinterTwoTone,
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { openNotification } from "utils/notification";
 import { useReactToPrint } from "react-to-print";
@@ -42,7 +47,7 @@ const BillTable = () => {
   const [billDetail, setBillDetail] = useState({});
   // const [showPrint, setShowPrint] = useState(false)
 
-  const[printBill, setPrintBill] = useState(false)
+  const [printBill, setPrintBill] = useState(false);
 
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -53,7 +58,6 @@ const BillTable = () => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
     setSearchGlobal(selectedKeys[0]);
@@ -139,7 +143,6 @@ const BillTable = () => {
         text
       ),
   });
-
   const totalPriceService = () => {
     return billDetail?.services?.reduce((total, cur) => {
       return (total += cur?.servicePrice?.price);
@@ -151,15 +154,13 @@ const BillTable = () => {
     }, 0);
   };
 
-  const handlePrintBill = async (data) => {
-    try {
-      setBillDetail(data)
-      setPrintBill(true);
+  const handlePrintBill = (data) => {
+    
+      setBillDetail(data);
+      // setPrintBill(true);
       handlePrint();
-      // setPrintBill(false);
-    } catch (err) {
-      console.log(err);
-    }
+      setPrintBill(false);
+    
   };
 
   const handleCancelBill = async (id) => {
@@ -261,7 +262,6 @@ const BillTable = () => {
       ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
         switch (record.statusName) {
-
           case "Đã thanh toán":
             return <Tag color="green">{record.statusName}</Tag>;
           case "Đã hủy":
@@ -272,11 +272,12 @@ const BillTable = () => {
     {
       title: "Hành động",
       dataIndex: "action",
+      width: 130,
       render: (text, record, dataIndex) => {
         return (
           <>
             <Popconfirm
-              title="Xác nhận?"
+              title="Hủy hóa đơn này?"
               placement="topLeft"
               okText="Đồng ý"
               cancelText="Hủy"
@@ -284,17 +285,11 @@ const BillTable = () => {
                 handleCancelBill(record.id);
               }}
             >
-              <Button
-                style={{ marginRight: "5px" }}
-                type="primary"
-                danger="true"
-              >
-                Hủy
-              </Button>
+              <DeleteTwoTone twoToneColor="#F4406D" style={{ fontSize: "30px",marginRight:"10px" }} />
             </Popconfirm>
 
             <Popconfirm
-              title="Xác nhận?"
+              title="In hóa đơn?"
               placement="topLeft"
               okText="Đồng ý"
               cancelText="Hủy"
@@ -303,7 +298,7 @@ const BillTable = () => {
                 handlePrintBill(record);
               }}
             >
-              <Button type="primary">Xuất hóa đơn</Button>
+              <PrinterTwoTone style={{ color: "#FFFFFF", fontSize: "30px" }} />
             </Popconfirm>
           </>
         );

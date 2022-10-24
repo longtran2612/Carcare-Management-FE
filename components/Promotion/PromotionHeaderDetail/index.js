@@ -10,7 +10,7 @@ import {
   Input,
   DatePicker,
   Table,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
@@ -26,7 +26,7 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPromotionLine from "components/Modal/ModalAddPromotionLine";
 import moment from "moment";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined ,PlusOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { EditOutlined } from "@ant-design/icons";
 import { formatMoney } from "utils/format";
@@ -235,39 +235,36 @@ const PromotionHeaderDetail = ({
         return handleType(record.type);
       },
     },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => {
-        return (
-          <div>
-            {status === "ACTIVE" ? (
-              <Tag color="green">Hoạt động</Tag>
-            ) : (
-              <Tag color="red">Không hoạt động</Tag>
-            )}
-          </div>
-        );
-      },
-      ...getColumnSearchProps("status"),
-    },
+    // {
+    //   title: "Trạng thái",
+    //   dataIndex: "status",
+    //   key: "status",
+    //   render: (text, record) => {
+    //     return (
+    //       <div>
+    //         {record.status == "ACTIVE" ? (
+    //           <Tag color="green">Hoạt động</Tag>
+    //         ) : (
+    //           <Tag color="red">Không hoạt động</Tag>
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    //   ...getColumnSearchProps("status"),
+    // },
     {
       dataIndex: "action",
       key: "action",
       render: (text, record) => {
         return (
           <div>
-            <Button
-              type="primary"
-              icon={<EditOutlined />}
+            <EditOutlined
               onClick={() => {
                 setPromotionLineSelected(record.id);
                 setShowDrawer(true);
               }}
-            >
-              Sửa
-            </Button>
+              style={{color:'#6B92F2', fontSize: "25px" }}
+            />
           </div>
         );
       },

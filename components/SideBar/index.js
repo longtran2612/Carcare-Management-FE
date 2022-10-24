@@ -48,7 +48,7 @@ const items = [
   getItem("Người dùng", "6", <UserOutlined />, [
     getItem("Nhân viên", "user"),
     getItem("Khách hàng", "customer"),
-    getItem("Nhóm người dùng", "user-group"),
+    // getItem("Nhóm người dùng", "user-group"),
   ]),
   getItem("Khuyến mãi", "7", <TagsOutlined />, [
     getItem("Khuyến mãi", "promotion"),

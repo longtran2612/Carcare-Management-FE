@@ -3,8 +3,9 @@ import { getCarSlots } from "pages/api/carSlotApi";
 import React, { useState, useEffect, useRef } from "react";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
-import slot_active from "public/images/slot_active.png";
+import slot_active from "public/images/slot_active.gif";
 import slot_available from "public/images/slot_available.png";
+import slot_unavailable from "public/images/slot_unavailable.png";
 import Image from "next/image";
 import { executeCarSlot } from "pages/api/carSlotApi";
 import { openNotification } from "utils/notification";
@@ -58,12 +59,12 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
 
   const convertStatusCarSlotImg = (status) => {
     switch (status) {
-      case "ACTIVE":
-        return <Image height={100} width={100} src={slot_active} />;
+      case "UNAVAILABLE":
+        return <Image height={120} width={120} src={slot_unavailable} />;
       case "AVAILABLE":
-        return <Image height={100} width={100} src={slot_available} />;
+        return <Image height={120} width={120} src={slot_available} />;
       case "IN_USE":
-        return <Image height={100} width={100} src={slot_active} />;
+        return <Image height={120} width={120} src={slot_active} />;
       default:
         break;
     }
@@ -75,7 +76,7 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
         title="Chọn vị trí xử lý xe"
         visible={show}
         onCancel={handleCancel}
-        width={700}
+        width={900}
         okText="Xác nhận"
         cancelText="Hủy bỏ"
       >
@@ -86,34 +87,38 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
                 key={carSlot.id}
                 xs={24}
                 sm={24}
-                md={12}
-                lg={8}
+                md={8}
+                lg={6}
                 style={{ marginBottom: "10px" }}
                 onClick={() => {
                   if (carSlot.status === "AVAILABLE") {
                     onFinish(carSlot.id);
                   } else {
-                    openNotification("Thất bại","Vị trí này đang được sử dụng!");
+                    openNotification(
+                      "Thất bại",
+                      "Vui lòng chọn vị trí trống!"
+                    );
                   }
                 }}
               >
                 <Card
                   headStyle={{
-                    backgroundColor: "#8CB3F1",
+                    backgroundColor: "#002140",
                     color: "white",
-                    height: "50px",
+                    height: "25px",
+                    justifyContent: "center",
+                    alignContent: "center",
                     textAlign: "center",
-                    fontSize: "20px",
+                    fontSize: "15px",
                   }}
                   style={
-                    carSlot.status === "IN_USE"
+                    carSlot.status === "AVAILABLE"
                       ? {
                           margin: "10px",
                           borderRadius: "20px",
                           overflow: "hidden",
                           cursor: "pointer",
                           height: "200px",
-                          pointerEvents: "none",
                         }
                       : {
                           margin: "10px",
@@ -121,24 +126,26 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
                           overflow: "hidden",
                           cursor: "pointer",
                           height: "200px",
+                          pointerEvents: "none",
                         }
                   }
-                  hoverable={carSlot.status === "IN_USE" ? false : true}
+                  hoverable={carSlot.status === "AVAILABLE" ? true : false}
                   title={carSlot.name}
                   bordered={false}
                 >
-                  {carSlot.status == "IN_USE" ? (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignContent: "center",
-                        pointerEvents: "none",
-                      }}
-                    >
-                      {convertStatusCarSlotImg(carSlot.status)}
-                    </div>
-                  ) : (
+                  {/* {carSlot.status == "IN_USE" && ( */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignContent: "center",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    {convertStatusCarSlotImg(carSlot.status)}
+                  </div>
+                  {/* )}
+                  {carSlot.status == "AVAILABLE" && (
                     <div>
                       <div
                         style={{
@@ -150,7 +157,7 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
                         {convertStatusCarSlotImg(carSlot.status)}
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </Card>
               </Col>
             );

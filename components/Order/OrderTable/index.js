@@ -21,7 +21,12 @@ import { PlusOutlined } from "@ant-design/icons";
 
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
-import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  ClearOutlined,
+  SearchOutlined,
+  DeleteTwoTone,
+  PlayCircleTwoTone,
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
 import { OrderDetail } from "components/Order/OrderDetail";
@@ -235,7 +240,7 @@ function OrderTable({}) {
         return (
           <>
             <Popconfirm
-              title="Xác nhận?"
+              title="Hủy yêu cầu này?"
               placement="topLeft"
               okText="Đồng ý"
               cancelText="Hủy"
@@ -243,17 +248,17 @@ function OrderTable({}) {
                 handleCancelOrder(record.id);
               }}
             >
-              <Button
-                style={{ marginRight: "5px" }}
-                type="primary"
-                danger="true"
-              >
-                Hủy
-              </Button>
+              <DeleteTwoTone
+                twoToneColor="#F4406D"
+                style={{
+                  fontSize: "30px",
+                  marginRight: "10px",
+                }}
+              />
             </Popconfirm>
 
             <Popconfirm
-              title="Xác nhận?"
+              title="Xử lý yêu cầu này?"
               placement="topLeft"
               okText="Đồng ý"
               cancelText="Hủy"
@@ -262,7 +267,13 @@ function OrderTable({}) {
                 setModalSelectSlot(true);
               }}
             >
-              <Button type="primary">Xử lý</Button>
+              <PlayCircleTwoTone
+                style={{
+                  color: "#FFFFFF",
+                  fontSize: "30px",
+                  marginRight: "10px",
+                }}
+              />
             </Popconfirm>
           </>
         );
@@ -397,7 +408,10 @@ function OrderTable({}) {
             }}
             expandable={{
               expandedRowRender: (record) => (
-                <Row  style={{padding: '10px', backgroundColor: "#ECE3E3" }} gutter={16}>
+                <Row
+                  style={{ padding: "10px", backgroundColor: "#ECE3E3" }}
+                  gutter={16}
+                >
                   <Col span={12}>
                     <Table
                       bordered
@@ -417,12 +431,12 @@ function OrderTable({}) {
                         padding: "10px",
                       }}
                     >
-                      <Row  gutter={32}>
+                      <Row gutter={32}>
                         <Col
                           style={{ borderRight: "solid LightGray 1px" }}
                           span={11}
                         >
-                          <Divider >      Khách hàng </Divider>
+                          <Divider> Khách hàng </Divider>
                           <Timeline style={{ marginTop: "20px" }}>
                             <Timeline.Item>
                               Tên: {record?.customerName}
@@ -433,8 +447,7 @@ function OrderTable({}) {
                           </Timeline>
                         </Col>
                         <Col span={12}>
-                         
-                          <Divider > Xe </Divider>
+                          <Divider> Xe </Divider>
                           <Timeline style={{ marginTop: "20px" }}>
                             <Timeline.Item>Xe: {record?.carName}</Timeline.Item>
                             <Timeline.Item>

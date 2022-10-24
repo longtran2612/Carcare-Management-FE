@@ -31,8 +31,8 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
       estimateTime: values.estimateTime,
       servicePrice: {
         price: values.price,
-        currency: currency
-      }
+        currency: currency,
+      },
     };
     console.log(dataCreate);
     try {
@@ -107,8 +107,8 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Row gutter={[16,16]}>
-            <Col span={12} >
+          <Row gutter={[16, 16]}>
+            <Col span={12}>
               <Form.Item
                 label="Tên dịch vụ"
                 name="name"
@@ -121,7 +121,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={12} >
+            <Col span={12}>
               <Form.Item
                 label="Danh mục dịch vụ"
                 rules={[
@@ -154,7 +154,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={8} >
+            <Col span={8}>
               <Form.Item
                 label="Kiểu dịch vụ"
                 rules={[
@@ -165,14 +165,14 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 name="type"
               >
                 <Select>
-                    <Select.Option value="HOT">HOT</Select.Option>
-                    <Select.Option value="LIKE">Yêu thích</Select.Option>
-                    <Select.Option value="NEW">Mới</Select.Option>
-                    <Select.Option value="NORMAL">Thông thường</Select.Option>
-                  </Select>
+                  <Select.Option value="HOT">HOT</Select.Option>
+                  <Select.Option value="LIKE">Yêu thích</Select.Option>
+                  <Select.Option value="NEW">Mới</Select.Option>
+                  <Select.Option value="NORMAL">Thông thường</Select.Option>
+                </Select>
               </Form.Item>
             </Col>
-            <Col span={8} >
+            <Col span={8}>
               <Form.Item
                 label="Giá dịch vụ"
                 rules={[
@@ -182,7 +182,13 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 ]}
                 name="price"
               >
-                <InputNumber addonAfter={selectCurrency} style={{ width: "100%" }} />
+                <InputNumber
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  addonAfter={selectCurrency}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -195,7 +201,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 ]}
                 name="estimateTime"
               >
-                <InputNumber  />
+                <InputNumber addonAfter='phút' />
               </Form.Item>
             </Col>
             <Col span={24}>
