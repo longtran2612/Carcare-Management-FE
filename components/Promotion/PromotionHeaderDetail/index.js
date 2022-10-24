@@ -39,7 +39,6 @@ const PromotionHeaderDetail = ({
 }) => {
   const router = useRouter();
   const [form] = Form.useForm();
-  const { TextArea } = Input;
   const [promotionHeaderDetail, setPromotionHeaderDetail] = useState({});
   const [promotionLine, setPromotionLine] = useState([]);
   const [modalQuestion, setModalQuestion] = useState(false);
@@ -281,8 +280,8 @@ const PromotionHeaderDetail = ({
         return <Tag color="blue">Giảm tiền</Tag>;
       case "PERCENTAGE":
         return <Tag color="green">Giảm theo %</Tag>;
-      case "GIFT":
-        return <Tag color="gold">Tặng quà</Tag>;
+      case "SERVICE":
+        return <Tag color="gold">Dịch vụ</Tag>;
       default:
     }
   };

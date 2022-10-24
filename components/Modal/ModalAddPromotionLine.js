@@ -88,7 +88,7 @@ const ModalAddPromotionLine = ({promotionHeaderId, show, onSuccess, handleCancel
                   <Select.Option value="PERCENTAGE">
                     Giảm tiền theo %
                   </Select.Option>
-                  <Select.Option value="GIFT">Tặng quà</Select.Option>
+                  <Select.Option value="SERVICE">Dịch vụ</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -103,7 +103,7 @@ const ModalAddPromotionLine = ({promotionHeaderId, show, onSuccess, handleCancel
                   },
                 ]}
               >
-                <DatePicker placeholder="bắt đầu" format={formatDate} />
+                <DatePicker placeholder="Ngày bắt đầu" format={formatDate} />
               </Form.Item>
             </Col>
             <Col span={12} >
@@ -116,7 +116,7 @@ const ModalAddPromotionLine = ({promotionHeaderId, show, onSuccess, handleCancel
                   },
                 ]}
               >
-                <DatePicker placeholder="kết thúc" format={formatDate} />
+                <DatePicker placeholder="Ngày kết thúc" format={formatDate} />
               </Form.Item>
             </Col>
           </Row>

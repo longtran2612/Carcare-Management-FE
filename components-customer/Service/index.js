@@ -69,17 +69,6 @@ const ServiceCustomer = () => {
       return (total += cur?.estimateTime);
     }, 0);
   };
-  const handleType = (value) => {
-    switch (value) {
-      case "MONEY":
-        return "Giảm tiền";
-      case "PERCENTAGE":
-        return "Giảm theo";
-      case "GIFT":
-        return "Tặng quà";
-      default:
-    }
-  };
 
   useEffect(() => {
     handleGetOrders();
@@ -145,7 +134,7 @@ const ServiceCustomer = () => {
               <Col span={8}>
                 <DescriptionItem
                   title="Thời gian xử lý ước tính"
-                  content={item.totalEstimateTime} phút
+                  content={item.totalEstimateTime+" phút"}
                 />
               </Col>
             </Row>

@@ -19,6 +19,7 @@ import { getCategories } from "pages/api/categoryAPI";
 import Loading from "components/Loading";
 import { validateMessages } from "utils/messageForm";
 import TextArea from "antd/lib/input/TextArea";
+import { openNotification } from "utils/notification";
 
 function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
   const [promotionDetail, setPromotionDetail] = useState(null);
@@ -39,6 +40,9 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         amount: response.data.Data[0].amount,
         maximumDiscount: response.data.Data[0].maximumDiscount,
         minimumSpend: response.data.Data[0].minimumSpend,
+        categoryIds: response.data.Data[0].categoryIds,
+        serviceIds: response.data.Data[0].serviceIds,
+        customerType: response.data.Data[0].customerType,
       });
       // setLoading(false);
     } catch (error) {
@@ -54,9 +58,9 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
       amount: values.amount,
       maximumDiscount: values.maximumDiscount,
       minimumSpend: values.minimumSpend,
-      categoryIds: values.categoryIds.join(","),
-      groupIds: values.groupIds.join(","),
-      serviceIds: values.serviceIds.join(","),
+      categoryIds: values.categoryIds,
+      customerType: values.customerType,
+      serviceIds: values.serviceIds,
     };
     if (values.type === "PERCENTAGE") {
       dataUpdate.serviceReceip = null;
@@ -65,7 +69,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
       dataUpdate.maximumDiscount = 0;
       dataUpdate.serviceReceip = null;
     }
-    if (values.type === "GIFT") {
+    if (values.type === "SERVICE") {
       dataUpdate.maximumDiscount = 0;
       dataUpdate.serviceReceip = values.serviveReceive;
     }
@@ -78,6 +82,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
       );
       // onSuccess(response.data.Data);
       // handleCancel();
+      openNotification("Thành công", "Cập nhật chi tiết khuyến mãi thành công");
       getPromotionDetail();
     } catch (error) {
       console.log(error);
@@ -179,7 +184,14 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
             {promotionDetail?.type === "MONEY" ? (
               <Col span={12}>
                 <Form.Item label="Giá trị" name="amount">
-                  <InputNumber addonAfter="Đ" min={0} />
+                  <InputNumber
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    addonAfter="Đ"
+                    min={0}
+                  />
                 </Form.Item>
               </Col>
             ) : (
@@ -206,7 +218,14 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   },
                 ]}
               >
-                <InputNumber addonAfter="Đ" min={0} />
+                <InputNumber
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  addonAfter="Đ"
+                  min={0}
+                />
               </Form.Item>
             </Col>
             {promotionDetail?.type != "MONEY" && (
@@ -220,11 +239,26 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                     },
                   ]}
                 >
-                  <InputNumber min={0} />
+                  <InputNumber
+                    addonAfter="Đ"
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    min={0}
+                  />
                 </Form.Item>
               </Col>
             )}
             <Col span={12}>
+              <Form.Item label="Nhóm người dùng áp dụng" name="customerType">
+                <Select>
+                <Select.Option value={0}>Tất cả</Select.Option>
+                  <Select.Option value={1}>Thân thiết</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={24}>
               <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
                 <Select mode="multiple">
                   {categories.map((category) => (
@@ -235,17 +269,9 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item label="Nhóm người dùng áp dụng" name="groupIds">
-                <Select mode="multiple">
-                  <Select.Option value="1">Thân thiết</Select.Option>
-                  <Select.Option value="2">VIP</Select.Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item label="Dịch vụ áp dụng" name="serviceIds">
-                <Select mode="multiple">
+                <Select maxLength={2} mode="multiple">
                   {services.map((service) => (
                     <Select.Option value={service.id}>
                       {service.serviceCode + " - " + service.name}

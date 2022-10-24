@@ -94,7 +94,9 @@ ant-card-head-title{
 .ant-divider-horizontal{
   margin: 5px !important;
 }
-
+.ant-input-number-group-wrapper{
+  width: 100% !important;
+}
 .background-login{
   background: linear-gradient(to top right, #AE9CE1, #F5E7DB);
 }
