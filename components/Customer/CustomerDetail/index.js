@@ -80,7 +80,7 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
         email: values.email,
         address: values.address,
         status: values.status,
-        image: imageS3,
+        image: imageS3 || customerDetail?.image,
         birthDay: values.birthDay,
       };
       const res = await updateUserById(body, customerId);

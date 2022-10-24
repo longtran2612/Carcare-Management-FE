@@ -28,6 +28,7 @@ const authSlice = createSlice({
       Cookies.remove("accessToken");
       Cookies.remove("username");
       Cookies.remove("refreshToken");
+      Cookies.remove("id");
     }
   },
   

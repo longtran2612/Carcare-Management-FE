@@ -10,36 +10,29 @@ import {
   DatePicker,
   Upload,
   Layout,
+  Popconfirm,
   Tabs,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
-import {
-  getUserById,
-  updateUserById,
-  uploadImagesUser,
-} from "pages/api/userAPI";
+import { updateUserById, uploadImagesUser } from "pages/api/userAPI";
+import { getCustomerById } from "pages/api/customerAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
-import { loadUser } from "pages/api/authAPI";
-import { getUserByPhone } from "pages/api/userAPI";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
-const formatDate = "YYYY/MM/DD";
-import MyHeader from "components/Header";
-import MyFooter from "components/Footer";
-import { CustomerNavigation } from "components-customer/navigation";
-import { UserOutlined, LockOutlined, ClearOutlined } from "@ant-design/icons";
+import Cookies from "js-cookie";
+
+const formatDate = "DD/MM/YYYY";
 
 export const ProfileCustomer = () => {
-  const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  const [userDetail, setUserDetail] = useState({});
   const [modalUpload, setModalUpload] = useState(false);
-  
+  const [customerDetail, setCustomerDetail] = useState({});
+
   const [listFiles, setListFiles] = useState({
     images: [],
     imageBlob: [],
@@ -48,18 +41,22 @@ export const ProfileCustomer = () => {
   const [imageS3, setImageS3] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchUserDetail = async () => {
+  const fetchCustomerDetail = async () => {
     setLoading(true);
+    let id = Cookies.get("id");
     try {
-      const response = await getUserByPhone();
-      console.log("response:", response);
-      setUserDetail(response.data.Data);
-
+      const response = await getCustomerById(id);
+      setCustomerDetail(response.data.Data);
       form.setFieldsValue({
         name: response.data.Data.name,
-        phone: response.data.Data.phone,
+        customerCode: response.data.Data.customerCode,
+        phoneNumber: response.data.Data.phoneNumber,
         email: response.data.Data.email,
-        birthDay: moment(moment(response.data.Data.birthDay), formatDate),
+        gender: response.data.Data.gender,
+        nationality: response.data.Data.nationality,
+        identityNumber: response.data.Data.identityNumber,
+        statusName: response.data.Data.statusName,
+        dateOfBirth: response.data.Data.dateOfBirth ? moment(moment(response.data.Data.dateOfBirth), formatDate): null,
         address: response.data.Data.address,
         image: response.data.Data.image,
         status: response.data.Data.status,
@@ -67,12 +64,12 @@ export const ProfileCustomer = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(error.message);
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    fetchUserDetail();
+    fetchCustomerDetail();
   }, []);
 
   const onFinish = async (values) => {
@@ -81,18 +78,16 @@ export const ProfileCustomer = () => {
         name: values.name,
         email: values.email,
         address: values.address,
-        status: values.status,
-        image: imageS3,
+        image: imageS3 || customerDetail?.image,
         birthDay: values.birthDay,
       };
-      const res = await updateUserById(body, userId);
-      setUserDetail(res.data.Data);
+      const res = await updateUserById(body, customerDetail?.id);
+      setCustomerDetail(res.data.Data);
       if (res.data.StatusCode == "200") {
-        openNotification("Cập nhật người dùng thành công!", "");
-        onUpdateUser();
+        openNotification("Cập nhật thông tin thành công!", "");
       }
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
   // handle upload image
@@ -116,24 +111,24 @@ export const ProfileCustomer = () => {
       });
       const response = await uploadImagesUser(formData);
       setImageS3(response.data.Data[0]);
-      setUserDetail((prevState) => {
+      setCustomerDetail((prevState) => {
         return { ...prevState, image: response.data.Data[0] };
       });
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      console.log(error);
+      openNotification(error.response.data.message[0]);
     }
   };
 
   return (
     <>
-      <Row >
+      <Row gutter={[16, 16]}>
         <Col span={6}>
-          <Image width={300} height={250} src={userDetail.image} />
+          <Image width={300} height={250} src={customerDetail.image} />
           <div
             style={{
-              marginTop: "2rem",
+              marginTop: "10px",
               display: "flex",
               justifyContent: "center",
             }}
@@ -148,15 +143,15 @@ export const ProfileCustomer = () => {
             </Upload>
           </div>
         </Col>
-        <Col span={17}>
+        <Col span={18}>
           <Form
             form={form}
             layout="vertical"
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row>
-              <Col span={23} style={{ marginRight: "20px" }}>
+            <Row gutter={[32]}>
+              <Col span={12}>
                 <Form.Item
                   label="Tên"
                   name="name"
@@ -169,10 +164,67 @@ export const ProfileCustomer = () => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={23}>
+
+              <Col span={6}>
+                <Form.Item
+                  label="Ngày sinh"
+                  name="dateOfBirth"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <DatePicker format={formatDate} />
+                </Form.Item>
+              </Col>
+
+              <Col span={6}>
+                <Form.Item
+                  label="Giới tính"
+                  name="gender"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Select>
+                    <Select.Option value="Nam">Nam</Select.Option>
+                    <Select.Option value="Nữ">Nữ</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Quốc tịch"
+                  name="nationality"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  label="Số CMND"
+                  name="identityNumber"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
                 <Form.Item
                   label="Số điện thoại"
-                  name="phone"
+                  name="phoneNumber"
                   rules={[
                     {
                       required: true,
@@ -182,7 +234,7 @@ export const ProfileCustomer = () => {
                   <Input disabled="true" />
                 </Form.Item>
               </Col>
-              <Col span={23} style={{ marginRight: "20px" }}>
+              <Col span={6}>
                 <Form.Item
                   label="Email"
                   name="email"
@@ -195,22 +247,7 @@ export const ProfileCustomer = () => {
                   <Input />
                 </Form.Item>
               </Col>
-
-              <Col span={23} style={{ marginRight: "20px" }}>
-                <Form.Item
-                  label="Ngày sinh"
-                  name="birthDay"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <DatePicker format={formatDate} />
-                </Form.Item>
-              </Col>
-
-              <Col span={23}>
+              <Col span={24}>
                 <Form.Item
                   label="Địa chỉ"
                   name="address"
@@ -232,16 +269,19 @@ export const ProfileCustomer = () => {
                 <div style={{ marginRight: "20px" }}>
                   <Button
                     onClick={() => {
-                      fetchUserDetail();
+                      fetchCustomerDetail();
                     }}
                   >
                     Đặt lại
                   </Button>
                 </div>
                 <div>
-                  <Button
-                    type="primary"
-                    onClick={() => {
+                  <Popconfirm
+                    title="Xác nhận?"
+                    placement="topLeft"
+                    okText="Đồng ý"
+                    cancelText="Hủy"
+                    onConfirm={() => {
                       form
                         .validateFields()
                         .then((values) => {
@@ -252,14 +292,20 @@ export const ProfileCustomer = () => {
                         });
                     }}
                   >
-                    Cập nhật
-                  </Button>
+                    <Button type="primary">Cập nhật</Button>
+                  </Popconfirm>
                 </div>
               </div>
             </Row>
           </Form>
         </Col>
       </Row>
+      <ModalUploadImage
+        visible={modalUpload}
+        handleCancel={() => setModalUpload(false)}
+        handleOk={() => handleUploadImages()}
+        listImage={listFiles.imageBlob}
+      />
       <Loading loading={loading} />
     </>
   );

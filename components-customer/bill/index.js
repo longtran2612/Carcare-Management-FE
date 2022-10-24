@@ -15,6 +15,7 @@ import { formatMoney } from "utils/format";
 import moment from "moment";
 import Image from "next/image";
 import payment_completed from "public/images/payment_complete.gif";
+import Cookies from "js-cookie";
 
 const { Title } = Typography;
 const formatDate = "HH:ss DD/MM/YYYY";
@@ -38,8 +39,9 @@ const BillCustomer = () => {
 
   const getAllBill = async () => {
     setLoading(true);
+    let id = Cookies.get("id");
     try {
-      const res = await getAllBillsByCustomerId("63510f855ac8423bc2f08fe9");
+      const res = await getAllBillsByCustomerId(id);
       console.log(res.data.Data);
       setBills(res.data.Data);
     } catch (error) {

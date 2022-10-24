@@ -17,9 +17,12 @@ function HomePageCustomer() {
   const router = useRouter();
 
   const [landingPageData, setLandingPageData] = useState({});
+
   useEffect(() => {
     setLandingPageData(JsonData);
   }, []);
+
+  
   return (
     <>
       <Layout

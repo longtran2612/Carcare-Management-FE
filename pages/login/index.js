@@ -1,23 +1,21 @@
 import React from "react";
-import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
 import { Typography, Divider } from "antd";
 import {
-  FacebookOutlined,
-  GoogleOutlined,
   PhoneOutlined,
   LockOutlined,
 } from "@ant-design/icons";
 import { Form, Input, Button, Col, Row, message, Space } from "antd";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { setLogin } from "redux/slices/authSlice";
 import { login } from "pages/api/authAPI";
 import Loading from "components/Loading";
-const { Title } = Typography;
 import logo from "public/images/logo.png";
 import Image from "next/image";
+import Cookies from "js-cookie";
+import { getCustomerByPhone } from "pages/api/customerAPI";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -25,27 +23,26 @@ export default function LoginPage() {
 
   const router = useRouter();
 
-  const onFinish = (values) => {
+  const onFinish = async (values)=>{
     setLoading(true);
-    login(values)
-      .then((res) => {
-        if (res.data.StatusCode == 200) {
-          dispatch(setLogin(res.data.Data));
-
-          router.push("/");
-        } else {
-          if (res.status == 422) {
-            message.error(res.data.message);
-          }
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        message.error(err.response.data.message[0]);
-        message.error("Tài khoản hoặc mật khẩu không chính xác");
-      });
-  };
+    console.log(values);
+    try{
+      const res = await login(values);
+      dispatch(setLogin(res.data.Data));
+      if(res.data.Data.roles == "ROLE_CUSTOMER"){
+        router.push("/home");
+        const customer = await getCustomerByPhone(res.data.Data.username);
+        Cookies.set("id", customer.data.Data.id);
+      }
+      if(res.data.Data.roles == "ROLE_USER"){
+        router.push("/admin");
+      }
+    }catch(err){
+      message.error(err.response.data.message[0]);
+      message.error("Tài khoản hoặc mật khẩu không chính xác");
+    }
+    setLoading(false);
+  }
 
   return (
     <>

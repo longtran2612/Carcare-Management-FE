@@ -31,7 +31,7 @@ const AdminPage = () => {
       loadUser().then((res) => {
         console.log("res:", res);
         if (res.data.StatusCode == 200) {
-          if (res.data.Data.roles == "ROLE_ADMIN") {
+          if (res.data.Data.roles == "ROLE_USER") {
             router.push("/admin");
           } else {
             router.push("/home");
