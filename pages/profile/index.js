@@ -128,7 +128,7 @@ const CustomerProfile = () => {
   return (
     <>
       <Layout>
-        <CustomerNavigation />
+        <MyHeader />
         <Layout.Content
           style={{
             paddingTop: "7rem",

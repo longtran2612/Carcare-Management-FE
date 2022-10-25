@@ -125,11 +125,7 @@ export const CustomerNavigation = () => {
           id="bs-example-navbar-collapse-1"
         >
           <ul className="nav navbar-nav navbar-right">
-            <li>
-              <a href="#about" className="page-scroll">
-                Về chúng tôi
-              </a>
-            </li>
+        
             <li>
               <a href="#services" className="page-scroll">
                 Dịch vụ
@@ -137,14 +133,10 @@ export const CustomerNavigation = () => {
             </li>
             <li>
               <a href="#features" className="page-scroll">
-                Điều khoản
+                Chức năng
               </a>
             </li>
-            <li>
-              <a href="#contact" className="page-scroll">
-                Liên hệ
-              </a>
-            </li>
+        
             <li>
               <a  className="page-scroll">
                 <Dropdown overlay={handleMenu}>
