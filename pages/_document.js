@@ -27,16 +27,6 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          // public/index.html
-          <script
-            crossorigin
-            src="https://unpkg.com/react@17/umd/react.production.min.js"
-          ></script>
-          <script
-            crossorigin
-            src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
-          ></script>
-          // According to the need to introduce
           <script
             type="text/javascript"
             src="https://unpkg.com/@ant-design/plots@latest/dist/plots.min.js"
