@@ -54,9 +54,9 @@ const items = [
     getItem("Khuyến mãi", "promotion"),
   ]),
   getItem("Thống kê - Báo cáo", "8", <BarChartOutlined />, [
-    getItem("Doanh số", "bill-chart"),
-    getItem("Dịch vụ", "service-chart"),
-    getItem("Khuyến mãi", "promotion-chart"),
+    getItem("Doanh số", "bill-report"),
+    getItem("Dịch vụ", "service-report"),
+    getItem("Khuyến mãi", "promotion-report"),
   ]),
 ];
 

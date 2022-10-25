@@ -158,7 +158,7 @@ const BillTable = () => {
     setBillDetail(data);
     // setPrintBill(true);
     handlePrint();
-    setPrintBill(false);
+    // setPrintBill(false);
   };
 
   const handleCancelBill = async (id) => {

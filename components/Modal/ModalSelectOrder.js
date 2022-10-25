@@ -206,6 +206,9 @@ function ModalSelectOrder({ onSelectOrder }) {
         return (
           <>
             <PlayCircleTwoTone
+              onClick={() => {
+                onSelectOrder(record.id);
+              }}
               style={{
                 color: "#FFFFFF",
                 fontSize: "30px",
