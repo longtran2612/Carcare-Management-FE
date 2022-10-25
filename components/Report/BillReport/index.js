@@ -70,7 +70,7 @@ const BillReport = () => {
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item href="">Báo cáo doanh số</Breadcrumb.Item>
+        <Breadcrumb.Item href=""> {" "}Báo cáo doanh số</Breadcrumb.Item>
       </Breadcrumb>
       <Row>
         <Col style={{padding:"10px"}} span={12}>

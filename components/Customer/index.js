@@ -12,7 +12,7 @@ const CustomerPage = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item href="">
           <UserOutlined />
-          Quản lý khách hàng
+          {" "}Quản lý khách hàng
         </Breadcrumb.Item>
       </Breadcrumb>
 

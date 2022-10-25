@@ -213,7 +213,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                 Hủy
               </Button>
               <Button
-                type="dashed"
+                type="primary"
                 icon={<PrinterOutlined />}
                 onClick={() => {
                   form
@@ -228,22 +228,6 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                 }}
               >
                 Hoàn thành và in hóa đơn
-              </Button>
-              <Button
-                onClick={() => {
-                  form
-                    .validateFields()
-                    .then((values) => {
-                      form.resetFields();
-                      onFinishNoPrint(values);
-                    })
-                    .catch((info) => {
-                      console.log("Validate Failed:", info);
-                    });
-                }}
-                type="primary"
-              >
-                Hoàn thành
               </Button>
             </div>
           </>

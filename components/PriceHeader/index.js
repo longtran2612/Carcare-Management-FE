@@ -10,7 +10,7 @@ const PriceHeaderPage = () => {
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item href="">Quản lý bảng giá</Breadcrumb.Item>
+        <Breadcrumb.Item href=""> {" "}Quản lý bảng giá</Breadcrumb.Item>
       </Breadcrumb>
       <PriceHeaderTable />
     </>

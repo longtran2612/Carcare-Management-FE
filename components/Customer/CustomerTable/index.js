@@ -241,7 +241,7 @@ function CustomerTable({}) {
       ),
     },
     {
-      title: "Trạng thái",
+      title: "Nhóm khác hàng",
       key: "statusName",
       dataIndex: "statusName",
       ...getColumnSearchProps("statusName"),

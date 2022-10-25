@@ -10,7 +10,7 @@ import {
   DatePicker,
   InputNumber,
   Upload,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
@@ -178,8 +178,8 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  label="Tên mẫu xe"
-                  name="name"
+                  label="Model"
+                  name="model"
                   rules={[
                     {
                       required: true,
@@ -221,19 +221,6 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="Model"
-                  name="model"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
                   label="Thương hiệu"
                   name="brand"
                   rules={[
@@ -261,8 +248,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                   </Select>
                 </Form.Item>
               </Col>
-
-              <Col span={8}>
+              <Col span={12}>
                 <Form.Item
                   label="Đông cơ"
                   name="engine"
@@ -275,7 +261,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={12}>
                 <Form.Item
                   label="Truyền động"
                   name="transmission"
@@ -288,7 +274,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={12}>
                 <Form.Item
                   label="Nhiên liệu"
                   name="fuel"
@@ -333,7 +319,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                   </Button>
                 </div>
                 <div>
-                <Popconfirm
+                  <Popconfirm
                     title="Cập nhật?"
                     placement="topLeft"
                     okText="Xác nhận"

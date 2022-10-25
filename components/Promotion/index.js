@@ -10,7 +10,7 @@ const PromotionHeaderPage = () => {
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item href="">Quản lý chương trình khuyến mãi</Breadcrumb.Item>
+        <Breadcrumb.Item href=""> {" "}Quản lý chương trình khuyến mãi</Breadcrumb.Item>
       </Breadcrumb>
       <PromotionHeaderTable />
     </>

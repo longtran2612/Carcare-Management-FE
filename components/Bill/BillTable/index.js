@@ -251,7 +251,6 @@ const BillTable = () => {
         return <div>{moment(paymentDate).format(formatDate)}</div>;
       },
     },
-
     {
       title: "Trạng thái",
       key: "statusName",

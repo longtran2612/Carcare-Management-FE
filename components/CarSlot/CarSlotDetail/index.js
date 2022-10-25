@@ -10,6 +10,7 @@ import {
   Text,
   Card,
   Steps,
+  Modal,
 } from "antd";
 import {
   getCarSlotByCode,
@@ -23,6 +24,8 @@ import {
   LoadingOutlined,
   PrinterOutlined,
   PlusCircleFilled,
+  ExclamationCircleOutlined,
+  CheckCircleOutlined 
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
@@ -199,7 +202,6 @@ const CarSlotDetail = ({ carSlotId }) => {
   };
   const handleCompleteOrder = async () => {
     setLoading(true);
-
     let dataComplete = {
       orderId: order?.id,
       carSlotId: carSlotDetail?.id,
@@ -212,6 +214,7 @@ const CarSlotDetail = ({ carSlotId }) => {
       console.log(dataComplete);
       const response = await completeCarSlot(dataComplete);
       openNotification("Hoàn thành xử lý thành công!", "");
+      fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
       openNotification(error.response.data.message);
@@ -253,7 +256,9 @@ const CarSlotDetail = ({ carSlotId }) => {
       <div className="carslot">
         <div className="carslot-content">
           <div className="carslot-content--header">
-            <Title style={{padding:'0px'}} level={3}>{carSlotDetail?.name}</Title>
+            <Title style={{ padding: "0px" }} level={3}>
+              {carSlotDetail?.name}
+            </Title>
             <div> {convertStatusCarSlot(carSlotDetail?.status)}</div>
           </div>
           {carSlotDetail?.status == "IN_USE" && (
@@ -339,12 +344,13 @@ const CarSlotDetail = ({ carSlotId }) => {
                           </>
                         );
                       }}
-                      
                       title={() => (
                         <>
                           <Row>
                             <Col span={12}>
-                             <span style={{fontSize:'1rem',font:'bold'}}>Dịch vụ sử dụng</span>
+                              <span style={{ fontSize: "1rem", font: "bold" }}>
+                                Dịch vụ sử dụng
+                              </span>
                             </Col>
                             <Col span={12}>
                               <Button
@@ -473,22 +479,56 @@ const CarSlotDetail = ({ carSlotId }) => {
           setShowConfimCancel(false);
         }}
       />
-      <ModalQuestion
-        title="Bạn có chắc chắn hoàn thành xử lý yêu cầu này?"
-        visible={showConfimComplete}
-        handleCancel={() => setShowConfimComplete(false)}
-        handleOk={() => {
-          handleCompleteOrder();
-          setShowConfimComplete(false);
-          setShowCreateBill(true);
-        }}
-      />
       <UpDateServiceOrder
         show={showUpdateServiceOrder}
         order={order}
         handleCancel={() => setShowUpdateServiceOrder(false)}
         onSuccess={() => handleSuccessUPdateOrder()}
       />
+      <Modal
+        title="Xác nhận?"
+        onCancel={() => setShowConfimComplete(false)}
+        visible={showConfimComplete}
+        icon={<CheckCircleOutlined />}
+        footer={
+          <>
+            <div className="steps-action">
+              <Button
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={() => {
+                  setShowUpdateServiceOrder(false);
+                }}
+              >
+                Hủy
+              </Button>
+              <Button
+                type="dashed"
+                icon={<PrinterOutlined />}
+                onClick={() => {
+                  handleCompleteOrder();
+                  setShowConfimComplete(false);
+                  setShowCreateBill(true);
+                }}
+              >
+                Hoàn thành và in hóa đơn
+              </Button>
+              <Button
+                type="primary"
+                onClick={() => {
+                  handleCompleteOrder();
+                  setShowConfimComplete(false);
+                }}
+              >
+                Hoàn thành
+              </Button>
+            </div>
+          </>
+        }
+      >
+         <Typography.Title level={4}>Bạn có chắc chắn hoàn thành xử lý yêu cầu này?</Typography.Title>
+      </Modal>
 
       <Loading loading={loading} />
     </>

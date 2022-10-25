@@ -2,16 +2,13 @@ import { Table, Tag, Space, Button, Row, Col, Input, Tooltip } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { ClearOutlined } from "@ant-design/icons";
 import { getCars } from "pages/api/carAPI";
-import {PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { SearchOutlined } from "@ant-design/icons";
-import ModalQuestion from "components/Modal/ModalQuestion";
-import ModalAddCar from "components/Modal/ModalAddCar";
 import { useRouter } from "next/router";
 import CarDetail from "../CarDetail";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
 import { openNotification } from "utils/notification";
-import ModalAddCarWithCustomer from "components/Modal/ModalAddCarWithCustomer";
 import ModalAddCarWithoutCustomer from "components/Modal/ModalAddCarWithoutCustomer";
 
 function CarTable({}) {
@@ -129,10 +126,6 @@ function CarTable({}) {
       key: "carCode",
       render: (carCode) => <a style={{ color: "blue" }}>{carCode}</a>,
       filteredValue: [searchGlobal],
-      sorter: {
-        compare: (a, b) => a.carCode - b.carCode,
-        multiple: 2,
-      },
       onFilter: (value, record) => {
         return (
           String(record.carCode).toLowerCase().includes(value.toLowerCase()) ||
@@ -150,15 +143,10 @@ function CarTable({}) {
       },
     },
     {
-      title: "Tên xe",
-      dataIndex: "name",
-      key: "name",
-      ...getColumnSearchProps("name"),
-      render: (name) => (
-        <Tooltip placement="topLeft" title={name}>
-          {name}
-        </Tooltip>
-      ),
+      title: "Model",
+      dataIndex: "model",
+      key: "model",
+      ...getColumnSearchProps("model"),
     },
 
     {
@@ -168,58 +156,22 @@ function CarTable({}) {
       ...getColumnSearchProps("licensePlate"),
     },
     {
-      title: "Sở hữu",
-      dataIndex: "customerName",
-      key: "customerName",
-      ...getColumnSearchProps("customerName"),
-    },
-    {
       title: "Thương hiệu",
       dataIndex: "brand",
       key: "brand",
       ...getColumnSearchProps("brand"),
     },
     {
-      title: "Model",
-      dataIndex: "model",
-      key: "model",
-      ...getColumnSearchProps("model"),
-    },
-    {
       title: "Màu xe",
       dataIndex: "color",
       key: "color",
       ...getColumnSearchProps("color"),
     },
     {
-      title: "Động cơ",
-      dataIndex: "engine",
-      key: "engine",
-      ...getColumnSearchProps("engine"),
-    },
-    {
-      title: "Truyền động",
-      dataIndex: "transmission",
-      key: "transmission",
-      ...getColumnSearchProps("transmission"),
-    },
-    {
-      title: "Chỗ ngồi",
-      dataIndex: "seats",
-      key: "seats",
-      ...getColumnSearchProps("seats"),
-    },
-    {
-      title: "Nhiên liệu",
-      dataIndex: "fuel",
-      key: "fuel",
-      ...getColumnSearchProps("fuel"),
-    },
-    {
-      title: "Màu xe",
-      dataIndex: "color",
-      key: "color",
-      ...getColumnSearchProps("color"),
+      title: "Sở hữu",
+      dataIndex: "customerName",
+      key: "customerName",
+      ...getColumnSearchProps("customerName"),
     },
   ];
 
@@ -284,7 +236,7 @@ function CarTable({}) {
             }}
             scroll={{
               y: 450,
-              x: 2000,
+              // x: 2000,
             }}
             onRow={(record, rowIndex) => {
               return {
@@ -301,7 +253,7 @@ function CarTable({}) {
         handleCancel={() => setModalCar(false)}
         onSuccess={(data) => handleSuccessCreateCar(data)}
       /> */}
-        <ModalAddCarWithoutCustomer
+      <ModalAddCarWithoutCustomer
         show={modalCar}
         handleCancel={() => setModalCar(false)}
         onSuccess={(data) => handleSuccessCreateCar(data)}

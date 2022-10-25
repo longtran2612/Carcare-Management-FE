@@ -12,7 +12,7 @@ const CarPage = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item href="">
           <CarOutlined />
-          <span>Quản lý xe</span>
+          <span>Quản lý xe khách hàng</span>
         </Breadcrumb.Item>
       </Breadcrumb>
       

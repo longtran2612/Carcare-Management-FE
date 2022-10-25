@@ -246,12 +246,12 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input  />
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item
-                  label="Dòng xe"
+                  label="Model"
                   name="model"
                   rules={[
                     {
@@ -259,7 +259,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -272,7 +272,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -285,7 +285,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -298,7 +298,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                     },
                   ]}
                 >
-                  <InputNumber />
+                  <InputNumber disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -311,7 +311,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={24}>

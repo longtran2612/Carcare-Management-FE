@@ -9,6 +9,7 @@ import {
   Typography,
   Timeline,
   Divider,
+  Popconfirm
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
@@ -17,13 +18,14 @@ import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
-import { ClearOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined, PlusOutlined ,PrinterTwoTone } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
 import { openNotification } from "utils/notification";
+import ModalCreateBill from "components/Modal/ModalCreateBill";
 
 import { OrderNotRequestDetail } from "../OrderNotRequestDetail";
-const { Title } = Typography;
+
 
 function OrderNotRequestTable({}) {
   const [orders, setOrders] = useState([]);
@@ -33,10 +35,12 @@ function OrderNotRequestTable({}) {
   const [searchText, setSearchText] = useState("");
   const { orderId } = router.query;
   const [loading, setLoading] = useState(false);
+  const [showCreateBill, setShowCreateBill] = useState(false);
 
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+  const [orderSelected, setOrderSelected] = useState(null);
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
@@ -123,7 +127,6 @@ function OrderNotRequestTable({}) {
         text
       ),
   });
-
   const handleSuccessCreateOrder = async () => {
     handleGetorders();
   };
@@ -218,6 +221,34 @@ function OrderNotRequestTable({}) {
         }
       },
     },
+    {
+      title: "Hành động",
+      dataIndex: "action",
+      width: 130,
+      render: (text, record, dataIndex) => {
+        if (record.status === 10) {
+          return (
+            <>
+              <Popconfirm
+                title="In hóa đơn?"
+                placement="topLeft"
+                okText="Đồng ý"
+                cancelText="Hủy"
+                onConfirm={() => {
+                  setOrderSelected(record);
+                  setShowCreateBill(true);
+                }}
+              >
+                <PrinterTwoTone
+                  style={{ color: "#FFFFFF", fontSize: "30px" }}
+                />
+              </Popconfirm>
+            </>
+          );
+        }
+      },
+    },
+    
   ];
 
   const handleGetorders = async () => {
@@ -278,6 +309,11 @@ function OrderNotRequestTable({}) {
       },
     },
   ];
+
+  const handleSuccessBill = () => {
+    setShowCreateBill(false);
+    fetchCarSlotDetail();
+  };
 
   return (
     <>
@@ -391,6 +427,12 @@ function OrderNotRequestTable({}) {
         show={modalOrder}
         handleCancel={() => setModalOrder(false)}
         onSuccess={(data) => handleSuccessCreateOrder(data)}
+      />
+       <ModalCreateBill
+        order={orderSelected}
+        show={showCreateBill}
+        handleCancel={() => setShowCreateBill(false)}
+        onSuccess={() => handleSuccessBill()}
       />
 
       <Loading loading={loading} />

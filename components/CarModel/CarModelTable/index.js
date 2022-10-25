@@ -132,7 +132,6 @@ function CarModelTable({}) {
       onFilter: (value, record) => {
         return (
           String(record.carModelCode).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.brand).toLowerCase().includes(value.toLowerCase()) ||
           String(record.model).toLowerCase().includes(value.toLowerCase()) ||
           String(record.type).toLowerCase().includes(value.toLowerCase()) ||
@@ -156,6 +155,7 @@ function CarModelTable({}) {
       title: "Hãng xe",
       dataIndex: "brand",
       key: "brand",
+      width: 120,
       ...getColumnSearchProps("brand"),
     },
 
@@ -163,25 +163,36 @@ function CarModelTable({}) {
       title: "Động cơ",
       dataIndex: "engine",
       key: "engine",
+      width: 120,
       ...getColumnSearchProps("engine"),
     },
     {
       title: "Truyền động",
       dataIndex: "transmission",
       key: "transmission",
+      width: 120,
       ...getColumnSearchProps("transmission"),
     },
     {
       title: "Số nghế ngồi",
       dataIndex: "seats",
       key: "seats",
+      width: 120,
       ...getColumnSearchProps("seats"),
     },
     {
       title: "Nhiên liệu",
       dataIndex: "fuel",
       key: "fuel",
+      width: 120,
       ...getColumnSearchProps("fuel"),
+    },
+    {
+      title: "Năm sản xuất",
+      dataIndex: "year",
+      key: "year",
+      width: 120,
+      ...getColumnSearchProps("year"),
     },
   ];
 
