@@ -21,13 +21,13 @@ a {
   justify-content: space-between;
 }
 .card-slot div:first-child {
-  border-right: 1px solid #ccc;
+  border-right: 0.5px solid #ccc;
   flex-basis: 60%;
 }
 .card-slot div:last-child {
   /* align-self: start; */
   flex-basis: 50%;
-  padding-left: 1rem;
+  padding-left: 0.4rem;
   align-items: center;
   padding-top: 0.3rem;
   
@@ -41,7 +41,7 @@ a {
 .content{
   background: rgba(250, 250, 250,0.8);
   border-radius: 5px;
-  min-height: 110vh;
+  min-height: 100vh;
   overflow: initial;
   margin: 5px 5px;
   padding: 10px;

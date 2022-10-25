@@ -155,11 +155,10 @@ const BillTable = () => {
   };
 
   const handlePrintBill = (data) => {
-      setBillDetail(data);
-      // setPrintBill(true);
-      handlePrint();
-      setPrintBill(false);
-    
+    setBillDetail(data);
+    // setPrintBill(true);
+    handlePrint();
+    setPrintBill(false);
   };
 
   const handleCancelBill = async (id) => {
@@ -273,34 +272,40 @@ const BillTable = () => {
       dataIndex: "action",
       width: 130,
       render: (text, record, dataIndex) => {
-        return (
-          <>
-            <Popconfirm
-              title="Hủy hóa đơn này?"
-              placement="topLeft"
-              okText="Đồng ý"
-              cancelText="Hủy"
-              onConfirm={() => {
-                handleCancelBill(record.id);
-              }}
-            >
-              <DeleteTwoTone twoToneColor="#F4406D" style={{ fontSize: "30px",marginRight:"10px" }} />
-            </Popconfirm>
-
-            <Popconfirm
-              title="In hóa đơn?"
-              placement="topLeft"
-              okText="Đồng ý"
-              cancelText="Hủy"
-              onConfirm={() => {
-                setPrintBill(true);
-                handlePrintBill(record);
-              }}
-            >
-              <PrinterTwoTone style={{ color: "#FFFFFF", fontSize: "30px" }} />
-            </Popconfirm>
-          </>
-        );
+        if (record.statusName === "Đã thanh toán") {
+          return (
+            <>
+              <Popconfirm
+                title="Hủy hóa đơn này?"
+                placement="topLeft"
+                okText="Đồng ý"
+                cancelText="Hủy"
+                onConfirm={() => {
+                  handleCancelBill(record.id);
+                }}
+              >
+                <DeleteTwoTone
+                  twoToneColor="#F4406D"
+                  style={{ fontSize: "30px", marginRight: "10px" }}
+                />
+              </Popconfirm>
+              <Popconfirm
+                title="In hóa đơn?"
+                placement="topLeft"
+                okText="Đồng ý"
+                cancelText="Hủy"
+                onConfirm={() => {
+                  setPrintBill(true);
+                  handlePrintBill(record);
+                }}
+              >
+                <PrinterTwoTone
+                  style={{ color: "#FFFFFF", fontSize: "30px" }}
+                />
+              </Popconfirm>
+            </>
+          );
+        }
       },
     },
   ];

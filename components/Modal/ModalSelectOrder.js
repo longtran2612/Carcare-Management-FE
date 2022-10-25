@@ -18,7 +18,11 @@ import { formatMoney } from "utils/format";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  ClearOutlined,
+  SearchOutlined,
+  PlayCircleTwoTone,
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
 const { Title } = Typography;
@@ -165,16 +169,23 @@ function ModalSelectOrder({ onSelectOrder }) {
       ...getColumnSearchProps("customerName"),
     },
     {
-      title: "Biên số",
+      title: "Biên số xe",
       dataIndex: "carLicensePlate",
       key: "carLicensePlate",
       ...getColumnSearchProps("carLicensePlate"),
     },
     {
+      title: "Tổng tiền dịch vụ",
+      dataIndex: "totalServicePrice",
+      key: "carLicensePlate",
+      render: (totalServicePrice) => (
+        <div>{formatMoney(totalServicePrice)}</div>
+      ),
+    },
+    {
       title: "Thời gian xử lý",
       dataIndex: "totalEstimateTime",
       key: "totalEstimateTime",
-      ...getColumnSearchProps("totalEstimateTime"),
       render: (totalEstimateTime) => {
         return <div>{totalEstimateTime} phút</div>;
       },
@@ -193,14 +204,15 @@ function ModalSelectOrder({ onSelectOrder }) {
       dataIndex: "action",
       render: (text, record, dataIndex) => {
         return (
-          <Button
-            onClick={() => {
-              onSelectOrder(record.id);
-            }}
-            type="primary"
-          >
-            Xử lý
-          </Button>
+          <>
+            <PlayCircleTwoTone
+              style={{
+                color: "#FFFFFF",
+                fontSize: "30px",
+                marginRight: "10px",
+              }}
+            />
+          </>
         );
       },
     },
@@ -280,17 +292,16 @@ function ModalSelectOrder({ onSelectOrder }) {
 
   return (
     <>
-    {/* <Row>
+      {/* <Row>
         <Col span={24}>
           
     </Row> */}
       <Table
         rowKey="id"
         bordered
-      
         title={() => (
           <>
-            <Row >
+            <Row>
               <Col span={8} style={{ marginRight: "10px" }}>
                 <Input.Search
                   placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
@@ -330,7 +341,10 @@ function ModalSelectOrder({ onSelectOrder }) {
         }}
         expandable={{
           expandedRowRender: (record) => (
-            <Row  style={{padding: '10px', backgroundColor: "#ECE3E3" }} gutter={16}>
+            <Row
+              style={{ padding: "10px", backgroundColor: "#ECE3E3" }}
+              gutter={16}
+            >
               <Col span={12}>
                 <Table
                   bordered
@@ -350,12 +364,12 @@ function ModalSelectOrder({ onSelectOrder }) {
                     padding: "10px",
                   }}
                 >
-                  <Row  gutter={32}>
+                  <Row gutter={32}>
                     <Col
                       style={{ borderRight: "solid LightGray 1px" }}
                       span={11}
                     >
-                      <Divider >      Khách hàng </Divider>
+                      <Divider> Khách hàng </Divider>
                       <Timeline style={{ marginTop: "20px" }}>
                         <Timeline.Item>
                           Tên: {record?.customerName}
@@ -366,8 +380,7 @@ function ModalSelectOrder({ onSelectOrder }) {
                       </Timeline>
                     </Col>
                     <Col span={12}>
-                     
-                      <Divider > Xe </Divider>
+                      <Divider> Xe </Divider>
                       <Timeline style={{ marginTop: "20px" }}>
                         <Timeline.Item>Xe: {record?.carName}</Timeline.Item>
                         <Timeline.Item>

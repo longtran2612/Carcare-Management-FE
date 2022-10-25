@@ -10,6 +10,7 @@ import {
   Select,
   Form,
   Input,
+  Breadcrumb,
 } from "antd";
 import {
   getCarSlots,
@@ -30,6 +31,7 @@ import {
   CarOutlined,
   FieldTimeOutlined,
   PlusOutlined,
+  HomeOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
 
@@ -171,31 +173,33 @@ const CarSlot = () => {
         return {
           backgroundColor: "#002140",
           color: "white",
-          height: "40px",
+          height: "10px !important",
           textAlign: "center",
+          height: "20px",
           justifyContent: "center",
           alignContent: "center",
-          fontSize: "20px",
+          fontSize: "17px",
         };
       case "AVAILABLE":
         return {
           backgroundColor: "#004d00",
           color: "white",
-          height: "40px",
+          height: "35px",
+          height: "20px",
           textAlign: "center",
           justifyContent: "center",
           alignContent: "center",
-          fontSize: "20px",
+          fontSize: "17px",
         };
       case "UNAVAILABLE":
         return {
           backgroundColor: "#b38600",
           color: "white",
-          height: "40px",
+          height: "20px",
           textAlign: "center",
           justifyContent: "center",
           alignContent: "center",
-          fontSize: "20px",
+          fontSize: "17px",
         };
     }
   };
@@ -206,8 +210,19 @@ const CarSlot = () => {
         <CarSlotDetail carSlotId={carSlotId} />
       ) : (
         <div className="site-card-border-less-wrapper">
-          <Row>
-            <Col span={24}>
+          <Row style={{ paddingBottom: "10px" }}>
+            <Col span={12}>
+              <Breadcrumb style={{ margin: "5px", alignItems: "center" }}>
+                <Breadcrumb.Item href="/admin">
+                  <HomeOutlined />
+                </Breadcrumb.Item>
+                <Breadcrumb.Item href="">
+                  <CarOutlined />
+                  {" "} Quản lý vị trí chăm sóc xe
+                </Breadcrumb.Item>
+              </Breadcrumb>
+            </Col>
+            <Col span={12}>
               <Button
                 style={{ float: "right" }}
                 icon={<PlusOutlined />}
@@ -218,7 +233,7 @@ const CarSlot = () => {
               </Button>
             </Col>
           </Row>
-          <Row gutter={[16]}>
+          <Row gutter={[16, 16]}>
             {carSlots?.map((carSlot) => {
               return (
                 <Col
@@ -226,7 +241,8 @@ const CarSlot = () => {
                   xs={24}
                   sm={24}
                   md={12}
-                  lg={8}
+                  lg={12}
+                  xl={6}
                   style={{ marginBottom: "10px" }}
                   onDoubleClick={() => {
                     if (carSlot.status === "UNAVAILABLE") {
@@ -239,11 +255,11 @@ const CarSlot = () => {
                   <Card
                     headStyle={handleCss(carSlot.status)}
                     style={{
-                      margin: "10px",
-                      borderRadius: "15px",
+                      borderRadius: "8px",
                       overflow: "hidden",
                       cursor: "pointer",
-                      height: "300px",
+                      height: "270px",
+                      padding: "0px",
                       border: "0.5px solid #002140",
                       boxShadow: " 4px 4px 4px -2px #ADBBF3",
                     }}
