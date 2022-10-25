@@ -1,12 +1,8 @@
 import React ,{useEffect} from "react";
-import { Layout } from 'antd';
-import  MyHeader from "components/Header";
-import  MyFooter  from "components/Footer";
-const {Content} = Layout;
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 import HomePageCustomer from "pages/home";
 import {loadUser} from "pages/api/authAPI";
+
 
 function HomePage() {
     const router = useRouter();
@@ -15,7 +11,7 @@ function HomePage() {
           loadUser().then((res) => {
             console.log("res:", res);
             if (res.data.StatusCode == 200) {
-              if(res.data.Data.roles == "ROLE_ADMIN"){
+              if(res.data.Data.roles == "ROLE_USER"){
                 router.push("/admin");
               }else{
                 router.push("/home");

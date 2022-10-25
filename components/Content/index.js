@@ -11,6 +11,7 @@ import CustomerPage from "components/Customer";
 import OrderNotRequestPage from "components/OrderNotRequest";
 import PromotionHeaderPage from "components/Promotion";
 import BillPage from "components/Bill";
+import BillChart from "components/Chart/BillChart";
 const MyContent = ({ keyMenu }) => {
   const renderViewByKey = () => {
     switch (keyMenu) {
@@ -40,6 +41,10 @@ const MyContent = ({ keyMenu }) => {
         return <PromotionHeaderPage />;
       case "bills":
         return <BillPage />;
+      case "bill-chart":
+        return <BillChart />;
+      case "order-chart":
+        return <BillChart />;
       default:
         break;
     }
