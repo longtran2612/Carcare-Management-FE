@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getOrders } from "pages/api/orderAPI";
 import Loading from "components/Loading";
-import {
-  List,
-  Col,
-  Row,
-  Typography,
-} from "antd";
+import { List, Col, Row, Typography } from "antd";
 import { formatMoney } from "utils/format";
 import moment from "moment";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import payment_completed from "public/images/payment_complete.gif";
 import slot_active from "public/images/slot_active.gif";
+import order_cancel from "public/images/order_cancel.png";
+import order_complete from "public/images/order_complete.gif";
 
 const formatDate = "HH:ss DD/MM/YYYY";
 
@@ -32,7 +29,6 @@ const ServiceCustomer = () => {
   const [loading, setLoading] = React.useState(true);
   const [showDetail, setShowDetail] = useState(false);
   const [billDetail, setBillDetail] = useState({});
-  
 
   const handleGetOrders = async () => {
     setLoading(true);
@@ -74,6 +70,19 @@ const ServiceCustomer = () => {
     handleGetOrders();
   }, []);
 
+  const handleImage = (status) => {
+    switch (status) {
+      case -100:
+        return <Image height={170} width={170} src={order_cancel} />;
+      case 10:
+        return <Image height={170} width={170} src={order_complete} />;
+      case 2:
+        return <Image height={170} width={170} src={slot_active} />;
+      default:
+        break;
+    }
+  };
+
   return (
     <>
       <List
@@ -88,16 +97,24 @@ const ServiceCustomer = () => {
         dataSource={orders}
         renderItem={(item) => (
           <List.Item
-            key={item.title}
+            key={item.id}
             onClick={() => {
               setBillDetail(item);
               setShowDetail(true);
             }}
-            extra={<Image width={170} height={170} src={slot_active} />}
+            extra={handleImage(item.status)}
+            style={{
+              cursor: "pointer",
+              border: "1px solid #9B9A9A",
+              margin: "10px",
+              borderRadius: "8px",
+              padding: "10px",
+              boxShadow: "0px 0px 3px 0px #9B9A9A",
+            }}
           >
             <List.Item.Meta
               title={
-                <Typography.Title level={5}>{item.orderCode}</Typography.Title>
+                <Typography.Title style={{color:"#1C1266"}} level={4}>#{item.orderCode}</Typography.Title>
               }
               description={
                 <>
@@ -119,11 +136,8 @@ const ServiceCustomer = () => {
               }
             />
             <Row gutter={16}>
-            <Col span={8}>
-                <DescriptionItem
-                  title="Trạng thái"
-                  content={item.statusName}
-                />
+              <Col span={8}>
+                <DescriptionItem title="Trạng thái" content={item.statusName} />
               </Col>
               <Col span={8}>
                 <DescriptionItem
@@ -134,7 +148,7 @@ const ServiceCustomer = () => {
               <Col span={8}>
                 <DescriptionItem
                   title="Thời gian xử lý ước tính"
-                  content={item.totalEstimateTime+" phút"}
+                  content={item.totalEstimateTime + " phút"}
                 />
               </Col>
             </Row>
@@ -163,7 +177,7 @@ const ServiceCustomer = () => {
           </List.Item>
         )}
       />
-    
+
       <Loading loading={loading} />
     </>
   );

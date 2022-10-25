@@ -66,8 +66,8 @@ const BillCustomer = () => {
         return "Giảm tiền";
       case "PERCENTAGE":
         return "Giảm theo";
-      case "GIFT":
-        return "Tặng quà";
+      case "SERVICe":
+        return "Dịch vụ";
       default:
     }
   };
@@ -96,10 +96,19 @@ const BillCustomer = () => {
               setShowDetail(true);
             }}
             extra={<Image width={170} height={170} src={payment_completed} />}
+            style={{ 
+              cursor: "pointer" ,
+              border: "1px solid #9B9A9A",
+              margin: "10px",
+              borderRadius: "8px",
+              padding: "10px",
+              boxShadow: "0px 0px 3px 0px #9B9A9A",
+            }}
+
           >
             <List.Item.Meta
               title={
-                <Typography.Title level={5}>{item.billCode}</Typography.Title>
+                <Typography.Title style={{color:"#1C1266"}} level={4}>#{item.billCode}</Typography.Title>
               }
               description={
                 <>
