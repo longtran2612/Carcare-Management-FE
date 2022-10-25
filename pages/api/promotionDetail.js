@@ -82,6 +82,20 @@ const updatePromotionDetail = (data,id) => {
       throw err;
     });
 };
+const getAllPromotionUseable = (data) => {
+  return axios({
+    method: "GET",
+    url: API_URL + `/promotion-details/get-all-usable-promotion-by-order-id/${data}`,
+  })
+  .then((res) => {
+    return res;
+  })
+  .catch((err) => {
+    throw err;
+  });
+};
+
+
 
 export {
   getPromotionDetail,
@@ -90,4 +104,5 @@ export {
   getPromotionDetailByCode,
   createPromotionDetail,
   updatePromotionDetail,
+  getAllPromotionUseable
 };

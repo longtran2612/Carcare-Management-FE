@@ -426,6 +426,9 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                           dataIndex="estimateTime"
                           key="estimateTime"
                           title="Thời gian sử lý"
+                          render={(text) => {
+                            return <div>{text} phút</div>;
+                          }}
                         ></Column>
                         <Column
                           title="Giá dịch vụ"

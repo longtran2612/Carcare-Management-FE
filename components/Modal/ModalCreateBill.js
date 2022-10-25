@@ -16,7 +16,10 @@ import {
   Input,
   List,
 } from "antd";
-import { getPromotionDetail } from "pages/api/promotionDetail";
+import {
+  getPromotionDetail,
+  getAllPromotionUseable,
+} from "pages/api/promotionDetail";
 import { createBill } from "pages/api/billAPI";
 import { getCarbyCustomerId } from "pages/api/carAPI";
 import { validateMessages } from "utils/messageForm";
@@ -37,7 +40,6 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
 
   const [promotionDetails, setPromotionDetails] = useState([]);
-  const [promotionSelected, setPromotionSelected] = useState(null);
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
   const [showPrint, setShowPrint] = useState(false);
   const [showCardId, setShowCardId] = useState(false);
@@ -50,7 +52,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
 
   const handleFetchPromotion = async () => {
     try {
-      const res = await getPromotionDetail();
+      const res = await getAllPromotionUseable(order.id);
       setPromotionDetails(res.data.Data);
     } catch (error) {
       console.log(error);
@@ -66,10 +68,10 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
   };
 
   useEffect(() => {
-    if (show) {
+    if (order) {
       handleFetchPromotion();
     }
-  }, [show]);
+  }, [show, order]);
 
   const totalPriceService = () => {
     return order?.services?.reduce((total, cur) => {
@@ -77,28 +79,25 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
     }, 0);
   };
   const totalPromotionAmount = () => {
-    if (promotionSelected) {
-      if (promotionSelected?.type === "PERCENTAGE") {
-        let total = (totalPriceService() * promotionSelected?.amount) / 100;
-        if (total > promotionSelected?.maximumDiscount) {
-          return promotionSelected?.maximumDiscount;
+    let totalPromotion = 0;
+    promotionDetails.forEach((promotion) => {
+      if (promotion.type === "PERCENTAGE") {
+        let total = (totalPriceService() * promotion.amount) / 100;
+        if (total > promotion.maximumDiscount) {
+          totalPromotion += promotion.maximumDiscount;
+        } else {
+          totalPromotion += total;
         }
-        return total;
       } else {
-        if (promotionSelected?.type === "MONEY") {
-          return promotionSelected.amount;
+        if (promotion.type === "MONEY") {
+          totalPromotion += promotion.amount;
         }
       }
-    }
+    });
+    return totalPromotion;
   };
   const finalTotalPrice = () => {
-    if (
-      promotionSelected?.type === "PERCENTAGE" ||
-      promotionSelected?.type === "MONEY"
-    ) {
-      return totalPriceService() - totalPromotionAmount();
-    }
-    return totalPriceService();
+    return totalPriceService() - totalPromotionAmount();
   };
 
   const handleType = (value) => {
@@ -119,8 +118,10 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       paymentAmount: finalTotalPrice(),
       paymentType: values.paymentType,
     };
-    if (promotionSelected != undefined) {
-      dataCreateBill.promotionCodes = [promotionSelected?.promotionDetailCode];
+    if (promotionDetails.length > 0) {
+      dataCreateBill.promotionCodes = [
+        promotionDetails.map((promotion) => promotion.id),
+      ];
       dataCreateBill.totalPromotionAmount = totalPromotionAmount();
     }
     if (values.paymentType === "CARD") {
@@ -145,8 +146,10 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       paymentAmount: finalTotalPrice(),
       paymentType: values.paymentType,
     };
-    if (promotionSelected != undefined) {
-      dataCreateBill.promotionCodes = [promotionSelected?.promotionDetailCode];
+    if (promotionDetails.length > 0) {
+      dataCreateBill.promotionCodes = [
+        promotionDetails.map((promotion) => promotion.id),
+      ];
       dataCreateBill.totalPromotionAmount = totalPromotionAmount();
     }
     if (values.paymentType === "CARD") {
@@ -274,35 +277,41 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                                 index={1}
                               ></Table.Summary.Cell>
                               <Table.Summary.Cell index={2}>
+                              <span style={{fontWeight:"bold", color: "#E34262" }}>
                                 Tổng tiền dịch vụ
+                              </span>
                               </Table.Summary.Cell>
                               <Table.Summary.Cell index={3}>
+                              <span style={{fontWeight:"bold", color: "#E34262" }}>
                                 {formatMoney(totalPriceService() || 0)}
+                                </span>
                               </Table.Summary.Cell>
                             </Table.Summary.Row>
                             <Table.Summary.Row>
-                              <Table.Summary.Cell index={0}>
+                              <Table.Summary.Cell
+                                index={0}
+                              ></Table.Summary.Cell>
+                              <Table.Summary.Cell index={1}>
                                 <Button
                                   icon={<TagsOutlined />}
                                   type="ghost"
                                   style={{
-                                    backgroundColor: "yellow",
-                                    color: "black",
+                                    backgroundColor: "#B6D433",
+                                    color: "white",
                                   }}
                                   onClick={() => setShowSelectPromotion(true)}
                                 >
-                                  Khuyến mãi
+                                  Danh sách khuyến mãi
                                 </Button>
                               </Table.Summary.Cell>
-                              <Table.Summary.Cell index={1}>
-                                {promotionSelected?.description}{" "}
-                              </Table.Summary.Cell>
                               <Table.Summary.Cell index={2}>
-                                {handleType(promotionSelected?.type)}
+                              <span style={{fontWeight:"bold", color: "#677E31" }}>
+                                Khuyến mãi
+                                </span>
                               </Table.Summary.Cell>
 
                               <Table.Summary.Cell index={3}>
-                                <span style={{ color: "#E34262" }}>
+                                <span style={{fontWeight:"bold", color: "#677E31" }}>
                                   - {formatMoney(totalPromotionAmount() || 0)}
                                 </span>
                               </Table.Summary.Cell>
@@ -315,12 +324,16 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                                 index={1}
                               ></Table.Summary.Cell>
                               <Table.Summary.Cell index={2}>
+                              <span
+                                  style={{ color: "red", fontWeight:"bold", }}
+                                >
                                 Khách phải trả
+                                </span>
                               </Table.Summary.Cell>
 
                               <Table.Summary.Cell index={3}>
                                 <span
-                                  style={{ color: "red", fontWeight: "bold" }}
+                                  style={{ color: "red", fontWeight:"bold", }}
                                 >
                                   {formatMoney(finalTotalPrice() || 0)}
                                 </span>
@@ -339,7 +352,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                         title="STT"
                         dataIndex="stt"
                         key="stt"
-                        width={170}
+                        width={79}
                         render={(text, record, dataIndex) => {
                           return <div>{dataIndex + 1}</div>;
                         }}
@@ -348,6 +361,11 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                         title="Mã dịch vụ"
                         dataIndex="serviceCode"
                         key="serviceCode"
+                        render={(text, record) => {
+                          return (
+                            <div><a color="blue">{record.serviceCode}</a></div>
+                          );
+                        }}
                       />
                       <Column title="Tên dịch vụ" dataIndex="name" key="name" />
                       <Column
@@ -389,7 +407,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
         </Form>
       </Modal>
       <Drawer
-        title="Chọn khuyến mãi"
+        title="Danh sách khuyến mãi được áp dụng"
         placement="right"
         onClose={() => setShowSelectPromotion(false)}
         visible={showSelectPromotion}
@@ -413,14 +431,14 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                   <List.Item
                     key={item.id}
                     onClick={() => {
-                      if (totalPriceService() > item.minimumSpend) {
-                        setPromotionSelected(item);
-                        setShowSelectPromotion(false);
-                      } else {
-                        openNotification(
-                          "Đơn hàng chưa đạt giá trị tối thiểu để sử dụng mã khuyến mãi này"
-                        );
-                      }
+                      // if (totalPriceService() > item.minimumSpend) {
+                      //   setPromotionSelected(item);
+                      //   setShowSelectPromotion(false);
+                      // } else {
+                      //   openNotification(
+                      //     "Đơn hàng chưa đạt giá trị tối thiểu để sử dụng mã khuyến mãi này"
+                      //   );
+                      // }
                     }}
                     // actions={[
                     //   <Button
@@ -577,7 +595,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                   </tr>
                 </>
               ))}
-              {promotionSelected && (
+              {promotionDetails && (
                 <>
                   <tr className="item">
                     <td>Khuyến mãi</td>
