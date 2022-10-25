@@ -9,7 +9,7 @@ import {
   Typography,
   Timeline,
   Divider,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
@@ -18,14 +18,18 @@ import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
-import { ClearOutlined, SearchOutlined, PlusOutlined ,PrinterTwoTone } from "@ant-design/icons";
+import {
+  ClearOutlined,
+  SearchOutlined,
+  PlusOutlined,
+  PrinterTwoTone,
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
 import { openNotification } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 
 import { OrderNotRequestDetail } from "../OrderNotRequestDetail";
-
 
 function OrderNotRequestTable({}) {
   const [orders, setOrders] = useState([]);
@@ -211,13 +215,15 @@ function OrderNotRequestTable({}) {
       dataIndex: "statusName",
       ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
-        switch (record.statusName) {
-          case "Đang xử lý":
+        switch (record.status) {
+          case 2:
             return <Tag color="blue">{record.statusName}</Tag>;
-          case "Hoàn thành":
+          case 10:
             return <Tag color="green">{record.statusName}</Tag>;
-          case "Đã hủy":
+          case -100:
             return <Tag color="red">{record.statusName}</Tag>;
+          case 100:
+            return <Tag color="pink">{record.statusName}</Tag>;
         }
       },
     },
@@ -248,7 +254,6 @@ function OrderNotRequestTable({}) {
         }
       },
     },
-    
   ];
 
   const handleGetorders = async () => {
@@ -312,7 +317,7 @@ function OrderNotRequestTable({}) {
 
   const handleSuccessBill = () => {
     setShowCreateBill(false);
-    fetchCarSlotDetail();
+    handleGetorders();
   };
 
   return (
@@ -428,7 +433,7 @@ function OrderNotRequestTable({}) {
         handleCancel={() => setModalOrder(false)}
         onSuccess={(data) => handleSuccessCreateOrder(data)}
       />
-       <ModalCreateBill
+      <ModalCreateBill
         order={orderSelected}
         show={showCreateBill}
         handleCancel={() => setShowCreateBill(false)}

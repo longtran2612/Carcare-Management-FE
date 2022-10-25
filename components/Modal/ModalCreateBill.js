@@ -119,9 +119,9 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       paymentType: values.paymentType,
     };
     if (promotionDetails.length > 0) {
-      dataCreateBill.promotionCodes = [
-        promotionDetails.map((promotion) => promotion.id),
-      ];
+      dataCreateBill.promotionCodes = 
+        promotionDetails.map((promotion) => promotion.promotionDetailCode);
+      
       dataCreateBill.totalPromotionAmount = totalPromotionAmount();
     }
     if (values.paymentType === "CARD") {
@@ -137,7 +137,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       handlePrint();
       setShowPrint(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      console.log(error);
     }
   };
   const onFinishNoPrint = async (values) => {
@@ -261,13 +261,23 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                                 index={1}
                               ></Table.Summary.Cell>
                               <Table.Summary.Cell index={2}>
-                              <span style={{fontWeight:"bold", color: "#E34262" }}>
-                                Tổng tiền dịch vụ
-                              </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#E34262",
+                                  }}
+                                >
+                                  Tổng tiền dịch vụ
+                                </span>
                               </Table.Summary.Cell>
                               <Table.Summary.Cell index={3}>
-                              <span style={{fontWeight:"bold", color: "#E34262" }}>
-                                {formatMoney(totalPriceService() || 0)}
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#E34262",
+                                  }}
+                                >
+                                  {formatMoney(totalPriceService() || 0)}
                                 </span>
                               </Table.Summary.Cell>
                             </Table.Summary.Row>
@@ -289,13 +299,23 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                                 </Button>
                               </Table.Summary.Cell>
                               <Table.Summary.Cell index={2}>
-                              <span style={{fontWeight:"bold", color: "#677E31" }}>
-                                Khuyến mãi
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#677E31",
+                                  }}
+                                >
+                                  Khuyến mãi
                                 </span>
                               </Table.Summary.Cell>
 
                               <Table.Summary.Cell index={3}>
-                                <span style={{fontWeight:"bold", color: "#677E31" }}>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#677E31",
+                                  }}
+                                >
                                   - {formatMoney(totalPromotionAmount() || 0)}
                                 </span>
                               </Table.Summary.Cell>
@@ -308,16 +328,16 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                                 index={1}
                               ></Table.Summary.Cell>
                               <Table.Summary.Cell index={2}>
-                              <span
-                                  style={{ color: "red", fontWeight:"bold", }}
+                                <span
+                                  style={{ color: "red", fontWeight: "bold" }}
                                 >
-                                Khách phải trả
+                                  Khách phải trả
                                 </span>
                               </Table.Summary.Cell>
 
                               <Table.Summary.Cell index={3}>
                                 <span
-                                  style={{ color: "red", fontWeight:"bold", }}
+                                  style={{ color: "red", fontWeight: "bold" }}
                                 >
                                   {formatMoney(finalTotalPrice() || 0)}
                                 </span>
@@ -347,7 +367,9 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                         key="serviceCode"
                         render={(text, record) => {
                           return (
-                            <div><a color="blue">{record.serviceCode}</a></div>
+                            <div>
+                              <a color="blue">{record.serviceCode}</a>
+                            </div>
                           );
                         }}
                       />
@@ -412,30 +434,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                   }}
                   span={24}
                 >
-                  <List.Item
-                    key={item.id}
-                    onClick={() => {
-                      // if (totalPriceService() > item.minimumSpend) {
-                      //   setPromotionSelected(item);
-                      //   setShowSelectPromotion(false);
-                      // } else {
-                      //   openNotification(
-                      //     "Đơn hàng chưa đạt giá trị tối thiểu để sử dụng mã khuyến mãi này"
-                      //   );
-                      // }
-                    }}
-                    // actions={[
-                    //   <Button
-                    //     type="primary"
-                    //     onClick={() => {
-                    //       setPromotionSelected(item);
-                    //       setShowSelectPromotion(false);
-                    //     }}
-                    //   >
-                    //     Áp dụng
-                    //   </Button>,
-                    // ]}
-                  >
+                  <List.Item key={item.id}>
                     <List.Item.Meta
                       avatar={
                         <Avatar
@@ -457,30 +456,31 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                       {item.type === "PERCENTAGE" ? (
                         <Col span={24}>
                           {" "}
-                          <span style={{ fontWeight: "bold" }}>
+                          <span style={{ color: "red", fontWeight: "bold" }}>
                             Giảm {item.amount}%{" "}
                           </span>
                         </Col>
                       ) : (
                         <Col span={24}>
-                          <span style={{ fontWeight: "bold" }}>
+                          <span style={{ color: "red", fontWeight: "bold" }}>
                             Giảm {formatMoney(item.amount || 0)}{" "}
                           </span>
                         </Col>
                       )}
-
                       <Col span={12}>
                         <span style={{ fontWeight: "bold" }}>
                           Số tiền đơn hàng tối thiểu:{" "}
                         </span>
                         {formatMoney(item.minimumSpend || 0)}
                       </Col>
-                      <Col span={12}>
-                        <span style={{ fontWeight: "bold" }}>
-                          Giảm tối đa:{" "}
-                        </span>
-                        {formatMoney(item.maximumDiscount || 0)}
-                      </Col>
+                      {item.type === "PERCENTAGE" && (
+                        <Col span={12}>
+                          <span style={{ fontWeight: "bold" }}>
+                            Giảm tối đa:{" "}
+                          </span>
+                          {formatMoney(item.maximumDiscount || 0)}
+                        </Col>
+                      )}
                       <Col span={12}>
                         <span style={{ fontWeight: "bold" }}>
                           Ngày bắt đầu:{" "}
