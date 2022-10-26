@@ -94,7 +94,19 @@ const getAllPromotionUseable = (data) => {
     throw err;
   });
 };
-
+const getAllPromotionUseAbleByServiceIds = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/promotion-details/get-all-usable-promotion-by-service-ids`,
+    data: data,
+  })
+  .then((res) => {
+    return res;
+  })
+  .catch((err) => {
+    throw err;
+  });
+};
 
 
 export {
@@ -104,5 +116,6 @@ export {
   getPromotionDetailByCode,
   createPromotionDetail,
   updatePromotionDetail,
-  getAllPromotionUseable
+  getAllPromotionUseable,
+  getAllPromotionUseAbleByServiceIds
 };

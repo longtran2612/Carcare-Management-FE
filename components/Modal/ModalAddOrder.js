@@ -14,6 +14,7 @@ import {
   Timeline,
   Table,
 } from "antd";
+import { getAllPromotionUseAbleByServiceIds } from "pages/api/promotionDetail";
 import { getCustomers } from "pages/api/customerAPI";
 import { getCustomerById } from "pages/api/customerAPI";
 import { getCarById } from "pages/api/carAPI";
@@ -41,6 +42,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   const [customerOrder, setCustomerOrder] = useState(null);
   const [carOrder, setCarOrder] = useState(null);
 
+  const [promotionDetails, setPromotionDetails] = useState([]);
   const [services, setServices] = useState([]);
   const [serviceIds, setServiceIds] = useState([]);
 
@@ -65,6 +67,18 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
       console.log(error);
     }
   };
+  const handleFetchPromotion = async () => {
+    try {
+      console.log(services.map((s) => s.id));
+      const res = await getAllPromotionUseAbleByServiceIds(
+        services.map((s) => s.id)
+      );
+      setPromotionDetails(res.data.Data);
+      console.log(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (show) {
@@ -72,6 +86,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     }
     handleFetchCar();
     if (current == 2) {
+      handleFetchPromotion();
       handleGetData();
       form.setFieldValue(
         "deliverDate",
@@ -95,18 +110,18 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     console.log(resCar.data.Data);
   };
   const next = () => {
-    if(current == 0){
-      if(form.getFieldValue("customerId") == null){
+    if (current == 0) {
+      if (form.getFieldValue("customerId") == null) {
         openNotification("Vui lòng chọn khách hàng!");
         return;
       }
-      if(form.getFieldValue("carId") == null){
+      if (form.getFieldValue("carId") == null) {
         openNotification("Vui lòng chọn xe!");
         return;
       }
     }
-    if(current == 1){
-      if(services.length == 0){
+    if (current == 1) {
+      if (services.length == 0) {
         openNotification("Vui lòng chọn dịch vụ!");
         return;
       }
@@ -132,11 +147,6 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     });
   };
 
-  const totalPriceService = () => {
-    return services.reduce((total, cur) => {
-      return (total += cur.servicePrice.price);
-    }, 0);
-  };
   const totalTimeService = () => {
     return services.reduce((total, cur) => {
       return (total += cur.estimateTime);
@@ -172,9 +182,33 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     setCurrent(0);
   };
 
-  console.log(
-    form.getFieldsValue(["receiveDate", "executeDate", "deliverDate"])
-  );
+  const totalPriceService = () => {
+    return services.reduce((total, cur) => {
+      return (total += cur.servicePrice.price);
+    }, 0);
+  };
+  const totalPromotionAmount = () => {
+    let totalPromotion = 0;
+    promotionDetails.forEach((promotion) => {
+      if (promotion.type === "PERCENTAGE") {
+        let total = (totalPriceService() * promotion.amount) / 100;
+        if (total > promotion.maximumDiscount) {
+          totalPromotion += promotion.maximumDiscount;
+        } else {
+          totalPromotion += total;
+        }
+      } else {
+        if (promotion.type === "MONEY") {
+          totalPromotion += promotion.amount;
+        }
+      }
+    });
+    return totalPromotion;
+  };
+  const finalTotalPrice = () => {
+    let total = totalPriceService() - totalPromotionAmount();
+    return total;
+  };
   return (
     <>
       <Modal
@@ -313,7 +347,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                     onClick={() => {
                       if (form.getFieldValue("customerId")) {
                         setModalCar(true);
-                      }else{
+                      } else {
                         openNotification("Vui lòng chọn khách hàng!");
                       }
                     }}
@@ -455,10 +489,10 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                         <Row gutter={32}>
                           <Col
                             style={{ borderRight: "solid LightGray 1px" }}
-                            span={8}
+                            span={5}
                           >
                             <Divider>Khách hàng </Divider>
-                            <Timeline style={{ marginTop: "5px" }}>
+                            <Timeline style={{ marginTop: "15px" }}>
                               <Timeline.Item>
                                 Mã: {customerOrder?.customerCode}
                               </Timeline.Item>
@@ -472,10 +506,10 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                           </Col>
                           <Col
                             style={{ borderRight: "solid LightGray 1px" }}
-                            span={8}
+                            span={5}
                           >
                             <Divider>Xe </Divider>
-                            <Timeline style={{ marginTop: "5px" }}>
+                            <Timeline style={{ marginTop: "15px" }}>
                               <Timeline.Item>
                                 Mã: {carOrder?.carCode}
                               </Timeline.Item>
@@ -487,7 +521,10 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                               </Timeline.Item>
                             </Timeline>
                           </Col>
-                          <Col span={8}>
+                          <Col
+                            style={{ borderRight: "solid LightGray 1px" }}
+                            span={7}
+                          >
                             <Divider>Thông tin</Divider>
                             <Timeline style={{ marginTop: "5px" }}>
                               <Timeline.Item>
@@ -509,6 +546,23 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                                 {moment(form.getFieldValue("executeDate"))
                                   .add(totalTimeService(), "m")
                                   .format(formatDate)}
+                              </Timeline.Item>
+                            </Timeline>
+                          </Col>
+                          <Col span={7}>
+                            <Divider>Thông tin thanh toán</Divider>
+                            <Timeline style={{ marginTop: "15px" }}>
+                              <Timeline.Item>
+                                Tổng tiền dịch vụ:{" "}
+                                {formatMoney(totalPriceService() || 0)}
+                              </Timeline.Item>
+                              <Timeline.Item>
+                                Khuyến mãi: -{" "}
+                                {formatMoney(totalPromotionAmount() || 0)}
+                              </Timeline.Item>
+                              <Timeline.Item>
+                                Tổng thanh toán :
+                                {formatMoney(finalTotalPrice() || 0)}
                               </Timeline.Item>
                             </Timeline>
                           </Col>
