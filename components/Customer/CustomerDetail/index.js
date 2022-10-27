@@ -13,12 +13,8 @@ import {
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
-import {
-  getUserById,
-  updateUserById,
-  uploadImagesUser,
-} from "pages/api/userAPI";
-import { getCustomerByCode } from "pages/api/customerAPI";
+import { updateUserById, uploadImagesUser } from "pages/api/userAPI";
+import { getCustomerByCode, updateCustomer } from "pages/api/customerAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
@@ -82,13 +78,14 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
         status: values.status,
         image: imageS3 || customerDetail?.image,
         birthDay: values.birthDay,
+        // phoneNumber: values.phoneNumber,
+        // identityNumber: values.identityNumber,
+        gender: values.gender,
+        nationality: values.nationality,
       };
-      const res = await updateUserById(body, customerId);
+      const res = await updateCustomer(customerDetail.id, body);
       setCustomerDetail(res.data.Data);
-      if (res.data.StatusCode == "200") {
-        openNotification("Cập nhật người dùng thành công!", "");
-        onUpdateCustomer();
-      }
+      openNotification("Cập nhật người dùng thành công!", "");
     } catch (error) {
       openNotification(error.response.data.message[0]);
     }
@@ -209,10 +206,8 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
                   name="statusName"
                 >
                   <Select>
-                    <Select.Option value="ACTIVE">Hoạt động</Select.Option>
-                    <Select.Option value="INACTIVE">
-                      Không hoạt động
-                    </Select.Option>
+                    <Select.Option value="ACTIVE">Thông thường</Select.Option>
+                    <Select.Option value="INACTIVE">Thân thiết</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -256,7 +251,7 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input disabled />
                 </Form.Item>
               </Col>
 

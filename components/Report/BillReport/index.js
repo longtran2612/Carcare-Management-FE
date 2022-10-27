@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Column } from "@ant-design/plots";
-import { Breadcrumb, Col,Row } from "antd";
+import { Breadcrumb, Col, Row, Select } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import { DatePicker, Space } from "antd";
 import moment from "moment";
 const { RangePicker } = DatePicker;
 
+const dateFormat = "DD/MM/YYYY";
+
 const BillReport = () => {
+  const [typeDate, setTypeDate] = useState("d");
+
   const data = [
     {
       type: "Tháng 1",
@@ -64,26 +68,61 @@ const BillReport = () => {
     },
   };
 
+  const onChangeTypeDate = (value) => {
+    setTypeDate(value);
+    handleDatePicker();
+  };
+
+  const handleDatePicker = () => {
+    switch (typeDate) {
+      case "d":
+        return (
+          <RangePicker
+            defaultValue={[moment("2021-01-01"), moment("2021-01-31")]}
+            format={dateFormat}
+          />
+        );
+      case "m":
+        return <RangePicker picker="month" />;
+      case "q":
+        return <RangePicker picker="quarter" />;
+      case "y":
+        return <RangePicker picker="year" />;
+    }
+  };
+
+  useEffect(() => {
+    console.log(typeDate);
+  }, [typeDate]);
+
+
   return (
     <>
       <Breadcrumb style={{ margin: "5px", alignItems: "center" }}>
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item href=""> {" "}Báo cáo doanh số</Breadcrumb.Item>
+        <Breadcrumb.Item href=""> Báo cáo doanh số</Breadcrumb.Item>
       </Breadcrumb>
-      <Row>
-        <Col style={{padding:"10px"}} span={12}>
-          <RangePicker
-            defaultValue={[
-              moment("2021-01-01", "YYYY-MM-DD"),
-              moment("2021-01-31", "YYYY-MM-DD"),
-            ]}
-            format="YYYY-MM-DD"
-          />
+      <Row style={{ marginTop: "20px" }} gutter={[16, 16]}>
+        <Col style={{ padding: "10px" }} span={5}>
+          <Select
+            onChange={onChangeTypeDate}
+            value={typeDate}
+            defaultValue="d"
+            style={{ width: "200px" }}
+          >
+            <Select.Option value="d">Ngày</Select.Option>
+            <Select.Option value="m">Tháng</Select.Option>
+            <Select.Option value="q">Quý</Select.Option>
+            <Select.Option value="y">Năm</Select.Option>
+          </Select>
+        </Col>
+        <Col style={{ padding: "10px" }} span={12}>
+          {handleDatePicker()}
         </Col>
         <Col span={24}>
-        <Column style={{ paddingTop: "3rem" }} {...config} />;
+          <Column style={{ paddingTop: "3rem" }} {...config} />;
         </Col>
       </Row>
     </>

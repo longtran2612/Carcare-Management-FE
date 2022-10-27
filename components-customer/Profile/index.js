@@ -12,16 +12,17 @@ import {
   Layout,
   Popconfirm,
   Tabs,
+  InputNumber,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
 import { updateUserById, uploadImagesUser } from "pages/api/userAPI";
-import { getCustomerById } from "pages/api/customerAPI";
+import { getCustomerById, updateCustomer } from "pages/api/customerAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined ,SmileOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
 import Cookies from "js-cookie";
 
@@ -56,7 +57,9 @@ export const ProfileCustomer = () => {
         nationality: response.data.Data.nationality,
         identityNumber: response.data.Data.identityNumber,
         statusName: response.data.Data.statusName,
-        dateOfBirth: response.data.Data.dateOfBirth ? moment(moment(response.data.Data.dateOfBirth), formatDate): null,
+        dateOfBirth: response.data.Data.dateOfBirth
+          ? moment(moment(response.data.Data.dateOfBirth), formatDate)
+          : null,
         address: response.data.Data.address,
         image: response.data.Data.image,
         status: response.data.Data.status,
@@ -73,21 +76,25 @@ export const ProfileCustomer = () => {
   }, []);
 
   const onFinish = async (values) => {
+    let id = Cookies.get("id");
     try {
       let body = {
         name: values.name,
         email: values.email,
         address: values.address,
+        status: values.status,
         image: imageS3 || customerDetail?.image,
         birthDay: values.birthDay,
+        nationality: values.nationality,
+        // phoneNumber: values.phoneNumber,
+        // identityNumber: values.identityNumber,
+        gender: values.gender,
       };
-      const res = await updateUserById(body, customerDetail?.id);
+      const res = await updateCustomer(id, body);
       setCustomerDetail(res.data.Data);
-      if (res.data.StatusCode == "200") {
-        openNotification("Cập nhật thông tin thành công!", "");
-      }
+      openNotification("Thành công","Cập nhật thông tin thành công","bottomRight");
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      openNotification("Thất bại","","bottomRight");
     }
   };
   // handle upload image
@@ -218,7 +225,7 @@ export const ProfileCustomer = () => {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -231,7 +238,7 @@ export const ProfileCustomer = () => {
                     },
                   ]}
                 >
-                  <Input disabled="true" />
+                  <Input disabled/>
                 </Form.Item>
               </Col>
               <Col span={6}>

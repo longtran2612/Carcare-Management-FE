@@ -10,10 +10,11 @@ import {
   Timeline,
   Divider,
   Popconfirm,
+  Select
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { getAllExecuteOrder, getAllOrder } from "pages/api/orderAPI";
+import { getAllExecuteOrder, getAllOrder,getOrders } from "pages/api/orderAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
@@ -30,7 +31,7 @@ import { openNotification } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 
 import { OrderNotRequestDetail } from "../OrderNotRequestDetail";
-
+const { Option } = Select;
 function OrderNotRequestTable({}) {
   const [orders, setOrders] = useState([]);
   const [modalOrder, setModalOrder] = useState(false);
@@ -45,6 +46,7 @@ function OrderNotRequestTable({}) {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
   const [orderSelected, setOrderSelected] = useState(null);
+  const [status, setStatus] = useState(10);
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
@@ -258,10 +260,22 @@ function OrderNotRequestTable({}) {
 
   const handleGetorders = async () => {
     setLoading(true);
+    let dataGetOrder = {
+      keyword: "",
+      pageSize: 100,
+      status: status,
+      pageNumber: 0,
+      sort: [
+        {
+          key: "createDate",
+          asc: false,
+        },
+      ],
+    };
     try {
-      const res = await getAllOrder();
+      const res = await getOrders(dataGetOrder);
       if (res.status === 200) {
-        setOrders(res.data.Data);
+        setOrders(res.data.Data.content);
         setLoading(false);
       }
     } catch (error) {
@@ -272,7 +286,7 @@ function OrderNotRequestTable({}) {
 
   useEffect(() => {
     handleGetorders();
-  }, []);
+  }, [status]);
 
   const columnService = [
     {
@@ -342,6 +356,19 @@ function OrderNotRequestTable({}) {
                       onSearch={(value) => setSearchGlobal(value)}
                       value={searchGlobal}
                     />
+                  </Col>
+                  <Col span={4}>
+                    <Select
+                      placeholder="Trạng thái"
+                      style={{ width: "100%" }}
+                      onChange={(value) => setStatus(value)}
+                      value={status}
+                    >
+                      <Option value={10}>Đã xử lý</Option>
+                      <Option value={2}>Đang xử lý</Option>
+                      <Option value={-100}>Đã hủy</Option>
+                      <Option value={100}>Đã hoàn thành</Option>
+                    </Select>
                   </Col>
                   <Col span={4}>
                     <Button

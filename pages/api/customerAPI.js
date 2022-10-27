@@ -41,19 +41,17 @@ const getCustomerByPhone = async (data) => {
 };
 
 const getCustomerByCode = async (data) => {
-    return axios({
-      method: "GET",
-      url: API_URL + `/customer/find-customer-by-code/${data}`,
+  return axios({
+    method: "GET",
+    url: API_URL + `/customer/find-customer-by-code/${data}`,
+  })
+    .then((res) => {
+      return res;
     })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
-  };
-  
-
+    .catch((err) => {
+      throw err;
+    });
+};
 
 const createCustomer = async (data) => {
   return axios({
@@ -68,8 +66,25 @@ const createCustomer = async (data) => {
       throw err;
     });
 };
+const updateCustomer = async (id, data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/customer/update/${id}`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
-
-
-
-export { createCustomer, getCustomerById,getCustomers,getCustomerByCode,getCustomerByPhone};
+export {
+  createCustomer,
+  getCustomerById,
+  getCustomers,
+  getCustomerByCode,
+  getCustomerByPhone,
+  updateCustomer
+};
