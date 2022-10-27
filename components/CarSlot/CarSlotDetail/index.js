@@ -11,6 +11,9 @@ import {
   Card,
   Steps,
   Modal,
+  Drawer,
+  List,
+  Avatar,
 } from "antd";
 import {
   getCarSlotByCode,
@@ -25,7 +28,8 @@ import {
   PrinterOutlined,
   PlusCircleFilled,
   ExclamationCircleOutlined,
-  CheckCircleOutlined 
+  CheckCircleOutlined,
+  TagsOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
@@ -40,6 +44,8 @@ import { openNotification } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import UpDateServiceOrder from "components/Modal/ModalUpdateServiceOrder";
+
+import { getAllPromotionUseable } from "pages/api/promotionDetail";
 
 const formatDate = "HH:mm DD/MM/YYYY";
 
@@ -60,6 +66,9 @@ const CarSlotDetail = ({ carSlotId }) => {
   const [showConfimComplete, setShowConfimComplete] = useState(false);
   const [showConfimExecute, setShowConfimExecute] = useState(false);
   const [showUpdateServiceOrder, setShowUpdateServiceOrder] = useState(false);
+
+  const [promotionDetails, setPromotionDetails] = useState([]);
+  const [showSelectPromotion, setShowSelectPromotion] = useState(false);
 
   const [step, setStep] = useState(1);
 
@@ -116,21 +125,19 @@ const CarSlotDetail = ({ carSlotId }) => {
     }
   };
 
-  const totalPriceService = () => {
-    return order?.services?.reduce((total, cur) => {
-      return (total += cur?.servicePrice?.price);
-    }, 0);
-  };
-
-  const totalTimeService = () => {
-    return order?.services?.reduce((total, cur) => {
-      return (total += cur?.estimateTime);
-    }, 0);
+  const handleFetchPromotion = async () => {
+    try {
+      const res = await getAllPromotionUseable(order?.id);
+      setPromotionDetails(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     if (carSlotId) {
       fetchCarSlotDetail();
+      handleFetchPromotion();
     }
   }, [carSlotId]);
 
@@ -142,7 +149,7 @@ const CarSlotDetail = ({ carSlotId }) => {
           <Tag
             style={{
               width: "150px",
-              height: "30px",
+              height: "20px",
               fontSize: "15px",
             }}
             color="green"
@@ -239,9 +246,41 @@ const CarSlotDetail = ({ carSlotId }) => {
     setShowCreateBill(false);
     fetchCarSlotDetail();
   };
-  console.log("customer", customer);
-  console.log("order", order);
-  console.log("car", car);
+
+  const totalPriceService = () => {
+    return order?.services?.reduce((total, cur) => {
+      return (total += cur?.servicePrice?.price);
+    }, 0);
+  };
+
+  const totalTimeService = () => {
+    return order?.services?.reduce((total, cur) => {
+      return (total += cur?.estimateTime);
+    }, 0);
+  };
+
+  const totalPromotionAmount = () => {
+    let totalPromotion = 0;
+    promotionDetails.forEach((promotion) => {
+      if (promotion.type === "PERCENTAGE") {
+        let total = (totalPriceService() * promotion.amount) / 100;
+        if (total > promotion.maximumDiscount) {
+          totalPromotion += promotion.maximumDiscount;
+        } else {
+          totalPromotion += total;
+        }
+      } else {
+        if (promotion.type === "MONEY") {
+          totalPromotion += promotion.amount;
+        }
+      }
+    });
+    return totalPromotion;
+  };
+  const finalTotalPrice = () => {
+    let total = totalPriceService() - totalPromotionAmount();
+    return total;
+  };
 
   const handleSuccessUPdateOrder = () => {
     setShowUpdateServiceOrder(false);
@@ -256,7 +295,7 @@ const CarSlotDetail = ({ carSlotId }) => {
       <div className="carslot">
         <div className="carslot-content">
           <div className="carslot-content--header">
-            <Title style={{ padding: "0px" }} level={3}>
+            <Title style={{ padding: "0px", color: "blue" }} level={3}>
               {carSlotDetail?.name}
             </Title>
             <div> {convertStatusCarSlot(carSlotDetail?.status)}</div>
@@ -264,7 +303,10 @@ const CarSlotDetail = ({ carSlotId }) => {
           {carSlotDetail?.status == "IN_USE" && (
             <Row>
               <Col span={6}>
-                <div className="carslot-customer content-white">
+                <div
+                  style={{ marginRight: "10px" }}
+                  className="carslot-customer content-white"
+                >
                   <Title level={4}>Thông tin khách hàng</Title>
                   <Timeline>
                     <Timeline.Item>Mã: {customer?.customerCode}</Timeline.Item>
@@ -321,24 +363,111 @@ const CarSlotDetail = ({ carSlotId }) => {
                   </Col>
                   <Col span={24}>
                     <Table
+                      size="small"
                       pagination={false}
                       bordered
                       dataSource={order?.services}
+                      scroll={{ y: 260 }}
                       summary={() => {
                         return (
                           <>
                             <Table.Summary.Row>
-                              <Table.Summary.Cell index={0}>
-                                Tổng
+                              <Table.Summary.Cell
+                                index={0}
+                              ></Table.Summary.Cell>
+                              <Table.Summary.Cell index={1}>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#E34262",
+                                  }}
+                                >
+                                  Tổng dịch vụ
+                                </span>
                               </Table.Summary.Cell>
+                              <Table.Summary.Cell index={2}>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#E34262",
+                                  }}
+                                >
+                                  {totalTimeService() || 0} phút
+                                </span>
+                              </Table.Summary.Cell>
+                              <Table.Summary.Cell index={3}>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#E34262",
+                                  }}
+                                >
+                                  {formatMoney(totalPriceService() || 0)}
+                                </span>
+                              </Table.Summary.Cell>
+                            </Table.Summary.Row>
+                            <Table.Summary.Row>
+                              <Table.Summary.Cell
+                                index={0}
+                              ></Table.Summary.Cell>
+                              <Table.Summary.Cell index={1}>
+                                <Button
+                                  icon={<TagsOutlined />}
+                                  type="ghost"
+                                  style={{
+                                    backgroundColor: "#B6D433",
+                                    color: "white",
+                                  }}
+                                  onClick={() => setShowSelectPromotion(true)}
+                                >
+                                  Danh sách khuyến mãi
+                                </Button>
+                              </Table.Summary.Cell>
+                              <Table.Summary.Cell index={2}>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#677E31",
+                                  }}
+                                >
+                                  Tổng tiền khuyến mãi
+                                </span>
+                              </Table.Summary.Cell>
+                              <Table.Summary.Cell index={3}>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#677E31",
+                                  }}
+                                >
+                                  {formatMoney(totalPromotionAmount() || 0)}
+                                </span>
+                              </Table.Summary.Cell>
+                            </Table.Summary.Row>
+                            <Table.Summary.Row>
+                              <Table.Summary.Cell
+                                index={0}
+                              ></Table.Summary.Cell>
                               <Table.Summary.Cell
                                 index={1}
                               ></Table.Summary.Cell>
                               <Table.Summary.Cell index={2}>
-                                {totalTimeService() || 0} phút
+                                <span
+                                  style={{ color: "red", fontWeight: "bold" }}
+                                >
+                                  Tổng thanh toán (tạm tính)
+                                </span>
                               </Table.Summary.Cell>
                               <Table.Summary.Cell index={3}>
-                                {formatMoney(totalPriceService() || 0)}
+                                {" "}
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "red",
+                                  }}
+                                >
+                                  {formatMoney(finalTotalPrice() || 0)}
+                                </span>
                               </Table.Summary.Cell>
                             </Table.Summary.Row>
                           </>
@@ -527,8 +656,98 @@ const CarSlotDetail = ({ carSlotId }) => {
           </>
         }
       >
-         <Typography.Title level={4}>Bạn có chắc chắn hoàn thành xử lý yêu cầu này?</Typography.Title>
+        <Typography.Title level={4}>
+          Bạn có chắc chắn hoàn thành xử lý yêu cầu này?
+        </Typography.Title>
       </Modal>
+
+      <Drawer
+        title="Danh sách khuyến mãi được áp dụng"
+        placement="right"
+        onClose={() => setShowSelectPromotion(false)}
+        visible={showSelectPromotion}
+        width={700}
+      >
+        <>
+          <List
+            dataSource={promotionDetails}
+            itemLayout="vertical"
+            size="large"
+            renderItem={(item) => (
+              <Row gutter={16}>
+                <Col
+                  style={{
+                    border: "solid gray 1px",
+                    borderRadius: "5px",
+                    margin: "10px",
+                  }}
+                  span={24}
+                >
+                  <List.Item key={item.id}>
+                    <List.Item.Meta
+                      avatar={
+                        <Avatar
+                          size={{
+                            xs: 24,
+                            sm: 32,
+                            md: 40,
+                            lg: 64,
+                            xl: 80,
+                            xxl: 100,
+                          }}
+                          icon={<TagsOutlined />}
+                        />
+                      }
+                      title={<a>{item.name}</a>}
+                      description={<Title level={5}>{item.description}</Title>}
+                    />
+                    <Row>
+                      {item.type === "PERCENTAGE" ? (
+                        <Col span={24}>
+                          {" "}
+                          <span style={{ color: "red", fontWeight: "bold" }}>
+                            Giảm {item.amount}%{" "}
+                          </span>
+                        </Col>
+                      ) : (
+                        <Col span={24}>
+                          <span style={{ color: "red", fontWeight: "bold" }}>
+                            Giảm {formatMoney(item.amount || 0)}{" "}
+                          </span>
+                        </Col>
+                      )}
+                      <Col span={12}>
+                        <span style={{ fontWeight: "bold" }}>
+                          Số tiền đơn hàng tối thiểu:{" "}
+                        </span>
+                        {formatMoney(item.minimumSpend || 0)}
+                      </Col>
+                      {item.type === "PERCENTAGE" && (
+                        <Col span={12}>
+                          <span style={{ fontWeight: "bold" }}>
+                            Giảm tối đa:{" "}
+                          </span>
+                          {formatMoney(item.maximumDiscount || 0)}
+                        </Col>
+                      )}
+                      <Col span={12}>
+                        <span style={{ fontWeight: "bold" }}>
+                          Ngày bắt đầu:{" "}
+                        </span>
+                        {moment(item.fromDate).format("DD/MM/YYYY")}
+                      </Col>
+                      <Col span={12}>
+                        <span style={{ fontWeight: "bold" }}>Kết thúc: </span>
+                        {moment(item.toDate).format("DD/MM/YYYY")}
+                      </Col>
+                    </Row>
+                  </List.Item>
+                </Col>
+              </Row>
+            )}
+          />
+        </>
+      </Drawer>
 
       <Loading loading={loading} />
     </>

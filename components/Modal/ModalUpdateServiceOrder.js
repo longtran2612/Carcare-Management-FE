@@ -1,6 +1,6 @@
-import { Table, Tag, Button, Input, Row, Col, Modal, Space } from "antd";
+import { Table, Tag, Button, Input, Row, Col, Modal,Drawer, Space,List } from "antd";
 import React, { useState, useEffect, useRef } from "react";
-import { SearchOutlined, ClearOutlined } from "@ant-design/icons";
+import { SearchOutlined, ClearOutlined,TagsOutlined } from "@ant-design/icons";
 import { getServices } from "pages/api/serviceAPI";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
@@ -8,6 +8,7 @@ import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
 import { updateOrder } from "pages/api/orderAPI";
 import { openNotification } from "utils/notification";
+import { getAllPromotionUseAbleByServiceIds } from "pages/api/promotionDetail";
 
 function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
   const [services, setServices] = useState([]);
@@ -21,6 +22,9 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
 
+  const [promotionDetails, setPromotionDetails] = useState([]);
+  const [showSelectPromotion, setShowSelectPromotion] = useState(false);
+
   const handleGetServices = async () => {
     setLoading(true);
     try {
@@ -33,13 +37,30 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
     }
   };
 
+  const handleFetchPromotion = async () => {
+    try {
+      const res = await getAllPromotionUseAbleByServiceIds(
+        selectedRowKeys
+      );
+      setPromotionDetails(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     handleGetServices();
     if (order) {
       setSelectedRowKeys(order?.services.map((item) => item.id));
       setSelectedRows(order?.services);
+     
     }
   }, [order]);
+
+  console.log(promotionDetails)
+  useEffect(() => {
+    handleFetchPromotion();
+  }, [selectedRowKeys]);
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
@@ -212,11 +233,7 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
       return (total += cur.servicePrice.price);
     }, 0);
   };
-  const totalTimeService = () => {
-    return selectedRows.reduce((total, cur) => {
-      return (total += cur.estimateTime);
-    }, 0);
-  };
+
   const onFinish = async () => {
     setLoading(true);
     let dataUpdate = {
@@ -230,7 +247,35 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
     } catch (error) {
       console.log(error);
     }
-   
+  };
+
+  const totalTimeService = () => {
+    return selectedRows.reduce((total, cur) => {
+      return (total += cur.estimateTime);
+    }, 0);
+  };
+
+  const totalPromotionAmount = () => {
+    let totalPromotion = 0;
+    promotionDetails.forEach((promotion) => {
+      if (promotion.type === "PERCENTAGE") {
+        let total = (totalPriceService() * promotion.amount) / 100;
+        if (total > promotion.maximumDiscount) {
+          totalPromotion += promotion.maximumDiscount;
+        } else {
+          totalPromotion += total;
+        }
+      } else {
+        if (promotion.type === "MONEY") {
+          totalPromotion += promotion.amount;
+        }
+      }
+    });
+    return totalPromotion;
+  };
+  const finalTotalPrice = () => {
+    let total = totalPriceService() - totalPromotionAmount();
+    return total;
   };
 
   return (
@@ -281,18 +326,179 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
           footer={() => {
             return (
               <>
-                <Row gutter={16}>
-                  <Col style={{ marginRight: "10px" }} span={15}></Col>
-                  <Col style={{ marginRight: "13px" }} span={4}>
+                <Row gutter={[16, 16]}>
+                  <Col style={{ marginRight: "40px" }} span={10}></Col>
+                  <Col style={{ marginRight: "25px" }} span={4}>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#E34262",
+                      }}
+                    >
+                      Tổng tiền dịch vụ
+                    </span>
+                  </Col>
+                  <Col style={{ marginRight: "15px" }} span={4}>
                     {totalTimeService() || 0} phút
                   </Col>
-                  <Col span={4}>{formatMoney(totalPriceService() || 0)}</Col>
+                  <Col span={4}>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#E34262",
+                      }}
+                    >
+                      {formatMoney(totalPriceService() || 0)}
+                    </span>
+                  </Col>
+                  <Col style={{ marginRight: "40px" }} span={10}>
+                    <Button
+                      icon={<TagsOutlined />}
+                      type="ghost"
+                      style={{
+                        backgroundColor: "#B6D433",
+                        color: "white",
+                      }}
+                      onClick={() => setShowSelectPromotion(true)}
+                    >
+                      Danh sách khuyến mãi
+                    </Button>
+                  </Col>
+                  <Col style={{ marginRight: "25px" }} span={4}>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#677E31",
+                      }}
+                    >
+                      Tổng tiền khuyến mãi
+                    </span>
+                  </Col>
+                  <Col style={{ marginRight: "15px" }} span={4}></Col>
+
+                  <Col span={4}>
+                    {" "}
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#677E31",
+                      }}
+                    >
+                      {formatMoney(totalPromotionAmount() || 0)}
+                    </span>
+                  </Col>
+                  <Col style={{ marginRight: "40px" }} span={10}></Col>
+                  <Col style={{ marginRight: "25px" }} span={4}>
+                    <span style={{ color: "red", fontWeight: "bold" }}>
+                      Tổng thanh toán (tạm tính)
+                    </span>
+                  </Col>
+                  <Col style={{ marginRight: "15px" }} span={4}></Col>
+
+                  <Col span={4}>
+                    {" "}
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "red",
+                      }}
+                    >
+                      {formatMoney(finalTotalPrice() || 0)}
+                    </span>
+                  </Col>
                 </Row>
               </>
             );
           }}
         />
       </Modal>
+      <Drawer
+        title="Danh sách khuyến mãi được áp dụng"
+        placement="right"
+        onClose={() => setShowSelectPromotion(false)}
+        visible={showSelectPromotion}
+        width={700}
+      >
+        <>
+          <List
+            dataSource={promotionDetails}
+            itemLayout="vertical"
+            size="large"
+            renderItem={(item) => (
+              <Row gutter={16}>
+                <Col
+                  style={{
+                    border: "solid gray 1px",
+                    borderRadius: "5px",
+                    margin: "10px",
+                  }}
+                  span={24}
+                >
+                  <List.Item key={item.id}>
+                    <List.Item.Meta
+                      avatar={
+                        <Avatar
+                          size={{
+                            xs: 24,
+                            sm: 32,
+                            md: 40,
+                            lg: 64,
+                            xl: 80,
+                            xxl: 100,
+                          }}
+                          icon={<TagsOutlined />}
+                        />
+                      }
+                      title={<a>{item.name}</a>}
+                      description={<Title level={5}>{item.description}</Title>}
+                    />
+                    <Row>
+                      {item.type === "PERCENTAGE" ? (
+                        <Col span={24}>
+                          {" "}
+                          <span style={{ color: "red", fontWeight: "bold" }}>
+                            Giảm {item.amount}%{" "}
+                          </span>
+                        </Col>
+                      ) : (
+                        <Col span={24}>
+                          <span style={{ color: "red", fontWeight: "bold" }}>
+                            Giảm {formatMoney(item.amount || 0)}{" "}
+                          </span>
+                        </Col>
+                      )}
+                      <Col span={12}>
+                        <span style={{ fontWeight: "bold" }}>
+                          Số tiền đơn hàng tối thiểu:{" "}
+                        </span>
+                        {formatMoney(item.minimumSpend || 0)}
+                      </Col>
+                      {item.type === "PERCENTAGE" && (
+                        <Col span={12}>
+                          <span style={{ fontWeight: "bold" }}>
+                            Giảm tối đa:{" "}
+                          </span>
+                          {formatMoney(item.maximumDiscount || 0)}
+                        </Col>
+                      )}
+                      <Col span={12}>
+                        <span style={{ fontWeight: "bold" }}>
+                          Ngày bắt đầu:{" "}
+                        </span>
+                        {moment(item.fromDate).format("DD/MM/YYYY")}
+                      </Col>
+                      <Col span={12}>
+                        <span style={{ fontWeight: "bold" }}>Kết thúc: </span>
+                        {moment(item.toDate).format("DD/MM/YYYY")}
+                      </Col>
+                    </Row>
+                  </List.Item>
+                </Col>
+              </Row>
+            )}
+          />
+        </>
+      </Drawer>
       <Loading loading={loading} />
     </>
   );
