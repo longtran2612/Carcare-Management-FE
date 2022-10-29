@@ -141,7 +141,7 @@ const UserProfile = () => {
               <br />
               <br />
               <Tabs>
-                <Tabs.TabPane tab="Thông tin người dùng" key="1">
+                <Tabs.items tab="Thông tin người dùng" key="1">
                   <Row gutter={[16, 16]}>
                     <Col span={6}>
                       <Image width={300} height={250} src={userDetail.image} />
@@ -301,10 +301,10 @@ const UserProfile = () => {
                       </Form>
                     </Col>
                   </Row>
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="Thay đổi mật khẩu" key="2">
+                </Tabs.items>
+                <Tabs.items tab="Thay đổi mật khẩu" key="2">
                   <ChangePassword/>
-                  </Tabs.TabPane>
+                  </Tabs.items>
               </Tabs>
             </Col>
           </Row>

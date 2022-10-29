@@ -234,7 +234,7 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
                   name="nationality"
                   rules={[
                     {
-                      required: true,x
+                      required: true,
                     },
                   ]}
                 >

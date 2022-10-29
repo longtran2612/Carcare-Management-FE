@@ -9,7 +9,7 @@ import {
   UserOutlined,
   DownOutlined,
   HighlightOutlined,
-  ClearOutlined
+  ClearOutlined,BookOutlined
 } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { setLogout } from "redux/slices/authSlice";
@@ -46,22 +46,29 @@ export const CustomerNavigation = () => {
     if(accessToken){
       return(
         <Menu>
-        <Menu.Item key="0">
+        <Menu.Item key="1">
           <Link href="/my-account">
             <a>
               <UserOutlined /> Trang cá nhân
             </a>
           </Link>
         </Menu.Item>
-        <Menu.Item key="1">
-          <Link href="/change-password">
+        <Menu.Item key="2">
+        <Link href="/my-account?key=2">
             <a>
               <ClearOutlined /> Dịch vụ đang sử dụng
             </a>
           </Link>
         </Menu.Item>
-        <Menu.Item key="2">
-          <Link href="/change-password">
+        <Menu.Item key="3">
+        <Link href="/my-account?key=3">
+            <a>
+            <BookOutlined /> Lịch sử sử dụng dịch vụ
+            </a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="4">
+        <Link href="/my-account?key=4">
             <a>
               <SettingOutlined /> Đổi mật khẩu
             </a>

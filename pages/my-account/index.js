@@ -27,12 +27,13 @@ const MyAccountPage = () => {
       setLoading(false);
       return;
     }
+    setLoading(false);
   }
 
   useEffect(() => {
     handleAccess();
     if (key) {
-      setActive(key);
+      onChange(key);
     }
   }, [key]);
   return (
@@ -59,18 +60,18 @@ const MyAccountPage = () => {
           onChange={onChange}
           accessKey={active}
         >
-          <Tabs.TabPane tab="Thông tin cá nhân" key="1">
+          <Tabs.items tab="Thông tin cá nhân" key="1">
             <ProfileCustomer />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Dịch vụ đang sử dụng" key="2">
+          </Tabs.items>
+          <Tabs.items tab="Dịch vụ đang sử dụng" key="2">
             <ServiceCustomer />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Lịch sử thanh toán" key="3">
+          </Tabs.items>
+          <Tabs.items tab="Lịch sử thanh toán" key="3">
             <BillCustomer />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Thay đổi mật khẩu" key="4">
+          </Tabs.items>
+          <Tabs.items tab="Thay đổi mật khẩu" key="4">
             <ChangePassword />
-          </Tabs.TabPane>
+          </Tabs.items>
         </Tabs>
       </Layout.Content>
       ;
