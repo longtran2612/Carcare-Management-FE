@@ -87,9 +87,9 @@ const AdminPage = () => {
           >
             <MyContent keyMenu={key} />
           </Content>
-          {/* <Footer style={{ backgroundColor: "white", textAlign: "center" }}>
+          <Footer style={{ backgroundColor: "white", textAlign: "center" }}>
             <Row justify="center">©2022 Coppy right by VL-CARCARE</Row>
-          </Footer> */}
+          </Footer>
         </Layout>
       </Layout>
       <Loading loading={loading} />

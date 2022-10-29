@@ -14,6 +14,7 @@ import {
   Timeline,
   Table,
 } from "antd";
+import { PlusCircleOutlined, UserAddOutlined } from "@ant-design/icons";
 import { getAllPromotionUseAbleByServiceIds } from "pages/api/promotionDetail";
 import { getCustomers } from "pages/api/customerAPI";
 import { getCustomerById } from "pages/api/customerAPI";
@@ -271,7 +272,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
             </Col>
             {current === 0 && (
               <>
-                <Col span={8}>
+                <Col span={11}>
                   <Form.Item
                     label="Khách hàng"
                     name="customerId"
@@ -307,12 +308,14 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col style={{ display: "flex", alignItems: "center" }} span={4}>
-                  <Button type="primary" onClick={() => setModalCustomer(true)}>
-                    Thêm mới khách hàng
-                  </Button>
+                <Col style={{ display: "flex", alignItems: "center" }} span={1}>
+                  <Button
+                    icon={<UserAddOutlined />}
+                    type="primary"
+                    onClick={() => setModalCustomer(true)}
+                  ></Button>
                 </Col>
-                <Col span={8}>
+                <Col span={11}>
                   <Form.Item
                     label="Xe"
                     name="carId"
@@ -341,8 +344,9 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col style={{ display: "flex", alignItems: "center" }} span={4}>
+                <Col style={{ display: "flex", alignItems: "center" }} span={1}>
                   <Button
+                    icon={<PlusCircleOutlined />}
                     type="primary"
                     onClick={() => {
                       if (form.getFieldValue("customerId")) {
@@ -352,7 +356,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                       }
                     }}
                   >
-                    Thêm mới xe
+       
                   </Button>
                 </Col>
                 <Col span={12}>

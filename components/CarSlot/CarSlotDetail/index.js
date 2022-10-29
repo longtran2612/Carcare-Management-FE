@@ -137,9 +137,13 @@ const CarSlotDetail = ({ carSlotId }) => {
   useEffect(() => {
     if (carSlotId) {
       fetchCarSlotDetail();
-      handleFetchPromotion();
     }
   }, [carSlotId]);
+  useEffect(() => {
+    if (order) {
+      handleFetchPromotion();
+    }
+  }, [order]);
 
   const convertStatusCarSlot = (status) => {
     console.log("statusss", status);

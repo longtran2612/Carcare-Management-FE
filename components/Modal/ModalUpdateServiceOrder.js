@@ -1,4 +1,4 @@
-import { Table, Tag, Button, Input, Row, Col, Modal,Drawer, Space,List } from "antd";
+import { Table, Tag, Button, Input, Row, Col, Modal,Drawer, Space,List,Avatar,Typography  } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { SearchOutlined, ClearOutlined,TagsOutlined } from "@ant-design/icons";
 import { getServices } from "pages/api/serviceAPI";
@@ -7,8 +7,10 @@ import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
 import { updateOrder } from "pages/api/orderAPI";
+import moment from "moment";
 import { openNotification } from "utils/notification";
 import { getAllPromotionUseAbleByServiceIds } from "pages/api/promotionDetail";
+const {Title} = Typography;
 
 function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
   const [services, setServices] = useState([]);
