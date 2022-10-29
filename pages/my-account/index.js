@@ -6,10 +6,35 @@ import { ProfileCustomer } from "components-customer/Profile";
 import ChangePassword from "components-customer/ChangePassword/ChangePassword";
 import BillCustomer from "components-customer/bill";
 import ServiceCustomer from "components-customer/Service";
-
+import { useRouter } from "next/router";
+import { useState,useEffect } from "react";
+import Loading from "components/Loading";
+import Cookies from "js-cookie";
 const MyAccountPage = () => {
-  const onChange = (key) => {};
+  const [active, setActive] = useState();
+  const [loading, setLoading] = useState(false);
+  const onChange = (key) => {
+    setActive(key);
 
+  };
+  const router = useRouter();
+  const { key } = router.query;
+  const handleAccess = async () => {
+    setLoading(true);
+    let accessToken = Cookies.get("accessToken");
+    if (accessToken == null) {
+      router.push("/login");
+      setLoading(false);
+      return;
+    }
+  }
+
+  useEffect(() => {
+    handleAccess();
+    if (key) {
+      setActive(key);
+    }
+  }, [key]);
   return (
     <>
       <CustomerNavigation />
@@ -23,6 +48,7 @@ const MyAccountPage = () => {
         }}
       >
         <Tabs
+          defaultActiveKey={key}
           style={{
             margin: "1rem",
             padding: "2rem",
@@ -30,22 +56,25 @@ const MyAccountPage = () => {
             background: "white",
             borderRadius: "5px",
           }}
+          onChange={onChange}
+          accessKey={active}
         >
-          <Tabs.TabPane tab="Thông tin cá nhân" key="item-1">
+          <Tabs.TabPane tab="Thông tin cá nhân" key="1">
             <ProfileCustomer />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Dịch vụ đang sử dụng" key="item-2">
+          <Tabs.TabPane tab="Dịch vụ đang sử dụng" key="2">
             <ServiceCustomer />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Lịch sử thanh toán" key="item-3">
+          <Tabs.TabPane tab="Lịch sử thanh toán" key="3">
             <BillCustomer />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Thay đổi mật khẩu" key="item-4">
+          <Tabs.TabPane tab="Thay đổi mật khẩu" key="4">
             <ChangePassword />
           </Tabs.TabPane>
         </Tabs>
       </Layout.Content>
       ;
+      <Loading loading={loading} />
     </>
   );
 };

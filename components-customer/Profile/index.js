@@ -131,7 +131,8 @@ export const ProfileCustomer = () => {
   return (
     <>
       <Row gutter={[16, 16]}>
-        <Col span={6}>
+        <Col   
+         span={6}>
           <Image width={300} height={250} src={customerDetail.image} />
           <div
             style={{

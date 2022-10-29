@@ -66,14 +66,14 @@ const MyHeader = () => {
         )}
 
         {accessToken ? (
-          <SubMenu key="10_1" icon={<UserOutlined />} title="Cá nhân">
-            <Menu.Item key="10_3" icon={<InfoOutlined />}>
-              <Link href="/profile">Thông tin cá nhân</Link>
+          <SubMenu key="10" icon={<UserOutlined />} title="Cá nhân">
+            <Menu.Item key="10_1" icon={<InfoOutlined />}>
+              <Link href="/admin/profile">Thông tin cá nhân</Link>
             </Menu.Item>
-            <Menu.Item key="10_4" icon={<SettingOutlined />}>
+            {/* <Menu.Item key="10_4" icon={<SettingOutlined />}>
               <Link href="/setting">Cài đặt</Link>
-            </Menu.Item>
-            <Menu.Item key="10_1" icon={<LogoutOutlined />}>
+            </Menu.Item> */}
+            <Menu.Item key="10_2" icon={<LogoutOutlined />}>
               {/* <Link a>Đăng xuất</Button> */}
               <a onClick={() => setShowComfirm(true)}>Đăng xuất</a>
             </Menu.Item>
