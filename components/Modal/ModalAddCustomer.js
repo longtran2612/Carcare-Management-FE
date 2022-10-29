@@ -119,7 +119,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item name="gender" label="Giới tính">
+              <Form.Item initialValue='Nam' name="gender" label="Giới tính">
                 <Select>
                   <Option value="Nam">Nam</Option>
                   <Option value="Nữ">Nữ</Option>
@@ -164,11 +164,11 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
             </Col>
             <Col span={8}>
               <Form.Item name="dateOfBirth" label="Ngày sinh">
-                <DatePicker format={formatDate} />
+                <DatePicker placeholder="Chọn ngày sinh" format={formatDate} />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name="nationality" label="Quốc gia">
+              <Form.Item initialValue='Việt Nam' name="nationality" label="Quốc gia">
                 <Input />
               </Form.Item>
             </Col>

@@ -13,7 +13,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { ClearOutlined,PlusOutlined } from "@ant-design/icons";
 import { getCustomers } from "pages/api/customerAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
-import ModalAddUser from "components/Modal/ModelAddUser";
 import ModalAddCustomer from "components/Modal/ModalAddCustomer";
 import { SearchOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
@@ -227,21 +226,21 @@ function CustomerTable({}) {
       ),
     },
 
+    // {
+    //   title: "Địa chỉ",
+    //   dataIndex: "address",
+    //   key: "address",
+    //   ...getColumnSearchProps("address"),
+    //   sorter: (a, b) => a.address.length - b.address.length,
+    //   sortDirections: ["descend", "ascend"],
+    //   render: (address) => (
+    //     <Tooltip placement="topLeft" title={address}>
+    //       {address}
+    //     </Tooltip>
+    //   ),
+    // },
     {
-      title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
-      ...getColumnSearchProps("address"),
-      sorter: (a, b) => a.address.length - b.address.length,
-      sortDirections: ["descend", "ascend"],
-      render: (address) => (
-        <Tooltip placement="topLeft" title={address}>
-          {address}
-        </Tooltip>
-      ),
-    },
-    {
-      title: "Nhóm khác hàng",
+      title: "Nhóm khách hàng",
       key: "statusName",
       dataIndex: "statusName",
       ...getColumnSearchProps("statusName"),
@@ -251,12 +250,12 @@ function CustomerTable({}) {
         </>
       ),
     },
-    {
-      title: "Quốc gia",
-      key: "nationality",
-      dataIndex: "nationality",
-      ...getColumnSearchProps("statusName"),
-    },
+    // {
+    //   title: "Quốc gia",
+    //   key: "nationality",
+    //   dataIndex: "nationality",
+    //   ...getColumnSearchProps("nationality"),
+    // },
   ];
 
   const handlecustomers = async () => {
@@ -313,7 +312,6 @@ function CustomerTable({}) {
             </Col>
           </Row>
           <Table
-            onChange={handleSearch}
             columns={columns}
             dataSource={customers}
             bordered
@@ -322,7 +320,7 @@ function CustomerTable({}) {
             }}
             scroll={{
               y: 450,
-              x: 1700,
+           
             }}
             onRow={(record, rowIndex) => {
               return {

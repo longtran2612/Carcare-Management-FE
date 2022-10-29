@@ -10,11 +10,11 @@ import {
   Timeline,
   Divider,
   Popconfirm,
-  Select
+  Select,
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { getAllExecuteOrder, getAllOrder,getOrders } from "pages/api/orderAPI";
+import { getAllExecuteOrder, getAllOrder, getOrders } from "pages/api/orderAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
@@ -175,28 +175,22 @@ function OrderNotRequestTable({}) {
         );
       },
     },
-    // {
-    //   title: "Dịch vụ",
-    //   dataIndex: "services",
-    //   key: "services",
-    // },
     {
       title: "Khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      ...getColumnSearchProps("statusName"),
+      ...getColumnSearchProps("customerName"),
     },
     {
       title: "Biển số xe",
       dataIndex: "carLicensePlate",
       key: "carLicensePlate",
-      ...getColumnSearchProps("statusName"),
+      ...getColumnSearchProps("carLicensePlate"),
     },
     {
       title: "Thời gian xử lý",
       dataIndex: "totalEstimateTime",
       key: "totalEstimateTime",
-      ...getColumnSearchProps("statusName"),
       render: (totalEstimateTime) => {
         return <div>{totalEstimateTime} phút</div>;
       },
@@ -206,7 +200,6 @@ function OrderNotRequestTable({}) {
       title: "Thời gian tạo",
       dataIndex: "createDate",
       key: "createDate",
-      ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
         return <div>{moment(record.createDate).format(formatDate)}</div>;
       },
@@ -348,7 +341,7 @@ function OrderNotRequestTable({}) {
             bordered
             title={() => (
               <>
-                <Row>
+                <Row gutter={8}>
                   <Col span={8} style={{ marginRight: "10px" }}>
                     <Input.Search
                       placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
@@ -358,25 +351,25 @@ function OrderNotRequestTable({}) {
                     />
                   </Col>
                   <Col span={4}>
-                    <Select
-                      placeholder="Trạng thái"
-                      style={{ width: "100%" }}
-                      onChange={(value) => setStatus(value)}
-                      value={status}
-                    >
-                      <Option value={10}>Đã xử lý</Option>
-                      <Option value={2}>Đang xử lý</Option>
-                      <Option value={-100}>Đã hủy</Option>
-                      <Option value={100}>Đã hoàn thành</Option>
-                    </Select>
-                  </Col>
-                  <Col span={4}>
                     <Button
                       onClick={() => setSearchGlobal("")}
                       icon={<ClearOutlined />}
                     >
                       Xóa bộ lọc
                     </Button>
+                  </Col>
+                  <Col span={4}>
+                    <Select
+                      placeholder="Trạng thái"
+                      style={{ width: "100%" }}
+                      onChange={(value) => setStatus(value)}
+                      value={status}
+                    >
+                      <Option value={10}>Đã hoàn thành</Option>
+                      <Option value={2}>Đang xử lý</Option>
+                      <Option value={-100}>Đã hủy</Option>
+                      <Option value={100}>Đã xuất hóa đơn</Option>
+                    </Select>
                   </Col>
                 </Row>
               </>

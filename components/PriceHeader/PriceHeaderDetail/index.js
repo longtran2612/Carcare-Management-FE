@@ -36,7 +36,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const [prices, setPrices] = useState([]);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [modalPrice, setModalPrice] = useState(false);
-  const formatDate = "YYYY/MM/DD";
+  const formatDate = "DD/MM/YYYY";
   const [loading, setLoading] = useState(false);
 
   const [searchText, setSearchText] = useState("");
@@ -158,7 +158,6 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      // openNotification(error.response.data);
     }
   };
 
@@ -240,7 +239,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
     };
     try {
       const res = await updatePriceHeader(body, priceHeaderDetail.id);
-      openNotification("Cập nhật dịch vụ thành công!", "");
+      openNotification("Cập nhật bảng giá thành công!", "");
       onUpdatePriceHeader();
       setLoading(false);
     } catch (error) {
@@ -258,7 +257,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
         Trở lại
       </Button>
-      <Row gutter={[16, 16]}>
+      <Row>
         <Col span={24}>
           <Form
             form={form}
@@ -266,8 +265,8 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row gutter={[32, 8]}>
-              <Col span={6}>
+            <Row gutter={[16]}>
+              <Col span={12}>
                 <Form.Item
                   label="Tên bảng giá"
                   name="name"
@@ -280,7 +279,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={4}>
                 <Form.Item
                   label="Ngày bắt đầu"
                   name="fromDate"
@@ -291,10 +290,9 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   ]}
                 >
                   <DatePicker format={formatDate} />
-                  {/* <Input /> */}
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={4}>
                 <Form.Item
                   label="Ngày kết thúc"
                   name="toDate"
@@ -305,10 +303,9 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   ]}
                 >
                   <DatePicker />
-                  {/* <Input /> */}
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={4}>
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -380,6 +377,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
         </Col>
         <Col span={24}>
           <Table
+          size="small"
             bordered
             title={() => (
               <>

@@ -6,7 +6,6 @@ import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 const { TextArea } = Input;
 import moment from "moment";
-const formatDate = "YYYY/MM/DD";
 
 const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();

@@ -277,7 +277,6 @@ function UserTable({}) {
             </Col>
           </Row>
           <Table
-            onChange={handleSearch}
             columns={columns}
             dataSource={users}
             bordered

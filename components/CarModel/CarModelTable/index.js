@@ -164,35 +164,30 @@ function CarModelTable({}) {
       dataIndex: "engine",
       key: "engine",
       width: 120,
-      ...getColumnSearchProps("engine"),
     },
     {
       title: "Truyền động",
       dataIndex: "transmission",
       key: "transmission",
       width: 120,
-      ...getColumnSearchProps("transmission"),
     },
     {
       title: "Số nghế ngồi",
       dataIndex: "seats",
       key: "seats",
       width: 120,
-      ...getColumnSearchProps("seats"),
     },
     {
       title: "Nhiên liệu",
       dataIndex: "fuel",
       key: "fuel",
       width: 120,
-      ...getColumnSearchProps("fuel"),
     },
     {
       title: "Năm sản xuất",
       dataIndex: "year",
       key: "year",
       width: 120,
-      ...getColumnSearchProps("year"),
     },
   ];
 

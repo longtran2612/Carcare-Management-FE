@@ -11,6 +11,7 @@ import {
   Upload,
   InputNumber,
   Popconfirm,
+  Select,
 } from "antd";
 import { useRouter } from "next/router";
 import { uploadImage } from "pages/api/uploadAPI";
@@ -28,15 +29,33 @@ const CarDetail = ({ carId, onUpdateCar }) => {
   const { TextArea } = Input;
   const [carDetail, setCarDetail] = useState({});
   const [modalUpload, setModalUpload] = useState(false);
-  const [carModels, setCarModels] = useState([]);
-  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [imageS3, setImageS3] = useState(null);
   const [listFiles, setListFiles] = useState({
     images: [],
     imageBlob: [],
   });
-  const [modalQuestion, setModalQuestion] = useState(false);
+  const [brands, setBrands] = useState([
+    "Toyota",
+    "VinFast",
+    "Nissan",
+    "Suzuki",
+    "Subaru",
+    "Lexus",
+    "Audi",
+    "Volkswagen",
+    "Honda",
+    "Volvo",
+    "Hyundai",
+    "Mazda",
+    "KIA",
+    "Mitsubishi",
+    "Maserati",
+    "Chevrolet",
+    "Ford",
+    "Mercedes-Benz",
+    "BMW",
+  ]);
   const fetchcarDetail = async () => {
     setLoading(true);
     try {
@@ -81,14 +100,6 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         name: values.name,
         color: values.color,
         licensePlate: values.licensePlate,
-        description: values.description,
-        brand: values.brand,
-        model: values.model,
-        engine: values.engine,
-        transmission: values.transmission,
-        seats: values.seats,
-        fuel: values.fuel,
-        year: values.year,
         imageUrl: imageS3 || carDetail?.imageUrl,
       };
       console.log(body);
@@ -186,7 +197,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
             <Row gutter={30}>
               <Col span={18}>
                 <Form.Item
-                  label="Tên mẫu xe"
+                  label="Tên xe"
                   name="name"
                   rules={[
                     {
@@ -246,7 +257,24 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                     },
                   ]}
                 >
-                  <Input  />
+                   <Select
+                   disabled
+                    showSearch
+                    placeholder="Chọn thương hiệu"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.includes(input)
+                    }
+                    filterSort={(optionA, optionB) =>
+                      optionA.children
+                        .toLowerCase()
+                        .localeCompare(optionB.children.toLowerCase())
+                    }
+                  >
+                    {brands.map((brand) => (
+                      <Option key={brand}>{brand}</Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </Col>
               <Col span={6}>

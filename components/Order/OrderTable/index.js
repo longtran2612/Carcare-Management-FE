@@ -192,13 +192,13 @@ function OrderTable({}) {
       title: "Khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      ...getColumnSearchProps("statusName"),
+      ...getColumnSearchProps("customerName"),
     },
     {
       title: "Biên số",
       dataIndex: "carLicensePlate",
       key: "carLicensePlate",
-      ...getColumnSearchProps("statusName"),
+      ...getColumnSearchProps("carLicensePlate"),
     },
     {
       title: "Thời gian xử lý",

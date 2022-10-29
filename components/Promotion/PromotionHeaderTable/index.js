@@ -68,7 +68,7 @@ function PromotionHeaderTable({}) {
               width: 90,
             }}
           >
-            Tìm
+            Tìm mã / tên 
           </Button>
           <Button
             onClick={() => {

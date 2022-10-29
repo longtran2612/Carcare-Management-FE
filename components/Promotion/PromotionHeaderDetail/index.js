@@ -322,7 +322,7 @@ const PromotionHeaderDetail = ({
             validateMessages={validateMessages}
           >
             <Row gutter={[32, 8]}>
-              <Col span={6}>
+              <Col span={12}>
                 <Form.Item
                   label="Tên chương trình"
                   name="name"
@@ -335,7 +335,7 @@ const PromotionHeaderDetail = ({
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={4}>
                 <Form.Item
                   label="Ngày bắt đầu"
                   name="fromDate"
@@ -349,7 +349,7 @@ const PromotionHeaderDetail = ({
                   {/* <Input /> */}
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={4}>
                 <Form.Item
                   label="Ngày kết thúc"
                   name="toDate"
@@ -363,7 +363,7 @@ const PromotionHeaderDetail = ({
                   {/* <Input /> */}
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={4}>
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -422,6 +422,7 @@ const PromotionHeaderDetail = ({
         </Col>
         <Col span={24}>
           <Table
+          size="small"
             bordered
             title={() => (
               <>
