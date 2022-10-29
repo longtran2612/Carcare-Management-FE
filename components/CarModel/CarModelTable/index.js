@@ -1,11 +1,25 @@
-import { Table, Tag, Space, Button, Row, Col, Input ,Popconfirm} from "antd";
+import {
+  Table,
+  Tag,
+  Space,
+  Button,
+  Row,
+  Col,
+  Input,
+  Popconfirm,
+  Upload,
+} from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import {
   getCarModel,
   importExcelCarModel,
   exportExcelCarModel,
 } from "pages/api/carModel";
-import {VerticalAlignBottomOutlined,VerticalAlignTopOutlined,PlusOutlined } from "@ant-design/icons";
+import {
+  VerticalAlignBottomOutlined,
+  VerticalAlignTopOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { useRouter } from "next/router";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCarModel from "components/Modal/ModalAddCarModal";
@@ -13,6 +27,7 @@ import CarModelDetail from "components/CarModel/CarModelDetail";
 import Loading from "components/Loading";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import { openNotification } from "utils/notification";
 
 function CarModelTable({}) {
   const [carModels, setCarModels] = useState([]);
@@ -23,6 +38,7 @@ function CarModelTable({}) {
   const router = useRouter();
   const [file, setFile] = useState(null);
   const { carModelId } = router.query;
+  const [uploadFile, setUploadFile] = useState(null);
 
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -131,7 +147,9 @@ function CarModelTable({}) {
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.carModelCode).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.carModelCode)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.brand).toLowerCase().includes(value.toLowerCase()) ||
           String(record.model).toLowerCase().includes(value.toLowerCase()) ||
           String(record.type).toLowerCase().includes(value.toLowerCase()) ||
@@ -195,9 +213,7 @@ function CarModelTable({}) {
     setLoading(true);
     try {
       const res = await getCarModel();
-      if (res.status === 200) {
-        setCarModels(res.data.Data);
-      }
+      setCarModels(res.data.Data);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -213,14 +229,16 @@ function CarModelTable({}) {
   };
 
   const handleExportExcel = async () => {
-    try{
+    try {
       const response = await exportCarModelExcel();
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
-
   };
-  const handleImportExcel = async () => {};
+  const handleImportExcel = async () => {
+    openNotification("Thành công", "Nhập dữ liệu thành công");
+    handleGetCarModel();
+  };
 
   return (
     <>
@@ -250,29 +268,34 @@ function CarModelTable({}) {
             </Col>
             <Col span={2}></Col>
             <Col span={3}>
-            <a download="dowload" href="https://khoa-luan-gl.herokuapp.com/car-models/export-to-excel">
-
-              <Button
-                style={{ float: "right" }}
-                icon={<VerticalAlignTopOutlined />}
-                
-                // onClick={() => handleExportExcel()}
+              <a
+                download="dowload"
+                href="https://khoa-luan-gl.herokuapp.com/car-models/export-to-excel"
               >
-                Export Excel
-              </Button>
-           
-                 
+                <Button
+                  style={{ float: "right" }}
+                  icon={<VerticalAlignTopOutlined />}
+
+                  // onClick={() => handleExportExcel()}
+                >
+                  Export Excel
+                </Button>
               </a>
             </Col>
             <Col span={3}>
-              <Button
-                style={{ float: "right" }}
-                icon={<VerticalAlignBottomOutlined />}
-             
-                onClick={() => handleImportExcel()}
+              <Upload
+                name="file"
+                action="https://khoa-luan-gl.herokuapp.com/car-models/import-from-excel"
+                onChange={handleImportExcel}
+                showUploadList={false}
               >
-                Import Excel
-              </Button>
+                <Button
+                  style={{ marginLeft: "10px", float: "right" }}
+                  icon={<VerticalAlignBottomOutlined />}
+                >
+                  Import Excel
+                </Button>
+              </Upload>
             </Col>
             <Col span={3}>
               <Button
