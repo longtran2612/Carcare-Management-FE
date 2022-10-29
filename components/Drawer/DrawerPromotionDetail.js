@@ -26,6 +26,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
+  const [showLimitAmount, setShowLimitAmount] = useState([]);
   const [form] = Form.useForm();
   const getPromotionDetail = async () => {
     // setLoading(true);
@@ -43,6 +44,8 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         categoryIds: response.data.Data[0].categoryIds,
         serviceIds: response.data.Data[0].serviceIds,
         customerType: response.data.Data[0].customerType,
+        limitUsedTime: response.data.Data[0].limitUsedTime,
+        limitPromotionAmount: response.data.Data[0].limitPromotionAmount,
       });
       // setLoading(false);
     } catch (error) {
@@ -61,6 +64,8 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
       categoryIds: values.categoryIds,
       customerType: values.customerType,
       serviceIds: values.serviceIds,
+      limitUsedTime:values.limitUsedTime,
+      limitPromotionAmount:values.limitPromotionAmount,
     };
     if (values.type === "PERCENTAGE") {
       dataUpdate.serviceReceip = null;
@@ -103,6 +108,10 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const onChange = () => {
+    setShowLimitAmount(form.getFieldValue('limitUsedTime'));
   };
 
   useEffect(() => {
@@ -253,7 +262,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
             <Col span={12}>
               <Form.Item label="Nhóm người dùng áp dụng" name="customerType">
                 <Select>
-                <Select.Option value={0}>Tất cả</Select.Option>
+                  <Select.Option value={0}>Tất cả</Select.Option>
                   <Select.Option value={1}>Thân thiết</Select.Option>
                 </Select>
               </Form.Item>
@@ -290,6 +299,34 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                       </Select.Option>
                     ))}
                   </Select>
+                </Form.Item>
+              </Col>
+            )}
+            <Col span={12}>
+              <Form.Item
+                label="Giới hạn ngân sách"
+                name="limitUsedTime"
+              >
+                <Select onChange={onChange}>
+                  <Select.Option value={false}>Không</Select.Option>
+                  <Select.Option value={true}>Có</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            {showLimitAmount && (
+              <Col span={12}>
+                <Form.Item
+                  label="Ngân sách giới hạn"
+                  name="limitPromotionAmount"
+                >
+                  <InputNumber
+                    addonAfter="Đ"
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    min={0}
+                  />
                 </Form.Item>
               </Col>
             )}
