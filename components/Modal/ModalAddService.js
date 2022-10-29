@@ -166,9 +166,9 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
               >
                 <Select>
                   <Select.Option value="HOT">HOT</Select.Option>
-                  <Select.Option value="LIKE">Yêu thích</Select.Option>
-                  <Select.Option value="NEW">Mới</Select.Option>
-                  <Select.Option value="NORMAL">Thông thường</Select.Option>
+                  <Select.Option value="Yêu thích">Yêu thích</Select.Option>
+                  <Select.Option value="Mới">Mới</Select.Option>
+                  <Select.Option value="Thường">Thông thường</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -201,7 +201,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 ]}
                 name="estimateTime"
               >
-                <InputNumber addonAfter='phút' />
+                <InputNumber addonAfter="phút" />
               </Form.Item>
             </Col>
             <Col span={24}>

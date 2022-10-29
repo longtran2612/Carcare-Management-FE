@@ -6,8 +6,6 @@ import MyHeader from "components/Header";
 import SideBar from "components/SideBar";
 import MyContent from "components/Content";
 import { loadUser } from "pages/api/authAPI";
-import logo from "public/images/logo.png";
-import Image from "next/image";
 import Loading from "components/Loading";
 const { Content, Sider, Footer } = Layout;
 

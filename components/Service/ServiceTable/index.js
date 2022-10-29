@@ -177,10 +177,6 @@ function ServiceTable({}) {
       dataIndex: "serviceCode",
       key: "serviceCode",
       render: (serviceCode) => <a style={{ color: "blue" }}>{serviceCode}</a>,
-      sorter: {
-        compare: (a, b) => a.id - b.id,
-        multiple: 2,
-      },
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -213,7 +209,6 @@ function ServiceTable({}) {
       title: "Thời gian xử lí",
       dataIndex: "estimateTime",
       key: "estimateTime",
-      ...getColumnSearchProps("estimateTime"),
       render: (estimateTime) => {
         return <div>{estimateTime} phút</div>;
       },
@@ -239,8 +234,6 @@ function ServiceTable({}) {
       key: "statusName",
       dataIndex: "statusName",
       ...getColumnSearchProps("statusName"),
-      sorter: (a, b) => a.statusName.length - b.statusName.length,
-      sortDirections: ["descend", "ascend"],
       filters: [
         {
           value: "Đang có hiệu lực",

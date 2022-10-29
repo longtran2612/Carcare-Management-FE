@@ -211,9 +211,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                 >
                   <Select>
                     <Select.Option value="HOT">HOT</Select.Option>
-                    <Select.Option value="LIKE">Yêu thích</Select.Option>
-                    <Select.Option value="NEW">Mới</Select.Option>
-                    <Select.Option value="NEW">Thông thường</Select.Option>
+                    <Select.Option value="Yêu thích">Yêu thích</Select.Option>
+                    <Select.Option value="Mới">Mới</Select.Option>
+                    <Select.Option value="Thường">Thông thường</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>

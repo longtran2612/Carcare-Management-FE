@@ -27,30 +27,6 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <script
-            type="text/javascript"
-            src="https://unpkg.com/@ant-design/plots@latest/dist/plots.min.js"
-          ></script>
-          // Plots
-          <script
-            type="text/javascript"
-            src="https://unpkg.com/@ant-design/plots@latest/dist/plots.min.js"
-          ></script>
-          // Flowchart
-          <script
-            type="text/javascript"
-            src="https://unpkg.com/@ant-design/flowchart@latest/dist/flowchart.min.js"
-          ></script>
-          // Maps
-          <script
-            type="text/javascript"
-            src="https://unpkg.com/@ant-design/maps@latest/dist/maps.min.js"
-          ></script>
-          // Graphs
-          <script
-            type="text/javascript"
-            src="https://unpkg.com/@ant-design/graphs@latest/dist/graphs.min.js"
-          ></script>
         </body>
       </Html>
     );
