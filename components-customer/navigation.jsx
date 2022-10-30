@@ -9,7 +9,8 @@ import {
   UserOutlined,
   DownOutlined,
   HighlightOutlined,
-  ClearOutlined,BookOutlined
+  ClearOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { setLogout } from "redux/slices/authSlice";
@@ -42,69 +43,72 @@ export const CustomerNavigation = () => {
       });
   };
 
-  const handleMenu=()=>{
-    if(accessToken){
-      return(
+  const handleMenu = () => {
+    if (accessToken) {
+      return (
         <Menu>
-        <Menu.Item key="1">
-          <Link href="/my-account">
-            <a>
-              <UserOutlined /> Trang cá nhân
-            </a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item key="2">
-        <Link href="/my-account?key=2">
-            <a>
-              <ClearOutlined /> Dịch vụ đang sử dụng
-            </a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item key="3">
-        <Link href="/my-account?key=3">
-            <a>
-            <BookOutlined /> Lịch sử sử dụng dịch vụ
-            </a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item key="4">
-        <Link href="/my-account?key=4">
-            <a>
-              <SettingOutlined /> Đổi mật khẩu
-            </a>
-          </Link>
-        </Menu.Item>
-        <Menu.Divider />
-        <Menu.Item key="3" onClick={handleLogout}>
-          <LogoutOutlined /> Đăng xuất
-        </Menu.Item>
-      </Menu>
-      )
-    }else{
-      return(
+          <Menu.Item key="1">
+            <Link href="/customer/profile">
+              <a>
+                <UserOutlined /> Trang cá nhân
+              </a>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Link href="/customer/order">
+              <a>
+                <ClearOutlined /> Dịch vụ đang sử dụng
+              </a>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <Link href="/customer/bill">
+              <a>
+                <BookOutlined /> Lịch sử sử dụng dịch vụ
+              </a>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <Link href="/customer/profile?key=2">
+              <a>
+                <SettingOutlined /> Đổi mật khẩu
+              </a>
+            </Link>
+          </Menu.Item>
+          <Menu.Divider />
+          <Menu.Item key="3" onClick={handleLogout}>
+            <LogoutOutlined /> Đăng xuất
+          </Menu.Item>
+        </Menu>
+      );
+    } else {
+      return (
         <Menu>
-        <Menu.Item key="0">
-          <Link href="/login">
-            <a>
-              <LoginOutlined /> Đăng nhập
-            </a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item key="1">
-          <Link href="/registry">
-            <a>
-              <HighlightOutlined /> Đăng ký
-            </a>
-          </Link>
-        </Menu.Item>
-      </Menu>
-      )
+          <Menu.Item key="0">
+            <Link href="/login">
+              <a>
+                <LoginOutlined /> Đăng nhập
+              </a>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="1">
+            <Link href="/registry">
+              <a>
+                <HighlightOutlined /> Đăng ký
+              </a>
+            </Link>
+          </Menu.Item>
+        </Menu>
+      );
     }
-  }
-
+  };
 
   return (
-    <nav id="menu" className="navbar navbar-default navbar-fixed-top">
+    <nav
+      id="menu"
+      style={{ position: "static", top: 0, marginBottom: 0 }}
+      className="navbar navbar-default navbar-fixed-top"
+    >
       <div className="container">
         <div className="navbar-header">
           <button
@@ -132,23 +136,27 @@ export const CustomerNavigation = () => {
           id="bs-example-navbar-collapse-1"
         >
           <ul className="nav navbar-nav navbar-right">
-        
+            {accessToken && (
+              <>
+                <li>
+                  <Link href="/customer/bill">
+                    <a className="page-scroll">Hóa đơn</a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/customer/bill">
+                    <a className="page-scroll">Dịch vụ</a>
+                  </Link>
+                </li>
+              </>
+            )}
+
             <li>
-              <a href="#services" className="page-scroll">
-                Dịch vụ
-              </a>
-            </li>
-            <li>
-              <a href="#features" className="page-scroll">
-                Chức năng
-              </a>
-            </li>
-        
-            <li>
-              <a  className="page-scroll">
+              <a className="page-scroll">
                 <Dropdown overlay={handleMenu}>
                   <a onClick={(e) => e.preventDefault()}>
-                    {accessToken ? 'Cá nhân' : "Đăng ký/Đăng nhập"} <DownOutlined />
+                    {accessToken ? "Cá nhân" : "Đăng ký/Đăng nhập"}{" "}
+                    <DownOutlined />
                     {/* Cá nhân <DownOutlined /> */}
                   </a>
                 </Dropdown>

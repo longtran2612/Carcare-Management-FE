@@ -30,7 +30,7 @@ function HomePageCustomer() {
           minHeight: "100vh",
         }}
       >
-        <MyHeader />
+        {/* <MyHeader /> */}
         <Content>
           <CustomerNavigation />
           <CustomerHeader />

@@ -22,7 +22,7 @@ export const Features = (props) => {
             lg={6}
             xl={6}
             onClick={() => {
-              router.push(`/my-account?key=1`);
+              router.push(`/customer/profile`);
             }}
           >
             <Card
@@ -52,7 +52,7 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() => router.push(`/my-account?key=2`)}
+            onClick={() =>  router.push(`/customer/order`)}
           >
             <Card
               style={{
@@ -84,7 +84,7 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() => router.push(`/my-account?key=3`)}
+            onClick={() =>  router.push(`/customer/bill`)}
           >
             <Card
               style={{
@@ -115,7 +115,7 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() => router.push(`/my-account?key=4`)}
+            onClick={() =>  router.push(`/customer/profile`)}
           >
             {" "}
             <Card

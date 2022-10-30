@@ -29,7 +29,7 @@ import Loading from "components/Loading";
 const formatDate = "DD/MM/YYYY";
 import MyHeader from "components/Header";
 import { UserOutlined, LockOutlined, ClearOutlined } from "@ant-design/icons";
-import ChangePassword from "components-customer/ChangePassword/ChangePassword";
+import ChangePassword from "components-customer/ChangePassword/index.js";
 import Cookies from "js-cookie";
 const{Footer}=Layout;
 

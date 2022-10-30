@@ -3,7 +3,7 @@ import { Tabs, Layout } from "antd";
 import { CustomerNavigation } from "components-customer/navigation";
 import { UserOutlined, LockOutlined, ClearOutlined } from "@ant-design/icons";
 import { ProfileCustomer } from "components-customer/Profile";
-import ChangePassword from "components-customer/ChangePassword/ChangePassword";
+import ChangePassword from "components-customer/ChangePassword/index.js";
 import BillCustomer from "components-customer/bill";
 import ServiceCustomer from "components-customer/Service";
 import { useRouter } from "next/router";

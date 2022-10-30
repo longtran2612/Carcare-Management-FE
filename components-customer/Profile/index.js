@@ -92,7 +92,7 @@ export const ProfileCustomer = () => {
       };
       const res = await updateCustomer(id, body);
       setCustomerDetail(res.data.Data);
-      openNotification("Thành công","Cập nhật thông tin thành công","bottomRight");
+      openNotification("Thành công","Cập nhật thông tin thành công");
     } catch (error) {
       openNotification("Thất bại","","bottomRight");
     }
