@@ -59,25 +59,31 @@ const AdminPage = () => {
       >
         <Sider
           className="site-layout-background"
-          collapsible
-          onCollapse={(value) => setCollapsed(value)}
-          collapsed={collapsed}
+          // collapsible
+          // onCollapse={(value) => setCollapsed(value)}
           theme="dark"
           style={{
             overflow: "auto",
+            height: "100vh",
+            position: "fixed",
             left: 0,
             top: 0,
             bottom: 0,
           }}
         >
-          <Affix style={{ top: 0, left: 0 }}>
-            <SideBar
-              collapsed={collapsed}
-              handleOpenKey={(key) => setKey(key)}
-            />
-          </Affix>
+          {/* <Affix style={{ top: 0, left: 0 }}> */}
+          <SideBar
+            // collapsed={collapsed}
+            handleOpenKey={(key) => setKey(key)}
+          />
+          {/* </Affix> */}
         </Sider>
-        <Layout className="site-layout">
+        <Layout
+          style={{
+            marginLeft: 200,
+          }}
+          className="site-layout"
+        >
           <MyHeader />
           <Content
             className="site-layout-background content"

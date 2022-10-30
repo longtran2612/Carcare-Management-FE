@@ -28,13 +28,15 @@ function getItem(label, key, icon, children, type) {
 }
 
 const items = [
-  getItem("Cửa hàng", "1", <ShopOutlined />, [
+  getItem("Đơn hàng", "1", <ShopOutlined />, [
     getItem("Danh sách yêu cầu", "order"),
-    getItem("Vị trí xử lí", "car-slot"),
-    getItem("Hóa đơn", "bills"),
-  ]),
-  getItem("Đơn hàng ", "2", <BookOutlined />, [
     getItem("Danh sách đơn hàng", "order-not-request"),
+    getItem("Vị trí xử lý", "car-slot"),
+  ]),
+  getItem("Hóa đơn", "2", <BookOutlined />, [
+    getItem("Hóa đơn", "bills"),
+    getItem("Hóa đơn hủy", "bills"),
+   
   ]),
   getItem("Dịch vụ", "3", <ClearOutlined />, [
     getItem("Dịch vụ", "service"),

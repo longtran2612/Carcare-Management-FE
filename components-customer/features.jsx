@@ -21,7 +21,7 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onDoubleClick={() => {
+            onClick={() => {
               router.push(`/my-account?key=1`);
             }}
           >
@@ -52,7 +52,7 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onDoubleClick={() => router.push(`/my-account?key=2`)}
+            onClick={() => router.push(`/my-account?key=2`)}
           >
             <Card
               style={{
@@ -84,7 +84,7 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onDoubleClick={() => router.push(`/my-account?key=3`)}
+            onClick={() => router.push(`/my-account?key=3`)}
           >
             <Card
               style={{
@@ -115,7 +115,7 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onDoubleClick={() => router.push(`/my-account?key=4`)}
+            onClick={() => router.push(`/my-account?key=4`)}
           >
             {" "}
             <Card

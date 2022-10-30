@@ -256,7 +256,6 @@ function OrderNotRequestTable({}) {
     let dataGetOrder = {
       keyword: "",
       pageSize: 100,
-      status: status,
       pageNumber: 0,
       sort: [
         {
@@ -265,6 +264,9 @@ function OrderNotRequestTable({}) {
         },
       ],
     };
+    if(status){
+     dataGetOrder.status = status
+    }
     try {
       const res = await getOrders(dataGetOrder);
       if (res.status === 200) {
@@ -365,6 +367,7 @@ function OrderNotRequestTable({}) {
                       onChange={(value) => setStatus(value)}
                       value={status}
                     >
+                       <Option value={null}>Tất cả</Option>
                       <Option value={10}>Đã hoàn thành</Option>
                       <Option value={2}>Đang xử lý</Option>
                       <Option value={-100}>Đã hủy</Option>

@@ -53,7 +53,7 @@ const CarSlot = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(err.response.data.message[0]);
+      openNotification(error.response.data.message[0]);
     }
   };
   console.log("carSlots", carSlots);
