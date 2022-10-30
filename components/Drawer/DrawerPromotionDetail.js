@@ -46,6 +46,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         customerType: response.data.Data[0].customerType,
         limitUsedTime: response.data.Data[0].limitUsedTime,
         limitPromotionAmount: response.data.Data[0].limitPromotionAmount,
+        promotionUsedAmount: response.data.Data[0].promotionUsedAmount,
       });
       // setLoading(false);
     } catch (error) {
@@ -163,9 +164,9 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
           validateMessages={validateMessages}
         >
           <Divider>
-            <Typography.Title level={4}> Chi tiết khuyến mãi</Typography.Title>{" "}
+            <span>Chi tiết khuyến mãi</span>
           </Divider>
-          <Row gutter={[16, 4]}>
+          <Row gutter={[16, 2]}>
             <Col span={24}>
               <Form.Item label="Mô tả" name="description">
                 <TextArea rows={2} />
@@ -268,17 +269,6 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
-                <Select mode="multiple">
-                  {categories.map((category) => (
-                    <Select.Option value={category.id}>
-                      {category.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={24}>
               <Form.Item label="Dịch vụ áp dụng" name="serviceIds">
                 <Select maxLength={2} mode="multiple">
                   {services.map((service) => (
@@ -289,6 +279,18 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 </Select>
               </Form.Item>
             </Col>
+            <Col span={12}>
+              <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
+                <Select mode="multiple">
+                  {categories.map((category) => (
+                    <Select.Option value={category.id}>
+                      {category.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+           
             {promotionDetail?.type === "GIFT" && (
               <Col span={12}>
                 <Form.Item label="Dịch vụ khuyến mãi" name="serviveReceive">
@@ -330,6 +332,21 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 </Form.Item>
               </Col>
             )}
+            <Col span={12}>
+                <Form.Item
+                  label="Tổng tiền đã giảm"
+                  name="promotionUsedAmount"
+                >
+                  <InputNumber
+                    addonAfter="Đ"
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    min={0}
+                  />
+                </Form.Item>
+              </Col>
           </Row>
         </Form>
       </Drawer>
