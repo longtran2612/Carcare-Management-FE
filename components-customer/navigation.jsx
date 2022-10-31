@@ -55,20 +55,27 @@ export const CustomerNavigation = () => {
             </Link>
           </Menu.Item>
           <Menu.Item key="2">
+            <Link href="/customer">
+              <a>
+                <ClearOutlined /> Chức năng
+              </a>
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="3">
             <Link href="/customer/order">
               <a>
                 <ClearOutlined /> Dịch vụ đang sử dụng
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="3">
+          <Menu.Item key="4">
             <Link href="/customer/bill">
               <a>
                 <BookOutlined /> Lịch sử sử dụng dịch vụ
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="4">
+          <Menu.Item key="5">
             <Link href="/customer/profile?key=2">
               <a>
                 <SettingOutlined /> Đổi mật khẩu
@@ -76,7 +83,7 @@ export const CustomerNavigation = () => {
             </Link>
           </Menu.Item>
           <Menu.Divider />
-          <Menu.Item key="3" onClick={handleLogout}>
+          <Menu.Item key="6" onClick={handleLogout}>
             <LogoutOutlined /> Đăng xuất
           </Menu.Item>
         </Menu>
@@ -144,7 +151,7 @@ export const CustomerNavigation = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/customer/bill">
+                  <Link href="/customer/order">
                     <a className="page-scroll">Dịch vụ</a>
                   </Link>
                 </li>

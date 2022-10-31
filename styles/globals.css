@@ -108,6 +108,9 @@ ant-card-head-title{
 .background-login{
   background: linear-gradient(to top right, #AE9CE1, #F5E7DB);
 }
+.background-customer{
+  background: linear-gradient(to top right, #d2cce2, #f2e9e1);
+}
 .background-login-white{
   background: #fff
 }

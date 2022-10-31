@@ -10,9 +10,6 @@ export default function CustomerPage() {
     <>
       <CustomerNavigation />
       <Layout.Content
-        style={{
-          paddingTop: "4rem",
-        }}
       >
         <Features />
       </Layout.Content>
