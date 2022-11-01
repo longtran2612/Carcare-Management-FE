@@ -152,8 +152,8 @@ const CarSlotDetail = ({ carSlotId }) => {
         return (
           <Tag
             style={{
-              width: "150px",
-              height: "20px",
+              height: "30px",
+              padding: "5px",
               fontSize: "15px",
             }}
             color="green"
@@ -161,7 +161,7 @@ const CarSlotDetail = ({ carSlotId }) => {
             Chưa sử dụng
           </Tag>
         );
-      case "BOOKED":
+      case "INAVAILABLE":
         return (
           <Tag
             style={{
@@ -171,7 +171,7 @@ const CarSlotDetail = ({ carSlotId }) => {
             }}
             color="red"
           >
-            Đã đặt trước
+            Dang sửa chữa
           </Tag>
         );
       case "IN_USE":
@@ -569,7 +569,7 @@ const CarSlotDetail = ({ carSlotId }) => {
           {carSlotDetail?.status == "AVAILABLE" && (
             <Row className="content-white" span={24}>
               <Col span={24}>
-                <Typography.Title className="content-center" level={2}>
+                <Typography.Title className="content-center" style={{color:'#829822'}} level={2}>
                   Vị trí đang trống !!! vui lòng chọn yêu cầu sử lý
                 </Typography.Title>
               </Col>
@@ -629,7 +629,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                   margin: "0 8px",
                 }}
                 onClick={() => {
-                  setShowUpdateServiceOrder(false);
+                  setShowConfimComplete(false);
                 }}
               >
                 Hủy

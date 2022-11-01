@@ -339,6 +339,11 @@ const BillTable = () => {
     handleGetbills();
   }, []);
 
+  const handlepromotionDetails = (data) => {
+    if(data > 0)
+    return true;
+  }
+
   return (
     <>
       <Table
@@ -607,7 +612,7 @@ const BillTable = () => {
                   </tr>
                 </>
               ))}
-              {billDetail?.totalPromotionAmount ? 0 (
+              {handlepromotionDetails(billDetail?.totalPromotionAmount) && (
                 <>
                   <tr className="item">
                     <td>Khuyến mãi</td>
@@ -618,7 +623,7 @@ const BillTable = () => {
                     </td>
                   </tr>
                 </>
-              ): null}
+              )}
 
               <tr className="total">
                 <td></td>

@@ -112,6 +112,13 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
     }
   };
 
+  const handlepromotionDetails = () => {
+    if(totalPromotionAmount() > 0)
+    return true;
+
+  }
+
+
   const onFinish = async (values) => {
     const dataCreateBill = {
       orderId: order.id,
@@ -140,32 +147,6 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       console.log(error);
     }
   };
-  const onFinishNoPrint = async (values) => {
-    const dataCreateBill = {
-      orderId: order.id,
-      paymentAmount: finalTotalPrice(),
-      paymentType: values.paymentType,
-    };
-    if (promotionDetails.length > 0) {
-      dataCreateBill.promotionCodes = [
-        promotionDetails.map((promotion) => promotion.id),
-      ];
-      dataCreateBill.totalPromotionAmount = totalPromotionAmount();
-    }
-    if (values.paymentType === "CARD") {
-      dataCreateBill.cardId = values.cardId;
-    }
-    console.log(dataCreateBill);
-    try {
-      const res = await createBill(dataCreateBill);
-      openNotification("Thành công!", "Tạo hóa đơn thành công!");
-      handleCancel();
-      onSuccess(res.data);
-    } catch (error) {
-      openNotification(error.response.data.message[0]);
-    }
-  };
-
   const onchangePaymentType = (value) => {
     console.log(value);
     if (value === "CASH") {
@@ -579,7 +560,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                   </tr>
                 </>
               ))}
-              {totalPromotionAmount() ? 0 (
+              {handlepromotionDetails() && (
                 <>
                   <tr className="item">
                     <td>Khuyến mãi</td>
@@ -590,7 +571,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                     </td>
                   </tr>
                 </>
-              ): null}
+              )}
 
               <tr className="total">
                 <td></td>

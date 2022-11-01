@@ -23,7 +23,7 @@ import {
   ClearOutlined,
   SearchOutlined,
   PlusOutlined,
-  PrinterTwoTone,
+  PrinterTwoTone, 
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
@@ -193,6 +193,14 @@ function OrderNotRequestTable({}) {
       key: "totalEstimateTime",
       render: (totalEstimateTime) => {
         return <div>{totalEstimateTime} phút</div>;
+      },
+    },
+    {
+      title: "Tổng tiền dịch vụ",
+      dataIndex: "totalServicePrice",
+      key: "totalServicePrice",
+      render: (totalServicePrice) => {
+        return formatMoney(totalServicePrice);
       },
     },
 

@@ -213,6 +213,14 @@ function OrderTable({}) {
       },
     },
     {
+      title: "Tổng tiền dịch vụ",
+      dataIndex: "totalServicePrice",
+      key: "totalServicePrice",
+      render: (totalServicePrice) => {
+        return formatMoney(totalServicePrice);
+      },
+    },
+    {
       title: "Thời gian tạo",
       dataIndex: "createDate",
       key: "createDate",
