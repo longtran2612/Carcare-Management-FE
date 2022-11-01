@@ -10,6 +10,7 @@ export default function CustomerPage() {
     <>
       <CustomerNavigation />
       <Layout.Content
+      className="background-customer"
       >
         <Features />
       </Layout.Content>

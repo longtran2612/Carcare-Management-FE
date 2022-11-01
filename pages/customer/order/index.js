@@ -37,8 +37,8 @@ export default function CustomerOrderPage() {
             </Button>
             <div
               style={{
-                margin: "0.4rem",
-                padding: "1.5rem",
+                // margin: "0.4rem",
+                // padding: "1.5rem",
                 minHeight: "80vh",
               }}
             >

@@ -96,40 +96,36 @@ const BillCustomer = () => {
               setShowDetail(true);
             }}
             extra={<Image width={170} height={170} src={payment_completed} />}
-            style={{ 
-              cursor: "pointer" ,
+            style={{
+              cursor: "pointer",
               border: "1px solid #9B9A9A",
               margin: "10px",
               borderRadius: "8px",
-              padding: "10px",
+              padding: "5px",
+              backgroundColor: "white",
               boxShadow: "0px 0px 3px 0px #9B9A9A",
             }}
-
           >
             <List.Item.Meta
               title={
-                <Typography.Title style={{color:"#1C1266"}} level={4}>#{item.billCode}</Typography.Title>
-              }
-              description={
-                <>
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <DescriptionItem title="Mã xe" content={item.carCode} />
-                    </Col>
-                    <Col span={8}>
-                      <DescriptionItem title="Biển số" content={item.carName} />
-                    </Col>
-                    <Col span={8}>
-                      <DescriptionItem
-                        title="Tên xe"
-                        content={item.carLicensePlate}
-                      />
-                    </Col>
-                  </Row>
-                </>
+                <Typography.Title style={{ color: "#1C1266",margin:'0' }} level={4}>
+                  #{item.billCode}
+                </Typography.Title>
               }
             />
             <Row gutter={16}>
+              <Col span={8}>
+                <DescriptionItem title="Mã xe" content={item.carCode} />
+              </Col>
+              <Col span={8}>
+                <DescriptionItem title="Biển số" content={item.carName} />
+              </Col>
+              <Col span={8}>
+                <DescriptionItem
+                  title="Tên xe"
+                  content={item.carLicensePlate}
+                />
+              </Col>
               <Col span={8}>
                 <DescriptionItem
                   title="Tổng tiền dịch vụ"

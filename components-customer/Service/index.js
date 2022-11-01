@@ -110,32 +110,29 @@ const ServiceCustomer = () => {
               borderRadius: "8px",
               padding: "10px",
               boxShadow: "0px 0px 3px 0px #9B9A9A",
+              backgroundColor: "white",
             }}
           >
             <List.Item.Meta
               title={
-                <Typography.Title style={{color:"#1C1266"}} level={4}>#{item.orderCode}</Typography.Title>
-              }
-              description={
-                <>
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <DescriptionItem title="Mã xe" content={item.carCode} />
-                    </Col>
-                    <Col span={8}>
-                      <DescriptionItem title="Biển số" content={item.carName} />
-                    </Col>
-                    <Col span={8}>
-                      <DescriptionItem
-                        title="Tên xe"
-                        content={item.carLicensePlate}
-                      />
-                    </Col>
-                  </Row>
-                </>
+                <Typography.Title style={{ color: "#1C1266" }} level={4}>
+                  #{item.orderCode}
+                </Typography.Title>
               }
             />
             <Row gutter={16}>
+              <Col span={8}>
+                <DescriptionItem title="Mã xe" content={item.carCode} />
+              </Col>
+              <Col span={8}>
+                <DescriptionItem title="Biển số" content={item.carName} />
+              </Col>
+              <Col span={8}>
+                <DescriptionItem
+                  title="Tên xe"
+                  content={item.carLicensePlate}
+                />
+              </Col>
               <Col span={8}>
                 <DescriptionItem title="Trạng thái" content={item.statusName} />
               </Col>

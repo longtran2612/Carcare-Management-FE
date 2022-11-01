@@ -37,9 +37,9 @@ export default function CustomerBillPage() {
             </Button>
             <div
               style={{
-                margin: "0.4rem",
-                padding: "1.5rem",
-                minHeight: "80vh",
+                margin: "0.2rem",
+                // padding: "1.5rem",
+                // minHeight: "80vh",
               }}
             >
               <BillCustomer />
