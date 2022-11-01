@@ -18,7 +18,7 @@ import payment_completed from "public/images/payment_complete.gif";
 import Cookies from "js-cookie";
 
 const { Title } = Typography;
-const formatDate = "HH:ss DD/MM/YYYY";
+const formatDate = "HH:mm DD/MM/YYYY";
 
 const DescriptionItem = ({ title, content }) => (
   <div className="site-description-item-profile-wrapper">
@@ -80,13 +80,11 @@ const BillCustomer = () => {
     <>
       <List
         itemLayout="vertical"
-        size="large"
+        size="small"
         pagination={{
-          onChange: (page) => {
-            console.log(page);
-          },
-          pageSize: 5,
+          pageSize: 3,
         }}
+        style={{ overflow: "auto", height: "520px" }}
         dataSource={bills}
         renderItem={(item) => (
           <List.Item
@@ -108,7 +106,10 @@ const BillCustomer = () => {
           >
             <List.Item.Meta
               title={
-                <Typography.Title style={{ color: "#1C1266",margin:'0' }} level={4}>
+                <Typography.Title
+                  style={{ color: "#1C1266", margin: "0" }}
+                  level={5}
+                >
                   #{item.billCode}
                 </Typography.Title>
               }
@@ -118,11 +119,11 @@ const BillCustomer = () => {
                 <DescriptionItem title="Mã xe" content={item.carCode} />
               </Col>
               <Col span={8}>
-                <DescriptionItem title="Biển số" content={item.carName} />
+                <DescriptionItem title="Tên xe" content={item.carName} />
               </Col>
               <Col span={8}>
                 <DescriptionItem
-                  title="Tên xe"
+                  title="Biển số"
                   content={item.carLicensePlate}
                 />
               </Col>
@@ -178,15 +179,15 @@ const BillCustomer = () => {
         <Divider>
           <Title level={5}>Hóa đơn mã: {billDetail.billCode}</Title>
         </Divider>
-        <p className="site-description-item-profile-p">Xe</p>
+        <p className="site-description-item-profile-p">Xe xử lý</p>
         <Row>
-          <Col span={8}>
+          {/* <Col span={8}>
             <DescriptionItem title="Mã xe" content={billDetail.carCode} />
-          </Col>
-          <Col span={8}>
+          </Col> */}
+          <Col span={12}>
             <DescriptionItem title="Tên xe" content={billDetail.carName} />
           </Col>
-          <Col span={8}>
+          <Col span={6}>
             <DescriptionItem
               title="Biển số"
               content={billDetail.carLicensePlate}
@@ -198,18 +199,18 @@ const BillCustomer = () => {
         <Row>
           {billDetail?.services?.map((item, index) => (
             <>
-              <Col span={6}>
+              {/* <Col span={6}>
                 <DescriptionItem
                   title="Mã dịch vụ"
                   content={item?.serviceCode}
                 />
-              </Col>
-              <Col span={6}>
+              </Col> */}
+              <Col span={12}>
                 <DescriptionItem title="Tên dịch vụ" content={item?.name} />
               </Col>
               <Col span={6}>
                 <DescriptionItem
-                  title="Thời gian sử lý"
+                  title="Thời gian xử lý"
                   content={item?.estimateTime + " phút"}
                 />
               </Col>
@@ -226,16 +227,16 @@ const BillCustomer = () => {
           <>
             <Divider />
             <p className="site-description-item-profile-p">
-              Khuyến mãi sử dụng
+              Khuyến mãi xử dụng
             </p>
             <Row>
-              <Col span={6}>
+              {/* <Col span={8}>
                 <DescriptionItem
-                  title="Mã khuyến mãi sử dụng"
+                  title="Mã khuyến mãi xử dụng"
                   content={item?.promotionDetailCode}
                 />
-              </Col>
-              <Col span={6}>
+              </Col> */}
+              <Col span={12}>
                 <DescriptionItem title="Mô tả" content={item?.description} />
               </Col>
               <Col span={6}>
@@ -259,7 +260,7 @@ const BillCustomer = () => {
         <Row>
           <Col span={12}>
             <DescriptionItem
-              title="Tổng Thời gian sử lý"
+              title="Tổng Thời gian xử lý"
               content={totalTimeService() + " phút"}
             />
           </Col>

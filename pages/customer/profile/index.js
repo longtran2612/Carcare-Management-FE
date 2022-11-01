@@ -16,16 +16,17 @@ export default function CustomerProfilePage() {
       <CustomerNavigation />
       <Layout.Content
         style={{
-          paddingLeft: "2rem",
-          paddingRight: "2rem",
+          padding:'1rem',
+          backgroundColor: "#EAE3E3",
         }}
       >
         <Row>
-          <Col style={{margin:'10px',borderRadius: "5px",}} className="background-customer" span={24}>
+          <Col style={{borderRadius: "5px",backgroundColor:"white"}} span={24}>
           <Button
+          type="dashed" 
               style={{
                 paddingLeft: "20px",
-                marginTop: "5px",
+                marginTop: "10px",
                 marginLeft: "15px",
               }}
               onClick={() => router.back()}
@@ -37,7 +38,7 @@ export default function CustomerProfilePage() {
               style={{
                 margin: "0.4rem",
                 padding: "1.5rem",
-                minHeight: "80vh",
+                minHeight: "75vh",
                 
               }}
               

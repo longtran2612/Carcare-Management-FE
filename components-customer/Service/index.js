@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { getOrders } from "pages/api/orderAPI";
 import Loading from "components/Loading";
-import { List, Col, Row, Typography } from "antd";
+import { List, Col, Row, Typography, Tag } from "antd";
+import { SyncOutlined } from "@ant-design/icons";
 import { formatMoney } from "utils/format";
 import moment from "moment";
 import Image from "next/image";
 import Cookies from "js-cookie";
-import payment_completed from "public/images/payment_complete.gif";
 import slot_active from "public/images/slot_active.gif";
 import order_cancel from "public/images/order_cancel.png";
 import order_complete from "public/images/order_complete.gif";
 
-const formatDate = "HH:ss DD/MM/YYYY";
+const formatDate = "HH:mm DD/MM/YYYY";
 
 const DescriptionItem = ({ title, content }) => (
   <div className="site-description-item-profile-wrapper">
@@ -66,6 +66,52 @@ const ServiceCustomer = () => {
     }, 0);
   };
 
+  const convertOrderStatus = (status) => {
+    console.log("statusss", status);
+    switch (status) {
+      case 100:
+        return (
+          <Tag
+            style={{
+              height: "30px",
+              padding: "5px",
+              fontSize: "15px",
+            }}
+            color="green"
+          >
+            Đã hoàn thành
+          </Tag>
+        );
+      case -100:
+        return (
+          <Tag
+            style={{
+              height: "30px",
+              padding: "5px",
+              fontSize: "15px",
+            }}
+            color="red"
+          >
+            Đã hủy
+          </Tag>
+        );
+      case 2:
+        return (
+          <Tag
+            style={{
+              height: "30px",
+              padding: "5px",
+              fontSize: "15px",
+            }}
+            icon={<SyncOutlined spin />}
+            color="processing"
+          >
+            Đang xử lý
+          </Tag>
+        );
+    }
+  };
+
   useEffect(() => {
     handleGetOrders();
   }, []);
@@ -87,13 +133,11 @@ const ServiceCustomer = () => {
     <>
       <List
         itemLayout="vertical"
-        size="large"
+        size="small"
         pagination={{
-          onChange: (page) => {
-            console.log(page);
-          },
-          pageSize: 5,
+          pageSize: 3,
         }}
+        style={{ overflow: "auto", height: "520px" }}
         dataSource={orders}
         renderItem={(item) => (
           <List.Item
@@ -115,26 +159,29 @@ const ServiceCustomer = () => {
           >
             <List.Item.Meta
               title={
-                <Typography.Title style={{ color: "#1C1266" }} level={4}>
+                <Typography.Title style={{ color: "#1C1266" }} level={5}>
                   #{item.orderCode}
                 </Typography.Title>
               }
             />
             <Row gutter={16}>
-              <Col span={8}>
+              {/* <Col span={8}>
                 <DescriptionItem title="Mã xe" content={item.carCode} />
-              </Col>
+              </Col> */}
               <Col span={8}>
-                <DescriptionItem title="Biển số" content={item.carName} />
+                <DescriptionItem title="Tên xe" content={item.carName} />
               </Col>
               <Col span={8}>
                 <DescriptionItem
-                  title="Tên xe"
+                  title="Biển số"
                   content={item.carLicensePlate}
                 />
               </Col>
               <Col span={8}>
-                <DescriptionItem title="Trạng thái" content={item.statusName} />
+                <DescriptionItem
+                  title="Trạng thái"
+                  content={convertOrderStatus(item?.status)}
+                />
               </Col>
               <Col span={8}>
                 <DescriptionItem
@@ -165,8 +212,8 @@ const ServiceCustomer = () => {
               <Col span={8}>
                 <DescriptionItem
                   title="Thời gian hoàn thành dự kiến"
-                  content={moment(item?.orderStartExecuting)
-                    .add(totalTimeService(), "m")
+                  content={moment(item?.carExecutingDate)
+                    .add(item?.totalEstimateTime, "m")
                     .format(formatDate)}
                 />
               </Col>
