@@ -16,7 +16,12 @@ import {
   Avatar,
   List,
 } from "antd";
-import { LoadingOutlined, TagsOutlined,SyncOutlined } from "@ant-design/icons";
+import {
+  LoadingOutlined,
+  TagsOutlined,
+  SyncOutlined,
+  PlusCircleFilled,
+} from "@ant-design/icons";
 import { getOrderById } from "pages/api/orderAPI";
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
@@ -24,6 +29,7 @@ import ModalCreateBill from "components/Modal/ModalCreateBill";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
+import UpDateServiceOrder from "components/Modal/ModalUpdateServiceOrder";
 import { getAllPromotionUseable } from "pages/api/promotionDetail";
 
 const { Title } = Typography;
@@ -38,6 +44,8 @@ export const OrderNotRequestDetail = ({ orderId }) => {
   const [showCreateBill, setShowCreateBill] = useState(false);
 
   const [step, setStep] = useState(0);
+
+  const [showUpdateServiceOrder, setShowUpdateServiceOrder] = useState(false);
 
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
@@ -64,7 +72,6 @@ export const OrderNotRequestDetail = ({ orderId }) => {
 
   useEffect(() => {
     getOrder();
-   
   }, [orderId]);
 
   useEffect(() => {
@@ -130,11 +137,11 @@ export const OrderNotRequestDetail = ({ orderId }) => {
       case 1:
         return (
           <Tag
-          tyle={{
-            height: "30px",
-            alignItems: "center",
-            fontSize: "15px",
-          }}
+            tyle={{
+              height: "30px",
+              alignItems: "center",
+              fontSize: "15px",
+            }}
             color="white"
           >
             Chờ xử lý
@@ -195,6 +202,10 @@ export const OrderNotRequestDetail = ({ orderId }) => {
         );
     }
   };
+  const handleSuccessUPdateOrder = () => {
+    setShowUpdateServiceOrder(false);
+    getOrder();
+  };
 
   return (
     <>
@@ -203,7 +214,8 @@ export const OrderNotRequestDetail = ({ orderId }) => {
       </Button>
       <div className="carslot-content--header">
         <Title style={{ padding: "0px" }} level={3}>
-          Thông tin đơn hàng <span style={{ color: "blue" }}>#{order?.orderCode}</span>
+          Thông tin đơn hàng{" "}
+          <span style={{ color: "blue" }}>#{order?.orderCode}</span>
         </Title>
         <div> {convertOrderStatus()}</div>
       </div>
@@ -425,6 +437,19 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                           Dịch vụ sử dụng
                         </span>
                       </Col>
+                      {order?.status === 1 ||
+                        (order?.status === 2 && (
+                          <Col span={12}>
+                            <Button
+                              style={{ float: "right" }}
+                              type="primary"
+                              icon={<PlusCircleFilled />}
+                              onClick={() => setShowUpdateServiceOrder(true)}
+                            >
+                              Thêm dịch vụ
+                            </Button>
+                          </Col>
+                        ))}
                     </Row>
                   </>
                 )}
@@ -549,6 +574,12 @@ export const OrderNotRequestDetail = ({ orderId }) => {
           />
         </>
       </Drawer>
+      <UpDateServiceOrder
+        show={showUpdateServiceOrder}
+        order={order}
+        handleCancel={() => setShowUpdateServiceOrder(false)}
+        onSuccess={() => handleSuccessUPdateOrder()}
+      />
       <ModalCreateBill
         order={order}
         show={showCreateBill}
