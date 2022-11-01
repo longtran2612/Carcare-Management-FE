@@ -607,7 +607,7 @@ const BillTable = () => {
                   </tr>
                 </>
               ))}
-              {billDetail?.totalPromotionAmount && (
+              {billDetail?.totalPromotionAmount ? 0 (
                 <>
                   <tr className="item">
                     <td>Khuyến mãi</td>
@@ -618,7 +618,7 @@ const BillTable = () => {
                     </td>
                   </tr>
                 </>
-              )}
+              ): null}
 
               <tr className="total">
                 <td></td>

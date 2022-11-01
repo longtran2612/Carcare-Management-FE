@@ -520,9 +520,9 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                         Order #: {order?.orderCode}
                         <br />
                         Ngày tạo:{" "}
-                        {moment(order?.createDate).format("HH:ss DD/MM/YYYY")}
+                        {moment(order?.createDate).format("HH:mm DD/MM/YYYY")}
                         <br />
-                        Ngày thanh toán: {moment().format("HH:ss DD/MM/YYYY")}
+                        Ngày thanh toán: {moment().format("HH:mm DD/MM/YYYY")}
                       </td>
                     </tr>
                   </table>
@@ -579,7 +579,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                   </tr>
                 </>
               ))}
-              {promotionDetails && (
+              {totalPromotionAmount() ? 0 (
                 <>
                   <tr className="item">
                     <td>Khuyến mãi</td>
@@ -590,7 +590,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                     </td>
                   </tr>
                 </>
-              )}
+              ): null}
 
               <tr className="total">
                 <td></td>
