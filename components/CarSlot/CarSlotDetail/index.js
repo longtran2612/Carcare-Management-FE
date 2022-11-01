@@ -165,7 +165,6 @@ const CarSlotDetail = ({ carSlotId }) => {
         return (
           <Tag
             style={{
-              width: "150px",
               height: "30px",
               alignItems: "center",
               fontSize: "15px",
@@ -179,7 +178,6 @@ const CarSlotDetail = ({ carSlotId }) => {
         return (
           <Tag
             style={{
-              width: "150px",
               height: "30px",
               padding: "5px",
               fontSize: "15px",
@@ -187,7 +185,7 @@ const CarSlotDetail = ({ carSlotId }) => {
             icon={<SyncOutlined spin />}
             color="processing"
           >
-            Đang sử dụng
+            Đang xử lý
           </Tag>
         );
     }
@@ -340,14 +338,14 @@ const CarSlotDetail = ({ carSlotId }) => {
                   >
                     <Steps current={step} className="site-navigation-steps">
                       <Steps.Step
-                        title="Tiếp nhận"
+                        title="Tiếp nhận yêu cầu"
                         status="finish"
                         description={
                           moment(order?.createDate).format(formatDate) || ""
                         }
                       />
                       <Steps.Step
-                        title="Xử lý"
+                        title="Băt đầu xử lý"
                         status="process"
                         icon={<LoadingOutlined />}
                         description={

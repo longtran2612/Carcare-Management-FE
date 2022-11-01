@@ -30,7 +30,7 @@ export default function LoginPage() {
       const res = await login(values);
       dispatch(setLogin(res.data.Data));
       if(res.data.Data.roles == "ROLE_CUSTOMER"){
-        router.push("/home");
+        router.push("/customer");
         const customer = await getCustomerByPhone(res.data.Data.username);
         Cookies.set("id", customer.data.Data.id);
       }
