@@ -1,3 +1,5 @@
+import { useState } from "react";
+import Cookies from "js-cookie";
 import { Row, Col, Card, Typography } from "antd";
 import Image from "next/image";
 import feature_1 from "public/images/user-default.png";
@@ -7,6 +9,8 @@ import feature_4 from "public/images/18.svg";
 import { useRouter } from "next/router";
 export const Features = (props) => {
   const router = useRouter();
+
+  const [accessToken, setAccessToken] = useState(Cookies.get("accessToken"));
 
   return (
     <div id="features" className="text-center">
@@ -21,7 +25,7 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() =>  router.push(`/customer/order`)}
+            onClick={() => {accessToken ? router.push(`/customer/order`) :router.push('/login')}  }
           >
             <Card
               style={{
@@ -53,7 +57,7 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() =>  router.push(`/customer/order`)}
+            onClick={() => {accessToken ? router.push(`/customer/order`) :router.push('/login')}  }
           >
             <Card
               style={{
@@ -84,7 +88,7 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() =>  router.push(`/customer/bill`)}
+            onClick={() => {accessToken ? router.push(`/customer/bill`) :router.push('/login')}  }
           >
             {" "}
             <Card
@@ -113,9 +117,8 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() => {
-              router.push(`/customer/profile`);
-            }}
+            onClick={() => {accessToken ? router.push(`/customer/profile`) :router.push('/login')}  }
+
           >
             <Card
               style={{

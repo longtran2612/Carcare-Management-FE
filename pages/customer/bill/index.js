@@ -1,20 +1,23 @@
-import React, { useState } from "react";
+import React,{useState,useEffect} from "react";
 import { Tabs, Layout, Button, Col, Row } from "antd";
 import { RollbackOutlined } from "@ant-design/icons";
 import BillCustomer from "components-customer/bill";
 import Loading from "components/Loading";
 import { useRouter } from "next/router";
 import { CustomerNavigation } from "components-customer/navigation";
+import Cookies from "js-cookie";
 
 export default function CustomerBillPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+ 
+
   return (
     <>
       <CustomerNavigation />
       <Layout.Content
         style={{
-          padding:'1rem',
+          padding: "1rem",
           backgroundColor: "#EAE3E3",
         }}
       >
@@ -47,7 +50,6 @@ export default function CustomerBillPage() {
           </Col>
         </Row>
       </Layout.Content>
-      <Loading loading={loading} />
     </>
   );
 }

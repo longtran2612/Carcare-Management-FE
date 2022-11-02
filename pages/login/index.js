@@ -21,6 +21,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
+
   const router = useRouter();
 
   const onFinish = async (values)=>{
@@ -29,19 +30,21 @@ export default function LoginPage() {
     try{
       const res = await login(values);
       dispatch(setLogin(res.data.Data));
-      if(res.data.Data.roles == "ROLE_CUSTOMER"){
+      const roles = Cookies.get("roles");
+      if(roles === "ROLE_CUSTOMER"){
         router.push("/customer");
         const customer = await getCustomerByPhone(res.data.Data.username);
         Cookies.set("id", customer.data.Data.id);
       }
-      if(res.data.Data.roles == "ROLE_USER"){
+      if(roles == "ROLE_USER" || roles == "ROLE_ADMIN"){
         router.push("/admin");
       }
+      setLoading(false);
     }catch(err){
-      message.error(err.response.data.message[0]);
       message.error("Tài khoản hoặc mật khẩu không chính xác");
+      setLoading(false);
     }
-    setLoading(false);
+
   }
 
   return (

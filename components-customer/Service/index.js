@@ -37,7 +37,7 @@ const DescriptionItem = ({ title, content }) => (
     {content}
   </div>
 );
-const ServiceCustomer = () => {
+const ServiceCustomer = ({status}) => {
   const [orders, setOrders] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [showDetail, setShowDetail] = useState(false);
@@ -51,7 +51,7 @@ const ServiceCustomer = () => {
       keyword: username,
       pageSize: 20,
       pageNumber: 0,
-      status: 2,
+      status: status,
       sort: [
         {
           key: "createDate",
@@ -160,7 +160,7 @@ const ServiceCustomer = () => {
 
   useEffect(() => {
     handleGetOrders();
-  }, []);
+  }, [status]);
 
   useEffect(() => {
     if (orderDetail) {

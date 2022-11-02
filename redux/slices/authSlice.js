@@ -19,6 +19,7 @@ const authSlice = createSlice({
       Cookies.set("accessToken", action.payload.accessToken);
       Cookies.set("username", action.payload.username);
       Cookies.set("refreshToken", action.payload.refreshToken);
+      Cookies.set("roles", action.payload.roles);
     },
     setLogout(state) {
       state.accessToken = "";
@@ -29,6 +30,7 @@ const authSlice = createSlice({
       Cookies.remove("username");
       Cookies.remove("refreshToken");
       Cookies.remove("id");
+      Cookies.remove("roles");
     }
   },
   

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React,{useState,useEffect} from "react";
 import { Tabs, Layout, Button, Col, Row } from "antd";
 import { RollbackOutlined } from "@ant-design/icons";
 import { ProfileCustomer } from "components-customer/Profile";
 import ChangePassword from "components-customer/ChangePassword";
-
+import Cookies from "js-cookie";
 import { CustomerNavigation } from "components-customer/navigation";
 import Loading from "components/Loading";
 import { useRouter } from "next/router";
@@ -11,6 +11,12 @@ import { useRouter } from "next/router";
 export default function CustomerProfilePage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [accessToken, setAccessToken] = useState(Cookies.get("accessToken"));
+  useEffect(() => {
+    if(!accessToken){
+      router.push("/login");
+    } 
+  }, [accessToken]);
   return (
     <>
       <CustomerNavigation />

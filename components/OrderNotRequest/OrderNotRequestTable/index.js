@@ -31,7 +31,9 @@ import { openNotification } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 
 import { OrderNotRequestDetail } from "../OrderNotRequestDetail";
-const { Option } = Select;
+
+
+
 function OrderNotRequestTable({}) {
   const [orders, setOrders] = useState([]);
   const [modalOrder, setModalOrder] = useState(false);

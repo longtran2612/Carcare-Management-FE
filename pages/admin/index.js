@@ -13,6 +13,7 @@ const AdminPage = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [key, setKey] = useState("car-slot");
   const [loading, setLoading] = useState(false);
+  
 
   const router = useRouter();
 
@@ -26,21 +27,29 @@ const AdminPage = () => {
       return;
     }
     try {
-      loadUser().then((res) => {
-        console.log("res:", res);
-        if (res.data.StatusCode == 200) {
-          if (res.data.Data.roles == "ROLE_USER") {
-            router.push("/admin");
-          } else {
-            router.push("/home");
-          }
-        } else {
-          if (res.data.StatusCode == 400) {
-            message.error(res.message);
-          }
-        }
-        setLoading(false);
-      });
+      // loadUser().then((res) => {
+      //   console.log("res:", res);
+      //   if (res.data.StatusCode == 200) {
+      //     if (res.data.Data.roles == "ROLE_USER" || res.data.Data.roles == "ROLE_ADMIN") {
+      //       router.push("/admin");
+      //     } else {
+      //       router.push("/home");
+      //     }
+      //   } else {
+      //     if (res.data.StatusCode == 400) {
+      //       message.error(res.message);
+      //     }
+      //   }
+      //   setLoading(false);
+      // });
+      const res = await loadUser();
+      const roles = Cookies.get("roles");
+      if(roles == "ROLE_USER" || roles == "ROLE_ADMIN"){
+        router.push("/admin");
+      }else{
+        router.push("/home");
+      }
+      setLoading(false);
     } catch (err) {
       console.log(err);
       setLoading(false);

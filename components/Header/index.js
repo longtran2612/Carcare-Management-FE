@@ -22,6 +22,7 @@ const MyHeader = () => {
   const [keyMenu, setKeyMenu] = useState(1);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.authSlice);
+  const [role , setRole] = useState(Cookies.get("roles"));
   const router = useRouter();
 
   const[showComfirm, setShowComfirm] = useState(false)
@@ -66,7 +67,7 @@ const MyHeader = () => {
         )}
 
         {accessToken ? (
-          <SubMenu key="10" icon={<UserOutlined />} title="Cá nhân">
+          <SubMenu key="10" icon={<UserOutlined />} title={role === 'ADMIN' ?'ADMIN' :'Nhân viên'}>
             <Menu.Item key="10_1" icon={<InfoOutlined />}>
               <Link href="/admin/profile">Thông tin cá nhân</Link>
             </Menu.Item>
@@ -79,12 +80,9 @@ const MyHeader = () => {
             </Menu.Item>
           </SubMenu>
         ) : (
-          <SubMenu key="11" icon={<LoginOutlined />} title="Đăng ký/Đăng nhập">
+          <SubMenu key="11" icon={<LoginOutlined />} title="Đăng nhập">
             <Menu.Item key="11_1">
               <Link href="/login">Đăng nhập</Link>
-            </Menu.Item>
-            <Menu.Item key="11_2">
-              <Link href="/registry">Đăng ký</Link>
             </Menu.Item>
           </SubMenu>
         )}
