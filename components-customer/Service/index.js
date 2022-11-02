@@ -37,7 +37,7 @@ const DescriptionItem = ({ title, content }) => (
     {content}
   </div>
 );
-const ServiceCustomer = ({status}) => {
+const ServiceCustomer = ({ status }) => {
   const [orders, setOrders] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [showDetail, setShowDetail] = useState(false);
@@ -115,7 +115,33 @@ const ServiceCustomer = ({status}) => {
   const convertOrderStatus = (status) => {
     console.log("statusss", status);
     switch (status) {
+      case 0:
+        return (
+          <Tag
+            style={{
+              height: "30px",
+              padding: "5px",
+              fontSize: "15px",
+            }}
+            color="cyan"
+          >
+            Đang chờ xử lý
+          </Tag>
+        );
       case 100:
+        return (
+          <Tag
+            style={{
+              height: "30px",
+              padding: "5px",
+              fontSize: "15px",
+            }}
+            color="pink"
+          >
+            Đã xuất hóa đơn
+          </Tag>
+        );
+      case 10:
         return (
           <Tag
             style={{
@@ -174,13 +200,96 @@ const ServiceCustomer = ({status}) => {
         return <Image height={170} width={170} src={order_cancel} />;
       case 10:
         return <Image height={170} width={170} src={order_complete} />;
+      case 100:
+        return <Image height={170} width={170} src={slot_active} />;
+      case 0:
+        return <Image height={170} width={170} src={slot_active} />;
       case 2:
         return <Image height={170} width={170} src={slot_active} />;
       default:
         break;
     }
   };
-
+  const handleStatusInDrawer = () => {
+    switch (orderDetail.status) {
+      case -100:
+        return "Đã hủy";
+      case 10:
+        return "Đã hoàn thành";
+      case 100:
+        return "Đã xuất hóa đơn";
+      case 0:
+        return "Đang chờ xử lý";
+      case 2:
+        return (
+          <>
+            <Col span={8}>
+              <DescriptionItem
+                title="Tiếp nhận yêu cầu"
+                content={moment(orderDetail.createDate).format(formatDate)}
+              />
+            </Col>
+            <Col span={8}>
+              <DescriptionItem
+                title="Bắt đầu xử lý"
+                content={moment(orderDetail.carExecutingDate).format(
+                  formatDate
+                )}
+              />
+            </Col>
+            <Col span={8}>
+              <DescriptionItem
+                title="Hoàn thành dự kiến"
+                content={moment(orderDetail?.carExecutingDate)
+                  .add(orderDetail?.totalEstimateTime, "m")
+                  .format(formatDate)}
+              />
+            </Col>
+          </>
+        );
+      default:
+        break;
+    }
+  };
+  const handleStatusInList = (item) => {
+    switch (item.status) {
+      case -100:
+        return "Đã hủy";
+      case 10:
+        return "Đã hoàn thành";
+      case 100:
+        return "Đã xuất hóa đơn";
+      case 0:
+        return "Đang chờ xử lý";
+      case 2:
+        return (
+          <Row gutter={16}>
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian tiếp nhận yêu cầu"
+                content={moment(item.createDate).format(formatDate)}
+              />
+            </Col>
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian bắt đầu xử lý"
+                content={moment(item.carExecutingDate).format(formatDate)}
+              />
+            </Col>
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian hoàn thành dự kiến"
+                content={moment(item?.carExecutingDate)
+                  .add(item?.totalEstimateTime, "m")
+                  .format(formatDate)}
+              />
+            </Col>
+          </Row>
+        );
+      default:
+        break;
+    }
+  };
   return (
     <>
       <List
@@ -248,28 +357,7 @@ const ServiceCustomer = ({status}) => {
                 />
               </Col>
             </Row>
-            <Row gutter={16}>
-              <Col span={8}>
-                <DescriptionItem
-                  title="Thời gian tiếp nhận yêu cầu"
-                  content={moment(item.createDate).format(formatDate)}
-                />
-              </Col>
-              <Col span={8}>
-                <DescriptionItem
-                  title="Thời gian bắt đầu xử lý"
-                  content={moment(item.carExecutingDate).format(formatDate)}
-                />
-              </Col>
-              <Col span={8}>
-                <DescriptionItem
-                  title="Thời gian hoàn thành dự kiến"
-                  content={moment(item?.carExecutingDate)
-                    .add(item?.totalEstimateTime, "m")
-                    .format(formatDate)}
-                />
-              </Col>
-            </Row>
+            {handleStatusInList(item)}
           </List.Item>
         )}
       />
@@ -297,26 +385,7 @@ const ServiceCustomer = ({status}) => {
               content={orderDetail.carLicensePlate}
             />
           </Col>
-          <Col span={8}>
-            <DescriptionItem
-              title="Tiếp nhận yêu cầu"
-              content={moment(orderDetail.createDate).format(formatDate)}
-            />
-          </Col>
-          <Col span={8}>
-            <DescriptionItem
-              title="Bắt đầu xử lý"
-              content={moment(orderDetail.carExecutingDate).format(formatDate)}
-            />
-          </Col>
-          <Col span={8}>
-            <DescriptionItem
-              title="Hoàn thành dự kiến"
-              content={moment(orderDetail?.carExecutingDate)
-                .add(orderDetail?.totalEstimateTime, "m")
-                .format(formatDate)}
-            />
-          </Col>
+          {handleStatusInDrawer()}
 
           <Table
             size="small"

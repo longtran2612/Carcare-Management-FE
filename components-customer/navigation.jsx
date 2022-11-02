@@ -11,7 +11,7 @@ import {
   HighlightOutlined,
   ClearOutlined,
   BookOutlined,
-  BarsOutlined
+  BarsOutlined,
 } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { setLogout } from "redux/slices/authSlice";
@@ -58,7 +58,7 @@ export const CustomerNavigation = () => {
           <Menu.Item key="2">
             <Link href="/customer">
               <a>
-              <BarsOutlined /> Chức năng
+                <BarsOutlined /> Chức năng
               </a>
             </Link>
           </Menu.Item>
@@ -76,13 +76,7 @@ export const CustomerNavigation = () => {
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item key="5">
-            <Link href="/customer/profile?key=2">
-              <a>
-                <SettingOutlined /> Đổi mật khẩu
-              </a>
-            </Link>
-          </Menu.Item>
+
           <Menu.Divider />
           <Menu.Item key="6" onClick={handleLogout}>
             <LogoutOutlined /> Đăng xuất

@@ -146,6 +146,7 @@ const BillCustomer = () => {
                 />
               </Col>
             </Row>
+
             <Row gutter={16}>
               <Col span={8}>
                 <DescriptionItem
