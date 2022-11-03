@@ -20,13 +20,14 @@ import Loading from "components/Loading";
 import { validateMessages } from "utils/messageForm";
 import TextArea from "antd/lib/input/TextArea";
 import { openNotification } from "utils/notification";
+import { formatCountdown } from "antd/lib/statistic/utils";
 
 function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
   const [promotionDetail, setPromotionDetail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
-  const [showLimitAmount, setShowLimitAmount] = useState([]);
+  const [showLimitAmount, setShowLimitAmount] = useState(false);
   const [form] = Form.useForm();
   const getPromotionDetail = async () => {
     // setLoading(true);
@@ -48,6 +49,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         limitPromotionAmount: response.data.Data[0].limitPromotionAmount,
         promotionUsedAmount: response.data.Data[0].promotionUsedAmount,
       });
+      setShowLimitAmount(response.data.Data[0].limitPromotionAmount);
       // setLoading(false);
     } catch (error) {
       console.log(error);
@@ -59,25 +61,23 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
     const dataUpdate = {
       description: values.description,
       type: values.type,
-      amount: values.amount,
-      maximumDiscount: values.maximumDiscount,
       minimumSpend: values.minimumSpend,
       categoryIds: values.categoryIds,
       customerType: values.customerType,
-      serviceIds: values.serviceIds,
-      limitUsedTime:values.limitUsedTime,
-      limitPromotionAmount:values.limitPromotionAmount,
     };
     if (values.type === "PERCENTAGE") {
-      dataUpdate.serviceReceip = null;
+      (dataUpdate.maximumDiscount = values.maximumDiscount),
+        (dataUpdate.amount = values.amount),
+        (dataUpdate.limitUsedTime = values.limitUsedTime),
+        (dataUpdate.limitPromotionAmount = values.limitPromotionAmount);
     }
     if (values.type === "MONEY") {
-      dataUpdate.maximumDiscount = 0;
-      dataUpdate.serviceReceip = null;
+      (dataUpdate.amount = values.amount),
+        (dataUpdate.limitUsedTime = values.limitUsedTime),
+        (dataUpdate.limitPromotionAmount = values.limitPromotionAmount);
     }
     if (values.type === "SERVICE") {
-      dataUpdate.maximumDiscount = 0;
-      dataUpdate.serviceReceip = values.serviveReceive;
+      dataUpdate.serviceIds = [values.serviceIds];
     }
 
     try {
@@ -94,7 +94,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -116,8 +116,13 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
   };
 
   const onChange = () => {
-    setShowLimitAmount(form.getFieldValue('limitUsedTime'));
+    setShowLimitAmount(form.getFieldValue("limitUsedTime"));
   };
+  // useEffect(() => {
+  //   if (form.getFieldValue("limitUsedTime")) {
+  //     setShowLimitAmount(form.getFieldValue("limitUsedTime"));
+  //   }
+  // }, [show, form]);
 
   useEffect(() => {
     if (show) {
@@ -125,7 +130,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
       fetchCategories();
       fetchService();
     }
-  }, [show]);
+  }, [show, lineId]);
 
   return (
     <>
@@ -186,42 +191,15 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   },
                 ]}
               >
-                <Select disabled="true">
+                <Select disabled>
                   <Select.Option value="MONEY">Giảm tiền</Select.Option>
                   <Select.Option value="PERCENTAGE">
                     Giảm tiền theo %
                   </Select.Option>
-                  <Select.Option value="GIFT">Tặng quà</Select.Option>
+                  <Select.Option value="SERVICE">Dịch vụ</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
-            {promotionDetail?.type === "MONEY" ? (
-              <Col span={12}>
-                <Form.Item label="Giá trị" name="amount">
-                  <InputNumber
-                    formatter={(value) =>
-                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    addonAfter="Đ"
-                    min={0}
-                  />
-                </Form.Item>
-              </Col>
-            ) : (
-              promotionDetail?.type === "PERCENTAGE" && (
-                <Col span={12}>
-                  <Form.Item label="Giá trị" name="amount">
-                    <InputNumber
-                      addonAfter="%"
-                      min={0}
-                      max={100}
-                      maxLength={3}
-                    />
-                  </Form.Item>
-                </Col>
-              )
-            )}
             <Col span={12}>
               <Form.Item
                 label="Giá trị đơn hàng tối thiểu"
@@ -242,7 +220,79 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 />
               </Form.Item>
             </Col>
-            {promotionDetail?.type != "MONEY" && (
+            {promotionDetail?.type === "MONEY" && (
+              <Col span={12}>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  label="Giá trị"
+                  name="amount"
+                >
+                  <InputNumber
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    addonAfter="Đ"
+                    min={0}
+                  />
+                </Form.Item>
+              </Col>
+            )}
+            {promotionDetail?.type === "PERCENTAGE" && (
+              <Col span={12}>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng nhập Số % giảm từ 0 - 100",
+                    },
+                  ]}
+                  label="Giá trị"
+                  name="amount"
+                >
+                  <InputNumber addonAfter="%" min={0} max={100} />
+                </Form.Item>
+              </Col>
+            )}
+            {promotionDetail?.type === "SERVICE" && (
+              <Col span={24}>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  label="Dịch vụ khuyến mãi"
+                  name="serviceIds"
+                >
+                  <Select
+                    showSearch
+                    placeholder="Chọn dịch vụ khuyến mãi"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.includes(input)
+                    }
+                    filterSort={(optionA, optionB) =>
+                      optionA.children
+                        .toLowerCase()
+                        .localeCompare(optionB.children.toLowerCase())
+                    }
+                  >
+                    {services.map((service) => (
+                      <Select.Option value={service.id}>
+                        {service.serviceCode + " - " + service.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+            )}
+
+            {promotionDetail?.type === "PERCENTAGE" && (
               <Col span={12}>
                 <Form.Item
                   label="Số tiền tối đa được giảm"
@@ -264,6 +314,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 </Form.Item>
               </Col>
             )}
+            {promotionDetail?.type === "MONEY" && <Col span={12}></Col>}
             <Col span={12}>
               <Form.Item label="Nhóm người dùng áp dụng" name="customerType">
                 <Select>
@@ -272,17 +323,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={24}>
-              <Form.Item label="Dịch vụ áp dụng" name="serviceIds">
-                <Select maxLength={2} mode="multiple">
-                  {services.map((service) => (
-                    <Select.Option value={service.id}>
-                      {service.serviceCode + " - " + service.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
+
             <Col span={12}>
               <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
                 <Select mode="multiple">
@@ -294,25 +335,8 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 </Select>
               </Form.Item>
             </Col>
-           
-            {promotionDetail?.type === "GIFT" && (
-              <Col span={12}>
-                <Form.Item label="Dịch vụ khuyến mãi" name="serviveReceive">
-                  <Select>
-                    {services.map((service) => (
-                      <Select.Option value={service.id}>
-                        {service.serviceCode + " - " + service.name}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-            )}
             <Col span={12}>
-              <Form.Item
-                label="Giới hạn ngân sách"
-                name="limitUsedTime"
-              >
+              <Form.Item label="Giới hạn ngân sách" name="limitUsedTime">
                 <Select onChange={onChange}>
                   <Select.Option value={false}>Không</Select.Option>
                   <Select.Option value={true}>Có</Select.Option>
@@ -320,37 +344,41 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
               </Form.Item>
             </Col>
             {showLimitAmount && (
-              <Col span={12}>
-                <Form.Item
-                  label="Ngân sách giới hạn"
-                  name="limitPromotionAmount"
-                >
-                  <InputNumber
-                    addonAfter="Đ"
-                    formatter={(value) =>
-                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    min={0}
-                  />
-                </Form.Item>
-              </Col>
+              <>
+                <Col span={12}>
+                  <Form.Item
+                    label="Ngân sách giới hạn"
+                    name="limitPromotionAmount"
+                  >
+                    <InputNumber
+                      addonAfter="Đ"
+                      formatter={(value) =>
+                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }
+                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                      min={0}
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col span={12}>
+                  <Form.Item
+                    label="Tổng tiền đã giảm"
+                    name="promotionUsedAmount"
+                  >
+                    <InputNumber
+                      disabled
+                      addonAfter="Đ"
+                      formatter={(value) =>
+                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }
+                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                      min={0}
+                    />
+                  </Form.Item>
+                </Col>
+              </>
             )}
-            <Col span={12}>
-                <Form.Item
-                  label="Tổng tiền đã giảm"
-                  name="promotionUsedAmount"
-                >
-                  <InputNumber
-                    addonAfter="Đ"
-                    formatter={(value) =>
-                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    min={0}
-                  />
-                </Form.Item>
-              </Col>
           </Row>
         </Form>
       </Drawer>
