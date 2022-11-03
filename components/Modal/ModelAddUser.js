@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Form,
-  Input,
-  Select,
-  Col,
-  Row,
-  Cascader
-} from "antd";
+import { Modal, Form, Input, Select, Col, Row, Cascader } from "antd";
 import { createUser } from "pages/api/userAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
@@ -30,7 +22,13 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
       email: values.email,
       phone: values.phone,
       address:
-      values.address + ", " + wardSelected + ", " + districtSelected + ", " + provinceSelected,
+        values.address +
+        ", " +
+        wardSelected +
+        ", " +
+        districtSelected +
+        ", " +
+        provinceSelected,
     };
     console.log(dataUser);
 
@@ -54,13 +52,12 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
       setDistrictSelected(selectedOptions[1]?.label);
       setWardSelected(selectedOptions[2]?.label);
     }
-
   };
   const filter = (inputValue, path) =>
-  path.some((option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
-
-
-
+    path.some(
+      (option) =>
+        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+    );
 
   return (
     <>
@@ -89,7 +86,7 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
           onFinish={onFinish}
           autoComplete="off"
         >
-          <Row gutter={[16,4]}>
+          <Row gutter={[16, 4]}>
             <Col span={24}>
               <Form.Item
                 rules={[
@@ -125,24 +122,12 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                rules={[
-                  {
-                    pattern: new RegExp(
-                      "^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$"
-                    ),
-                    required: true,
-                    message: "Email không hợp lệ!",
-                  },
-                ]}
-                name="email"
-                label="Email"
-              >
+              <Form.Item name="email" label="Email">
                 <Input />
               </Form.Item>
             </Col>
             <Col span={24}>
-            <Form.Item name="adressvn" label="Tỉnh/Thành phố - Quận - Huyện">
+              <Form.Item name="adressvn" label="Tỉnh/Thành phố - Quận - Huyện">
                 <Cascader
                   options={addressData}
                   onChange={onChange}
@@ -155,16 +140,8 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-                name="address"
-                label="Địa chỉ chi tiết"
-              >
-                <TextArea rows={3} />
+              <Form.Item name="address" label="Địa chỉ chi tiết">
+                <TextArea rows={2} />
               </Form.Item>
             </Col>
           </Row>

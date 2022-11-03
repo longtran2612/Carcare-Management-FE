@@ -6,6 +6,7 @@ import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 import ModalAddCarModel from "./ModalAddCarModal";
 import { getCustomers } from "pages/api/customerAPI";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
 const ModalAddCarWithCustomer = ({
   customerId,
@@ -64,7 +65,11 @@ const ModalAddCarWithCustomer = ({
       handleCancel();
       onSuccess(res.data.Data);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if(error.response.data.message[0]){
+        openNotification(error.response.data.message[0]);
+      } else{
+        openNotification("Thất bại", "Thêm mới xe thất bại");
+      }
     }
   };
   const getCarModels = async () => {
@@ -143,7 +148,7 @@ const ModalAddCarWithCustomer = ({
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item label="Thương hiệu" name="brand">
                 <Select
                   showSearch
@@ -167,7 +172,7 @@ const ModalAddCarWithCustomer = ({
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col span={10}>
               <Form.Item label="Model" name="carModel">
                 <Select
                   showSearch
@@ -190,9 +195,11 @@ const ModalAddCarWithCustomer = ({
                 </Select>
               </Form.Item>
             </Col>
-            <Col style={{ display: "flex", alignItems: "center" }} span={4}>
-              <Button type="primary" onClick={() => setModalCarModel(true)}>
-                Thêm mới model
+            <Col style={{ display: "flex", alignItems: "center" }} span={2}>
+              <Button icon={<PlusCircleOutlined/>}
+               type="primary" onClick={() => setModalCarModel(true)}>
+               
+               
               </Button>
             </Col>
             {!customerId && (

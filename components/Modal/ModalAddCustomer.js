@@ -55,8 +55,13 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
       openNotification("Thành công", "Tạo mới khách hàng thành công");
       handleCancel();
       onSuccess(res.data.Data);
+      form.resetFields();
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if(error.response.data.message[0]){
+        openNotification(error.response.data.message[0]);
+      } else{
+        openNotification("Thất bại", "Thêm mới khách hàng thất bại");
+      }
     }
   };
   useEffect(() => {
@@ -85,7 +90,6 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
           form
             .validateFields()
             .then((values) => {
-              form.resetFields();
               onFinish(values);
             })
             .catch((info) => {

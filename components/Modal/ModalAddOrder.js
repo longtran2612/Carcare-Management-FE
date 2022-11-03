@@ -168,9 +168,14 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
       openNotification("Thành công!", "Tạo yêu cầu thành công");
       handleCancel();
       handleReset();
-      onSuccess(res.data);
+      onSuccess(res.data.Data);
+      form.resetFields();
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if(error.response.data.message[0]){
+        openNotification(error.response.data.message[0]);
+      } else{
+        openNotification("Thất bại", "Thêm mới yêu cầu thất bại");
+      }
     }
   };
 

@@ -42,8 +42,13 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
       openNotification("Thành công", "Thêm mới xe thành công");
       handleCancel();
       onSuccess(res.data.Data);
+      form.resetFields();
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if(error.response.data.message[0]){
+        openNotification(error.response.data.message[0]);
+      } else{
+        openNotification("Thất bại", "Thêm mới xe thất bại");
+      }
     }
   };
   const getCarModels = async () => {
@@ -79,7 +84,6 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
           form
             .validateFields()
             .then((values) => {
-              form.resetFields();
               onFinish(values);
             })
             .catch((info) => {

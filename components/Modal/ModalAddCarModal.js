@@ -36,8 +36,13 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
       openNotification("Tạo mẫu xe thành công thành công!", "");
       handleCancel();
       onSuccess(res.data.Data);
+      form.resetFields();
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if(error.response.data.message[0]){
+        openNotification(error.response.data.message[0]);
+      } else{
+        openNotification("Thất bại", "Thêm mẫu xe thất bại");
+      }
     }
   };
   console.log(brand);
@@ -58,7 +63,6 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
           form
             .validateFields()
             .then((values) => {
-              form.resetFields();
               onFinish(values);
             })
             .catch((info) => {
@@ -124,11 +128,7 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
               <Form.Item
                 label="Số nghế ngồi"
                 name="seats"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+                initialValue={4}
               >
                 <InputNumber min={1} max={16} />
               </Form.Item>
@@ -137,11 +137,7 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
               <Form.Item
                 label="Năm sản xuất"
                 name="year"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+                
               >
                 <InputNumber min={1900} max={moment().year()} />
               </Form.Item>
@@ -150,11 +146,7 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
               <Form.Item
                 label="Đông cơ"
                 name="engine"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+                
               >
                 <Input />
               </Form.Item>
@@ -163,11 +155,7 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
               <Form.Item
                 label="Truyền động"
                 name="transmission"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+               
               >
                 <Input />
               </Form.Item>
@@ -176,11 +164,7 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
               <Form.Item
                 label="Nhiên liệu"
                 name="fuel"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+               initialValue={"Xăng"}
               >
                 <Select
                   showSearch

@@ -236,10 +236,8 @@ function ModalSelectOrder({ onSelectOrder }) {
     };
     try {
       const res = await getOrders(dataGetOrder);
-      if (res.status === 200) {
-        setOrders(res.data.Data.content);
-        setLoading(false);
-      }
+      setOrders(res.data.Data.content);
+      setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);

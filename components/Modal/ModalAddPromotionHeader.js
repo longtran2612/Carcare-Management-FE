@@ -10,6 +10,7 @@ import {
 import { createPromotionHeader } from "pages/api/promotionHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
+import moment from "moment";
 const formatDate = "DD/MM/YYYY";
 
 const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
@@ -22,7 +23,11 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
       handleCancel();
       onSuccess(res.data);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if(error.response.data.message[0]){
+        openNotification(error.response.data.message[0]);
+      } else{
+        openNotification("Thất bại", "Thêm mới chương trình khuyến mãi thất bại");
+      }
     }
   };
 
@@ -71,6 +76,7 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
               <Form.Item
                 label="Ngày bắt đầu"
                 name="fromDate"
+                initialValue={moment()}
                 rules={[
                   {
                     required: true,

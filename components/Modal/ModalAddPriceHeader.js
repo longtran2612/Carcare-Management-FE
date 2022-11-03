@@ -20,9 +20,14 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
       const res = await createPriceHeader(values);
       openNotification("Thành công", "tạo mới bảng giá thành công");
       handleCancel();
-      onSuccess(res.data);
+      onSuccess(res.data.Data);
+      form.resetFields();
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if(error.response.data.message[0]){
+        openNotification(error.response.data.message[0]);
+      } else{
+        openNotification("Thất bại", "Thêm mới bảng giá thất bại");
+      }
     }
   };
 
@@ -35,7 +40,6 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
           form
             .validateFields()
             .then((values) => {
-              form.resetFields();
               onFinish(values);
             })
             .catch((info) => {
