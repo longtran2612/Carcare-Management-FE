@@ -65,6 +65,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
   }, [userId]);
 
   const onFinish = async (values) => {
+    setLoading(true)
     try {
       let body = {
         name: values.name,
@@ -76,12 +77,16 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       };
       const res = await updateUserById(body, userId);
       setUserDetail(res.data.Data);
-      if (res.data.StatusCode == "200") {
-        openNotification("Thành công!", "Cập nhật người dùng thành công");
-        onUpdateUser();
-      }
+      openNotification("Thành công!", "Cập nhật nhân viên thành công");
+      onUpdateUser();
+      setLoading(false)
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error.response.data) {
+        openNotification(error.response.data.message[0]);
+      } else{
+        openNotification("Thất bại", "Cập nhật thông tin nhân viên thất bại");
+      }
+      setLoading(false);
     }
   };
   // handle upload image
@@ -164,15 +169,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Ngày sinh"
-                  name="birthDay"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Ngày sinh" name="birthDay">
                   <DatePicker format={formatDate} />
                 </Form.Item>
               </Col>
@@ -195,15 +192,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label="Email"
-                  name="email"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Email" name="email">
                   <Input />
                 </Form.Item>
               </Col>
@@ -221,15 +210,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                 </Form.Item>
               </Col>
               <Col span={24}>
-                <Form.Item
-                  label="Địa chỉ"
-                  name="address"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Địa chỉ" name="address">
                   <TextArea rows={4} />
                 </Form.Item>
               </Col>

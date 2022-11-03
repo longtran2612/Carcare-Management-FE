@@ -97,12 +97,14 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         disableService(serviceId);
       }
       const res = await updateService(body, serviceDetail.id);
-      if (res.data.StatusCode == "200") {
-        openNotification("Thành công!", "Cập nhật dịch vụ thành công");
-        onUpdateService();
-      }
+      openNotification("Thành công!", "Cập nhật dịch vụ thành công");
+      onUpdateService();
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error.response.data) {
+        openNotification(error.response.data.message[0]);
+      } else {
+        openNotification("Thất bại", "Cập nhật bảng giá thất bại");
+      }
     }
   };
   // handle upload image

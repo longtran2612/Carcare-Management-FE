@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {
-  Col,
-  Row,
-  Image,
-  Button,
-  Form,
-  Select,
-  Input,
-  Popconfirm
-} from "antd";
+import { Col, Row, Image, Button, Form, Select, Input, Popconfirm } from "antd";
 import { useRouter } from "next/router";
-import { getCategoryById,getCategoryByCode, updateCategory } from "pages/api/categoryAPI";
+import {
+  getCategoryById,
+  getCategoryByCode,
+  updateCategory,
+} from "pages/api/categoryAPI";
 import { openNotification } from "utils/notification";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -46,7 +41,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
 
   useEffect(() => {
     if (categoryId) {
-        fetchcategoryDetail()
+      fetchcategoryDetail();
     }
   }, [categoryId]);
 
@@ -58,20 +53,22 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
         status: values.status,
       };
       const res = await updateCategory(body, categoryDetail.id);
-      if (res.data.StatusCode == "200") {
-        openNotification("Cập nhật dịch vụ thành công!", "");
-        onUpdateCategory();
-      }
+      openNotification("Cập nhật danh mục dịch vụ thành công!", "");
+      onUpdateCategory();
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error.response.data) {
+        openNotification(error.response.data.message[0]);
+      } else {
+        openNotification("Thất bại", "Cập nhật thông tin danh mục thành công");
+      }
     }
   };
   return (
     <>
-          <Button type="link" size="small" onClick={() => router.push("/admin")}>
+      <Button type="link" size="small" onClick={() => router.push("/admin")}>
         Trở lại
       </Button>
-      <Row gutter={[16,16]}>
+      <Row gutter={[16, 16]}>
         <Col span={6}>
           <Image width={300} height={250} src={categoryDetail.imageUrl} />
           <div
@@ -98,8 +95,8 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
             autoComplete="off"
             validateMessages={validateMessages}
           >
-             <Row gutter={[32,32]}>
-              <Col span={24} >
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
                 <Form.Item
                   label="Tên dịch vụ"
                   name="name"
@@ -112,7 +109,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={24} >
+              <Col span={24}>
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -162,7 +159,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
                   </Button>
                 </div>
                 <div>
-                <Popconfirm
+                  <Popconfirm
                     title="Xác nhận?"
                     placement="topLeft"
                     okText="Đồng ý"
@@ -186,7 +183,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
           </Form>
         </Col>
       </Row>
-     
+
       <Loading loading={loading} />
     </>
   );

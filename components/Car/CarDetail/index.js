@@ -104,12 +104,14 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       };
       console.log(body);
       const res = await updateCar(body, carDetail?.id);
-      if (res.data.StatusCode == "200") {
-        openNotification("Thành công", "Cập nhật thành công");
-        onUpdateCar();
-      }
+      openNotification("Thành công", "Cập nhật xe thành công");
+      onUpdateCar();
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error.response.data) {
+        openNotification(error.response.data.message[0]);
+      } else {
+        openNotification("Thất bại", "Cập nhật xe thất bại");
+      }
     }
   };
   // handle upload image
@@ -235,32 +237,16 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Màu sắc"
-                  name="color"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Màu sắc" name="color">
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Hãng xe"
-                  name="brand"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                   <Select
-                   disabled
+                <Form.Item label="Hãng xe" name="brand">
+                  <Select
+                    disabled
                     showSearch
-                    placeholder="Chọn thương hiệu"
+                    placeholder="Chọn hãng xe"
                     optionFilterProp="children"
                     filterOption={(input, option) =>
                       option.children.includes(input)
@@ -278,67 +264,27 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Model"
-                  name="model"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Model" name="model">
                   <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Dung tích"
-                  name="engine"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Dung tích" name="engine">
                   <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Truyền động"
-                  name="transmission"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Truyền động" name="transmission">
                   <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Số chỗ"
-                  name="seats"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Số chỗ" name="seats">
                   <InputNumber disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Nhiên liệu"
-                  name="fuel"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Nhiên liệu" name="fuel">
                   <Input disabled />
                 </Form.Item>
               </Col>

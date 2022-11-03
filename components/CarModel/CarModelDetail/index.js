@@ -111,7 +111,11 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
         onUpdateCarModel();
       }
     } catch (error) {
-      console.log(error);
+      if (error.response.data) {
+        openNotification(error.response.data.message[0]);
+      } else {
+        openNotification("Thất bại", "Cập nhật mẫu xe thất bại");
+      }
     }
   };
   // handle upload image
@@ -190,28 +194,12 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Số nghế ngồi"
-                  name="seats"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Số nghế ngồi" name="seats">
                   <InputNumber style={{ width: "100%" }} min={1} max={16} />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Năm sản xuất"
-                  name="year"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Năm sản xuất" name="year">
                   <InputNumber
                     style={{ width: "100%" }}
                     min={1900}
@@ -249,41 +237,17 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label="Đông cơ"
-                  name="engine"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Đông cơ" name="engine">
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label="Truyền động"
-                  name="transmission"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Truyền động" name="transmission">
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label="Nhiên liệu"
-                  name="fuel"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
+                <Form.Item label="Nhiên liệu" name="fuel">
                   <Select
                     showSearch
                     placeholder="Chọn nhiên liệu"

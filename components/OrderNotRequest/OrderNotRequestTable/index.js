@@ -23,7 +23,7 @@ import {
   ClearOutlined,
   SearchOutlined,
   PlusOutlined,
-  PrinterTwoTone, 
+  PrinterTwoTone,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
@@ -31,8 +31,6 @@ import { openNotification } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 
 import { OrderNotRequestDetail } from "../OrderNotRequestDetail";
-
-
 
 function OrderNotRequestTable({}) {
   const [orders, setOrders] = useState([]);
@@ -274,8 +272,8 @@ function OrderNotRequestTable({}) {
         },
       ],
     };
-    if(status){
-     dataGetOrder.status = status
+    if (status) {
+      dataGetOrder.status = status;
     }
     try {
       const res = await getOrders(dataGetOrder);
@@ -284,14 +282,18 @@ function OrderNotRequestTable({}) {
         setLoading(false);
       }
     } catch (error) {
-      openNotification("error", "Lỗi", "Không thể lấy dữ liệu");
+      if (error.response.data) {
+        openNotification(error.response.data.message[0]);
+      } else {
+        openNotification("Thất bại", "");
+      }
       setLoading(false);
     }
   };
 
   useEffect(() => {
     handleGetorders();
-  }, [status,orderId]);
+  }, [status, orderId]);
 
   const columnService = [
     {
@@ -377,7 +379,7 @@ function OrderNotRequestTable({}) {
                       onChange={(value) => setStatus(value)}
                       value={status}
                     >
-                       <Option value={null}>Tất cả</Option>
+                      <Option value={null}>Tất cả</Option>
                       <Option value={10}>Đã hoàn thành</Option>
                       <Option value={2}>Đang xử lý</Option>
                       <Option value={-100}>Đã hủy</Option>

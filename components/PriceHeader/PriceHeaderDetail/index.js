@@ -10,7 +10,7 @@ import {
   Input,
   DatePicker,
   Table,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
@@ -24,7 +24,7 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";
 import moment from "moment";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined,PlusOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
 
@@ -228,7 +228,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   ];
 
   const onFinish = async (values) => {
-    loading(true);
+    setLoading(true);
     let body = {
       id: priceHeaderDetail.id,
       type: values.type,
@@ -239,12 +239,16 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
     };
     try {
       const res = await updatePriceHeader(body, priceHeaderDetail.id);
-      openNotification("Cập nhật bảng giá thành công!", "");
+      openNotification("Thành công", "Cập nhật bảng giá thành công!");
       onUpdatePriceHeader();
       setLoading(false);
     } catch (error) {
+      if (error.response.data) {
+        openNotification(error.response.data.message[0]);
+      } else {
+        openNotification("Thất bại", "Cập nhật bảng giá thất bại");
+      }
       setLoading(false);
-      openNotification(error.response.data.message[0]);
     }
   };
 
@@ -327,11 +331,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                 <Form.Item
                   label="Mô tả"
                   name="description"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                  
                 >
                   <TextArea rows={2} />
                 </Form.Item>
@@ -352,7 +352,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   </Button>
                 </div>
                 <div>
-                <Popconfirm
+                  <Popconfirm
                     title="Cập nhật?"
                     placement="topLeft"
                     okText="Xác nhận"
@@ -377,7 +377,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
         </Col>
         <Col span={24}>
           <Table
-          size="small"
+            size="small"
             bordered
             title={() => (
               <>

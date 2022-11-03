@@ -299,8 +299,12 @@ const PromotionHeaderDetail = ({
       onUpdatePromotionHeader();
       setLoading(false);
     } catch (error) {
-      setLoading(false);
-      openNotification(error.response.data.message[0]);
+      if (error.response.data) {
+        openNotification(error.response.data.message[0]);
+      } else {
+        openNotification("Thất bại", "Cập nhật bảng giá thất bại");
+      }
+      setLoading(false)
     }
   };
 

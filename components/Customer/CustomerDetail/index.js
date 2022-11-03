@@ -85,9 +85,14 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
       };
       const res = await updateCustomer(customerDetail.id, body);
       setCustomerDetail(res.data.Data);
-      openNotification("Cập nhật người dùng thành công!", "");
+      openNotification("Cập nhật khách hàng thành công!", "");
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error.response.data) {
+        openNotification(error.response.data.message[0]);
+      } else {
+        openNotification("Thất bại", "Cập nhật thông tin khách hàng thất bại");
+      }
+      setLoading(false);
     }
   };
   // handle upload image
@@ -117,7 +122,11 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error.response.data) {
+        openNotification(error.response.data.message[0]);
+      } else {
+        openNotification("Thất bại", "Tải ảnh lên không thành công");
+      }
     }
   };
 
@@ -197,7 +206,7 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
               </Col>
               <Col span={6}>
                 <Form.Item
-                  label="Trạng thái"
+                  label="Nhóm khách hàng"
                   rules={[
                     {
                       required: true,
@@ -285,11 +294,7 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
                 <Form.Item
                   label="Địa chỉ"
                   name="address"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                 
                 >
                   <TextArea rows={4} />
                 </Form.Item>
