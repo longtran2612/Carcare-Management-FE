@@ -23,6 +23,8 @@ import {
   SearchOutlined,
   DeleteTwoTone,
   PrinterTwoTone,
+  DeleteOutlined,
+  PrinterOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { openNotification } from "utils/notification";
@@ -156,10 +158,14 @@ const BillTable = () => {
 
   const handlePrintBill = (data) => {
     setBillDetail(data);
-    // setPrintBill(true);
-    handlePrint();
-    // setPrintBill(false);
+    setPrintBill(true);
   };
+  useEffect(() => {
+    if (printBill) {
+      handlePrint();
+      setPrintBill(false);
+    }
+  }, [printBill]);
 
   const handleCancelBill = async (id) => {
     setLoading(true);
@@ -170,7 +176,17 @@ const BillTable = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
+      openNotification("Thất bại", "Không thể hủy hóa đơn này");
       setLoading(false);
+    }
+  };
+
+  const checkPromotion = (promotion) => {
+    console.log(promotion);
+    if (promotion) {
+      if (promotion.length > 0) {
+        return true;
+      }
     }
   };
 
@@ -340,9 +356,8 @@ const BillTable = () => {
   }, []);
 
   const handlepromotionDetails = (data) => {
-    if(data > 0)
-    return true;
-  }
+    if (data > 0) return true;
+  };
 
   return (
     <>
@@ -381,7 +396,7 @@ const BillTable = () => {
         }}
         onRow={(record, rowIndex) => {
           return {
-            onDoubleClick: (event) => {
+            onClick: (event) => {
               setBillDetail(record);
               setShowDetail(true);
             },
@@ -394,12 +409,40 @@ const BillTable = () => {
         onClose={() => setShowDetail(false)}
         visible={showDetail}
         width={1000}
+        extra={
+          billDetail.status === 1 && (
+            <Space>
+              <Button
+                icon={<DeleteOutlined />}
+                type="danger"
+                onClick={() => handleCancelBill(billDetail.id)}
+              >
+                Hủy
+              </Button>
+              <Button
+                icon={<PrinterOutlined />}
+                onClick={() => handlePrintBill(billDetail)}
+                type="primary"
+              >
+                In hóa đơn
+              </Button>
+            </Space>
+          )
+        }
       >
         <Divider>
-          <Title level={5}>Hóa đơn mã: {billDetail.billCode}</Title>
+          <Title level={5}>
+            Hóa đơn mã:
+            <span style={{ color: "blue" }}> #{billDetail.billCode} </span>
+          </Title>
         </Divider>
 
-        <p className="site-description-item-profile-p">Khách hàng</p>
+        <p
+          style={{ color: "red", marginBottom: "5px" }}
+          className="site-description-item-profile-p"
+        >
+          Khách hàng
+        </p>
         <Row>
           <Col span={8}>
             <DescriptionItem
@@ -436,26 +479,25 @@ const BillTable = () => {
           </Col>
         </Row>
         <Divider />
-        <p className="site-description-item-profile-p">Dịch vụ sử dụng</p>
+        <p
+          style={{ color: "red", marginBottom: "5px" }}
+          className="site-description-item-profile-p"
+        >
+          Dịch vụ sử dụng
+        </p>
         <Row>
           {billDetail?.services?.map((item, index) => (
             <>
-              <Col span={6}>
+              <Col span={8}>
                 <DescriptionItem
                   title="Mã dịch vụ"
                   content={item?.serviceCode}
                 />
               </Col>
-              <Col span={6}>
+              <Col span={8}>
                 <DescriptionItem title="Tên dịch vụ" content={item?.name} />
               </Col>
-              <Col span={6}>
-                <DescriptionItem
-                  title="Thời gian sử lý"
-                  content={item?.estimateTime + " phút"}
-                />
-              </Col>
-              <Col span={6}>
+              <Col span={8}>
                 <DescriptionItem
                   title="Giá"
                   content={formatMoney(item?.servicePrice?.price)}
@@ -464,47 +506,68 @@ const BillTable = () => {
             </>
           ))}
         </Row>
-        {billDetail?.promotionDetails?.map((item, index) => (
+        {checkPromotion(billDetail?.promotionDetails) && (
           <>
             <Divider />
-            <p className="site-description-item-profile-p">
+            <p
+              style={{ color: "red", marginBottom: "5px" }}
+              className="site-description-item-profile-p"
+            >
               Khuyến mãi sử dụng
             </p>
-            <Row>
-              <Col span={6}>
-                <DescriptionItem
-                  title="Mã khuyến mãi sử dụng"
-                  content={item?.promotionDetailCode}
-                />
-              </Col>
-              <Col span={6}>
-                <DescriptionItem title="Mô tả" content={item?.description} />
-              </Col>
-              <Col span={6}>
-                <DescriptionItem
-                  title="Loại khuyến mãi"
-                  content={handleType(item?.type)}
-                />
-              </Col>
-              <Col span={6}>
-                <DescriptionItem
-                  title="Tiền giảm"
-                  content={formatMoney(billDetail?.totalPromotionAmount)}
-                />
-              </Col>
-            </Row>
+            {billDetail?.promotionDetails?.map((item, index) => (
+              <>
+                <Row>
+                  <Col span={6}>
+                    <DescriptionItem title={item?.promotionDetailCode} />
+                  </Col>
+                  <Col span={6}>
+                    <DescriptionItem
+                      title="Mô tả"
+                      content={item?.description}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <DescriptionItem
+                      title="Loại khuyến mãi"
+                      content={handleType(item?.type)}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <DescriptionItem
+                      title="Tiền giảm"
+                      content={formatMoney(billDetail?.totalPromotionAmount)}
+                    />
+                  </Col>
+                </Row>
+              </>
+            ))}
           </>
-        ))}
+        )}
 
         <Divider />
-        <p className="site-description-item-profile-p">Thông tin thanh toán</p>
+        <p
+          style={{ color: "red", marginBottom: "5px" }}
+          className="site-description-item-profile-p"
+        >
+          Thông tin thanh toán
+        </p>
         <Row>
           <Col span={12}>
             <DescriptionItem
-              title="Tổng Thời gian sử lý"
-              content={totalTimeService() + " phút"}
+              title="Hình thức thanh toán"
+              content={billDetail.paymentType === "CASH" ? "Tiền mặt" : "Thẻ"}
             />
           </Col>
+          <Col span={12}>
+            {billDetail.paymentType === "DEBIT" && (
+              <DescriptionItem
+                title="Thông tin thanh toán"
+                content={billDetail.cardNumber}
+              />
+            )}
+          </Col>
+
           <Col span={12}>
             <DescriptionItem
               title="Tổng tiền khách trả"
@@ -515,12 +578,6 @@ const BillTable = () => {
             />
           </Col>
 
-          <Col span={12}>
-            <DescriptionItem
-              title="Hình thức thanh toán"
-              content={billDetail.paymentType === "CASH" ? "Tiền mặt" : "Thẻ"}
-            />
-          </Col>
           <Col span={12}>
             <DescriptionItem
               title="Ngày thanh toán"
@@ -551,10 +608,10 @@ const BillTable = () => {
                         <br />
                         Ngày tạo:{" "}
                         {moment(billDetail?.createDate).format(
-                          "HH:ss DD/MM/YYYY"
+                          "HH:mm DD/MM/YYYY"
                         )}
                         <br />
-                        Ngày thanh toán: {moment().format("HH:ss DD/MM/YYYY")}
+                        Ngày thanh toán: {moment().format("HH:mm DD/MM/YYYY")}
                       </td>
                     </tr>
                   </table>

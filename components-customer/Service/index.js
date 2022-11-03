@@ -25,6 +25,7 @@ import order_cancel from "public/images/order_cancel.png";
 import order_complete from "public/images/order_complete.gif";
 const { Title } = Typography;
 const formatDate = "HH:mm DD/MM/YYYY";
+import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
 
 const DescriptionItem = ({ title, content }) => (
   <div className="site-description-item-profile-wrapper">
@@ -615,95 +616,12 @@ const ServiceCustomer = ({ status }) => {
             />
           </Table>
         </Row>
-        <Drawer
-          title="Danh sách khuyến mãi được áp dụng"
-          placement="right"
-          onClose={() => setShowSelectPromotion(false)}
-          visible={showSelectPromotion}
-          width={700}
-        >
-          <>
-            <List
-              dataSource={promotionDetails}
-              itemLayout="vertical"
-              size="large"
-              renderItem={(item) => (
-                <Row gutter={16}>
-                  <Col
-                    style={{
-                      border: "solid gray 1px",
-                      borderRadius: "5px",
-                      margin: "10px",
-                    }}
-                    span={24}
-                  >
-                    <List.Item key={item.id}>
-                      <List.Item.Meta
-                        avatar={
-                          <Avatar
-                            size={{
-                              xs: 24,
-                              sm: 32,
-                              md: 40,
-                              lg: 64,
-                              xl: 80,
-                              xxl: 100,
-                            }}
-                            icon={<TagsOutlined />}
-                          />
-                        }
-                        title={<a>{item.name}</a>}
-                        description={
-                          <Title level={5}>{item.description}</Title>
-                        }
-                      />
-                      <Row>
-                        {item.type === "PERCENTAGE" ? (
-                          <Col span={24}>
-                            {" "}
-                            <span style={{ color: "red", fontWeight: "bold" }}>
-                              Giảm {item.amount}%{" "}
-                            </span>
-                          </Col>
-                        ) : (
-                          <Col span={24}>
-                            <span style={{ color: "red", fontWeight: "bold" }}>
-                              Giảm {formatMoney(item.amount || 0)}{" "}
-                            </span>
-                          </Col>
-                        )}
-                        <Col span={12}>
-                          <span style={{ fontWeight: "bold" }}>
-                            Số tiền đơn hàng tối thiểu:{" "}
-                          </span>
-                          {formatMoney(item.minimumSpend || 0)}
-                        </Col>
-                        {item.type === "PERCENTAGE" && (
-                          <Col span={12}>
-                            <span style={{ fontWeight: "bold" }}>
-                              Giảm tối đa:{" "}
-                            </span>
-                            {formatMoney(item.maximumDiscount || 0)}
-                          </Col>
-                        )}
-                        <Col span={12}>
-                          <span style={{ fontWeight: "bold" }}>
-                            Ngày bắt đầu:{" "}
-                          </span>
-                          {moment(item.fromDate).format("DD/MM/YYYY")}
-                        </Col>
-                        <Col span={12}>
-                          <span style={{ fontWeight: "bold" }}>Kết thúc: </span>
-                          {moment(item.toDate).format("DD/MM/YYYY")}
-                        </Col>
-                      </Row>
-                    </List.Item>
-                  </Col>
-                </Row>
-              )}
-            />
-          </>
-        </Drawer>
+        <DrawerPromotionOrder
+        show={showSelectPromotion}
+        promotionDetails={promotionDetails}
+        handleCancel={() => setShowSelectPromotion(false)}
+      />
+
       </Drawer>
 
       <Loading loading={loading} />

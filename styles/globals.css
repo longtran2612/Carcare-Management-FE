@@ -114,7 +114,9 @@ ant-card-head-title{
 .background-login-white{
   background: #fff
 }
-
+.background-promotion{
+  background: linear-gradient(to top right, #e6f09a, #f6edd1);
+}
 .site-description-item-profile-wrapper {
   margin-bottom: 7px;
   color: rgba(0, 0, 0, 0.65);
@@ -129,10 +131,11 @@ ant-card-head-title{
 
 .ant-drawer-body p.site-description-item-profile-p {
   display: block;
-  margin-bottom: 16px;
+  margin-bottom: 1px;
   color: rgba(0, 0, 0, 0.85);
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.5715;
+  font: bold;
 }
 
 [data-theme='compact'] .ant-drawer-body p.site-description-item-profile-p {

@@ -30,6 +30,7 @@ import {
   ExclamationCircleOutlined,
   CheckCircleOutlined,
   TagsOutlined,
+  QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
@@ -44,7 +45,7 @@ import { openNotification } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import UpDateServiceOrder from "components/Modal/ModalUpdateServiceOrder";
-
+import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
 import { getAllPromotionUseable } from "pages/api/promotionDetail";
 
 const formatDate = "HH:mm DD/MM/YYYY";
@@ -556,7 +557,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                               setShowConfimComplete(true);
                             }}
                           >
-                            Hoàn thành - Xuất hóa đơn
+                            Hoàn thành - Thanh toán - In hóa đơn
                           </Button>
                         </div>
                       </div>
@@ -569,7 +570,11 @@ const CarSlotDetail = ({ carSlotId }) => {
           {carSlotDetail?.status == "AVAILABLE" && (
             <Row className="content-white" span={24}>
               <Col span={24}>
-                <Typography.Title className="content-center" style={{color:'#829822'}} level={2}>
+                <Typography.Title
+                  className="content-center"
+                  style={{ color: "#829822" }}
+                  level={2}
+                >
                   Vị trí đang trống !!! vui lòng chọn yêu cầu sử lý
                 </Typography.Title>
               </Col>
@@ -617,7 +622,8 @@ const CarSlotDetail = ({ carSlotId }) => {
         onSuccess={() => handleSuccessUPdateOrder()}
       />
       <Modal
-        title="Xác nhận?"
+        title="Hoàn thành yêu cầu"
+        width={700}
         onCancel={() => setShowConfimComplete(false)}
         visible={showConfimComplete}
         icon={<CheckCircleOutlined />}
@@ -643,7 +649,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                   setShowCreateBill(true);
                 }}
               >
-                Hoàn thành và in hóa đơn
+                Hoàn thành - Thanh toán - In hóa đơn
               </Button>
               <Button
                 type="primary"
@@ -652,104 +658,23 @@ const CarSlotDetail = ({ carSlotId }) => {
                   setShowConfimComplete(false);
                 }}
               >
-                Hoàn thành
+                Hoàn thành yêu cầu
               </Button>
             </div>
           </>
         }
       >
         <Typography.Title level={4}>
-          Bạn có chắc chắn hoàn thành xử lý yêu cầu này?
+          <QuestionCircleOutlined style={{ color: "yellowgreen" }} /> Bạn có
+          chắc chắn hoàn thành xử lý yêu cầu này?
         </Typography.Title>
       </Modal>
 
-      <Drawer
-        title="Danh sách khuyến mãi được áp dụng"
-        placement="right"
-        onClose={() => setShowSelectPromotion(false)}
-        visible={showSelectPromotion}
-        width={700}
-      >
-        <>
-          <List
-            dataSource={promotionDetails}
-            itemLayout="vertical"
-            size="large"
-            renderItem={(item) => (
-              <Row gutter={16}>
-                <Col
-                  style={{
-                    border: "solid gray 1px",
-                    borderRadius: "5px",
-                    margin: "10px",
-                  }}
-                  span={24}
-                >
-                  <List.Item key={item.id}>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar
-                          size={{
-                            xs: 24,
-                            sm: 32,
-                            md: 40,
-                            lg: 64,
-                            xl: 80,
-                            xxl: 100,
-                          }}
-                          icon={<TagsOutlined />}
-                        />
-                      }
-                      title={<a>{item.name}</a>}
-                      description={<Title level={5}>{item.description}</Title>}
-                    />
-                    <Row>
-                      {item.type === "PERCENTAGE" ? (
-                        <Col span={24}>
-                          {" "}
-                          <span style={{ color: "red", fontWeight: "bold" }}>
-                            Giảm {item.amount}%{" "}
-                          </span>
-                        </Col>
-                      ) : (
-                        <Col span={24}>
-                          <span style={{ color: "red", fontWeight: "bold" }}>
-                            Giảm {formatMoney(item.amount || 0)}{" "}
-                          </span>
-                        </Col>
-                      )}
-                      <Col span={12}>
-                        <span style={{ fontWeight: "bold" }}>
-                          Số tiền đơn hàng tối thiểu:{" "}
-                        </span>
-                        {formatMoney(item.minimumSpend || 0)}
-                      </Col>
-                      {item.type === "PERCENTAGE" && (
-                        <Col span={12}>
-                          <span style={{ fontWeight: "bold" }}>
-                            Giảm tối đa:{" "}
-                          </span>
-                          {formatMoney(item.maximumDiscount || 0)}
-                        </Col>
-                      )}
-                      <Col span={12}>
-                        <span style={{ fontWeight: "bold" }}>
-                          Ngày bắt đầu:{" "}
-                        </span>
-                        {moment(item.fromDate).format("DD/MM/YYYY")}
-                      </Col>
-                      <Col span={12}>
-                        <span style={{ fontWeight: "bold" }}>Kết thúc: </span>
-                        {moment(item.toDate).format("DD/MM/YYYY")}
-                      </Col>
-                    </Row>
-                  </List.Item>
-                </Col>
-              </Row>
-            )}
-          />
-        </>
-      </Drawer>
+      <DrawerPromotionOrder
+        show={showSelectPromotion}
+        promotionDetails={promotionDetails}
+        handleCancel={() => setShowSelectPromotion(false)}
+      />
 
       <Loading loading={loading} />
     </>

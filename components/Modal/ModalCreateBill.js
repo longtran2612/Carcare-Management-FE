@@ -30,7 +30,7 @@ import Image from "next/image";
 import { TagsOutlined, PrinterOutlined } from "@ant-design/icons";
 import { useReactToPrint } from "react-to-print";
 import logo from "public/images/logo-footer-customer.png";
-
+import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
 const { Title } = Typography;
 const { Option } = Select;
 const { Column, ColumnGroup } = Table;
@@ -43,6 +43,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
   const [showPrint, setShowPrint] = useState(false);
   const [showCardId, setShowCardId] = useState(false);
+  const [billDetail, setBillDetail] = useState({});
 
   const componentRef = useRef();
 
@@ -131,18 +132,20 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       
       dataCreateBill.totalPromotionAmount = totalPromotionAmount();
     }
-    if (values.paymentType === "CARD") {
-      dataCreateBill.cardId = values.cardId;
+    if (values.paymentType === "DEBIT") {
+      dataCreateBill.cardNumber = values.cardNumber;
     }
     console.log(dataCreateBill);
     try {
       const res = await createBill(dataCreateBill);
       openNotification("Thành công!", "Tạo hóa đơn thành công!");
       handleCancel();
-      onSuccess(res.data);
+      setBillDetail(res.data.Data);
+      onSuccess(res.data.Data);
       setShowPrint(true);
       handlePrint();
       setShowPrint(false);
+      form.resetFields();
     } catch (error) {
       console.log(error);
     }
@@ -169,7 +172,6 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
           form
             .validateFields()
             .then((values) => {
-              form.resetFields();
               onFinish(values);
             })
             .catch((info) => {
@@ -382,7 +384,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                   </Col>
                   {showCardId && (
                     <Col span={6}>
-                      <Form.Item label="Thông tin chuyển khoản" name="cardId">
+                      <Form.Item label="Thông tin chuyển khoản" name="cardNumber">
                         <Input />
                       </Form.Item>
                     </Col>
@@ -393,93 +395,11 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
           </Row>
         </Form>
       </Modal>
-      <Drawer
-        title="Danh sách khuyến mãi được áp dụng"
-        placement="right"
-        onClose={() => setShowSelectPromotion(false)}
-        visible={showSelectPromotion}
-        width={700}
-      >
-        <>
-          <List
-            dataSource={promotionDetails}
-            itemLayout="vertical"
-            size="large"
-            renderItem={(item) => (
-              <Row gutter={16}>
-                <Col
-                  style={{
-                    border: "solid gray 1px",
-                    borderRadius: "5px",
-                    margin: "10px",
-                  }}
-                  span={24}
-                >
-                  <List.Item key={item.id}>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar
-                          size={{
-                            xs: 24,
-                            sm: 32,
-                            md: 40,
-                            lg: 64,
-                            xl: 80,
-                            xxl: 100,
-                          }}
-                          icon={<TagsOutlined />}
-                        />
-                      }
-                      title={<a>{item.name}</a>}
-                      description={<Title level={5}>{item.description}</Title>}
-                    />
-                    <Row>
-                      {item.type === "PERCENTAGE" ? (
-                        <Col span={24}>
-                          {" "}
-                          <span style={{ color: "red", fontWeight: "bold" }}>
-                            Giảm {item.amount}%{" "}
-                          </span>
-                        </Col>
-                      ) : (
-                        <Col span={24}>
-                          <span style={{ color: "red", fontWeight: "bold" }}>
-                            Giảm {formatMoney(item.amount || 0)}{" "}
-                          </span>
-                        </Col>
-                      )}
-                      <Col span={12}>
-                        <span style={{ fontWeight: "bold" }}>
-                          Số tiền đơn hàng tối thiểu:{" "}
-                        </span>
-                        {formatMoney(item.minimumSpend || 0)}
-                      </Col>
-                      {item.type === "PERCENTAGE" && (
-                        <Col span={12}>
-                          <span style={{ fontWeight: "bold" }}>
-                            Giảm tối đa:{" "}
-                          </span>
-                          {formatMoney(item.maximumDiscount || 0)}
-                        </Col>
-                      )}
-                      <Col span={12}>
-                        <span style={{ fontWeight: "bold" }}>
-                          Ngày bắt đầu:{" "}
-                        </span>
-                        {moment(item.fromDate).format("DD/MM/YYYY")}
-                      </Col>
-                      <Col span={12}>
-                        <span style={{ fontWeight: "bold" }}>Kết thúc: </span>
-                        {moment(item.toDate).format("DD/MM/YYYY")}
-                      </Col>
-                    </Row>
-                  </List.Item>
-                </Col>
-              </Row>
-            )}
-          />
-        </>
-      </Drawer>
+      <DrawerPromotionOrder
+        show={showSelectPromotion}
+        promotionDetails={promotionDetails}
+        handleCancel={() => setShowSelectPromotion(false)}
+      />
       {showPrint && (
         <div ref={componentRef}>
           <br />
@@ -498,10 +418,12 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                         />
                       </td>
                       <td>
-                        Order #: {order?.orderCode}
+                        Bill #: {billDetail?.billCode}
                         <br />
                         Ngày tạo:{" "}
-                        {moment(order?.createDate).format("HH:mm DD/MM/YYYY")}
+                        {moment(billDetail?.createDate).format(
+                          "HH:mm DD/MM/YYYY"
+                        )}
                         <br />
                         Ngày thanh toán: {moment().format("HH:mm DD/MM/YYYY")}
                       </td>
@@ -525,11 +447,12 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                       </td>
 
                       <td>
-                        Khách hàng : {order?.customerName}
+                        Khách hàng : {billDetail?.customerName}
                         <br />
-                        Số điện thoại : {order?.customerPhoneNumber}
+                        Số điện thoại : {billDetail?.customerPhoneNumber}
                         <br />
-                        Xe : {order?.carName} - {order?.carLicensePlate}
+                        Xe : {billDetail?.carName} -{" "}
+                        {billDetail?.carLicensePlate}
                       </td>
                     </tr>
                   </table>
@@ -540,7 +463,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                 <td>Thanh Toán</td>
 
                 <td>
-                  {form.getFieldValue("paymentType") == "CASH"
+                  {billDetail?.paymentType == "CASH"
                     ? "Tiền mặt"
                     : "Chuyển khoản"}
                 </td>
@@ -551,7 +474,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                 <td>Thành tiền</td>
               </tr>
 
-              {order?.services?.map((item) => (
+              {billDetail?.services?.map((item) => (
                 <>
                   <tr className="item">
                     <td>{item?.name}</td>
@@ -560,13 +483,13 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                   </tr>
                 </>
               ))}
-              {handlepromotionDetails() && (
+              {handlepromotionDetails(billDetail?.totalPromotionAmount) && (
                 <>
                   <tr className="item">
                     <td>Khuyến mãi</td>
                     <td>
                       <a style={{ color: "red" }}>
-                        -{formatMoney(totalPromotionAmount() || 0)}
+                        -{formatMoney(billDetail?.totalPromotionAmount || 0)}
                       </a>
                     </td>
                   </tr>
@@ -576,7 +499,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
               <tr className="total">
                 <td></td>
 
-                <td>Tổng: {formatMoney(finalTotalPrice() || 0)}</td>
+                <td>Tổng: {formatMoney(billDetail?.paymentAmount || 0)}</td>
               </tr>
             </table>
             <Divider style={{ paddingTop: "50px" }}>
