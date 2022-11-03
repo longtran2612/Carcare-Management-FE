@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Modal,
-  Form,
-  Input,
-  Row,
-  Col,
-  DatePicker,
-} from "antd";
+import { Modal, Form, Input, Row, Col, DatePicker } from "antd";
 import { createPromotionHeader } from "pages/api/promotionHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
@@ -19,14 +12,17 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
     try {
       console.log(values);
       const res = await createPromotionHeader(values);
-      openNotification("Thành công", "tạo mới chương trình khuyến mãi thành công");
+      openNotification(
+        "Thành công",
+        "tạo mới chương trình khuyến mãi thành công"
+      );
       handleCancel();
       onSuccess(res.data);
     } catch (error) {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -58,7 +54,7 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Row gutter={[16,16]}>
+          <Row gutter={[16, 16]}>
             <Col span={12}>
               <Form.Item
                 label="Tên chương trình khuyến mãi"
@@ -72,7 +68,7 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={6} >
+            <Col span={6}>
               <Form.Item
                 label="Ngày bắt đầu"
                 name="fromDate"
@@ -83,10 +79,18 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
                   },
                 ]}
               >
-                <DatePicker placeholder="bắt đầu" format={formatDate} />
+                <DatePicker
+                  disabledDate={(d) =>
+                    !d ||
+                    d.isBefore(moment()) ||
+                    d.isAfter(form.getFieldValue("toDate"))
+                  }
+                  placeholder="bắt đầu"
+                  format={formatDate}
+                />
               </Form.Item>
             </Col>
-            <Col span={6} >
+            <Col span={6}>
               <Form.Item
                 label="Ngày kết thúc"
                 name="toDate"
@@ -96,7 +100,13 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
                   },
                 ]}
               >
-                <DatePicker placeholder="kết thúc" format={formatDate} />
+                <DatePicker
+                  disabledDate={(d) =>
+                    !d || d.isSameOrBefore(form.getFieldValue("fromDate")) 
+                  }
+                  placeholder="kết thúc"
+                  format={formatDate}
+                />
               </Form.Item>
             </Col>
           </Row>

@@ -1,15 +1,9 @@
 import React from "react";
-import {
-  Modal,
-  Form,
-  Input,
-  Row,
-  Col,
-  DatePicker,
-} from "antd";
+import { Modal, Form, Input, Row, Col, DatePicker } from "antd";
 import { createPriceHeader } from "pages/api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
+import moment from "moment";
 const { TextArea } = Input;
 const formatDate = "HH:mm DD/MM/YYYY";
 
@@ -26,7 +20,7 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -57,7 +51,7 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Row gutter={[16,16]}>
+          <Row gutter={[16, 16]}>
             <Col span={12}>
               <Form.Item
                 label="Tên bảng giá"
@@ -71,7 +65,7 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={6} >
+            <Col span={6}>
               <Form.Item
                 label="Ngày bắt đầu"
                 name="effectiveDate"
@@ -80,11 +74,20 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
                     required: true,
                   },
                 ]}
+                initialValue={moment()}
               >
-                <DatePicker placeholder="bắt đầu" format={formatDate} />
+                <DatePicker
+                  disabledDate={(d) =>
+                    !d ||
+                    d.isBefore(moment()) ||
+                    d.isAfter(form.getFieldValue("toDate"))
+                  }
+                  placeholder="bắt đầu"
+                  format={formatDate}
+                />
               </Form.Item>
             </Col>
-            <Col span={6} >
+            <Col span={6}>
               <Form.Item
                 label="Ngày kết thúc"
                 name="expirationDate"
@@ -94,10 +97,16 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
                   },
                 ]}
               >
-                <DatePicker placeholder="kết thúc" format={formatDate} />
+                <DatePicker
+                  disabledDate={(d) =>
+                    !d || d.isSameOrBefore(form.getFieldValue("fromDate"))
+                  }
+                  placeholder="kết thúc"
+                  format={formatDate}
+                />
               </Form.Item>
             </Col>
-            <Col span={24} >
+            <Col span={24}>
               <Form.Item label="Mô tả" name="description">
                 <TextArea rows={4} />
               </Form.Item>

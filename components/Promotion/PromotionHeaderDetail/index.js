@@ -263,7 +263,7 @@ const PromotionHeaderDetail = ({
                 setPromotionLineSelected(record.id);
                 setShowDrawer(true);
               }}
-              style={{color:'#6B92F2', fontSize: "25px" }}
+              style={{ color: "#6B92F2", fontSize: "25px" }}
             />
           </div>
         );
@@ -302,9 +302,9 @@ const PromotionHeaderDetail = ({
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại", "Cập nhật thất bại");
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -349,7 +349,17 @@ const PromotionHeaderDetail = ({
                     },
                   ]}
                 >
-                  <DatePicker format={formatDate} />
+                  <DatePicker
+                    disabled={
+                      moment().isAfter(form.getFieldValue("fromDate"))
+                        ? true
+                        : false
+                    }
+                    disabledDate={(d) =>
+                      !d || d.isBefore(form.getFieldValue("toDate"))
+                    }
+                    format={formatDate}
+                  />
                   {/* <Input /> */}
                 </Form.Item>
               </Col>
@@ -363,7 +373,12 @@ const PromotionHeaderDetail = ({
                     },
                   ]}
                 >
-                  <DatePicker />
+                  <DatePicker
+                    disabledDate={(d) =>
+                      !d || d.isSameOrBefore(form.getFieldValue("fromDate"))
+                    }
+                    format={formatDate}
+                  />
                   {/* <Input /> */}
                 </Form.Item>
               </Col>
@@ -426,7 +441,7 @@ const PromotionHeaderDetail = ({
         </Col>
         <Col span={24}>
           <Table
-          size="small"
+            size="small"
             bordered
             title={() => (
               <>
@@ -483,6 +498,7 @@ const PromotionHeaderDetail = ({
         handleCancel={() => setModalPrice(false)}
         onSuccess={(data) => handleSuccessCreatePromotionLine(data)}
         promotionHeaderId={promotionHeaderId}
+        endDate={form.getFieldValue("toDate")}
       />
       <Loading show={loading} />
     </>

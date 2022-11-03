@@ -13,7 +13,6 @@ const AdminPage = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [key, setKey] = useState("car-slot");
   const [loading, setLoading] = useState(false);
-  
 
   const router = useRouter();
 
@@ -44,9 +43,9 @@ const AdminPage = () => {
       // });
       const res = await loadUser();
       const roles = Cookies.get("roles");
-      if(roles == "ROLE_USER" || roles == "ROLE_ADMIN"){
+      if (roles == "ROLE_USER" || roles == "ROLE_ADMIN") {
         router.push("/admin");
-      }else{
+      } else {
         router.push("/home");
       }
       setLoading(false);
@@ -93,7 +92,9 @@ const AdminPage = () => {
           }}
           className="site-layout"
         >
-          <MyHeader />
+          <Affix style={{ top: 0, left: 0 }}>
+            <MyHeader />
+          </Affix>
           <Content
             className="site-layout-background content"
             style={{
@@ -102,9 +103,9 @@ const AdminPage = () => {
           >
             <MyContent keyMenu={key} />
           </Content>
-          <Footer style={{ backgroundColor: "white", textAlign: "center" }}>
+          {/* <Footer style={{ backgroundColor: "white", textAlign: "center" }}>
             <Row justify="center">©2022 Coppy right by VL-CARCARE</Row>
-          </Footer>
+          </Footer> */}
         </Layout>
       </Layout>
       <Loading loading={loading} />

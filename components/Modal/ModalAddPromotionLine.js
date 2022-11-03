@@ -1,26 +1,24 @@
 import React from "react";
-import {
-  Modal,
-  Form,
-  Input,
-  Row,
-  Col,
-  DatePicker,
-  Select,
-} from "antd";
+import { Modal, Form, Input, Row, Col, DatePicker, Select } from "antd";
 import moment from "moment";
 import { createPromotionLine } from "pages/api/promotionLineAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 const formatDate = "DD/MM/YYYY";
 
-const ModalAddPromotionLine = ({promotionHeaderId, show, onSuccess, handleCancel }) => {
+const ModalAddPromotionLine = ({
+  promotionHeaderId,
+  show,
+  onSuccess,
+  handleCancel,
+  endDate
+}) => {
   const [form] = Form.useForm();
   const onFinish = async (values) => {
     let dataCreate = {
       promotionHeaderId: promotionHeaderId,
       ...values,
-    }
+    };
     try {
       console.log(dataCreate);
       const res = await createPromotionLine(dataCreate);
@@ -32,7 +30,7 @@ const ModalAddPromotionLine = ({promotionHeaderId, show, onSuccess, handleCancel
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -86,8 +84,9 @@ const ModalAddPromotionLine = ({promotionHeaderId, show, onSuccess, handleCancel
                     required: true,
                   },
                 ]}
+                initialValue="MONEY"
               >
-                 <Select>
+                <Select>
                   <Select.Option value="MONEY">Giảm tiền</Select.Option>
                   <Select.Option value="PERCENTAGE">
                     Giảm tiền theo %
@@ -96,8 +95,8 @@ const ModalAddPromotionLine = ({promotionHeaderId, show, onSuccess, handleCancel
                 </Select>
               </Form.Item>
             </Col>
-            
-            <Col span={12} >
+
+            <Col span={12}>
               <Form.Item
                 label="Ngày bắt đầu"
                 name="fromDate"
@@ -106,11 +105,20 @@ const ModalAddPromotionLine = ({promotionHeaderId, show, onSuccess, handleCancel
                     required: true,
                   },
                 ]}
+                initialValue={moment()}
               >
-                <DatePicker placeholder="Ngày bắt đầu" format={formatDate} />
+                <DatePicker
+                  disabledDate={(d) =>
+                    !d ||
+                    d.isBefore(moment()) ||
+                    d.isAfter(form.getFieldValue("toDate"))
+                  }
+                  placeholder="Ngày bắt đầu"
+                  format={formatDate}
+                />
               </Form.Item>
             </Col>
-            <Col span={12} >
+            <Col span={12}>
               <Form.Item
                 label="Ngày kết thúc"
                 name="toDate"
@@ -120,7 +128,13 @@ const ModalAddPromotionLine = ({promotionHeaderId, show, onSuccess, handleCancel
                   },
                 ]}
               >
-                <DatePicker placeholder="Ngày kết thúc" format={formatDate} />
+                <DatePicker
+                  disabledDate={(d) =>
+                    !d || d.isSameOrBefore(form.getFieldValue("fromDate")) || d.isAfter(endDate)
+                  }
+                  placeholder="Ngày kết thúc"
+                  format={formatDate}
+                />
               </Form.Item>
             </Col>
           </Row>

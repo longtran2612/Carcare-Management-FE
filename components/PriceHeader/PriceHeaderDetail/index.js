@@ -28,7 +28,7 @@ import { ClearOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
 
-const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
+const PriceHeaderDetail = ({ priceHeaderId }) => {
   const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -230,17 +230,14 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
   const onFinish = async (values) => {
     setLoading(true);
     let body = {
-      id: priceHeaderDetail.id,
-      type: values.type,
-      name: values.name,
       description: values.description,
-      categoryId: values.categoryId,
-      status: values.status,
+      // fromDate: values.fromDate,
+      toDate: values.toDate,
     };
     try {
       const res = await updatePriceHeader(body, priceHeaderDetail.id);
       openNotification("Thành công", "Cập nhật bảng giá thành công!");
-      onUpdatePriceHeader();
+      fetchPrice();
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message[0]) {
@@ -293,7 +290,17 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                     },
                   ]}
                 >
-                  <DatePicker format={formatDate} />
+                  <DatePicker
+                    disabled={
+                      moment().isAfter(form.getFieldValue("fromDate"))
+                        ? true
+                        : false
+                    }
+                    disabledDate={(d) =>
+                      !d || d.isBefore(form.getFieldValue("toDate"))
+                    }
+                    format={formatDate}
+                  />
                 </Form.Item>
               </Col>
               <Col span={4}>
@@ -306,7 +313,12 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                     },
                   ]}
                 >
-                  <DatePicker />
+                  <DatePicker
+                    disabledDate={(d) =>
+                      !d || d.isSameOrBefore(form.getFieldValue("fromDate"))
+                    }
+                    format={formatDate}
+                  />
                 </Form.Item>
               </Col>
               <Col span={4}>
@@ -319,7 +331,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                   ]}
                   name="status"
                 >
-                  <Select>
+                  <Select disabled>
                     <Select.Option value="ACTIVE">Hoạt động</Select.Option>
                     <Select.Option value="INACTIVE">
                       Không hoạt động
@@ -328,11 +340,7 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
                 </Form.Item>
               </Col>
               <Col span={24}>
-                <Form.Item
-                  label="Mô tả"
-                  name="description"
-                  
-                >
+                <Form.Item label="Mô tả" name="description">
                   <TextArea rows={2} />
                 </Form.Item>
               </Col>

@@ -52,10 +52,10 @@ const getPriceHeaders = () => {
         throw err;
       });
   };
-  const updatePriceHeader = (data) => {
+  const updatePriceHeader = (data,id) => {
     return axios({
-      method: "PUT",
-      url: API_URL + `/price-headers/${data.id}`,
+      method: "POST",
+      url: API_URL + `/price-headers/update/${id}`,
       data: data,
     })
 

@@ -1,16 +1,17 @@
-import "../styles/style.css"
+import "../styles/style.css";
 import "../styles/globals.css";
 import "../styles/style.scss";
 import "../styles/service.scss";
 import "../styles/carslot.scss";
 import "antd/dist/antd.css";
 import "../styles/bootstrap.css";
-
+import locale from "antd/es/date-picker/locale/vi_VN";
 
 import store from "../redux/store";
 import { Provider } from "react-redux";
 import { Fragment } from "react";
 import Head from "next/head";
+import { ConfigProvider } from "antd";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -20,11 +21,14 @@ function MyApp({ Component, pageProps }) {
           name="viewport"
           content="viewport-fit=cover width=device-width, initial-scale=1"
         />
-         <link rel="icon" href="/images/favicon.ico" />
+        <link rel="icon" href="/images/favicon.ico" />
       </Head>
-        <Provider store={store}>
+
+      <Provider store={store}>
+        <ConfigProvider locale={locale}>
           <Component {...pageProps} />
-        </Provider>
+        </ConfigProvider>
+      </Provider>
     </Fragment>
   );
 }

@@ -9,7 +9,7 @@ import {
   ClearOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
-import { Typography } from "antd";
+import { Typography, Affix } from "antd";
 import React, { useState, useEffect } from "react";
 const { Title } = Typography;
 import { useRouter } from "next/router";
