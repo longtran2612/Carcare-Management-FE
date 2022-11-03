@@ -102,7 +102,21 @@ const cancelCarSlot = (data) => {
     });
 };
 
+const deteleCarSlot = (id) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/car-slots/delete/${id}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 export {
+  deteleCarSlot,
   cancelCarSlot,
   getCarSlots,
   getCarSlotDetail,

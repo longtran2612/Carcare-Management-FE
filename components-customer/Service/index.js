@@ -254,13 +254,88 @@ const ServiceCustomer = ({ status }) => {
   const handleStatusInList = (item) => {
     switch (item.status) {
       case -100:
-        return "Đã hủy";
+        return(
+        <Row gutter={16}>
+          <Col span={8}>
+            <DescriptionItem
+              title="Thời gian tiếp nhận yêu cầu"
+              content={moment(item.createDate).format(formatDate)}
+            />
+          </Col>
+          <Col span={8}>
+            <DescriptionItem
+              title="Thời gian hủy"
+              content={moment(item.orderCanceledDate).format(formatDate)}
+            />
+          </Col>
+        </Row>
+        );
       case 10:
-        return "Đã hoàn thành";
+        return (
+          <Row gutter={16}>
+            {" "}
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian tiếp nhận yêu cầu"
+                content={moment(item.createDate).format(formatDate)}
+              />
+            </Col>
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian bắt đầu xử lý"
+                content={moment(item.carExecutingDate).format(formatDate)}
+              />
+            </Col>
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian hoàn thành"
+                content={moment(item?.carExecutedDate).format(formatDate)}
+              />
+            </Col>
+          </Row>
+        );
       case 100:
-        return "Đã xuất hóa đơn";
+        return (
+          <Row gutter={16}>
+            {" "}
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian tiếp nhận yêu cầu"
+                content={moment(item.createDate).format(formatDate)}
+              />
+            </Col>
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian bắt đầu xử lý"
+                content={moment(item.carExecutingDate).format(formatDate)}
+              />
+            </Col>
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian hoàn thành"
+                content={moment(item?.carExecutedDate).format(formatDate)}
+              />
+            </Col>
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian thanh toán"
+                content={moment(item?.paymentDate).format(formatDate)}
+              />
+            </Col>
+          </Row>
+        );
       case 0:
-        return "Đang chờ xử lý";
+        return (
+          <Row gutter={16}>
+            {" "}
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian tiếp nhận yêu cầu"
+                content={moment(item.createDate).format(formatDate)}
+              />
+            </Col>
+          </Row>
+        );
       case 2:
         return (
           <Row gutter={16}>
@@ -290,6 +365,8 @@ const ServiceCustomer = ({ status }) => {
         break;
     }
   };
+
+
   return (
     <>
       <List
@@ -356,6 +433,14 @@ const ServiceCustomer = ({ status }) => {
                   content={item.totalEstimateTime + " phút"}
                 />
               </Col>
+              {item.status === 10 || item.status === 100  && (
+                <Col span={8}>
+                  <DescriptionItem
+                    title="Thời gian xử lý thực tế"
+                    content={item.totalExecuteTime + " phút"}
+                  />
+                </Col>
+              )}
             </Row>
             {handleStatusInList(item)}
           </List.Item>

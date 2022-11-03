@@ -11,11 +11,13 @@ import {
   Form,
   Input,
   Breadcrumb,
+  Popconfirm,
 } from "antd";
 import {
   getCarSlots,
   createCarSlot,
   updateCarSlot,
+  deteleCarSlot,
 } from "pages/api/carSlotApi";
 import { useRouter } from "next/router";
 import CarSlotDetail from "./CarSlotDetail";
@@ -33,6 +35,9 @@ import {
   PlusOutlined,
   HomeOutlined,
   SettingOutlined,
+  SaveOutlined,
+  QuestionCircleOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 
 const formatDate = "HH:mm";
@@ -167,6 +172,16 @@ const CarSlot = () => {
     setShowSetting(false);
   };
 
+  const handelDeleteCarSlot = async (id) => {
+    try {
+      const res = await deteleCarSlot(id);
+      openNotification("Thành công", "Xóa vị trí thành công");
+      fetchCarSlots();
+    } catch (error) {
+      openNotification("Thất bại", "Xóa vị trí thất bại");
+    }
+  };
+
   const handleCss = (status) => {
     switch (status) {
       case "IN_USE":
@@ -217,20 +232,25 @@ const CarSlot = () => {
                   <HomeOutlined />
                 </Breadcrumb.Item>
                 <Breadcrumb.Item href="">
-                  <CarOutlined />
-                  {" "} Quản lý vị trí chăm sóc xe
+                  <CarOutlined /> Quản lý vị trí chăm sóc xe
                 </Breadcrumb.Item>
               </Breadcrumb>
             </Col>
             <Col span={12}>
-              <Button
-                style={{ float: "right" }}
-                icon={<PlusOutlined />}
-                type="primary"
-                onClick={() => handleCreateCarSlot()}
+              <Popconfirm
+                title="Bạn có chắc muốn thêm mới vị trí chăm sóc xe?"
+                onConfirm={() => handleCreateCarSlot()}
+                okText="Có"
+                cancelText="Không"
               >
-                Thêm vị trí mới
-              </Button>
+                <Button
+                  style={{ float: "right" }}
+                  icon={<PlusOutlined />}
+                  type="primary"
+                >
+                  Thêm vị trí mới
+                </Button>
+              </Popconfirm>
             </Col>
           </Row>
           <Row gutter={[16, 16]}>
@@ -304,6 +324,60 @@ const CarSlot = () => {
         width={700}
         okText="Xác nhận"
         cancelText="Hủy bỏ"
+        footer={
+          <>
+            <div className="steps-action">
+              <Button
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={() => {
+                  setShowSetting(false);
+                }}
+              >
+                Hủy
+              </Button>
+              {form.getFieldValue("status") != "IN_USE" && (
+                <Popconfirm
+                  title="Bạn có chắc chắn muốn xóa vị trí này?"
+                  icon={<QuestionCircleOutlined/>}
+                  onConfirm={() => {
+                    handelDeleteCarSlot(form.getFieldValue("id"));
+                    setShowSetting(false);
+                  }}
+                  okText="Xác nhận"
+                  cancelText="Hủy bỏ"
+                >
+                  <Button
+                  icon={<DeleteOutlined />}
+                    style={{
+                      margin: "0 8px",
+                    }}
+                    type="danger"
+                  >
+                    Xóa vị trí
+                  </Button>
+                </Popconfirm>
+              )}
+              <Button
+                type="primary"
+                icon={<SaveOutlined />}
+                onClick={() => {
+                  form
+                    .validateFields()
+                    .then((values) => {
+                      onUpdateSlot(values);
+                    })
+                    .catch((info) => {
+                      console.log("Validate Failed:", info);
+                    });
+                }}
+              >
+                Lưu
+              </Button>
+            </div>
+          </>
+        }
       >
         <Row gutter={16}>
           <Col span={24}>

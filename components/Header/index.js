@@ -67,7 +67,7 @@ const MyHeader = () => {
         )}
 
         {accessToken ? (
-          <SubMenu key="10" icon={<UserOutlined />} title={role === 'ADMIN' ?'ADMIN' :'Nhân viên'}>
+          <SubMenu key="10" icon={<UserOutlined />} title={role === 'ROLE_ADMIN' ?'ADMIN' :'Nhân viên'}>
             <Menu.Item key="10_1" icon={<InfoOutlined />}>
               <Link href="/admin/profile">Thông tin cá nhân</Link>
             </Menu.Item>
