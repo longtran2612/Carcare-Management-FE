@@ -21,6 +21,7 @@ import {
   TagsOutlined,
   SyncOutlined,
   PlusCircleFilled,
+  PrinterOutlined,
 } from "@ant-design/icons";
 import { getOrderById } from "pages/api/orderAPI";
 import Loading from "components/Loading";
@@ -31,6 +32,7 @@ import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
 import UpDateServiceOrder from "components/Modal/ModalUpdateServiceOrder";
 import { getAllPromotionUseable } from "pages/api/promotionDetail";
+import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -248,11 +250,12 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                   <Button
                     type="primary"
                     size="large"
+                    icon ={<PrinterOutlined/>}
                     onClick={() => {
                       setShowCreateBill(true);
                     }}
                   >
-                    Xuất hóa đơn
+                    Thanh toán - In hóa đơn
                   </Button>
                 </div>
               </div>
@@ -340,34 +343,13 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                       <Table.Summary.Row>
                         <Table.Summary.Cell index={0}></Table.Summary.Cell>
                         <Table.Summary.Cell index={1}>
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              color: "#E34262",
-                            }}
-                          >
-                            Tổng dịch vụ
-                          </span>
+                          Tổng dịch vụ
                         </Table.Summary.Cell>
                         <Table.Summary.Cell index={2}>
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              color: "#E34262",
-                            }}
-                          >
-                            {totalTimeService() || 0} phút
-                          </span>
+                          {totalTimeService() || 0} phút
                         </Table.Summary.Cell>
                         <Table.Summary.Cell index={3}>
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              color: "#E34262",
-                            }}
-                          >
-                            {formatMoney(totalPriceService() || 0)}
-                          </span>
+                          {formatMoney(totalPriceService() || 0)}
                         </Table.Summary.Cell>
                       </Table.Summary.Row>
                       <Table.Summary.Row>
@@ -382,7 +364,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                             }}
                             onClick={() => setShowSelectPromotion(true)}
                           >
-                            Danh sách khuyến mãi
+                            Khuyến mãi được áp dụng
                           </Button>
                         </Table.Summary.Cell>
                         <Table.Summary.Cell index={2}>
@@ -411,7 +393,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                         <Table.Summary.Cell index={1}></Table.Summary.Cell>
                         <Table.Summary.Cell index={2}>
                           <span style={{ color: "red", fontWeight: "bold" }}>
-                            Tổng thanh toán (tạm tính)
+                            Tổng tiền thanh toán
                           </span>
                         </Table.Summary.Cell>
                         <Table.Summary.Cell index={3}>
@@ -487,93 +469,6 @@ export const OrderNotRequestDetail = ({ orderId }) => {
           </Row>
         </Col>
       </Row>
-      <Drawer
-        title="Danh sách khuyến mãi được áp dụng"
-        placement="right"
-        onClose={() => setShowSelectPromotion(false)}
-        visible={showSelectPromotion}
-        width={700}
-      >
-        <>
-          <List
-            dataSource={promotionDetails}
-            itemLayout="vertical"
-            size="large"
-            renderItem={(item) => (
-              <Row gutter={16}>
-                <Col
-                  style={{
-                    border: "solid gray 1px",
-                    borderRadius: "5px",
-                    margin: "10px",
-                  }}
-                  span={24}
-                >
-                  <List.Item key={item.id}>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar
-                          size={{
-                            xs: 24,
-                            sm: 32,
-                            md: 40,
-                            lg: 64,
-                            xl: 80,
-                            xxl: 100,
-                          }}
-                          icon={<TagsOutlined />}
-                        />
-                      }
-                      title={<a>{item.name}</a>}
-                      description={<Title level={5}>{item.description}</Title>}
-                    />
-                    <Row>
-                      {item.type === "PERCENTAGE" ? (
-                        <Col span={24}>
-                          {" "}
-                          <span style={{ color: "red", fontWeight: "bold" }}>
-                            Giảm {item.amount}%{" "}
-                          </span>
-                        </Col>
-                      ) : (
-                        <Col span={24}>
-                          <span style={{ color: "red", fontWeight: "bold" }}>
-                            Giảm {formatMoney(item.amount || 0)}{" "}
-                          </span>
-                        </Col>
-                      )}
-                      <Col span={12}>
-                        <span style={{ fontWeight: "bold" }}>
-                          Số tiền đơn hàng tối thiểu:{" "}
-                        </span>
-                        {formatMoney(item.minimumSpend || 0)}
-                      </Col>
-                      {item.type === "PERCENTAGE" && (
-                        <Col span={12}>
-                          <span style={{ fontWeight: "bold" }}>
-                            Giảm tối đa:{" "}
-                          </span>
-                          {formatMoney(item.maximumDiscount || 0)}
-                        </Col>
-                      )}
-                      <Col span={12}>
-                        <span style={{ fontWeight: "bold" }}>
-                          Ngày bắt đầu:{" "}
-                        </span>
-                        {moment(item.fromDate).format("DD/MM/YYYY")}
-                      </Col>
-                      <Col span={12}>
-                        <span style={{ fontWeight: "bold" }}>Kết thúc: </span>
-                        {moment(item.toDate).format("DD/MM/YYYY")}
-                      </Col>
-                    </Row>
-                  </List.Item>
-                </Col>
-              </Row>
-            )}
-          />
-        </>
-      </Drawer>
       <UpDateServiceOrder
         show={showUpdateServiceOrder}
         order={order}
@@ -586,6 +481,12 @@ export const OrderNotRequestDetail = ({ orderId }) => {
         handleCancel={() => setShowCreateBill(false)}
         onSuccess={() => handleSuccessBill()}
       />
+      <DrawerPromotionOrder
+        show={showSelectPromotion}
+        promotionDetails={promotionDetails}
+        handleCancel={() => setShowSelectPromotion(false)}
+      />
+
       <Loading loading={loading} />
     </>
   );

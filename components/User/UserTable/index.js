@@ -244,7 +244,7 @@ function UserTable({}) {
   };
   useEffect(() => {
     handleUsers();
-  }, []);
+  }, [userId]);
 
   const handleSuccessCreteUser = () => {
     handleUsers();

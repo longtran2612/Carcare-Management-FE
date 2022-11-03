@@ -271,7 +271,7 @@ function CustomerTable({}) {
   };
   useEffect(() => {
     handlecustomers();
-  }, []);
+  }, [customerId]);
 
   const handleSuccessCreateCustomer = (data) => {
     handlecustomers();

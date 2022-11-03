@@ -379,34 +379,13 @@ const CarSlotDetail = ({ carSlotId }) => {
                                 index={0}
                               ></Table.Summary.Cell>
                               <Table.Summary.Cell index={1}>
-                                <span
-                                  style={{
-                                    fontWeight: "bold",
-                                    color: "#E34262",
-                                  }}
-                                >
-                                  Tổng dịch vụ
-                                </span>
+                                Tổng dịch vụ
                               </Table.Summary.Cell>
                               <Table.Summary.Cell index={2}>
-                                <span
-                                  style={{
-                                    fontWeight: "bold",
-                                    color: "#E34262",
-                                  }}
-                                >
-                                  {totalTimeService() || 0} phút
-                                </span>
+                                {totalTimeService() || 0} phút
                               </Table.Summary.Cell>
                               <Table.Summary.Cell index={3}>
-                                <span
-                                  style={{
-                                    fontWeight: "bold",
-                                    color: "#E34262",
-                                  }}
-                                >
-                                  {formatMoney(totalPriceService() || 0)}
-                                </span>
+                                {formatMoney(totalPriceService() || 0)}
                               </Table.Summary.Cell>
                             </Table.Summary.Row>
                             <Table.Summary.Row>
@@ -423,7 +402,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                                   }}
                                   onClick={() => setShowSelectPromotion(true)}
                                 >
-                                  Danh sách khuyến mãi
+                                  Khuyến mãi được áp dụng
                                 </Button>
                               </Table.Summary.Cell>
                               <Table.Summary.Cell index={2}>

@@ -132,7 +132,7 @@ function CategoryTable({}) {
 
   useEffect(() => {
     handleCatetgory();
-  }, []);
+  }, [categoryId]);
 
   const columns = [
     {

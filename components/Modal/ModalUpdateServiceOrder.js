@@ -1,6 +1,20 @@
-import { Table, Tag, Button, Input, Row, Col, Modal,Drawer, Space,List,Avatar,Typography  } from "antd";
+import {
+  Table,
+  Tag,
+  Button,
+  Input,
+  Row,
+  Col,
+  Modal,
+  Drawer,
+  Space,
+  List,
+  Avatar,
+  Typography,
+  Divider,
+} from "antd";
 import React, { useState, useEffect, useRef } from "react";
-import { SearchOutlined, ClearOutlined,TagsOutlined } from "@ant-design/icons";
+import { SearchOutlined, ClearOutlined, TagsOutlined } from "@ant-design/icons";
 import { getServices } from "pages/api/serviceAPI";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
@@ -11,7 +25,7 @@ import moment from "moment";
 import { openNotification } from "utils/notification";
 import { getAllPromotionUseAbleByServiceIds } from "pages/api/promotionDetail";
 import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
-const {Title} = Typography;
+const { Title } = Typography;
 
 function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
   const [services, setServices] = useState([]);
@@ -42,9 +56,7 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
 
   const handleFetchPromotion = async () => {
     try {
-      const res = await getAllPromotionUseAbleByServiceIds(
-        selectedRowKeys
-      );
+      const res = await getAllPromotionUseAbleByServiceIds(selectedRowKeys);
       setPromotionDetails(res.data.Data);
     } catch (error) {
       console.log(error);
@@ -56,11 +68,10 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
     if (order) {
       setSelectedRowKeys(order?.services.map((item) => item.id));
       setSelectedRows(order?.services);
-     
     }
   }, [order]);
 
-  console.log(promotionDetails)
+  console.log(promotionDetails);
   useEffect(() => {
     handleFetchPromotion();
   }, [selectedRowKeys]);
@@ -313,6 +324,7 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
           </Col>
         </Row>
         <Table
+          size="small"
           rowKey={(record) => record.id}
           onChange={handleSearch}
           columns={columns}
@@ -325,35 +337,18 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
           scroll={{
             y: 200,
           }}
-          size="small"
           footer={() => {
             return (
               <>
-                <Row gutter={[16, 16]}>
+                <Row gutter={[16,4]}>
                   <Col style={{ marginRight: "40px" }} span={10}></Col>
                   <Col style={{ marginRight: "25px" }} span={4}>
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        color: "#E34262",
-                      }}
-                    >
-                      Tổng tiền dịch vụ
-                    </span>
+                    Tổng dịch vụ
                   </Col>
                   <Col style={{ marginRight: "15px" }} span={4}>
                     {totalTimeService() || 0} phút
                   </Col>
-                  <Col span={4}>
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        color: "#E34262",
-                      }}
-                    >
-                      {formatMoney(totalPriceService() || 0)}
-                    </span>
-                  </Col>
+                  <Col span={4}>{formatMoney(totalPriceService() || 0)}</Col>
                   <Col style={{ marginRight: "40px" }} span={10}>
                     <Button
                       icon={<TagsOutlined />}
@@ -361,10 +356,11 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
                       style={{
                         backgroundColor: "#B6D433",
                         color: "white",
+                        marginLeft: "70px",
                       }}
                       onClick={() => setShowSelectPromotion(true)}
                     >
-                      Danh sách khuyến mãi
+                      Khuyến mãi được áp dụng
                     </Button>
                   </Col>
                   <Col style={{ marginRight: "25px" }} span={4}>
@@ -390,10 +386,11 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
                       {formatMoney(totalPromotionAmount() || 0)}
                     </span>
                   </Col>
+                  <Divider style={{margin:'0',padding:'0'}}/>
                   <Col style={{ marginRight: "40px" }} span={10}></Col>
                   <Col style={{ marginRight: "25px" }} span={4}>
                     <span style={{ color: "red", fontWeight: "bold" }}>
-                      Tổng thanh toán (tạm tính)
+                      Tổng thanh toán
                     </span>
                   </Col>
                   <Col style={{ marginRight: "15px" }} span={4}></Col>
@@ -420,7 +417,7 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
         promotionDetails={promotionDetails}
         handleCancel={() => setShowSelectPromotion(false)}
       />
-      
+
       <Loading loading={loading} />
     </>
   );

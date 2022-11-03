@@ -193,7 +193,7 @@ function PromotionHeaderTable({}) {
 
   useEffect(() => {
     handleGetpromotionHeaders();
-  }, []);
+  }, [promotionHeaderId]);
 
   const handleSuccessCreatePromotionHeader = () => {
     handleGetpromotionHeaders();

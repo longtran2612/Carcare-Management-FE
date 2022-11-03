@@ -291,7 +291,7 @@ function OrderNotRequestTable({}) {
 
   useEffect(() => {
     handleGetorders();
-  }, [status]);
+  }, [status,orderId]);
 
   const columnService = [
     {

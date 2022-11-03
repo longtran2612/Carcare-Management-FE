@@ -222,7 +222,7 @@ function CarModelTable({}) {
   };
   useEffect(() => {
     handleGetCarModel();
-  }, []);
+  }, [carModelId]);
 
   const handleSuccessCarModel = () => {
     handleGetCarModel();

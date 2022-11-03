@@ -314,7 +314,7 @@ function OrderTable({}) {
 
   useEffect(() => {
     handleGetorders();
-  }, []);
+  }, [orderRequestId]);
 
   const columnService = [
     {

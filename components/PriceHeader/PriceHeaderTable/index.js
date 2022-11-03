@@ -190,7 +190,7 @@ function PriceHeaderTable({}) {
 
   useEffect(() => {
     handleGetPriceHeaders();
-  }, []);
+  }, [priceHeaderId]);
 
   const handleSuccessCreatePriceHeader = () => {
     handleGetPriceHeaders();

@@ -189,7 +189,7 @@ function CarTable({}) {
 
   useEffect(() => {
     handleGetCar();
-  }, []);
+  }, [carId]);
 
   const handleSuccessCreateCar = () => {
     handleGetCar();

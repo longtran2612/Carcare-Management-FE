@@ -56,6 +56,9 @@ function ServiceTable({}) {
 
   useEffect(() => {
     handleGetServices();
+  }, [serviceId]);
+
+  useEffect(() => {
     fetchCategoryServices();
   }, []);
 
