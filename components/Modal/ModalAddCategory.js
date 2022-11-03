@@ -28,10 +28,10 @@ const ModalAddCategory = ({ show, onSuccess, handleCancel }) => {
       onSuccess(res.data.Data);
       form.resetFields();
     } catch (error) {
-      if(error.response.data.message[0]){
-        openNotification(error.response.data.message[0]);
-      } else{
-        openNotification("Thất bại", "Thêm mới danh mục thất bại");
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

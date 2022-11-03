@@ -87,12 +87,11 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
       setCustomerDetail(res.data.Data);
       openNotification("Cập nhật khách hàng thành công!", "");
     } catch (error) {
-      if (error.response.data) {
-        openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại", "Cập nhật thông tin khách hàng thất bại");
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
       }
-      setLoading(false);
     }
   };
   // handle upload image
@@ -122,10 +121,10 @@ const CustomerDetail = ({ customerId, onUpdateCustomer }) => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      if (error.response.data) {
-        openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại", "Tải ảnh lên không thành công");
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

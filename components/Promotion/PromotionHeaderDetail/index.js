@@ -284,7 +284,7 @@ const PromotionHeaderDetail = ({
   };
 
   const onFinish = async (values) => {
-    loading(true);
+    setLoading(true);
     let body = {
       id: promotionHeaderDetail.id,
       type: values.type,
@@ -295,14 +295,14 @@ const PromotionHeaderDetail = ({
     };
     try {
       const res = await updatePriceHeader(body, promotionHeaderDetail.id);
-      openNotification("Cập nhật dịch vụ thành công!", "");
+      openNotification("Cập nhật chương trình khuyến mãi thành công!", "");
       onUpdatePromotionHeader();
       setLoading(false);
     } catch (error) {
-      if (error.response.data) {
-        openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại", "Cập nhật bảng giá thất bại");
+        openNotification("Thất bại", "Cập nhật thất bại");
       }
       setLoading(false)
     }

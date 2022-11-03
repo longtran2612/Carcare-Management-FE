@@ -243,8 +243,8 @@ const PriceHeaderDetail = ({ priceHeaderId, onUpdatePriceHeader }) => {
       onUpdatePriceHeader();
       setLoading(false);
     } catch (error) {
-      if (error.response.data) {
-        openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification("Thất bại", "Cập nhật bảng giá thất bại");
       }

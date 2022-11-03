@@ -53,8 +53,8 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       });
       setLoading(false);
     } catch (error) {
+      console.log(error);
       setLoading(false);
-      openNotification(error.response.Message);
     }
   };
 
@@ -65,7 +65,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
   }, [userId]);
 
   const onFinish = async (values) => {
-    setLoading(true)
+    setLoading(true);
     try {
       let body = {
         name: values.name,
@@ -79,11 +79,11 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       setUserDetail(res.data.Data);
       openNotification("Thành công!", "Cập nhật nhân viên thành công");
       onUpdateUser();
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
-      if (error.response.data) {
-        openNotification(error.response.data.message[0]);
-      } else{
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
         openNotification("Thất bại", "Cập nhật thông tin nhân viên thất bại");
       }
       setLoading(false);
@@ -116,7 +116,11 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+      }
     }
   };
 

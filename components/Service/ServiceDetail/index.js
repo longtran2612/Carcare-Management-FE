@@ -100,8 +100,8 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       openNotification("Thành công!", "Cập nhật dịch vụ thành công");
       onUpdateService();
     } catch (error) {
-      if (error.response.data) {
-        openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification("Thất bại", "Cập nhật bảng giá thất bại");
       }

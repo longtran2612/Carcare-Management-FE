@@ -30,13 +30,12 @@ export default function LoginPage() {
     try{
       const res = await login(values);
       dispatch(setLogin(res.data.Data));
-      const roles = Cookies.get("roles");
-      if(roles === "ROLE_CUSTOMER"){
+      if(res.data.Data.roles === "ROLE_CUSTOMER"){
         router.push("/customer");
         const customer = await getCustomerByPhone(res.data.Data.username);
         Cookies.set("id", customer.data.Data.id);
       }
-      if(roles == "ROLE_USER" || roles == "ROLE_ADMIN"){
+      if(res.data.Data.roles  == "ROLE_USER" || res.data.Data.roles  == "ROLE_ADMIN"){
         router.push("/admin");
       }
       setLoading(false);

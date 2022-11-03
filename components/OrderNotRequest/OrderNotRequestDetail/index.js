@@ -59,7 +59,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
       setOrder(res.data.Data);
       setLoading(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      console.log(error);
       setLoading(false);
     }
   };

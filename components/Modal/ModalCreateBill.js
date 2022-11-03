@@ -147,10 +147,10 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       setShowPrint(false);
       form.resetFields();
     } catch (error) {
-      if(error.response.data.message[0]){
-        openNotification(error.response.data.message[0]);
-      } else{
-        openNotification("Thất bại", "Tạo hóa đơn thất bại");
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

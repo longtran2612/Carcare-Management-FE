@@ -65,7 +65,11 @@ const UserProfile = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(error.message);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau","bottomRight");
+      }
     }
   };
 
@@ -90,7 +94,11 @@ const UserProfile = () => {
       setUserDetail(res.data.Data);
       openNotification("Thành công!", "Cập nhật người dùng thành công");
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau","bottomRight");
+      }
     }
   };
   // handle upload image
@@ -120,7 +128,11 @@ const UserProfile = () => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau","bottomRight");
+      }
     }
   };
 

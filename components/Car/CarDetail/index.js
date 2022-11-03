@@ -107,10 +107,10 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       openNotification("Thành công", "Cập nhật xe thành công");
       onUpdateCar();
     } catch (error) {
-      if (error.response.data) {
-        openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại", "Cập nhật xe thất bại");
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

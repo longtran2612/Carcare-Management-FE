@@ -39,7 +39,11 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
       handleCancel();
       onSuccess(res.data);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+      }
     }
   };
   useEffect(() => {

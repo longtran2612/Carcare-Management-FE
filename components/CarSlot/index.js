@@ -58,7 +58,11 @@ const CarSlot = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+      }
     }
   };
   console.log("carSlots", carSlots);
@@ -77,12 +81,19 @@ const CarSlot = () => {
   };
 
   const handleCreateCarSlot = async () => {
+    setLoading(true);
     try {
       const res = await createCarSlot();
       openNotification("Thành công", "Thêm mới vị trí thành công");
       fetchCarSlots();
+      setLoading(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+      setLoading(false);
     }
   };
 
@@ -156,6 +167,7 @@ const CarSlot = () => {
   };
 
   const onUpdateSlot = async (values) => {
+    setLoading(true);
     console.log("values", values);
     let dataUpdate = {
       name: values.name,
@@ -165,20 +177,32 @@ const CarSlot = () => {
       const res = await updateCarSlot(dataUpdate, form.getFieldValue("id"));
       openNotification("Thành công", "Cập nhật vị trí thành công");
       fetchCarSlots();
+      setLoading(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+      setLoading(false);
     }
 
-    setShowSetting(false);
   };
 
   const handelDeleteCarSlot = async (id) => {
+    setLoading(true);
     try {
       const res = await deteleCarSlot(id);
       openNotification("Thành công", "Xóa vị trí thành công");
       fetchCarSlots();
+      setLoading(false);
     } catch (error) {
-      openNotification("Thất bại", "Xóa vị trí thất bại");
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+      setLoading(false);
     }
   };
 

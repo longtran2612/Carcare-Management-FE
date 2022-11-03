@@ -94,7 +94,11 @@ export const ProfileCustomer = () => {
       setCustomerDetail(res.data.Data);
       openNotification("Thành công","Cập nhật thông tin thành công");
     } catch (error) {
-      openNotification("Thất bại","","bottomRight");
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau","bottomRight");
+      }
     }
   };
   // handle upload image
@@ -124,7 +128,11 @@ export const ProfileCustomer = () => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message[0]) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau","bottomRight");
+      }
     }
   };
 
