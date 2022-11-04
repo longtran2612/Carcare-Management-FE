@@ -41,7 +41,7 @@ const ModalAddCar = ({ show, onSuccess, handleCancel }) => {
       const res = await createCar(values);
       openNotification("Thành công", "Thêm mới xe thành công");
       handleCancel();
-      onSuccess(res.data.Data);
+      onSuccess(res?.data?.Data);
       form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message[0]) {

@@ -24,7 +24,7 @@ const ModalAddPromotionLine = ({
       const res = await createPromotionLine(dataCreate);
       openNotification("Thành công", "tạo mới dòng khuyến mãi thành công");
       handleCancel();
-      onSuccess(res.data.Data);
+      onSuccess(res?.data?.Data);
       form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message[0]) {

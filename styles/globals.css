@@ -105,6 +105,22 @@ ant-card-head-title{
 .ant-input-number-group-wrapper{
   width: 100% !important;
 }
+.ant-drawer-header{
+  background: linear-gradient(to top right, #afa0d6, #84a5e4) !important;
+}
+.ant-modal-header{
+  background: linear-gradient(to top right, #afa0d6, #84a5e4) !important;
+  font:bold !important;
+}
+.ant-modal-title{
+  font:bold 1.2rem "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  color: #444444 !important;
+}
+.ant-drawer-title{
+  font:bold 1.2rem "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  color: #444444 !important;
+}
+
 .background-login{
   background: linear-gradient(to top right, #AE9CE1, #F5E7DB);
 }

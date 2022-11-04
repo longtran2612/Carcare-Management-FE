@@ -40,7 +40,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
       const res = await createService(dataCreate);
       openNotification("Thành công!", "Tạo mới dịch vụ thành công");
       handleCancel();
-      onSuccess(res.data.Data);
+      onSuccess(res?.data?.Data);
       form.resetFields();
 
     } catch (error) {

@@ -84,7 +84,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
   return (
     <>
       <Modal
-        title="Thêm người dùng mới"
+        title="Thêm khách hàng mới"
         visible={show}
         onOk={() => {
           form

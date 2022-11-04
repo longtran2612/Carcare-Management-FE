@@ -141,11 +141,11 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       openNotification("Thành công!", "Tạo hóa đơn thành công!");
       handleCancel();
       setBillDetail(res.data.Data);
-      onSuccess(res.data.Data);
+      onSuccess(res?.data?.Data);
+      form.resetFields();
       setShowPrint(true);
       handlePrint();
       setShowPrint(false);
-      form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);

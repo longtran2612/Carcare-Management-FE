@@ -25,7 +25,7 @@ const ModalAddCategory = ({ show, onSuccess, handleCancel }) => {
       const res = await createCategory(values);
       openNotification("Thành công", "Tạo mới danh mục thành công");
       handleCancel();
-      onSuccess(res.data.Data);
+      onSuccess(res?.data?.Data);
       form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message[0]) {

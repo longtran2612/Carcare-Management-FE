@@ -14,7 +14,7 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
       const res = await createPriceHeader(values);
       openNotification("Thành công", "tạo mới bảng giá thành công");
       handleCancel();
-      onSuccess(res.data.Data);
+      onSuccess(res?.data?.Data);
       form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message[0]) {

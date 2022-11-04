@@ -37,7 +37,9 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
       console.log(res);
       openNotification("Thành công!", "Tạo mới người dùng thành công");
       handleCancel();
-      onSuccess(res.data);
+      onSuccess(res?.data?.Data);
+      form.resetFields();
+
     } catch (error) {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
@@ -66,13 +68,12 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
   return (
     <>
       <Modal
-        title="Thêm người dùng mới"
+        title="Thêm nhân viên mới"
         visible={show}
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
-              form.resetFields();
               onFinish(values);
             })
             .catch((info) => {

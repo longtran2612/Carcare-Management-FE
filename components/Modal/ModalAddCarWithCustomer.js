@@ -63,7 +63,8 @@ const ModalAddCarWithCustomer = ({
       const res = await createCar(dataCreate);
       openNotification("Thành công", "Thêm mới xe thành công");
       handleCancel();
-      onSuccess(res.data.Data);
+      onSuccess(res?.data?.Data);
+      form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
@@ -112,7 +113,7 @@ const ModalAddCarWithCustomer = ({
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
+              
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

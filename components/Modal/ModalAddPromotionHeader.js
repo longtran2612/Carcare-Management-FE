@@ -17,7 +17,8 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
         "tạo mới chương trình khuyến mãi thành công"
       );
       handleCancel();
-      onSuccess(res.data);
+      onSuccess(res?.data?.Data);
+      form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
@@ -36,7 +37,7 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
           form
             .validateFields()
             .then((values) => {
-              form.resetFields();
+      
               onFinish(values);
             })
             .catch((info) => {
