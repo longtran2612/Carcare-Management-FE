@@ -5,7 +5,10 @@ import "../styles/service.scss";
 import "../styles/carslot.scss";
 import "antd/dist/antd.css";
 import "../styles/bootstrap.css";
-import locale from "antd/es/date-picker/locale/vi_VN";
+import "moment/locale/vi"
+import moment from "moment";
+moment.locale("vi");
+import locale from "antd/lib/locale/vi_VN";
 
 import store from "../redux/store";
 import { Provider } from "react-redux";
