@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import axiosClient from ".";
 import { API_URL } from "./url";
 
 const getBills = () => {

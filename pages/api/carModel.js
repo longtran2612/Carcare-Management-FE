@@ -64,6 +64,19 @@ const deleteCarModel = (data) => {
       throw err;
     });
 };
+const updateCarModel = (data,id) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/car-models/update/${id}`,
+    data: data,
+  })
+    .then((res) => {  
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
 const exportExcelCarModel = () => {
   return axios({
@@ -96,4 +109,4 @@ const importExcelCarModel = (data) => {
     });
 };
 
-export { getCarModel, getCarModelById, deleteCarModel, createCarModel,getCarModelByBrand, exportExcelCarModel, importExcelCarModel };
+export { getCarModel,updateCarModel, getCarModelById, deleteCarModel, createCarModel,getCarModelByBrand, exportExcelCarModel, importExcelCarModel };

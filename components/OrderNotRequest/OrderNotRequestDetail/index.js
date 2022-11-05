@@ -23,7 +23,8 @@ import {
   PlusCircleFilled,
   PrinterOutlined,
 } from "@ant-design/icons";
-import { getOrderById } from "pages/api/orderAPI";
+import { getUserById, getUsers } from "pages/api/userAPI";
+import { getOrderById,updateOrder } from "pages/api/orderAPI";
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
@@ -40,11 +41,13 @@ const { Column, ColumnGroup } = Table;
 const formatDate = "HH:mm DD/MM/YYYY";
 
 export const OrderNotRequestDetail = ({ orderId }) => {
+  const [form] = Form.useForm();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [showCreateBill, setShowCreateBill] = useState(false);
-
+  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState(null);
   const [step, setStep] = useState(0);
 
   const [showUpdateServiceOrder, setShowUpdateServiceOrder] = useState(false);
@@ -57,6 +60,8 @@ export const OrderNotRequestDetail = ({ orderId }) => {
       setLoading(true);
       const res = await getOrderById(orderId);
       setOrder(res.data.Data);
+      fetchUser(res.data.Data.executorId);
+      fetchUsers();
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -67,6 +72,25 @@ export const OrderNotRequestDetail = ({ orderId }) => {
     try {
       const res = await getAllPromotionUseable(order?.id);
       setPromotionDetails(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  const fetchUser = async (data) => {
+    console.log("id", data);
+    try {
+      const response = await getUserById(data);
+      setUser(response.data.Data);
+      form.setFieldValue("executorId", response.data.Data.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchUsers = async () => {
+    try {
+      const response = await getUsers();
+      setUsers(response.data.Data);
     } catch (error) {
       console.log(error);
     }
@@ -208,12 +232,28 @@ export const OrderNotRequestDetail = ({ orderId }) => {
     setShowUpdateServiceOrder(false);
     getOrder();
   };
+  const handleChangeUser = async (value) => {
+    setLoading(true);
+    let dataUpdate= {
+      executorId: value,
+      serviceIds: order?.services?.map((service) => service.id),
+    }
+    try {
+      const res = await updateOrder(order?.id, dataUpdate);
+      openNotification("Thành công!", "Cập nhật nhân viên xử lý thành công");
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
 
   return (
     <>
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
         Trở lại
       </Button>
+    
       <div className="carslot-content--header">
         <Title style={{ padding: "0px" }} level={3}>
           Thông tin đơn hàng{" "}
@@ -221,12 +261,37 @@ export const OrderNotRequestDetail = ({ orderId }) => {
         </Title>
         <div> {convertOrderStatus()}</div>
       </div>
+      <Form form={form} layout="vertical">
       <Row>
         <Col span={6}>
           <div
             style={{ marginRight: "10px" }}
             className="carslot-customer content-white"
           >
+            <Form.Item label="Nhân viên xử lý" name="executorId">
+              <Select
+                style={{ width: "100%", marginBottom: "10px" }}
+                showSearch
+                placeholder="Nhân viên xử lý"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  optionA.children
+                    .toLowerCase()
+                    .localeCompare(optionB.children.toLowerCase())
+                }
+                onChange={handleChangeUser}
+                disabled={order?.status === 10 ||order?.status === -100 || order?.status === -100}
+              >
+                {users.map((item) => (
+                  <Option value={item.id}>
+                    {item.name + " - " + item.phone}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
             <Title level={4}>Thông tin khách hàng</Title>
             <Timeline>
               <Timeline.Item>Mã: {order?.customerCode}</Timeline.Item>
@@ -250,7 +315,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                   <Button
                     type="primary"
                     size="large"
-                    icon ={<PrinterOutlined/>}
+                    icon={<PrinterOutlined />}
                     onClick={() => {
                       setShowCreateBill(true);
                     }}
@@ -469,6 +534,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
           </Row>
         </Col>
       </Row>
+      </Form>
       <UpDateServiceOrder
         show={showUpdateServiceOrder}
         order={order}

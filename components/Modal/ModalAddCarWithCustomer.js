@@ -20,7 +20,6 @@ const ModalAddCarWithCustomer = ({
   const [modalCarModel, setModalCarModel] = useState(false);
   const [users, setUsers] = useState([]);
   const [brandSelected, setBrandSelected] = useState("");
-  
 
   const [brands, setBrands] = useState([
     "Toyota",
@@ -55,7 +54,7 @@ const ModalAddCarWithCustomer = ({
         carModelName + " " + values.licensePlate + " " + (values.color || ""),
       carModel: values.carModel || null,
       licensePlate: values.licensePlate,
-      customerId: customerId,
+      customerId: customerId || values.customerId,
     };
 
     try {
@@ -66,11 +65,7 @@ const ModalAddCarWithCustomer = ({
       onSuccess(res?.data?.Data);
       form.resetFields();
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
-        openNotification(error?.response?.data?.message[0]);
-      } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
-      }
+      openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
     }
   };
   const getCarModels = async () => {
@@ -95,13 +90,14 @@ const ModalAddCarWithCustomer = ({
     form.setFieldsValue({ carModel: data.carModelCode });
   };
 
+
+
   useEffect(() => {
-    if(!customerId){
+    if (!customerId) {
       getUsersData();
     }
     getCarModels();
-   
-  }, [show,form,brandSelected]);
+  }, [show, form, brandSelected]);
 
   return (
     <>
@@ -113,7 +109,6 @@ const ModalAddCarWithCustomer = ({
             .validateFields()
             .then((values) => {
               onFinish(values);
-              
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -197,11 +192,11 @@ const ModalAddCarWithCustomer = ({
               </Form.Item>
             </Col>
             <Col style={{ display: "flex", alignItems: "center" }} span={2}>
-              <Button icon={<PlusCircleOutlined/>}
-               type="primary" onClick={() => setModalCarModel(true)}>
-               
-               
-              </Button>
+              <Button
+                icon={<PlusCircleOutlined />}
+                type="primary"
+                onClick={() => setModalCarModel(true)}
+              ></Button>
             </Col>
             {!customerId && (
               <Col span={24}>

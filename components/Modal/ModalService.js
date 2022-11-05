@@ -28,7 +28,7 @@ import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
 const { Step } = Steps;
 const { Title } = Typography;
 
-function ServiceOrder({ onSelected, selectedService}) {
+function ServiceOrder({ onSelected, selectedService }) {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -43,8 +43,8 @@ function ServiceOrder({ onSelected, selectedService}) {
   const searchInput = useRef(null);
   const [filteredInfo, setFilteredInfo] = useState({});
 
-  const[totalAmountToParent,setTotalAmountToParent] = useState(0);
-  const[totalAmountPromotion,setTotalAmountPromotion] = useState(0);
+  const [totalAmountToParent, setTotalAmountToParent] = useState(0);
+  const [totalAmountPromotion, setTotalAmountPromotion] = useState(0);
 
   const handleGetServices = async () => {
     setLoading(true);
@@ -271,8 +271,8 @@ function ServiceOrder({ onSelected, selectedService}) {
     return totalPromotion;
   };
   const finalTotalPrice = () => {
-    let total = totalPriceService() - totalPromotionAmount()
-    return total ;
+    let total = totalPriceService() - totalPromotionAmount();
+    return total;
   };
 
   return (
@@ -307,37 +307,21 @@ function ServiceOrder({ onSelected, selectedService}) {
             pageSize: 20,
           }}
           scroll={{
-            y: 200,
+            y: 170,
           }}
           size="small"
           footer={() => {
             return (
               <>
-                <Row gutter={[16, 16]}>
+                <Row gutter={[16]}>
                   <Col style={{ marginRight: "40px" }} span={10}></Col>
                   <Col style={{ marginRight: "25px" }} span={4}>
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        color: "#E34262",
-                      }}
-                    >
-                      Tổng tiền dịch vụ
-                    </span>
+                    Tổng tiền dịch vụ
                   </Col>
                   <Col style={{ marginRight: "15px" }} span={4}>
                     {totalTimeService() || 0} phút
                   </Col>
-                  <Col span={4}>
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        color: "#E34262",
-                      }}
-                    >
-                      {formatMoney(totalPriceService() || 0)}
-                    </span>
-                  </Col>
+                  <Col span={4}>{formatMoney(totalPriceService() || 0)}</Col>
                   <Col style={{ marginRight: "40px" }} span={10}>
                     <Button
                       icon={<TagsOutlined />}
@@ -348,7 +332,7 @@ function ServiceOrder({ onSelected, selectedService}) {
                       }}
                       onClick={() => setShowSelectPromotion(true)}
                     >
-                      Danh sách khuyến mãi
+                      Khuyến mãi được áp dụng
                     </Button>
                   </Col>
                   <Col style={{ marginRight: "25px" }} span={4}>
@@ -405,7 +389,6 @@ function ServiceOrder({ onSelected, selectedService}) {
         handleCancel={() => setShowSelectPromotion(false)}
       />
 
-     
       <Loading loading={loading} />
     </>
   );

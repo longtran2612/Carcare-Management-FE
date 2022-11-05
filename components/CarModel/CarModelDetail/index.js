@@ -15,11 +15,10 @@ import {
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
 import {
-  getUserById,
   updateUserById,
   uploadImagesUser,
 } from "pages/api/userAPI";
-import { getCarModelById } from "pages/api/carModel";
+import { getCarModelById,updateCarModel } from "pages/api/carModel";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
@@ -29,6 +28,7 @@ import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import CarDetail from "components/Car/CarDetail";
 
 const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
   const router = useRouter();
@@ -102,18 +102,17 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
   const onFinish = async (values) => {
     try {
       let body = {
-        name: values.name,
-        email: values.email,
-        address: values.address,
-        status: values.status,
-        image: values.image,
-        birthDay: values.birthDay,
+        brand: values.email,
+        model: values.address,
+        engine: values.engine,
+        transmission: values.transmission,
+        seats: values.seats,
+        fuel: values.fuel,
+        year: values.year,
       };
-      const res = await updateUserById(body, carModelId);
-      if (res.data.StatusCode == "200") {
-        openNotification("Cập nhật người dùng thành công!", "");
+      const res = await updateCarModel(body, carModelId);
+        openNotification("Thành công!", "Cập nhật thành công");
         onUpdateCarModel();
-      }
     } catch (error) {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);

@@ -15,6 +15,7 @@ import {
   Table,
 } from "antd";
 import { PlusCircleOutlined, UserAddOutlined } from "@ant-design/icons";
+import { getUsers } from "pages/api/userAPI";
 import { getAllPromotionUseAbleByServiceIds } from "pages/api/promotionDetail";
 import { getCustomers } from "pages/api/customerAPI";
 import { getCustomerById } from "pages/api/customerAPI";
@@ -27,7 +28,6 @@ import ServiceOrder from "./ModalService";
 import { formatMoney } from "utils/format";
 import ModalAddCustomer from "./ModalAddCustomer";
 import ModalAddCarWithCustomer from "./ModalAddCarWithCustomer";
-import ModalAddCar from "./ModalAddCar";
 import moment from "moment";
 
 const { Title } = Typography;
@@ -38,6 +38,9 @@ const formatDate = "HH:mm DD/MM/YYYY";
 const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
   const [customers, setCustomers] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [userSelected, setUserSelected] = useState({});
+
   const [cars, setCars] = useState([]);
 
   const [customerOrder, setCustomerOrder] = useState(null);
@@ -56,6 +59,14 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     try {
       const res = await getCustomers();
       setCustomers(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleFetchUser = async () => {
+    try {
+      const res = await getUsers();
+      setUsers(res.data.Data);
     } catch (error) {
       console.log(error);
     }
@@ -84,6 +95,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   useEffect(() => {
     if (show) {
       handleFetchCustomer();
+      handleFetchUser();
     }
     handleFetchCar();
     if (current == 2) {
@@ -99,6 +111,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   }, [show, current, form]);
 
   const handelChangeUser = async () => {
+    form.setFieldValue("carId", null);
     handleFetchCar();
   };
 
@@ -161,6 +174,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
       serviceIds: services.map((item) => item.id),
       receiveDate: form.getFieldValue("receiveDate"),
       executeDate: form.getFieldValue("executeDate"),
+      executorId: form.getFieldValue("executorId"),
     };
 
     try {
@@ -174,7 +188,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -215,6 +229,10 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     let total = totalPriceService() - totalPromotionAmount();
     return total;
   };
+const handleChangeCustomer =(values) => {
+  const user = users.find((u) => u.id === values);
+  setUserSelected(user)
+}
   return (
     <>
       <Modal
@@ -235,7 +253,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                   }}
                   onClick={() => prev()}
                 >
-                  Hủy
+                  Quay lại
                 </Button>
               )}
               {current < 2 && (
@@ -360,11 +378,33 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                         openNotification("Vui lòng chọn khách hàng!");
                       }
                     }}
-                  >
-       
-                  </Button>
+                  ></Button>
                 </Col>
-                <Col span={12}>
+                <Col span={8}>
+                  <Form.Item label="Nhân viên xử lý" name="executorId">
+                    <Select
+                      showSearch
+                      placeholder="Chọn nhân viên"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.children.includes(input)
+                      }
+                      filterSort={(optionA, optionB) =>
+                        optionA.children
+                          .toLowerCase()
+                          .localeCompare(optionB.children.toLowerCase())
+                      }
+                      onChange={handleChangeCustomer}
+                    >
+                      {users.map((item) => (
+                        <Option value={item.id}>
+                          {item.name + " - " + item.phone}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
                   <Form.Item
                     label="Nhập ngày nhận xe dự kiến"
                     name="receiveDate"
@@ -381,7 +421,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                     />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col span={8}>
                   <Form.Item
                     label="Nhập ngày xử lý dự kiến"
                     name="executeDate"
@@ -536,6 +576,11 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
                           >
                             <Divider>Thông tin</Divider>
                             <Timeline style={{ marginTop: "5px" }}>
+                            <Timeline.Item>
+                               Nhân viên xử lý:{" "}
+                               {userSelected?.name || "Chưa chọn"}
+                               
+                              </Timeline.Item>
                               <Timeline.Item>
                                 Thời gian nhận xe dự kiến:{" "}
                                 {moment(

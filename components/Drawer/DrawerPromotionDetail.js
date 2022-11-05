@@ -228,7 +228,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                       required: true,
                     },
                   ]}
-                  label="Giá trị"
+                  label="Giá trị khuyến mãi (Tiền)"
                   name="amount"
                 >
                   <InputNumber
@@ -251,7 +251,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                       message: "Vui lòng nhập Số % giảm từ 0 - 100",
                     },
                   ]}
-                  label="Giá trị"
+                  label="Giá trị khuyến mãi (%)"
                   name="amount"
                 >
                   <InputNumber addonAfter="%" min={0} max={100} />
@@ -323,18 +323,19 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 </Select>
               </Form.Item>
             </Col>
-
-            <Col span={12}>
-              <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
-                <Select mode="multiple">
-                  {categories.map((category) => (
-                    <Select.Option value={category.id}>
-                      {category.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
+            {promotionDetail?.type != "SERVICE" && (
+              <Col span={12}>
+                <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
+                  <Select mode="multiple">
+                    {categories.map((category) => (
+                      <Select.Option value={category.id}>
+                        {category.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+            )}
             <Col span={12}>
               <Form.Item label="Giới hạn ngân sách" name="limitUsedTime">
                 <Select onChange={onChange}>

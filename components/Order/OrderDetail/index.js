@@ -17,7 +17,7 @@ import {
   List,
   Popconfirm,
 } from "antd";
-import { getOrderById } from "pages/api/orderAPI";
+import { getOrderById ,updateOrder} from "pages/api/orderAPI";
 import {
   LoadingOutlined,
   TagsOutlined,
@@ -25,6 +25,7 @@ import {
   PlusCircleFilled,
   PlayCircleOutlined,
 } from "@ant-design/icons";
+import { getUserById, getUsers } from "pages/api/userAPI";
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
 import moment from "moment";
@@ -41,13 +42,15 @@ const { Column, ColumnGroup } = Table;
 const formatDate = "HH:mm DD/MM/YYYY";
 
 export const OrderDetail = ({ orderRequestId }) => {
+  const [form] = Form.useForm();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [showUpdateServiceOrder, setShowUpdateServiceOrder] = useState(false);
   const [modalSelectSlot, setModalSelectSlot] = useState(false);
   const [step, setStep] = useState(0);
-
+  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState(null);
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
 
@@ -56,10 +59,30 @@ export const OrderDetail = ({ orderRequestId }) => {
     try {
       const res = await getOrderById(orderRequestId);
       setOrder(res.data.Data);
+      fetchUser(res.data.Data.executorId);
+      fetchUsers();
       setLoading(false);
     } catch (error) {
       openNotification(error.response.data.message[0]);
       setLoading(false);
+    }
+  };
+  const fetchUser = async (data) => {
+    console.log("id", data);
+    try {
+      const response = await getUserById(data);
+      setUser(response.data.Data);
+      form.setFieldValue("executorId", response.data.Data.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchUsers = async () => {
+    try {
+      const response = await getUsers();
+      setUsers(response.data.Data);
+    } catch (error) {
+      console.log(error);
     }
   };
   const handleFetchPromotion = async () => {
@@ -121,6 +144,21 @@ export const OrderDetail = ({ orderRequestId }) => {
     router.push("/admin");
     // router.replace("/admin");
   };
+  const handleChangeUser = async (value) => {
+    setLoading(true);
+    let dataUpdate= {
+      executorId: value,
+      serviceIds: order?.services?.map((service) => service.id),
+    }
+    try {
+      const res = await updateOrder(order?.id, dataUpdate);
+      openNotification("Thành công!", "Cập nhật nhân viên xử lý thành công");
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
 
   console.log("order", order);
   return (
@@ -147,12 +185,37 @@ export const OrderDetail = ({ orderRequestId }) => {
           </Tag>
         </div>
       </div>
+      <Form form={form} layout="vertical">
       <Row>
         <Col span={6}>
           <div
             style={{ marginRight: "10px" }}
             className="carslot-customer content-white"
           >
+             <Form.Item label="Nhân viên xử lý" name="executorId">
+              <Select
+                style={{ width: "100%", marginBottom: "10px" }}
+                showSearch
+                placeholder="Nhân viên xử lý"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  optionA.children
+                    .toLowerCase()
+                    .localeCompare(optionB.children.toLowerCase())
+                }
+                onChange={handleChangeUser}
+                
+              >
+                {users.map((item) => (
+                  <Option value={item.id}>
+                    {item.name + " - " + item.phone}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
             <Title level={4}>Thông tin khách hàng</Title>
             <Timeline>
               <Timeline.Item>Mã: {order?.customerCode}</Timeline.Item>
@@ -361,6 +424,7 @@ export const OrderDetail = ({ orderRequestId }) => {
           </Row>
         </Col>
       </Row>
+      </Form>
       <UpDateServiceOrder
         show={showUpdateServiceOrder}
         order={order}
