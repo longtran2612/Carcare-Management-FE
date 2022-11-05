@@ -27,7 +27,7 @@ import Loading from "components/Loading";
 import { ClearOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
-
+const formatDate = "DD/MM/YYYY";
 const PriceHeaderDetail = ({ priceHeaderId }) => {
   const router = useRouter();
   const [form] = Form.useForm();
@@ -36,7 +36,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
   const [prices, setPrices] = useState([]);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [modalPrice, setModalPrice] = useState(false);
-  const formatDate = "DD/MM/YYYY";
+
   const [loading, setLoading] = useState(false);
 
   const [searchText, setSearchText] = useState("");
@@ -297,7 +297,8 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                         : false
                     }
                     disabledDate={(d) =>
-                      !d || d.isBefore(form.getFieldValue("toDate"))
+                      d.isBefore(moment()) ||
+                      !d || d.isAfter(form.getFieldValue("toDate"))
                     }
                     format={formatDate}
                   />

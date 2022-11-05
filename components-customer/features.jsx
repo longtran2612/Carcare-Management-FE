@@ -25,7 +25,11 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() => {accessToken ? router.push(`/customer/order`) :router.push('/login')}  }
+            onClick={() => {
+              accessToken
+                ? router.push(`/customer/order`)
+                : router.push("/login");
+            }}
           >
             <Card
               style={{
@@ -57,7 +61,11 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() => {accessToken ? router.push(`/customer/order`) :router.push('/login')}  }
+            onClick={() => {
+              accessToken
+                ? router.push(`/customer/order`)
+                : router.push("/login");
+            }}
           >
             <Card
               style={{
@@ -78,9 +86,7 @@ export const Features = (props) => {
               }
             />
 
-            <Typography.Title level={3}>
-              Xem lịch sử dịch vụ sử dụng
-            </Typography.Title>
+            <Typography.Title level={3}>Đơn hàng của bạn</Typography.Title>
           </Col>
           <Col
             xs={24}
@@ -88,7 +94,11 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() => {accessToken ? router.push(`/customer/bill`) :router.push('/login')}  }
+            onClick={() => {
+              accessToken
+                ? router.push(`/customer/bill`)
+                : router.push("/login");
+            }}
           >
             {" "}
             <Card
@@ -109,7 +119,7 @@ export const Features = (props) => {
                 />
               }
             ></Card>
-            <Typography.Title level={3}>Xem hóa đơn </Typography.Title>
+            <Typography.Title level={3}>Hóa đơn của bạn </Typography.Title>
           </Col>
           <Col
             xs={24}
@@ -117,8 +127,11 @@ export const Features = (props) => {
             md={12}
             lg={6}
             xl={6}
-            onClick={() => {accessToken ? router.push(`/customer/profile`) :router.push('/login')}  }
-
+            onClick={() => {
+              accessToken
+                ? router.push(`/customer/profile`)
+                : router.push("/login");
+            }}
           >
             <Card
               style={{
@@ -139,7 +152,7 @@ export const Features = (props) => {
               }
             />
 
-            <Typography.Title level={3}>Thông tin người dùng</Typography.Title>
+            <Typography.Title level={3}>Thông tin của bạn</Typography.Title>
           </Col>
         </Row>
       </div>

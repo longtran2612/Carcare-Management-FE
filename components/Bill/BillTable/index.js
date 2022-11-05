@@ -396,7 +396,7 @@ const BillTable = () => {
         }}
         onRow={(record, rowIndex) => {
           return {
-            onClick: (event) => {
+            onDoubleClick: (event) => {
               setBillDetail(record);
               setShowDetail(true);
             },

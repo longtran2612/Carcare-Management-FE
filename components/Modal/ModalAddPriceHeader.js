@@ -5,7 +5,7 @@ import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
 import moment from "moment";
 const { TextArea } = Input;
-const formatDate = "HH:mm DD/MM/YYYY";
+const formatDate = "DD/MM/YYYY";
 
 const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
@@ -80,7 +80,7 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
                   disabledDate={(d) =>
                     !d ||
                     d.isBefore(moment()) ||
-                    d.isAfter(form.getFieldValue("toDate"))
+                    d.isAfter(form.getFieldValue("expirationDate"))
                   }
                   placeholder="bắt đầu"
                   format={formatDate}
@@ -99,7 +99,7 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
               >
                 <DatePicker
                   disabledDate={(d) =>
-                    !d || d.isSameOrBefore(form.getFieldValue("fromDate"))
+                    !d || d.isSameOrBefore(form.getFieldValue("effectiveDate"))
                   }
                   placeholder="kết thúc"
                   format={formatDate}

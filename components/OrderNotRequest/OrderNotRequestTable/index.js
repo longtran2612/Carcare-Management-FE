@@ -46,7 +46,7 @@ function OrderNotRequestTable({}) {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
   const [orderSelected, setOrderSelected] = useState(null);
-  const [status, setStatus] = useState(10);
+  const [status, setStatus] = useState(null);
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
@@ -219,6 +219,8 @@ function OrderNotRequestTable({}) {
       ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
         switch (record.status) {
+          case 0:
+            return <Tag color="orange">{record.statusName}</Tag>;
           case 2:
             return <Tag color="blue">{record.statusName}</Tag>;
           case 10:
@@ -264,6 +266,7 @@ function OrderNotRequestTable({}) {
     let dataGetOrder = {
       keyword: "",
       pageSize: 100,
+      status:status,
       pageNumber: 0,
       sort: [
         {
@@ -272,9 +275,7 @@ function OrderNotRequestTable({}) {
         },
       ],
     };
-    if (status) {
-      dataGetOrder.status = status;
-    }
+   
     try {
       const res = await getOrders(dataGetOrder);
       setOrders(res.data.Data.content);

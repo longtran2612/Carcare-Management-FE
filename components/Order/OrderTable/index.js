@@ -236,7 +236,7 @@ function OrderTable({}) {
       render: (text, record, dataIndex) => {
         return (
           <div>
-            <Tag color="blue">{record.statusName}</Tag>
+            <Tag color="orange">{record.statusName}</Tag>
           </div>
         );
       },
@@ -293,7 +293,8 @@ function OrderTable({}) {
     setLoading(true);
     let dataGetOrder = {
       keyword: "",
-      pageSize: 20,
+      status: 0,
+      pageSize: 100,
       pageNumber: 0,
       sort: [
         {
