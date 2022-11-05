@@ -452,7 +452,7 @@ const BillTable = () => {
           </Col>
           <Col span={8}>
             <DescriptionItem
-              title="Tên khách hành"
+              title="Tên khách hàng"
               content={billDetail.customerName}
             />
           </Col>

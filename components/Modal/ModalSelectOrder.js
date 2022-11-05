@@ -226,6 +226,7 @@ function ModalSelectOrder({ onSelectOrder }) {
     let dataGetOrder = {
       keyword: "",
       pageSize: 20,
+      status:0,
       pageNumber: 0,
       sort: [
         {

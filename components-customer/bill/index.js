@@ -10,10 +10,12 @@ import {
   Row,
   Typography,
   Divider,
+  Tag,
 } from "antd";
 import { formatMoney } from "utils/format";
 import moment from "moment";
 import Image from "next/image";
+import order_cancel from "public/images/order_cancel.png";
 import payment_completed from "public/images/payment_complete.gif";
 import Cookies from "js-cookie";
 
@@ -71,6 +73,57 @@ const BillCustomer = () => {
       default:
     }
   };
+  const handleImage = (value) => {
+    switch (value) {
+      case 1:
+        return <Image width={170} height={170} src={payment_completed} />;
+      case 2:
+        return <Image width={170} height={170} src={order_cancel} />;
+      default:
+        break;
+    }
+  };
+  const convertOrderStatus = (status) => {
+    console.log("statusss", status);
+    switch (status) {
+      case 1:
+        return (
+          <Tag
+            style={{
+              height: "30px",
+              padding: "5px",
+              fontSize: "15px",
+            }}
+            color="green"
+          >
+            Đã thanh toán
+          </Tag>
+        );
+      case 2:
+        return (
+          <Tag
+            style={{
+              height: "30px",
+              padding: "5px",
+              fontSize: "15px",
+            }}
+            color="red"
+          >
+            Đã hủy
+          </Tag>
+        );
+      default:
+        break;
+    }
+  };
+  const checkPromotion = (promotion) => {
+    console.log(promotion);
+    if (promotion) {
+      if (promotion.length > 0) {
+        return true;
+      }
+    }
+  };
 
   useEffect(() => {
     getAllBill();
@@ -93,7 +146,7 @@ const BillCustomer = () => {
               setBillDetail(item);
               setShowDetail(true);
             }}
-            extra={<Image width={170} height={170} src={payment_completed} />}
+            extra={handleImage(item.status)}
             style={{
               cursor: "pointer",
               border: "1px solid #9B9A9A",
@@ -116,9 +169,6 @@ const BillCustomer = () => {
             />
             <Row gutter={16}>
               <Col span={8}>
-                <DescriptionItem title="Mã xe" content={item.carCode} />
-              </Col>
-              <Col span={8}>
                 <DescriptionItem title="Tên xe" content={item.carName} />
               </Col>
               <Col span={8}>
@@ -127,6 +177,7 @@ const BillCustomer = () => {
                   content={item.carLicensePlate}
                 />
               </Col>
+              <Col span={8}>{convertOrderStatus(item.status)}</Col>
               <Col span={8}>
                 <DescriptionItem
                   title="Tổng tiền dịch vụ"
@@ -160,12 +211,6 @@ const BillCustomer = () => {
                   content={item.paymentType === "CASH" ? "Tiền mặt" : "Thẻ"}
                 />
               </Col>
-              <Col span={8}>
-                <DescriptionItem
-                  title="Tình trạng thanh toán"
-                  content={item.statusName}
-                />
-              </Col>
             </Row>
           </List.Item>
         )}
@@ -178,9 +223,17 @@ const BillCustomer = () => {
         width={900}
       >
         <Divider>
-          <Title level={5}>Hóa đơn mã: {billDetail.billCode}</Title>
+          <Title level={5}>
+            Hóa đơn mã:
+            <span style={{ color: "blue" }}> #{billDetail.billCode} </span>
+          </Title>
         </Divider>
-        <p className="site-description-item-profile-p">Xe xử lý</p>
+        <p
+          style={{ color: "red", marginBottom: "5px" }}
+          className="site-description-item-profile-p"
+        >
+          Xe xử lý
+        </p>
         <Row>
           {/* <Col span={8}>
             <DescriptionItem title="Mã xe" content={billDetail.carCode} />
@@ -196,7 +249,12 @@ const BillCustomer = () => {
           </Col>
         </Row>
         <Divider />
-        <p className="site-description-item-profile-p">Dịch vụ sử dụng</p>
+        <p
+          style={{ color: "red", marginBottom: "5px" }}
+          className="site-description-item-profile-p"
+        >
+          Dịch vụ sử dụng
+        </p>
         <Row>
           {billDetail?.services?.map((item, index) => (
             <>
@@ -224,40 +282,50 @@ const BillCustomer = () => {
             </>
           ))}
         </Row>
-        {billDetail?.promotionDetails?.map((item, index) => (
+        {checkPromotion(billDetail?.promotionDetails) && (
           <>
             <Divider />
-            <p className="site-description-item-profile-p">
-              Khuyến mãi xử dụng
+            <p
+              style={{ color: "red", marginBottom: "5px" }}
+              className="site-description-item-profile-p"
+            >
+              Khuyến mãi sử dụng
             </p>
-            <Row>
-              {/* <Col span={8}>
-                <DescriptionItem
-                  title="Mã khuyến mãi xử dụng"
-                  content={item?.promotionDetailCode}
-                />
-              </Col> */}
-              <Col span={12}>
-                <DescriptionItem title="Mô tả" content={item?.description} />
-              </Col>
-              <Col span={6}>
-                <DescriptionItem
-                  title="Loại khuyến mãi"
-                  content={handleType(item?.type)}
-                />
-              </Col>
-              <Col span={6}>
-                <DescriptionItem
-                  title="Tiền giảm"
-                  content={formatMoney(billDetail?.totalPromotionAmount)}
-                />
-              </Col>
-            </Row>
+            {billDetail?.promotionDetails?.map((item, index) => (
+              <>
+                <Row>
+                  <Col span={6}>
+                    <DescriptionItem title={item?.promotionDetailCode} />
+                  </Col>
+                  <Col span={6}>
+                    <DescriptionItem
+                      title="Mô tả"
+                      content={item?.description}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <DescriptionItem
+                      title="Loại khuyến mãi"
+                      content={handleType(item?.type)}
+                    />
+                  </Col>
+                  <Col span={6}>
+                    <DescriptionItem
+                      title="Tiền giảm"
+                      content={formatMoney(billDetail?.totalPromotionAmount)}
+                    />
+                  </Col>
+                </Row>
+              </>
+            ))}
           </>
-        ))}
+        )}
 
         <Divider />
-        <p className="site-description-item-profile-p">Thông tin thanh toán</p>
+        <p
+          style={{ color: "red", marginBottom: "5px" }}
+          className="site-description-item-profile-p"
+        >Thông tin thanh toán</p>
         <Row>
           <Col span={12}>
             <DescriptionItem

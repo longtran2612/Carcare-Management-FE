@@ -15,7 +15,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { getOrders, cancelOrder } from "pages/api/orderAPI";
 import moment from "moment";
-const formatDate = "HH:mm:ss DD/MM/YYYY ";
+const formatDate = "HH:mm DD/MM/YYYY ";
 import { openNotification } from "utils/notification";
 import { PlusOutlined } from "@ant-design/icons";
 
