@@ -5,7 +5,7 @@ import Image from "next/image";
 import feature_1 from "public/images/user-default.png";
 import feature_2 from "public/images/16.svg";
 import feature_3 from "public/images/17.svg";
-import feature_4 from "public/images/18.svg";
+import feature_4 from "public/images/15.svg";
 import { useRouter } from "next/router";
 export const Features = (props) => {
   const router = useRouter();
@@ -13,10 +13,10 @@ export const Features = (props) => {
   const [accessToken, setAccessToken] = useState(Cookies.get("accessToken"));
 
   return (
-    <div id="features" className="text-center">
+    <div style={{minHeight:'80vh'}} id="features" className="text-center">
       <div className="container">
         <div className="section-title">
-          <h2>Tiện ích</h2>
+          <h2>Chức năng</h2>
         </div>
         <Row gutter={20}>
           <Col
@@ -26,9 +26,7 @@ export const Features = (props) => {
             lg={6}
             xl={6}
             onClick={() => {
-              accessToken
-                ? router.push(`/customer/order`)
-                : router.push("/login");
+                router.push(`/service`)
             }}
           >
             <Card
@@ -51,7 +49,7 @@ export const Features = (props) => {
             />
 
             <Typography.Title level={3}>
-              Xem trạng thái dịch vụ đang sử dụng
+              Danh sách dịch vụ của chúng tôi
             </Typography.Title>
           </Col>
 

@@ -141,13 +141,19 @@ export const CustomerNavigation = () => {
             {accessToken && (
               <>
                 <li>
-                  <Link href="/customer/bill">
-                    <a className="page-scroll">Hóa đơn</a>
+                  <Link href="/service">
+                    <a className="page-scroll">Dịch vụ</a>
                   </Link>
                 </li>
+
                 <li>
                   <Link href="/customer/order">
                     <a className="page-scroll">Đơn hàng</a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/customer/bill">
+                    <a className="page-scroll">Hóa đơn</a>
                   </Link>
                 </li>
               </>

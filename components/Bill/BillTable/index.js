@@ -9,11 +9,12 @@ import {
   Typography,
   Divider,
   Drawer,
+  Select,
   Popconfirm,
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { getBills, cancelBill } from "pages/api/billAPI";
+import { getBills, cancelBill,searchBill } from "pages/api/billAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
@@ -32,6 +33,7 @@ import { useReactToPrint } from "react-to-print";
 import Image from "next/image";
 import logo from "public/images/logo-footer-customer.png";
 const { Title } = Typography;
+const { Option } = Select;
 
 const DescriptionItem = ({ title, content }) => (
   <div className="site-description-item-profile-wrapper">
@@ -54,6 +56,7 @@ const BillTable = () => {
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+  const [status, setStatus] = useState(null);
 
   const componentRef = useRef(null);
 
@@ -327,12 +330,22 @@ const BillTable = () => {
 
   const handleGetbills = async () => {
     setLoading(true);
+    let dataGetBill = {
+      pageSize: 100,
+      status:status,
+      pageNumber: 0,
+      sort: [
+        {
+          key: "createDate",
+          asc: false,
+        },
+      ],
+    };
+    console.log(dataGetBill);
     try {
-      const res = await getBills();
-      if (res.status === 200) {
-        setBills(res.data.Data);
-        setLoading(false);
-      }
+      const res = await searchBill(dataGetBill);
+      setBills(res.data.Data.content);
+      setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -353,7 +366,7 @@ const BillTable = () => {
 
   useEffect(() => {
     handleGetbills();
-  }, []);
+  }, [status]);
 
   const handlepromotionDetails = (data) => {
     if (data > 0) return true;
@@ -383,6 +396,18 @@ const BillTable = () => {
                   Xóa bộ lọc
                 </Button>
               </Col>
+              <Col span={4}>
+                    <Select
+                      placeholder="Trạng thái"
+                      style={{ width: "100%" }}
+                      onChange={(value) => setStatus(value)}
+                      value={status}
+                    >
+                      <Option value={null}>Tất cả</Option>
+                      <Option value={1}>Đã thanh toán</Option>
+                      <Option value={2}>Đang hủy</Option>
+                    </Select>
+                  </Col>
             </Row>
           </>
         )}

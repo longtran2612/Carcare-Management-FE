@@ -297,11 +297,7 @@ export const ProfileCustomer = () => {
                 <Form.Item
                   label="Email"
                   name="email"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                 
                 >
                   <Input />
                 </Form.Item>
@@ -331,11 +327,7 @@ export const ProfileCustomer = () => {
                 <Form.Item
                   label="Địa chỉ"
                   name="address"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                 
                 >
                   <TextArea rows={4} />
                 </Form.Item>

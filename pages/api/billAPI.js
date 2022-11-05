@@ -77,9 +77,24 @@ const cancelBill =(data)=>{
     throw err;
   });
 };
+const searchBill = async (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/bills/search-bill`,
+    data: data,
+  })
+  .then((res) => {
+    return res;
+  })
+  .catch((err) => {
+    throw err;
+  });
+};
+
 
 
 export {
+  searchBill,
   getBills,
   createBill,
   getBillById,

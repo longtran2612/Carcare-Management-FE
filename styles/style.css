@@ -141,7 +141,7 @@ hr {
   background-color: #608dfd;
 }
 .section-title {
-  margin-bottom: 70px;
+  margin-bottom: 10px;
 }
 .section-title h2 {
   position: relative;
@@ -285,7 +285,7 @@ header .intro-text {
 /* Features Section */
 #features {
   background: #f6f6f6;
-  padding: 50px 0;
+  padding: 20px 0;
    
 }
 #features i.fa {

@@ -49,7 +49,7 @@ const SideBar = ({ handleOpenKey }) => {
         ]),
         getItem("Hóa đơn", "2", <BookOutlined />, [
           getItem("Hóa đơn", "bills"),
-          getItem("Hóa đơn hủy", "bills"),
+          // getItem("Hóa đơn hủy", "bills"),
         ]),
         getItem("Dịch vụ", "3", <ClearOutlined />, [
           getItem("Dịch vụ", "service"),
@@ -85,7 +85,7 @@ const SideBar = ({ handleOpenKey }) => {
         ]),
         getItem("Hóa đơn", "2", <BookOutlined />, [
           getItem("Hóa đơn", "bills"),
-          getItem("Hóa đơn hủy", "bills"),
+          // getItem("Hóa đơn hủy", "bills"),
         ]),
         getItem("Dịch vụ", "3", <ClearOutlined />, [
           getItem("Dịch vụ", "service"),

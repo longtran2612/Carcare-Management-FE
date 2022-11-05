@@ -11,7 +11,7 @@ const { Option } = Select;
 export default function CustomerOrderPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [status, setStatus] = useState(2);
+  const [status, setStatus] = useState(null);
   const [accessToken, setAccessToken] = useState(Cookies.get("accessToken"));
 
   useEffect(() => {

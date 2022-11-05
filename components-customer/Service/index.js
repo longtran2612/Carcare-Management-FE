@@ -23,6 +23,8 @@ import Cookies from "js-cookie";
 import slot_active from "public/images/slot_active.gif";
 import order_cancel from "public/images/order_cancel.png";
 import order_complete from "public/images/order_complete.gif";
+import order_wait from "public/images/order_wait.gif";
+import order_pay from "public/images/order_pay.png";
 const { Title } = Typography;
 const formatDate = "HH:mm DD/MM/YYYY";
 import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
@@ -124,7 +126,7 @@ const ServiceCustomer = ({ status }) => {
               padding: "5px",
               fontSize: "15px",
             }}
-            color="cyan"
+            color="yellow"
           >
             Đang chờ xử lý
           </Tag>
@@ -202,9 +204,9 @@ const ServiceCustomer = ({ status }) => {
       case 10:
         return <Image height={170} width={170} src={order_complete} />;
       case 100:
-        return <Image height={170} width={170} src={slot_active} />;
+        return <Image height={170} width={170} src={order_pay} />;
       case 0:
-        return <Image height={170} width={170} src={slot_active} />;
+        return <Image height={170} width={170} src={order_wait} />;
       case 2:
         return <Image height={170} width={170} src={slot_active} />;
       default:
@@ -259,7 +261,7 @@ const ServiceCustomer = ({ status }) => {
           <Row gutter={16}>
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian tiếp nhận yêu cầu"
+                title="Tiếp nhận yêu cầu"
                 content={moment(item.createDate).format(formatDate)}
               />
             </Col>
@@ -277,19 +279,19 @@ const ServiceCustomer = ({ status }) => {
             {" "}
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian tiếp nhận yêu cầu"
+                title="Tiếp nhận yêu cầu"
                 content={moment(item.createDate).format(formatDate)}
               />
             </Col>
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian bắt đầu xử lý"
+                title="Bắt đầu xử lý"
                 content={moment(item.carExecutingDate).format(formatDate)}
               />
             </Col>
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian hoàn thành"
+                title="Hoàn thành xử lý"
                 content={moment(item?.carExecutedDate).format(formatDate)}
               />
             </Col>
@@ -301,25 +303,19 @@ const ServiceCustomer = ({ status }) => {
             {" "}
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian tiếp nhận yêu cầu"
+                title="Tiếp nhận yêu cầu"
                 content={moment(item.createDate).format(formatDate)}
               />
             </Col>
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian bắt đầu xử lý"
-                content={moment(item.carExecutingDate).format(formatDate)}
-              />
-            </Col>
-            <Col span={8}>
-              <DescriptionItem
-                title="Thời gian hoàn thành"
+                title="hoàn thành"
                 content={moment(item?.carExecutedDate).format(formatDate)}
               />
             </Col>
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian thanh toán"
+                title="Thanh toán"
                 content={moment(item?.paymentDate).format(formatDate)}
               />
             </Col>
@@ -331,7 +327,7 @@ const ServiceCustomer = ({ status }) => {
             {" "}
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian tiếp nhận yêu cầu"
+                title="Tiếp nhận yêu cầu"
                 content={moment(item.createDate).format(formatDate)}
               />
             </Col>
@@ -342,19 +338,19 @@ const ServiceCustomer = ({ status }) => {
           <Row gutter={16}>
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian tiếp nhận yêu cầu"
+                title="Tiếp nhận yêu cầu"
                 content={moment(item.createDate).format(formatDate)}
               />
             </Col>
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian bắt đầu xử lý"
+                title="Bắt đầu xử lý"
                 content={moment(item.carExecutingDate).format(formatDate)}
               />
             </Col>
             <Col span={8}>
               <DescriptionItem
-                title="Thời gian hoàn thành dự kiến"
+                title="Hoàn thành dự kiến"
                 content={moment(item?.carExecutingDate)
                   .add(item?.totalEstimateTime, "m")
                   .format(formatDate)}
@@ -454,14 +450,23 @@ const ServiceCustomer = ({ status }) => {
         onClose={() => setShowDetail(false)}
         visible={showDetail}
         width={900}
+        extra={convertOrderStatus(orderDetail?.status)}
       >
         <Divider>
           <Title level={5}>Yêu cầu :# {orderDetail.orderCode}</Title>
         </Divider>
-        <Row gutter={[16, 32]}>
+        <Row gutter={[16]}>
           {/* <Col span={8}>
             <DescriptionItem title="Mã xe" content={billDetail.carCode} />
           </Col> */}
+          {orderDetail.executorName && (
+            <Col span={24}>
+              <DescriptionItem
+                title="Nhân viên xử lý"
+                content={orderDetail.executorName}
+              />
+            </Col>
+          )}
           <Col span={8}>
             <DescriptionItem title="Tên xe" content={orderDetail.carName} />
           </Col>
@@ -471,9 +476,10 @@ const ServiceCustomer = ({ status }) => {
               content={orderDetail.carLicensePlate}
             />
           </Col>
-          {convertOrderStatus(orderDetail?.status)}
-          {handleStatusInDrawer()}
+        </Row>
 
+        {handleStatusInList(orderDetail)}
+        <Row gutter={[16, 16]}>
           <Table
             size="small"
             pagination={false}
