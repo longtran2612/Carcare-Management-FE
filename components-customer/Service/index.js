@@ -255,21 +255,21 @@ const ServiceCustomer = ({ status }) => {
   const handleStatusInList = (item) => {
     switch (item.status) {
       case -100:
-        return(
-        <Row gutter={16}>
-          <Col span={8}>
-            <DescriptionItem
-              title="Thời gian tiếp nhận yêu cầu"
-              content={moment(item.createDate).format(formatDate)}
-            />
-          </Col>
-          <Col span={8}>
-            <DescriptionItem
-              title="Thời gian hủy"
-              content={moment(item.orderCanceledDate).format(formatDate)}
-            />
-          </Col>
-        </Row>
+        return (
+          <Row gutter={16}>
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian tiếp nhận yêu cầu"
+                content={moment(item.createDate).format(formatDate)}
+              />
+            </Col>
+            <Col span={8}>
+              <DescriptionItem
+                title="Thời gian hủy"
+                content={moment(item.orderCanceledDate).format(formatDate)}
+              />
+            </Col>
+          </Row>
         );
       case 10:
         return (
@@ -367,7 +367,6 @@ const ServiceCustomer = ({ status }) => {
     }
   };
 
-
   return (
     <>
       <List
@@ -434,14 +433,15 @@ const ServiceCustomer = ({ status }) => {
                   content={item.totalEstimateTime + " phút"}
                 />
               </Col>
-              {item.status === 10 || item.status === 100  && (
-                <Col span={8}>
-                  <DescriptionItem
-                    title="Thời gian xử lý thực tế"
-                    content={item.totalExecuteTime + " phút"}
-                  />
-                </Col>
-              )}
+              {item.status === 10 ||
+                (item.status === 100 && (
+                  <Col span={8}>
+                    <DescriptionItem
+                      title="Thời gian xử lý thực tế"
+                      content={item.totalExecuteTime + " phút"}
+                    />
+                  </Col>
+                ))}
             </Row>
             {handleStatusInList(item)}
           </List.Item>
@@ -462,15 +462,16 @@ const ServiceCustomer = ({ status }) => {
           {/* <Col span={8}>
             <DescriptionItem title="Mã xe" content={billDetail.carCode} />
           </Col> */}
-          <Col span={12}>
+          <Col span={8}>
             <DescriptionItem title="Tên xe" content={orderDetail.carName} />
           </Col>
-          <Col span={12}>
+          <Col span={8}>
             <DescriptionItem
               title="Biển số"
               content={orderDetail.carLicensePlate}
             />
           </Col>
+          {convertOrderStatus(orderDetail?.status)}
           {handleStatusInDrawer()}
 
           <Table
@@ -485,34 +486,13 @@ const ServiceCustomer = ({ status }) => {
                   <Table.Summary.Row>
                     <Table.Summary.Cell index={0}></Table.Summary.Cell>
                     <Table.Summary.Cell index={1}>
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          color: "#E34262",
-                        }}
-                      >
-                        Tổng dịch vụ
-                      </span>
+                      Tổng dịch vụ
                     </Table.Summary.Cell>
                     <Table.Summary.Cell index={2}>
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          color: "#E34262",
-                        }}
-                      >
-                        {totalTimeService() || 0} phút
-                      </span>
+                      {totalTimeService() || 0} phút
                     </Table.Summary.Cell>
                     <Table.Summary.Cell index={3}>
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          color: "#E34262",
-                        }}
-                      >
-                        {formatMoney(totalPriceService() || 0)}
-                      </span>
+                      {formatMoney(totalPriceService() || 0)}
                     </Table.Summary.Cell>
                   </Table.Summary.Row>
                   <Table.Summary.Row>
@@ -527,7 +507,7 @@ const ServiceCustomer = ({ status }) => {
                         }}
                         onClick={() => setShowSelectPromotion(true)}
                       >
-                        Danh sách khuyến mãi
+                        Khuyến mãi được áp dụng
                       </Button>
                     </Table.Summary.Cell>
                     <Table.Summary.Cell index={2}>
@@ -617,11 +597,10 @@ const ServiceCustomer = ({ status }) => {
           </Table>
         </Row>
         <DrawerPromotionOrder
-        show={showSelectPromotion}
-        promotionDetails={promotionDetails}
-        handleCancel={() => setShowSelectPromotion(false)}
-      />
-
+          show={showSelectPromotion}
+          promotionDetails={promotionDetails}
+          handleCancel={() => setShowSelectPromotion(false)}
+        />
       </Drawer>
 
       <Loading loading={loading} />

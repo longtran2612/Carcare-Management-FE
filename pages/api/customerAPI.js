@@ -54,7 +54,7 @@ const getCustomerByCode = async (data) => {
 };
 
 const createCustomer = async (data) => {
-  return axios({
+  return axiosClient()({
     method: "POST",
     url: API_URL + `/customer/create`,
     data: data,

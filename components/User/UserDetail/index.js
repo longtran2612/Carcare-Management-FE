@@ -9,6 +9,7 @@ import {
   Input,
   DatePicker,
   Upload,
+  Cascader,
   Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
@@ -22,8 +23,9 @@ import ModalUploadImage from "components/Modal/ModalUploadImage";
 import { UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
+import JsonData from "data/address-vn.json";
 
-const UserDetail = ({ userId, onUpdateUser }) => {
+function UserDetail  ({ userId, onUpdateUser }) {
   const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -37,6 +39,14 @@ const UserDetail = ({ userId, onUpdateUser }) => {
   const [imageS3, setImageS3] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [provinceSelected, setProvinceSelected] = useState("");
+  const [districtSelected, setDistrictSelected] = useState("");
+  const [wardSelected, setWardSelected] = useState("");
+  const [provinceSelectedCode, setProvinceSelectedCode] = useState("");
+  const [districtSelectedCode, setDistrictSelectedCode] = useState("");
+  const [wardSelectedCode, setWardSelectedCode] = useState("");
+  const [addressData, setAddressData] = useState(JsonData);
+
   const fetchUserDetail = async () => {
     setLoading(true);
     try {
@@ -48,6 +58,11 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         email: response.data.Data.email,
         birthDay: moment(moment(response.data.Data.birthDay), formatDate),
         address: response.data.Data.address,
+        addressvn: [
+          response.data.Data.provinceCode,
+          response.data.Data.districtCode,
+          response.data.Data.wardCode,
+        ],
         image: response.data.Data.image,
         status: response.data.Data.status,
       });
@@ -71,6 +86,12 @@ const UserDetail = ({ userId, onUpdateUser }) => {
         name: values.name,
         email: values.email,
         address: values.address,
+        district: districtSelected,
+        province: provinceSelected,
+        ward: wardSelected,
+        districtCode: districtSelectedCode,
+        provinceCode: provinceSelectedCode,
+        wardCode: wardSelectedCode,
         status: values.status,
         image: imageS3 || userDetail?.image,
         birthDay: values.birthDay,
@@ -123,6 +144,22 @@ const UserDetail = ({ userId, onUpdateUser }) => {
       }
     }
   };
+  const onChange = (value, selectedOptions) => {
+    console.log(value, selectedOptions);
+    if (selectedOptions) {
+      setProvinceSelected(selectedOptions[0]?.label);
+      setDistrictSelected(selectedOptions[1]?.label);
+      setWardSelected(selectedOptions[2]?.label);
+      setProvinceSelectedCode(selectedOptions[0]?.value);
+      setDistrictSelectedCode(selectedOptions[1]?.value);
+      setWardSelectedCode(selectedOptions[2]?.value);
+    }
+  };
+  const filter = (inputValue, path) =>
+    path.some(
+      (option) =>
+        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+    );
 
   return (
     <>
@@ -158,7 +195,7 @@ const UserDetail = ({ userId, onUpdateUser }) => {
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row gutter={[32, 32]}>
+            <Row gutter={[32]}>
               <Col span={12}>
                 <Form.Item
                   label="Tên"
@@ -211,6 +248,23 @@ const UserDetail = ({ userId, onUpdateUser }) => {
                   ]}
                 >
                   <Input disabled="true" />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item
+                  name="addressvn"
+                  label="Tỉnh/Thành phố - Quận - Huyện"
+                >
+                  <Cascader
+                    id="addressDetail"
+                    options={addressData}
+                    onChange={onChange}
+                    placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                    showSearch={{
+                      filter,
+                    }}
+                    onSearch={(value) => console.log(value)}
+                  />
                 </Form.Item>
               </Col>
               <Col span={24}>

@@ -51,8 +51,8 @@ const getAllBillsByCustomerId = (data) => {
       throw err;
     });
 };
-const createBill = (data) => {
-  return axios({
+const createBill =async (data) => {
+  return axiosClient()({
     method: "POST",
     url: API_URL + "/bills/create",
     data: data,

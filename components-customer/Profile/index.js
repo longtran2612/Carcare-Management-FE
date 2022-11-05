@@ -12,6 +12,7 @@ import {
   Layout,
   Popconfirm,
   Tabs,
+  Cascader,
   InputNumber,
 } from "antd";
 import { useRouter } from "next/router";
@@ -22,9 +23,10 @@ import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
-import { UploadOutlined ,SmileOutlined } from "@ant-design/icons";
+import { UploadOutlined, SmileOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
 import Cookies from "js-cookie";
+import JsonData from "data/address-vn.json";
 
 const formatDate = "DD/MM/YYYY";
 
@@ -34,6 +36,8 @@ export const ProfileCustomer = () => {
   const [modalUpload, setModalUpload] = useState(false);
   const [customerDetail, setCustomerDetail] = useState({});
 
+  const [addressData, setAddressData] = useState(JsonData);
+
   const [listFiles, setListFiles] = useState({
     images: [],
     imageBlob: [],
@@ -42,12 +46,20 @@ export const ProfileCustomer = () => {
   const [imageS3, setImageS3] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [provinceSelected, setProvinceSelected] = useState("");
+  const [districtSelected, setDistrictSelected] = useState("");
+  const [wardSelected, setWardSelected] = useState("");
+  const [provinceSelectedCode, setProvinceSelectedCode] = useState("");
+  const [districtSelectedCode, setDistrictSelectedCode] = useState("");
+  const [wardSelectedCode, setWardSelectedCode] = useState("");
+
   const fetchCustomerDetail = async () => {
     setLoading(true);
     let id = Cookies.get("id");
     try {
       const response = await getCustomerById(id);
       setCustomerDetail(response.data.Data);
+      console.log(response.data.Data);
       form.setFieldsValue({
         name: response.data.Data.name,
         customerCode: response.data.Data.customerCode,
@@ -61,6 +73,7 @@ export const ProfileCustomer = () => {
           ? moment(moment(response.data.Data.dateOfBirth), formatDate)
           : null,
         address: response.data.Data.address,
+        addressvn: [response.data.Data.provinceCode, response.data.Data.districtCode, response.data.Data.wardCode],
         image: response.data.Data.image,
         status: response.data.Data.status,
       });
@@ -82,6 +95,12 @@ export const ProfileCustomer = () => {
         name: values.name,
         email: values.email,
         address: values.address,
+        district: districtSelected,
+        province: provinceSelected,
+        ward: wardSelected,
+        districtCode: districtSelectedCode,
+        provinceCode: provinceSelectedCode,
+        wardCode: wardSelectedCode,
         status: values.status,
         image: imageS3 || customerDetail?.image,
         birthDay: values.birthDay,
@@ -92,12 +111,16 @@ export const ProfileCustomer = () => {
       };
       const res = await updateCustomer(id, body);
       setCustomerDetail(res.data.Data);
-      openNotification("Thành công","Cập nhật thông tin thành công");
+      openNotification("Thành công", "Cập nhật thông tin thành công");
     } catch (error) {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau","bottomRight");
+        openNotification(
+          "Thất bại",
+          "Có lỗi xảy ra, vui lòng thử lại sau",
+          "bottomRight"
+        );
       }
     }
   };
@@ -131,16 +154,36 @@ export const ProfileCustomer = () => {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau","bottomRight");
+        openNotification(
+          "Thất bại",
+          "Có lỗi xảy ra, vui lòng thử lại sau",
+          "bottomRight"
+        );
       }
     }
   };
+  const onChange = (value, selectedOptions) => {
+    console.log(value, selectedOptions);
+    if (selectedOptions) {
+      setProvinceSelected(selectedOptions[0]?.label);
+      setDistrictSelected(selectedOptions[1]?.label);
+      setWardSelected(selectedOptions[2]?.label);
+      setProvinceSelectedCode(selectedOptions[0]?.value);
+      setDistrictSelectedCode(selectedOptions[1]?.value);
+      setWardSelectedCode(selectedOptions[2]?.value);
+    }
+  };
+
+  const filter = (inputValue, path) =>
+    path.some(
+      (option) =>
+        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+    );
 
   return (
     <>
-      <Row gutter={[16, 16]}>
-        <Col   
-         span={6}>
+      <Row gutter={[16]}>
+        <Col span={6}>
           <Image width={300} height={250} src={customerDetail.image} />
           <div
             style={{
@@ -247,7 +290,7 @@ export const ProfileCustomer = () => {
                     },
                   ]}
                 >
-                  <Input disabled/>
+                  <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -261,6 +304,27 @@ export const ProfileCustomer = () => {
                   ]}
                 >
                   <Input />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item
+                  name="addressvn"
+                  label="Tỉnh/Thành phố - Quận - Huyện"
+                >
+                  <Cascader
+                    options={addressData}
+                    onChange={onChange}
+                    placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                    showSearch={{
+                      filter,
+                    }}
+                    // defaultValue={[
+                    //  customerDetail.provinceCode,
+                    //   customerDetail.districtCode,
+                    //   customerDetail.wardCode,
+                    // ]}
+                    onSearch={(value) => console.log(value)}
+                  />
                 </Form.Item>
               </Col>
               <Col span={24}>

@@ -15,20 +15,22 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
   const [provinceSelected, setProvinceSelected] = useState("");
   const [districtSelected, setDistrictSelected] = useState("");
   const [wardSelected, setWardSelected] = useState("");
+  const [provinceSelectedCode, setProvinceSelectedCode] = useState("");
+  const [districtSelectedCode, setDistrictSelectedCode] = useState("");
+  const [wardSelectedCode, setWardSelectedCode] = useState("");
 
   const onFinish = async (values) => {
     let dataUser = {
       fullname: values.fullname,
       email: values.email,
       phone: values.phone,
-      address:
-        values.address +
-        ", " +
-        wardSelected +
-        ", " +
-        districtSelected +
-        ", " +
-        provinceSelected,
+      address:values.address,
+      district: districtSelected,
+      province: provinceSelected,
+      ward:wardSelected,
+      districtCode: districtSelectedCode,
+      provinceCode: provinceSelectedCode,
+      wardCode:wardSelectedCode,
     };
     console.log(dataUser);
 
@@ -57,6 +59,9 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
       setProvinceSelected(selectedOptions[0]?.label);
       setDistrictSelected(selectedOptions[1]?.label);
       setWardSelected(selectedOptions[2]?.label);
+      setProvinceSelectedCode(selectedOptions[0]?.value);
+      setDistrictSelectedCode(selectedOptions[1]?.value);
+      setWardSelectedCode(selectedOptions[2]?.value);
     }
   };
   const filter = (inputValue, path) =>

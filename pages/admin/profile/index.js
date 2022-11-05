@@ -12,6 +12,7 @@ import {
   Layout,
   Tabs,
   Popconfirm,
+  Cascader
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
@@ -31,7 +32,9 @@ import MyHeader from "components/Header";
 import { UserOutlined, LockOutlined, ClearOutlined } from "@ant-design/icons";
 import ChangePassword from "components-customer/ChangePassword/index.js";
 import Cookies from "js-cookie";
-const{Footer}=Layout;
+import JsonData from "data/address-vn.json";
+
+const { Footer } = Layout;
 
 const UserProfile = () => {
   const router = useRouter();
@@ -47,6 +50,14 @@ const UserProfile = () => {
   const [imageS3, setImageS3] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [provinceSelected, setProvinceSelected] = useState("");
+  const [districtSelected, setDistrictSelected] = useState("");
+  const [wardSelected, setWardSelected] = useState("");
+  const [provinceSelectedCode, setProvinceSelectedCode] = useState("");
+  const [districtSelectedCode, setDistrictSelectedCode] = useState("");
+  const [wardSelectedCode, setWardSelectedCode] = useState("");
+  const [addressData, setAddressData] = useState(JsonData);
+
   const fetchUserDetail = async () => {
     setLoading(true);
     try {
@@ -58,6 +69,11 @@ const UserProfile = () => {
         phone: response.data.Data.phone,
         email: response.data.Data.email,
         birthDay: moment(moment(response.data.Data.birthDay), formatDate),
+        addressvn: [
+          response.data.Data.provinceCode,
+          response.data.Data.districtCode,
+          response.data.Data.wardCode,
+        ],
         address: response.data.Data.address,
         image: response.data.Data.image,
         status: response.data.Data.status,
@@ -68,13 +84,14 @@ const UserProfile = () => {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau","bottomRight");
+        openNotification(
+          "Thất bại",
+          "Có lỗi xảy ra, vui lòng thử lại sau",
+          "bottomRight"
+        );
       }
     }
   };
-
-
-
 
   useEffect(() => {
     fetchUserDetail();
@@ -85,6 +102,12 @@ const UserProfile = () => {
         name: values.name,
         email: values.email,
         address: values.address,
+        district: districtSelected,
+        province: provinceSelected,
+        ward: wardSelected,
+        districtCode: districtSelectedCode,
+        provinceCode: provinceSelectedCode,
+        wardCode: wardSelectedCode,
         status: values.status,
         image: imageS3 || userDetail?.image,
         birthDay: values.birthDay,
@@ -97,7 +120,11 @@ const UserProfile = () => {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau","bottomRight");
+        openNotification(
+          "Thất bại",
+          "Có lỗi xảy ra, vui lòng thử lại sau",
+          "bottomRight"
+        );
       }
     }
   };
@@ -131,10 +158,32 @@ const UserProfile = () => {
       if (error?.response?.data?.message[0]) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau","bottomRight");
+        openNotification(
+          "Thất bại",
+          "Có lỗi xảy ra, vui lòng thử lại sau",
+          "bottomRight"
+        );
       }
     }
   };
+  const onChange = (value, selectedOptions) => {
+    console.log(value, selectedOptions);
+    if (selectedOptions) {
+      setProvinceSelected(selectedOptions[0]?.label);
+      setDistrictSelected(selectedOptions[1]?.label);
+      setWardSelected(selectedOptions[2]?.label);
+      setProvinceSelectedCode(selectedOptions[0]?.value);
+      setDistrictSelectedCode(selectedOptions[1]?.value);
+      setWardSelectedCode(selectedOptions[2]?.value);
+    }
+  };
+
+  const filter = (inputValue, path) =>
+    path.some(
+      (option) =>
+        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+    );
+
 
   return (
     <>
@@ -154,7 +203,7 @@ const UserProfile = () => {
               <br />
               <Tabs>
                 <Tabs.items tab="Thông tin người dùng" key="1">
-                  <Row gutter={[16, 16]}>
+                  <Row gutter={[16,16]}>
                     <Col span={6}>
                       <Image width={300} height={250} src={userDetail.image} />
                       <div
@@ -183,7 +232,7 @@ const UserProfile = () => {
                         autoComplete="off"
                         validateMessages={validateMessages}
                       >
-                        <Row gutter={[32, 32]}>
+                        <Row gutter={[32]}>
                           <Col span={12}>
                             <Form.Item
                               label="Tên"
@@ -258,6 +307,22 @@ const UserProfile = () => {
                           </Col>
                           <Col span={24}>
                             <Form.Item
+                              name="addressvn"
+                              label="Tỉnh/Thành phố - Quận - Huyện"
+                            >
+                              <Cascader
+                                options={addressData}
+                                onChange={onChange}
+                                placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                                showSearch={{
+                                  filter,
+                                }}
+                                onSearch={(value) => console.log(value)}
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col span={24}>
+                            <Form.Item
                               label="Địa chỉ"
                               name="address"
                               rules={[
@@ -315,15 +380,13 @@ const UserProfile = () => {
                   </Row>
                 </Tabs.items>
                 <Tabs.items tab="Thay đổi mật khẩu" key="2">
-                  <ChangePassword/>
-                  </Tabs.items>
+                  <ChangePassword />
+                </Tabs.items>
               </Tabs>
             </Col>
           </Row>
         </Layout.Content>
-        <Footer style={{ backgroundColor: "white", textAlign: "center" }}>
-            <Row justify="center">©2022 Coppy right by VL-CARCARE</Row>
-          </Footer>
+       
       </Layout>
 
       <ModalUploadImage

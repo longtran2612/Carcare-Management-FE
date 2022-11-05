@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosClient from "./index";
 
 import { API_URL } from "./url";
 
@@ -42,8 +43,8 @@ const getAllExecuteOrder = () => {
     });
 };
 
-const createOrder = (data) => {
-  return axios({
+const createOrder = async (data) => {
+  return axiosClient()({
     method: "POST",
     url: API_URL + `/order/create`,
     data: data,
