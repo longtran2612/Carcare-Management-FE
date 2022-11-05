@@ -102,7 +102,7 @@ function UserDetail  ({ userId, onUpdateUser }) {
       onUpdateUser();
       setLoading(false);
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification("Thất bại", "Cập nhật thông tin nhân viên thất bại");

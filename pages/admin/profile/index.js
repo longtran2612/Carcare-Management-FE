@@ -81,7 +81,7 @@ const UserProfile = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification(
@@ -117,7 +117,7 @@ const UserProfile = () => {
       setUserDetail(res.data.Data);
       openNotification("Thành công!", "Cập nhật người dùng thành công");
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification(
@@ -155,7 +155,7 @@ const UserProfile = () => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification(

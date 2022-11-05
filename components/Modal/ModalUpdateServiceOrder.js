@@ -259,6 +259,7 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
       onSuccess();
       setLoading(false);
     } catch (error) {
+      openNotification("Thất bại", "cập nhật yêu cầu thất bại");
       console.log(error);
     }
   };

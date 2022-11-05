@@ -63,7 +63,7 @@ export const OrderDetail = ({ orderRequestId }) => {
       fetchUsers();
       setLoading(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      console.log(error);
       setLoading(false);
     }
   };

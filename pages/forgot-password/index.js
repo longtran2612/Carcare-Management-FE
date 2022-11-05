@@ -52,7 +52,7 @@ export default function ForgotPassword() {
       setStep(1);
       setLoading(false);
     } catch (err) {
-      openNotification(err.response.data.message[0]);
+      message.error("Có lỗi xảy ra, vui lòng thử lại sau");
       setLoading(false);
     }
   };

@@ -307,7 +307,7 @@ function OrderTable({}) {
       setOrders(res.data.Data.content);
       setLoading(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      openNotification("Thất bại", "Lấy danh sách đơn hàng thất bại");
       setLoading(false);
     }
   };

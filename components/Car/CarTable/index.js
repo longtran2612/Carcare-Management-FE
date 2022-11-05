@@ -183,7 +183,7 @@ function CarTable({}) {
       setCars(res.data.Data);
       setLoading(false);
     } catch (err) {
-      openNotification(err.response.data.message[0]);
+     console.log(err);
       setLoading(false);
     }
   };

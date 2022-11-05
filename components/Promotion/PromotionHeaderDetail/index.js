@@ -148,7 +148,7 @@ const PromotionHeaderDetail = ({
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(error.response.data.message[0]);
+      console.log(error);
     }
   };
 
@@ -299,7 +299,7 @@ const PromotionHeaderDetail = ({
       onUpdatePromotionHeader();
       setLoading(false);
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");

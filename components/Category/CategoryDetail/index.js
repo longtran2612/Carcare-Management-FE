@@ -56,7 +56,7 @@ const CategoryDetail = ({ categoryId, onUpdateCategory }) => {
       openNotification("Cập nhật danh mục dịch vụ thành công!", "");
       onUpdateCategory();
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");

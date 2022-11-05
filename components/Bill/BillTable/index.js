@@ -334,7 +334,7 @@ const BillTable = () => {
         setLoading(false);
       }
     } catch (error) {
-      openNotification("error", "Lỗi", "Không thể lấy dữ liệu");
+      console.log(error);
       setLoading(false);
     }
   };

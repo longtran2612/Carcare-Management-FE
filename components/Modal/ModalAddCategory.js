@@ -28,7 +28,7 @@ const ModalAddCategory = ({ show, onSuccess, handleCancel }) => {
       onSuccess(res?.data?.Data);
       form.resetFields();
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");

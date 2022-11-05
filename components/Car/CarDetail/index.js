@@ -83,7 +83,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       });
       setLoading(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      openNotification("Thất bại!", "Đã có lỗi xảy ra");
       setLoading(false);
     }
   };
@@ -107,7 +107,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       openNotification("Thành công", "Cập nhật xe thành công");
       onUpdateCar();
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
@@ -141,7 +141,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      openNotification("Thất bại!", "Đã có lỗi xảy ra");
     }
   };
 

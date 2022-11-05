@@ -113,7 +113,7 @@ export const ProfileCustomer = () => {
       setCustomerDetail(res.data.Data);
       openNotification("Thành công", "Cập nhật thông tin thành công");
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification(
@@ -151,7 +151,7 @@ export const ProfileCustomer = () => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification(

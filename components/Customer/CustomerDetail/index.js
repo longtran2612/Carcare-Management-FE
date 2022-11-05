@@ -70,7 +70,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(error.response.data.message[0]);
+      console.log(error);
     }
   };
 
@@ -125,7 +125,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
       setCustomerDetail(res.data.Data);
       openNotification("Cập nhật khách hàng thành công!", "");
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
@@ -159,7 +159,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
+      if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
         openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");

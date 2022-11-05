@@ -184,7 +184,7 @@ function PriceHeaderTable({}) {
       });
     } catch (err) {
       setLoading(false);
-      openNotification(err.response.data.message[0]);
+     console.log(err);
     }
   };
 

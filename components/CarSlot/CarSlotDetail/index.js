@@ -235,7 +235,7 @@ const CarSlotDetail = ({ carSlotId }) => {
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
-      openNotification(err.response.data.message[0]);
+      openNotification("Thất bại!", "Đã có lỗi xảy ra");
       setLoading(false);
     }
   };
@@ -256,7 +256,7 @@ const CarSlotDetail = ({ carSlotId }) => {
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
-      openNotification(error.response.data.message);
+      openNotification("Thất bại!", "Đã có lỗi xảy ra");
       setLoading(false);
     }
   };
@@ -269,7 +269,7 @@ const CarSlotDetail = ({ carSlotId }) => {
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
-      openNotification(error.response.data.message);
+      openNotification("Thất bại!", "Đã có lỗi xảy ra");
       setLoading(false);
     }
   };

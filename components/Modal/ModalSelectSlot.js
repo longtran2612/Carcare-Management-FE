@@ -53,7 +53,7 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      openNotification(err.response.data.message[0]);
+      console.log(error);
     }
   };
 

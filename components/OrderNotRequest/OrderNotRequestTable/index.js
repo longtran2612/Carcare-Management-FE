@@ -277,15 +277,13 @@ function OrderNotRequestTable({}) {
     }
     try {
       const res = await getOrders(dataGetOrder);
-      if (res.status === 200) {
-        setOrders(res.data.Data.content);
-        setLoading(false);
-      }
+      setOrders(res.data.Data.content);
+      setLoading(false);
     } catch (error) {
-      if (error.response.data) {
+      if (error.response.data.message) {
         openNotification(error.response.data.message[0]);
       } else {
-        openNotification("Thất bại", "");
+        openNotification("Thất bại", "Đã có lỗi xảy ra");
       }
       setLoading(false);
     }
