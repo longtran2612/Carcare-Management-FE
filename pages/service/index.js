@@ -41,15 +41,17 @@ const ServicePage = () => {
           <Row style={{ overflow: "auto", height: "530px" }} gutter={[16,16]}>
             {services
               ? services.map((d, i) => (
-                  <Col   xs={24} sm={24} md={12} lg={6} xl={6}>
+                  <Col xs={12} sm={12} md={12} lg={6} xl={6}>
                     <Card
                       style={{
                         borderRadius: "5px",
                         cursor: "pointer",
                         height: "220px",
+                        boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
+                        
                       }}
                       hoverable
-                      cover={<Image width={220} height={220} src={d.imageUrl} />}
+                      cover={<Image  layout='fill' src={d.imageUrl} />}
                     />
 
                     <Card.Meta

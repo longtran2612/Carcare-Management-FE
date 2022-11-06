@@ -35,7 +35,7 @@ export default function CustomerProfilePage() {
                 marginTop: "10px",
                 marginLeft: "15px",
               }}
-              onClick={() => router.back()}
+              onClick={() => router.push("/customer")}
               icon={<RollbackOutlined />}
             >
               Trở lại
