@@ -31,6 +31,9 @@ $black_text: #363636;
       height: calc(#{$demesion-img} - 20px);
       width: $demesion-img;
       object-fit: contain;
+      display: flex;
+      justify-self: center;
+      align-items: center;
     }
 
     &-intro {

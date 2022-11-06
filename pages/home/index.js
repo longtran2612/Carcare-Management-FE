@@ -37,7 +37,7 @@ function HomePageCustomer() {
           <Features data={landingPageData.Features} />
           <Services  data={landingPageData.Services} />
           <About data={landingPageData.About} />
-          <Testimonials data={landingPageData.Testimonials} />
+          {/* <Testimonials data={landingPageData.Testimonials} /> */}
         </Content>
         <MyFooter />
       </Layout>

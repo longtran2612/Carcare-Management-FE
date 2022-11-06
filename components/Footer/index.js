@@ -16,7 +16,7 @@ const MyFooter =() => {
   return (
     <div className="footer">
       <Divider style={{ marginTop: "0px" }} />
-      <Row gutter={[0, 16]}>
+      <Row >
         <Col xl={{ span: 10 }} xs={{ span: 24 }} sm={{ span: 24 }}>
           <div className="footer_left">
             <Link href="/home">
@@ -24,10 +24,6 @@ const MyFooter =() => {
                 <Image  width={200} height={200} src={logo} alt="VLCARSERVICE" />
               </div>
             </Link>
-
-            <div className="footer_left-intro">
-              Website quản lý trung tâm chăm sóc xe VLCARSERVICE
-            </div>
 
             <div className="footer_left-contact">
               <a href="#" className="footer_left-contact--logo-branch">
@@ -46,7 +42,7 @@ const MyFooter =() => {
         <Col xl={{ span: 14 }} xs={{ span: 24 }} sm={{ span: 24 }}>
           <div className="footer_right">
             <Row gutter={[8, 8]}>
-              <Col xl={{ span: 8 }} xs={{ span: 24 }} sm={{ span: 8 }}>
+              {/* <Col xl={{ span: 8 }} xs={{ span: 24 }} sm={{ span: 8 }}>
                 <ul className="footer_right-title">
                   <span>Hỗ trợ</span>
 
@@ -60,23 +56,23 @@ const MyFooter =() => {
                     <Link href="/">Báo cáo lạm dụng</Link>
                   </li>
                 </ul>
-              </Col>
-              <Col xl={{ span: 8 }} xs={{ span: 24 }} sm={{ span: 8 }}>
+              </Col> */}
+              <Col xl={{ span: 12 }} xs={{ span: 24 }} sm={{ span: 8 }}>
                 <ul className="footer_right-title">
                   <span>Khám phá</span>
 
                   <li className="footer_right-list">
-                    <Link href="/">Trang chủ</Link>
+                    <Link href="/admin">Trang chủ</Link>
                   </li>
                   <li className="footer_right-list">
                     <Link href="/service">Dịch vụ</Link>
                   </li>
                   <li className="footer_right-list">
-                    <Link href="/customer">Khách hàng</Link>
+                    <Link href="/customer">Chức năng</Link>
                   </li>
                 </ul>
               </Col>
-              <Col xl={{ span: 8 }} xs={{ span: 24 }} sm={{ span: 8 }}>
+              <Col xl={{ span: 12 }} xs={{ span: 24 }} sm={{ span: 8 }}>
                 <ul className="footer_right-title">
                   <span>Creators</span>
                   <li className="footer_right-list">
