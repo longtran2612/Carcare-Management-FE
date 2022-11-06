@@ -5,6 +5,7 @@ import { HomeOutlined } from "@ant-design/icons";
 import { DatePicker, Space } from "antd";
 import moment from "moment";
 import { getCustomers } from "pages/api/customerAPI";
+import { getUsers } from "pages/api/userAPI";
 const { RangePicker } = DatePicker;
 
 const dateFormat = "DD/MM/YYYY";
@@ -12,12 +13,21 @@ const dateFormat = "DD/MM/YYYY";
 const BillReport = () => {
   const [typeDate, setTypeDate] = useState("d");
   const [customers, setCustomers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [status, setStatus] = useState(100);
 
   const handleFetchCustomer = async () => {
     try {
       const res = await getCustomers();
       setCustomers(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleFetchUser = async () => {
+    try {
+      const res = await getUsers();
+      setUsers(res.data.Data);
     } catch (error) {
       console.log(error);
     }
@@ -48,6 +58,7 @@ const BillReport = () => {
 
   useEffect(() => {
     handleFetchCustomer();
+    handleFetchUser();
   }, []);
 
   const data = [
@@ -129,10 +140,10 @@ const BillReport = () => {
             <Select.Option value="y">Năm</Select.Option>
           </Select>
         </Col>
-        <Col span={9}>{handleDatePicker()}</Col>
-        <Col span={7}>
+        <Col span={7}>{handleDatePicker()}</Col>
+        <Col span={5}>
           <Select
-           style={{ width: "100%" }}
+            style={{ width: "100%" }}
             showSearch
             placeholder="Chọn khách hàng"
             optionFilterProp="children"
@@ -145,12 +156,26 @@ const BillReport = () => {
           >
             {customers.map((item) => (
               <Option value={item.id}>
-                {item.customerCode +
-                  " - " +
-                  item.name +
-                  " - " +
-                  item.phoneNumber}
+                {item.name + " - " + item.phoneNumber}
               </Option>
+            ))}
+          </Select>
+        </Col>
+        <Col span={5}>
+          <Select
+            style={{ width: "100%" }}
+            showSearch
+            placeholder="Chọn nhân viên"
+            optionFilterProp="children"
+            filterOption={(input, option) => option.children.includes(input)}
+            filterSort={(optionA, optionB) =>
+              optionA.children
+                .toLowerCase()
+                .localeCompare(optionB.children.toLowerCase())
+            }
+          >
+            {users.map((item) => (
+              <Option value={item.id}>{item.name + " - " + item.phone}</Option>
             ))}
           </Select>
         </Col>
@@ -162,9 +187,8 @@ const BillReport = () => {
             onChange={(value) => setStatus(value)}
             value={status}
           >
-                  <Option value={100}>Đã xuất hóa đơn</Option>
+            <Option value={100}>Đã xuất hóa đơn</Option>
             <Option value={-100}>Đã hủy</Option>
-      
           </Select>
         </Col>
         <Col span={24}>
