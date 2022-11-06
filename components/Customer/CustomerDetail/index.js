@@ -115,7 +115,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
         wardCode: wardSelectedCode,
         status: values.status,
         image: imageS3 || customerDetail?.image,
-        birthDay: values.birthDay,
+        dateOfBirth: values.dateOfBirth,
         // phoneNumber: values.phoneNumber,
         // identityNumber: values.identityNumber,
         gender: values.gender,
@@ -232,11 +232,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                 <Form.Item
                   label="Ngày sinh"
                   name="dateOfBirth"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                 
                 >
                   <DatePicker format={formatDate} />
                 </Form.Item>
@@ -262,11 +258,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                 <Form.Item
                   label="Giới tính"
                   name="gender"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                 
                 >
                   <Select>
                     <Select.Option value={1}>Nam</Select.Option>
@@ -278,11 +270,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                 <Form.Item
                   label="Quốc tịch"
                   name="nationality"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                  
                 >
                   <Input />
                 </Form.Item>

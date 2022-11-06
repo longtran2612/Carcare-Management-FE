@@ -146,7 +146,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
           totalPromotion += total;
         }
       } else {
-        if (promotion.type === "MONEY") {
+        if (promotion.type === "MONEY"|| promotion.type ==="SERVICE") {
           totalPromotion += promotion.amount;
         }
       }

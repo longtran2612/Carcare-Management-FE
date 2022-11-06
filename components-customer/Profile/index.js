@@ -103,7 +103,7 @@ export const ProfileCustomer = () => {
         wardCode: wardSelectedCode,
         status: values.status,
         image: imageS3 || customerDetail?.image,
-        birthDay: values.birthDay,
+        dateOfBirth: values.dateOfBirth,
         nationality: values.nationality,
         // phoneNumber: values.phoneNumber,
         // identityNumber: values.identityNumber,
@@ -228,11 +228,7 @@ export const ProfileCustomer = () => {
                 <Form.Item
                   label="Ngày sinh"
                   name="dateOfBirth"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                  
                 >
                   <DatePicker format={formatDate} />
                 </Form.Item>
@@ -242,11 +238,7 @@ export const ProfileCustomer = () => {
                 <Form.Item
                   label="Giới tính"
                   name="gender"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                  
                 >
                   <Select>
                     <Select.Option value="Nam">Nam</Select.Option>
@@ -258,11 +250,7 @@ export const ProfileCustomer = () => {
                 <Form.Item
                   label="Quốc tịch"
                   name="nationality"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                  
                 >
                   <Input />
                 </Form.Item>

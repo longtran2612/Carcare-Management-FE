@@ -15,7 +15,7 @@ const ServicePage = () => {
     setLoading(true);
     try {
       const res = await getServices();
-      setServices(res.data.Data);
+      setServices(res?.data?.Data);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -49,7 +49,7 @@ const ServicePage = () => {
                         height: "220px",
                       }}
                       hoverable
-                      cover={<Image width={220} height={220} src={d.image} />}
+                      cover={<Image width={220} height={220} src={d.imageUrl} />}
                     />
 
                     <Card.Meta

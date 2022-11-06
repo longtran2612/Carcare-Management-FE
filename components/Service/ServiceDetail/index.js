@@ -129,12 +129,16 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       const response = await uploadImage(formData);
       setImageS3(response.data.Data[0]);
       setServiceDetail((prevState) => {
-        return { ...prevState, image: response.data.Data[0] };
+        return { ...prevState, imageUrl: response.data.Data[0] };
       });
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      openNotification(error.response.data.message[0]);
+      if (error?.response?.data?.message) {
+        openNotification(error?.response?.data?.message[0]);
+      } else {
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+      }
     }
   };
   return (
@@ -158,7 +162,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
               showUploadList={false}
               fileList={listFiles.imageBlob}
             >
-              <Button icon={<UploadOutlined />}>Thay đổi ảnh đại diện</Button>
+              <Button icon={<UploadOutlined />}>Thay đổi hình ảnh</Button>
             </Upload>
           </div>
         </Col>

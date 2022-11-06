@@ -281,7 +281,7 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
           totalPromotion += total;
         }
       } else {
-        if (promotion.type === "MONEY") {
+        if (promotion.type === "MONEY"|| promotion.type ==="SERVICE") {
           totalPromotion += promotion.amount;
         }
       }
