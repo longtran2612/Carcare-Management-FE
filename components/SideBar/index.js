@@ -133,7 +133,7 @@ const SideBar = ({ handleOpenKey }) => {
       <Menu
         mode="inline"
         theme="dark"
-        style={{ height: "100%" }}
+        // style={{ height: "100%" }}
         items={items}
         onClick={onClick}
         defaultSelectedKeys={["car-slot"]}

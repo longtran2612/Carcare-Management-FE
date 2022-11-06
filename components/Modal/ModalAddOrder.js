@@ -406,7 +406,7 @@ const handleChangeCustomer =(values) => {
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Nhập ngày nhận xe dự kiến"
+                    label="Ngày nhận xe dự kiến"
                     name="receiveDate"
                     initialValue={moment()}
                     rules={[
@@ -416,14 +416,14 @@ const handleChangeCustomer =(values) => {
                     ]}
                   >
                     <DatePicker
-                      placeholder="Nhập ngày nhận xe dự kiến"
+                      placeholder="Ngày nhận xe dự kiến"
                       format={formatDate}
                     />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Nhập ngày xử lý dự kiến"
+                    label="Ngày xử lý dự kiến"
                     name="executeDate"
                     initialValue={moment()}
                     rules={[
@@ -433,7 +433,7 @@ const handleChangeCustomer =(values) => {
                     ]}
                   >
                     <DatePicker
-                      placeholder="Nhập ngày xử lý dự kiến"
+                      placeholder="Ngày xử lý dự kiến"
                       format={formatDate}
                     />
                   </Form.Item>

@@ -356,7 +356,17 @@ const CarSlotDetail = ({ carSlotId }) => {
                     style={{ marginRight: "10px" }}
                     className="carslot-customer content-white"
                   >
-                    <Form.Item label="Nhân viên xử lý" name="executorId">
+                    <Form.Item 
+                    label="Nhân viên xử lý" 
+                    name="executorId"
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          "Vui lòng chọn nhân viên xử lý yêu cầu này",
+                      },
+                    ]}
+                    >
                       <Select
                         style={{ width: "100%", marginBottom: "10px" }}
                         showSearch
@@ -616,7 +626,14 @@ const CarSlotDetail = ({ carSlotId }) => {
                               type="primary"
                               size="large"
                               onClick={() => {
-                                setShowConfimComplete(true);
+                                form
+                                .validateFields()
+                                .then((values) => {
+                                  setShowConfimComplete(true);
+                                })
+                                .catch((info) => {
+                                  console.log("Validate Failed:", info);
+                                });
                               }}
                             >
                               Hoàn thành - Thanh toán - In hóa đơn
