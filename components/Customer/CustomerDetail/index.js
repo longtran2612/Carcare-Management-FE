@@ -315,7 +315,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                   <Input disabled="true" />
                 </Form.Item>
               </Col>
-              <Col span={24}>
+              {/* <Col span={24}>
                 <Form.Item
                   name="addressvn"
                   label="Tỉnh/Thành phố - Quận - Huyện"
@@ -330,7 +330,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                     onSearch={(value) => console.log(value)}
                   />
                 </Form.Item>
-              </Col>
+              </Col> */}
               <Col span={24}>
                 <Form.Item label="Địa chỉ chi tiết" name="address">
                   <TextArea rows={4} />

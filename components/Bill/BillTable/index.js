@@ -14,7 +14,7 @@ import {
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { getBills, cancelBill,searchBill } from "pages/api/billAPI";
+import { getBills, cancelBill, searchBill } from "pages/api/billAPI";
 import moment from "moment";
 const formatDate = "HH:mm:ss DD/MM/YYYY ";
 import Loading from "components/Loading";
@@ -332,7 +332,7 @@ const BillTable = () => {
     setLoading(true);
     let dataGetBill = {
       pageSize: 100,
-      status:status,
+      status: status,
       pageNumber: 0,
       sort: [
         {
@@ -397,17 +397,17 @@ const BillTable = () => {
                 </Button>
               </Col>
               <Col span={4}>
-                    <Select
-                      placeholder="Trạng thái"
-                      style={{ width: "100%" }}
-                      onChange={(value) => setStatus(value)}
-                      value={status}
-                    >
-                      <Option value={null}>Tất cả</Option>
-                      <Option value={1}>Đã thanh toán</Option>
-                      <Option value={2}>Đang hủy</Option>
-                    </Select>
-                  </Col>
+                <Select
+                  placeholder="Trạng thái"
+                  style={{ width: "100%" }}
+                  onChange={(value) => setStatus(value)}
+                  value={status}
+                >
+                  <Option value={null}>Tất cả</Option>
+                  <Option value={1}>Đã thanh toán</Option>
+                  <Option value={2}>Đang hủy</Option>
+                </Select>
+              </Col>
             </Row>
           </>
         )}
@@ -520,7 +520,7 @@ const BillTable = () => {
                 />
               </Col>
               <Col span={8}>
-                <DescriptionItem title="Tên dịch vụ" content={item?.name} />
+                <DescriptionItem  title={item?.name} />
               </Col>
               <Col span={8}>
                 <DescriptionItem
@@ -543,26 +543,29 @@ const BillTable = () => {
             {billDetail?.promotionDetails?.map((item, index) => (
               <>
                 <Row>
-                  <Col span={6}>
+                  <Col span={8}>
                     <DescriptionItem title={item?.promotionDetailCode} />
                   </Col>
-                  <Col span={6}>
+                  <Col span={8}>
                     <DescriptionItem
                       title="Mô tả"
                       content={item?.description}
                     />
                   </Col>
-                  <Col span={6}>
+                  {/* <Col span={6}>
                     <DescriptionItem
                       title="Loại khuyến mãi"
                       content={handleType(item?.type)}
                     />
-                  </Col>
-                  <Col span={6}>
-                    <DescriptionItem
-                      title="Tiền giảm"
-                      content={formatMoney(billDetail?.totalPromotionAmount)}
-                    />
+                  </Col> */}
+                  <Col span={8}>
+                    {(item?.type == "PERCENTAGE" ||
+                      item?.type == "MONEY") && (
+                        <DescriptionItem
+                          title="Tiền giảm"
+                          content={formatMoney(item?.promotionUsedAmount)}
+                        />
+                      )}
                   </Col>
                 </Row>
               </>
@@ -578,35 +581,39 @@ const BillTable = () => {
           Thông tin thanh toán
         </p>
         <Row>
-          <Col span={12}>
+          <Col span={8}>
             <DescriptionItem
               title="Hình thức thanh toán"
               content={billDetail.paymentType === "CASH" ? "Tiền mặt" : "Thẻ"}
             />
           </Col>
-          <Col span={12}>
-            {billDetail.paymentType === "DEBIT" && (
-              <DescriptionItem
-                title="Thông tin thanh toán"
-                content={billDetail.cardNumber}
-              />
-            )}
-          </Col>
-
-          <Col span={12}>
-            <DescriptionItem
-              title="Tổng tiền khách trả"
-              content={formatMoney(
-                totalPriceService() - (billDetail?.totalPromotionAmount || 0) ||
-                  0
-              )}
-            />
-          </Col>
-
-          <Col span={12}>
+          <Col span={8}>
             <DescriptionItem
               title="Ngày thanh toán"
               content={moment(billDetail.paymentDate).format(formatDate)}
+            />
+          </Col>
+          <Col span={8}></Col>
+          <Col span={8}>
+            <DescriptionItem
+              title="Tổng Tiền dịch vụ"
+              content={formatMoney(billDetail?.totalServicePrice || 0)}
+            />
+          </Col>
+          <Col span={8}>
+            <DescriptionItem
+              title="Tổng tiền khuyến mãi"
+              content={formatMoney(billDetail?.totalPromotionAmount || 0)}
+            />
+          </Col>
+          <Col span={8}>
+            <DescriptionItem
+              title="Tổng tiền thanh toán"
+              content={
+                <span style={{ color: "red" }}>
+                  {formatMoney(billDetail?.paymentAmount || 0)}
+                </span>
+              }
             />
           </Col>
         </Row>

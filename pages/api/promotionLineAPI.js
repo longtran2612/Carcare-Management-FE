@@ -16,7 +16,7 @@ const getPromotionLines = () => {
     });
 };
 
-const getPromotionLineById = (data) => {
+const getPromotionLineById = async (data) => {
   return axios({
     method: "GET",
     url: API_URL + `/promotion-lines/find-promotion-line-by-id/${data}`,

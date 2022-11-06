@@ -1,9 +1,10 @@
 import React from "react";
 import { Drawer, List, Row, Col, Avatar, Typography } from "antd";
 import { TagsOutlined } from "@ant-design/icons";
+import { getPromotionLineById } from "pages/api/promotionLineAPI";
 import moment from "moment";
 import { formatMoney } from "utils/format";
-
+const formatDate = 'DD/MM/YYYY';
 const { Title } = Typography;
 
 export default function DrawerPromotionOrder({
@@ -11,6 +12,31 @@ export default function DrawerPromotionOrder({
   show,
   handleCancel,
 }) {
+
+  // const getPromotionLineFromDate = async (id) => {
+  //   try{
+  //     const res = await getPromotionLineById(id);
+  //     console.log(res.data.Data.fromDate);
+  //     return moment(res.data.Data.fromDate).format(formatDate);
+  //   }
+  //   catch(err){
+  //     console.log(err);
+  //     return "";
+  //   }
+  // };
+  // const getPromotionLineTodate = async (id) => {
+  //   try{
+  //     const res = await getPromotionLineById(id);
+  //     console.log(res.data.Data.toDate);
+      
+  //     return moment(res.data.Data.toDate).format(formatDate);
+  //   }
+  //   catch(err){
+  //     console.log(err);
+  //     return "";
+  //   }
+  // };
+
   return (
     <Drawer
       title="Danh sách khuyến mãi được áp dụng"
@@ -88,14 +114,14 @@ export default function DrawerPromotionOrder({
                       )}
                     </Col>
 
-                    <Col span={12}>
+                    {/* <Col span={12}>
                       <span style={{ fontWeight: "bold" }}>Ngày bắt đầu: </span>
-                      {moment(item.fromDate).format("DD/MM/YYYY")}
+                      {moment(getPromotionLineFromDate(item?.promotionLineId)).format(formatDate)}
                     </Col>
                     <Col span={12}>
                       <span style={{ fontWeight: "bold" }}>Kết thúc: </span>
-                      {moment(item.toDate).format("DD/MM/YYYY")}
-                    </Col>
+                      {moment(getPromotionLineTodate(item?.promotionLineId)).format(formatDate)}
+                    </Col> */}
                   </Row>
                 </List.Item>
               </Col>
