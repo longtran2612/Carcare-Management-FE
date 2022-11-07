@@ -27,7 +27,7 @@ const AdminPage = () => {
     }
     try {
       const res = await loadUser();
-      const roles = Cookies.get("roles");
+     
       if (res.data.Data.roles == "ROLE_USER" || res.data.Data.roles == "ROLE_ADMIN") {
         router.push("/admin");
       } else {

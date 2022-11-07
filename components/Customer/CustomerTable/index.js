@@ -19,11 +19,10 @@ import { useRouter } from "next/router";
 import CustomerDetail from "components/Customer/CustomerDetail";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
-import { openNotification } from "utils/notification";
 import moment from "moment";
 const formatDate = "DD/MM/YYYY";
 
-function CustomerTable({}) {
+function CustomerTable() {
   const [customers, setCustomers] = useState([]);
   const [modalCustomer, setModalCustomer] = useState(false);
   const [modalQuestion, setModalQuestion] = useState(false);

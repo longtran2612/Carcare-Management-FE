@@ -145,8 +145,8 @@ export default function LoginPage() {
             </Button>
           </Form>
           <Divider />
-          Chưa có tài khoản?<Link href="/registry"> Đăng ký</Link>
-          <br />
+          {/* Chưa có tài khoản?<Link href="/registry"> Đăng ký</Link>
+          <br /> */}
           Quên mật khẩu?<Link href="/forgot-password"> Lấy lại mật khẩu</Link>
           {/* <p className="text-center"> Hoặc đăng nhập bằng</p>
           <div className="logo_sign-up">

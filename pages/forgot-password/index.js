@@ -363,7 +363,7 @@ export default function ForgotPassword() {
           <p className="text-center">
             Đã có tài khoản? <Link href="/login">Đăng nhập</Link>
           </p>
-          Đăng ký tài khoản mới?<Link href="/registry"> Đăng ký</Link>
+          {/* Đăng ký tài khoản mới?<Link href="/registry"> Đăng ký</Link> */}
         </Col>
       </Row>
       <Loading loading={loading} />

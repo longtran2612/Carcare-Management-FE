@@ -20,7 +20,7 @@ import UserDetail from "../UserDetail";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
 
-function UserTable({}) {
+function UserTable() {
   const [users, setUsers] = useState([]);
   const [modalUser, setModalUser] = useState(false);
   const [modalQuestion, setModalQuestion] = useState(false);

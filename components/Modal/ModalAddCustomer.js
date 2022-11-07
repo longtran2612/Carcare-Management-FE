@@ -18,10 +18,10 @@ import JsonData from "data/address-vn.json";
 const { TextArea } = Input;
 const { Option } = Select;
 
-const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
+function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
   const [form] = Form.useForm();
 
-  const [addressData, setAddressData] = useState({});
+  const [addressData, setAddressData] = useState(JsonData);
 
   const [provinceSelected, setProvinceSelected] = useState("");
   const [districtSelected, setDistrictSelected] = useState("");
@@ -30,7 +30,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
   const [districtSelectedCode, setDistrictSelectedCode] = useState("");
   const [wardSelectedCode, setWardSelectedCode] = useState("");
   
-  const formatDate = "HH:mm DD/MM/YYYY";
+  const formatDate = "DD/MM/YYYY";
 
   const onFinish = async (values) => {
     let dataUser = {
@@ -60,15 +60,12 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
       form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
-  useEffect(() => {
-    setAddressData(JsonData);
-  }, []);
 
   const onChange = (value, selectedOptions) => {
     console.log(value, selectedOptions);
@@ -133,6 +130,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
                 <Select>
                   <Option value="Nam">Nam</Option>
                   <Option value="Nữ">Nữ</Option>
+                  <Option value='Khác'>Khác</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -197,7 +195,7 @@ const ModalAddCustomer = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item name="adressvn" label="Tỉnh/Thành phố - Quận - Huyện">
+              <Form.Item name="addressvn" label="Tỉnh/Thành phố - Quận - Huyện">
                 <Cascader
                   options={addressData}
                   onChange={onChange}

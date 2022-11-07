@@ -35,7 +35,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
     images: [],
     imageBlob: [],
   });
-  const [addressData, setAddressData] = useState({});
+  const [addressData, setAddressData] = useState(JsonData);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [imageS3, setImageS3] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -80,9 +80,6 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
     }
   }, [customerId]);
 
-  useEffect(() => {
-    setAddressData(JsonData);
-  }, []);
 
   const onChange = (value, selectedOptions) => {
     console.log(value, selectedOptions);
@@ -126,7 +123,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
       openNotification("Cập nhật khách hàng thành công!", "");
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
@@ -160,7 +157,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
       setModalUpload(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
@@ -240,11 +237,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
               <Col span={6}>
                 <Form.Item
                   label="Nhóm khách hàng"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                 
                   name="statusName"
                 >
                   <Select>
@@ -261,8 +254,9 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                  
                 >
                   <Select>
-                    <Select.Option value={1}>Nam</Select.Option>
-                    <Select.Option value={2}>Nữ</Select.Option>
+                    <Select.Option value="Nam">Nam</Select.Option>
+                    <Select.Option value='Nữ'>Nữ</Select.Option>
+                    <Select.Option value='Khác'>Khác</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -293,11 +287,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                 <Form.Item
                   label="Email"
                   name="email"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                 
                 >
                   <Input />
                 </Form.Item>
@@ -315,7 +305,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                   <Input disabled="true" />
                 </Form.Item>
               </Col>
-              {/* <Col span={24}>
+              <Col span={24}>
                 <Form.Item
                   name="addressvn"
                   label="Tỉnh/Thành phố - Quận - Huyện"
@@ -330,7 +320,7 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                     onSearch={(value) => console.log(value)}
                   />
                 </Form.Item>
-              </Col> */}
+              </Col>
               <Col span={24}>
                 <Form.Item label="Địa chỉ chi tiết" name="address">
                   <TextArea rows={4} />

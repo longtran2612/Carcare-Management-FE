@@ -8,9 +8,9 @@ import JsonData from "data/address-vn.json";
 const { TextArea } = Input;
 const { Option } = Select;
 
-const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
+function ModalAddUser ({ show, onSuccess, handleCancel }) {
   const [form] = Form.useForm();
-  const [addressData, setAddressData] = useState({});
+  const [addressData, setAddressData] = useState(JsonData);
 
   const [provinceSelected, setProvinceSelected] = useState("");
   const [districtSelected, setDistrictSelected] = useState("");
@@ -20,7 +20,7 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
   const [wardSelectedCode, setWardSelectedCode] = useState("");
 
   const onFinish = async (values) => {
-    let dataUser = {
+    const dataUser = {
       fullname: values.fullname,
       email: values.email,
       phone: values.phone,
@@ -32,10 +32,10 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
       provinceCode: provinceSelectedCode,
       wardCode:wardSelectedCode,
     };
-    console.log(dataUser);
+    console.log("data create",dataUser);
 
     try {
-      const res = await createUser(values);
+      const res = await createUser(dataUser);
       console.log(res);
       openNotification("Thành công!", "Tạo mới người dùng thành công");
       handleCancel();
@@ -50,11 +50,9 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
       }
     }
   };
-  useEffect(() => {
-    setAddressData(JsonData);
-  }, []);
 
   const onChange = (value, selectedOptions) => {
+    console.log(value, selectedOptions);
     if (selectedOptions) {
       setProvinceSelected(selectedOptions[0]?.label);
       setDistrictSelected(selectedOptions[1]?.label);
@@ -137,7 +135,7 @@ const ModalAddUser = ({ show, onSuccess, handleCancel }) => {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item name="adressvn" label="Tỉnh/Thành phố - Quận - Huyện">
+              <Form.Item name="addressvn" label="Tỉnh/Thành phố - Quận - Huyện">
                 <Cascader
                   options={addressData}
                   onChange={onChange}

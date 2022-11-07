@@ -21,6 +21,7 @@ import {
   updateUserById,
   uploadImagesUser,
 } from "pages/api/userAPI";
+import { uploadImage } from "pages/api/uploadAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
@@ -29,7 +30,6 @@ import { UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "DD/MM/YYYY";
 import MyHeader from "components/Header";
-import { UserOutlined, LockOutlined, ClearOutlined } from "@ant-design/icons";
 import ChangePassword from "components-customer/ChangePassword/index.js";
 import Cookies from "js-cookie";
 import JsonData from "data/address-vn.json";
@@ -108,7 +108,7 @@ const UserProfile = () => {
         districtCode: districtSelectedCode,
         provinceCode: provinceSelectedCode,
         wardCode: wardSelectedCode,
-        status: values.status,
+        // status: values.status,
         image: imageS3 || userDetail?.image,
         birthDay: values.birthDay,
       };
@@ -123,7 +123,7 @@ const UserProfile = () => {
         openNotification(
           "Thất bại",
           "Có lỗi xảy ra, vui lòng thử lại sau",
-          "bottomRight"
+       
         );
       }
     }
@@ -156,12 +156,11 @@ const UserProfile = () => {
       setModalUpload(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification(
           "Thất bại",
           "Có lỗi xảy ra, vui lòng thử lại sau",
-          "bottomRight"
         );
       }
     }
@@ -189,8 +188,8 @@ const UserProfile = () => {
     <>
       <Layout>
         <MyHeader />
-        <Layout.Content className="content">
-          <Row className="content-white">
+        <Layout.Content  className="content">
+          <Row style={{paddingLeft:'40px',paddingRight:'40px'}} className="content-white">
             <Col span={24}>
               <Button
                 type="link"
@@ -205,7 +204,7 @@ const UserProfile = () => {
                 <Tabs.items tab="Thông tin người dùng" key="1">
                   <Row gutter={[16,16]}>
                     <Col span={6}>
-                      <Image width={300} height={250} src={userDetail.image} />
+                      <Image width={300} height={300} src={userDetail.image} />
                       <div
                         style={{
                           marginTop: "10px",
@@ -232,8 +231,8 @@ const UserProfile = () => {
                         autoComplete="off"
                         validateMessages={validateMessages}
                       >
-                        <Row gutter={[32]}>
-                          <Col span={12}>
+                        <Row gutter={[16]}>
+                          <Col span={18}>
                             <Form.Item
                               label="Tên"
                               name="name"
@@ -250,16 +249,12 @@ const UserProfile = () => {
                             <Form.Item
                               label="Ngày sinh"
                               name="birthDay"
-                              rules={[
-                                {
-                                  required: true,
-                                },
-                              ]}
+                             
                             >
                               <DatePicker format={formatDate} />
                             </Form.Item>
                           </Col>
-                          <Col span={6}>
+                          {/* <Col span={6}>
                             <Form.Item
                               label="Trạng thái"
                               rules={[
@@ -278,7 +273,7 @@ const UserProfile = () => {
                                 </Select.Option>
                               </Select>
                             </Form.Item>
-                          </Col>
+                          </Col> */}
                           <Col span={12}>
                             <Form.Item
                               label="Email"
