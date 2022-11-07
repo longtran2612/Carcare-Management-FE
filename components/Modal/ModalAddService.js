@@ -21,6 +21,7 @@ const { Option } = Select;
 const ModalAddService = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
   const [currency, setCurrency] = useState("VND");
+  
   const onFinish = async (values) => {
     console.log(values);
     let dataCreate = {

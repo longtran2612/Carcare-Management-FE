@@ -69,11 +69,11 @@ const updateService = (data, id) => {
     });
 };
 
-const searchService = (params) => {
+const searchService = async (data) => {
   return axios({
-    method: "GET",
+    method: "POST",
     url: API_URL + "/services/search",
-    params: params,
+    data: data,
   })
     .then((res) => {
       return res;
@@ -82,6 +82,7 @@ const searchService = (params) => {
       throw err;
     });
 };
+
 const disableService = (id) => {
   return axios({
     method: "POST",
