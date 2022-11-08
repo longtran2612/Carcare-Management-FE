@@ -103,7 +103,7 @@ function UserDetail  ({ userId, onUpdateUser }) {
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification("Thất bại", "Cập nhật thông tin nhân viên thất bại");
       }
@@ -135,10 +135,11 @@ function UserDetail  ({ userId, onUpdateUser }) {
         return { ...prevState, image: response.data.Data[0] };
       });
       setListFiles({ images: [], imageBlob: [] });
+      openNotification("Thành công", "Tải ảnh lên thành công");
       setModalUpload(false);
     } catch (error) {
-      if (error?.response?.data?.message[0]) {
-        openNotification(error?.response?.data?.message[0]);
+      if (error?.response?.data?.message) {
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }

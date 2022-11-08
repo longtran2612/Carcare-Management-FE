@@ -72,7 +72,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-     console.log(error);
+      console.log(error);
     }
   };
 
@@ -101,7 +101,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       onUpdateService();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification("Thất bại", "Cập nhật bảng giá thất bại");
       }
@@ -130,12 +130,13 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       setImageS3(response.data.Data[0]);
       setServiceDetail((prevState) => {
         return { ...prevState, imageUrl: response.data.Data[0] };
-      });
+      })
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
+      openNotification("Thành công", "Tải ảnh lên thành công");
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
@@ -206,20 +207,11 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Kiểu dịch vụ"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                  name="type"
-                >
-                  <Select>
-                    <Select.Option value="HOT">HOT</Select.Option>
-                    <Select.Option value="Yêu thích">Yêu thích</Select.Option>
-                    <Select.Option value="Mới">Mới</Select.Option>
-                    <Select.Option value="Thường">Thông thường</Select.Option>
+                <Form.Item label="Kiểu dịch vụ" name="type">
+                  <Select style={{ width: "100%" }}>
+                    <Option value="NORMAL">Thường</Option>
+                    <Option value="NEW">Mới</Option>
+                    <Option value="HOT">HOT</Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -256,7 +248,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   ]}
                   name="estimateTime"
                 >
-                  <InputNumber />
+                  <InputNumber addonAfter="Phút" />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -269,7 +261,15 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   ]}
                   name="price"
                 >
-                  <InputNumber disabled="true" />
+                  <InputNumber
+                    addonAfter="Đ"
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    min={0}
+                    disabled="true"
+                  />
                 </Form.Item>
               </Col>
               <Col span={24}>

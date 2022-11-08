@@ -49,10 +49,7 @@ const BillTable = () => {
   const [loading, setLoading] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [billDetail, setBillDetail] = useState({});
-  // const [showPrint, setShowPrint] = useState(false)
-
   const [printBill, setPrintBill] = useState(false);
-
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -148,34 +145,22 @@ const BillTable = () => {
         text
       ),
   });
-  const totalPriceService = () => {
-    return billDetail?.services?.reduce((total, cur) => {
-      return (total += cur?.servicePrice?.price);
-    }, 0);
-  };
-  const totalTimeService = () => {
-    return billDetail?.services?.reduce((total, cur) => {
-      return (total += cur?.estimateTime);
-    }, 0);
-  };
 
   const handlePrintBill = (data) => {
     setBillDetail(data);
     setPrintBill(true);
+    setShowDetail(false);
   };
-  useEffect(() => {
-    if (printBill) {
-      handlePrint();
-      setPrintBill(false);
-    }
-  }, [printBill]);
+
 
   const handleCancelBill = async (id) => {
     setLoading(true);
     try {
       const res = await cancelBill(id);
       openNotification("Thành công", "Hủy hóa đơn thành công");
+      
       handleGetbills();
+      setShowDetail(false);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -285,47 +270,47 @@ const BillTable = () => {
         }
       },
     },
-    {
-      title: "Hành động",
-      dataIndex: "action",
-      width: 130,
-      render: (text, record, dataIndex) => {
-        if (record.statusName === "Đã thanh toán") {
-          return (
-            <>
-              <Popconfirm
-                title="Hủy hóa đơn này?"
-                placement="topLeft"
-                okText="Đồng ý"
-                cancelText="Hủy"
-                onConfirm={() => {
-                  handleCancelBill(record.id);
-                }}
-              >
-                <DeleteTwoTone
-                  twoToneColor="#F4406D"
-                  style={{ fontSize: "30px", marginRight: "10px" }}
-                />
-              </Popconfirm>
-              <Popconfirm
-                title="In hóa đơn?"
-                placement="topLeft"
-                okText="Đồng ý"
-                cancelText="Hủy"
-                onConfirm={() => {
-                  setPrintBill(true);
-                  handlePrintBill(record);
-                }}
-              >
-                <PrinterTwoTone
-                  style={{ color: "#FFFFFF", fontSize: "30px" }}
-                />
-              </Popconfirm>
-            </>
-          );
-        }
-      },
-    },
+    // {
+    //   title: "Hành động",
+    //   dataIndex: "action",
+    //   width: 130,
+    //   render: (text, record, dataIndex) => {
+    //     if (record.statusName === "Đã thanh toán") {
+    //       return (
+    //         <>
+    //           <Popconfirm
+    //             title="Hủy hóa đơn này?"
+    //             placement="topLeft"
+    //             okText="Đồng ý"
+    //             cancelText="Hủy"
+    //             onConfirm={() => {
+    //               handleCancelBill(record.id);
+    //             }}
+    //           >
+    //             <DeleteTwoTone
+    //               twoToneColor="#F4406D"
+    //               style={{ fontSize: "30px", marginRight: "10px" }}
+    //             />
+    //           </Popconfirm>
+    //           <Popconfirm
+    //             title="In hóa đơn?"
+    //             placement="topLeft"
+    //             okText="Đồng ý"
+    //             cancelText="Hủy"
+    //             onConfirm={() => {
+    //               setPrintBill(true);
+    //               handlePrintBill(record);
+    //             }}
+    //           >
+    //             <PrinterTwoTone
+    //               style={{ color: "#FFFFFF", fontSize: "30px" }}
+    //             />
+    //           </Popconfirm>
+    //         </>
+    //       );
+    //     }
+    //   },
+    // },
   ];
 
   const handleGetbills = async () => {
@@ -352,17 +337,12 @@ const BillTable = () => {
     }
   };
 
-  const handleType = (value) => {
-    switch (value) {
-      case "MONEY":
-        return "Giảm tiền";
-      case "PERCENTAGE":
-        return "Giảm theo";
-      case "GIFT":
-        return "Tặng quà";
-      default:
+  useEffect(() => {
+    if (printBill) {
+      handlePrint();
+      setPrintBill(false);
     }
-  };
+  }, [printBill]);
 
   useEffect(() => {
     handleGetbills();
@@ -421,7 +401,7 @@ const BillTable = () => {
         }}
         onRow={(record, rowIndex) => {
           return {
-            onDoubleClick: (event) => {
+            onClick: (event) => {
               setBillDetail(record);
               setShowDetail(true);
             },

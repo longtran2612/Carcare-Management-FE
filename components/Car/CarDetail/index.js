@@ -108,7 +108,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       onUpdateCar();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
       }

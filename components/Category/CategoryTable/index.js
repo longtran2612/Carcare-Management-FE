@@ -2,7 +2,7 @@ import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import { message } from "antd";
-import { ClearOutlined, SearchOutlined ,PlusOutlined} from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { getCategories } from "pages/api/categoryAPI";
 import ModalAddCategory from "components/Modal/ModalAddCategory";
 import CategoryDetail from "../CategoryDetail";
@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
 import { openNotification } from "utils/notification";
+import DrawerCategory from "components/Drawer/DrawerCategory";
 
 function CategoryTable({}) {
   const [categories, setCategories] = useState([]);
@@ -17,7 +18,8 @@ function CategoryTable({}) {
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { categoryId } = router.query;
+  const [categorySelected, setCategorySelected] = useState(null);
+  const [showDrawer, setShowDrawer] = useState(false);
 
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -112,17 +114,13 @@ function CategoryTable({}) {
   const handleCatetgory = async () => {
     setLoading(true);
     try {
-      getCategories().then((res) => {
-        if (res.data.StatusCode == 200) {
-          setCategories(res.data.Data);
-        } else {
-          message.error(res.data.message);
-        }
+        const res = await getCategories();
+        setCategories(res.data.Data);
         setLoading(false);
-      });
+  
     } catch (err) {
       setLoading(false);
-     console.log(err);
+      console.log(err);
     }
   };
 
@@ -132,7 +130,7 @@ function CategoryTable({}) {
 
   useEffect(() => {
     handleCatetgory();
-  }, [categoryId]);
+  }, [showDrawer]);
 
   const columns = [
     {
@@ -152,7 +150,9 @@ function CategoryTable({}) {
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.categoryCode).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.categoryCode)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.type).toLowerCase().includes(value.toLowerCase()) ||
           String(record.status).toLowerCase().includes(value.toLowerCase())
@@ -170,6 +170,9 @@ function CategoryTable({}) {
       dataIndex: "type",
       key: "type",
       ...getColumnSearchProps("type"),
+      render: (text, record) => {
+        return handleTypeService(record.type);
+      },
     },
     {
       title: "Trạng thái",
@@ -188,64 +191,82 @@ function CategoryTable({}) {
       },
     },
   ];
+  const handleTypeService = (value) => {
+    switch (value) {
+      case "NORMAL":
+        return <Tag color={"blue"}>{"Thông thường"}</Tag>;
+      case "NEW":
+        return <Tag color={"green"}>{"Mới"}</Tag>;
+      case "LIKE":
+        return <Tag color={"pink"}>{"Yêu thích"}</Tag>;
+      default:
+        break;
+    }
+  };
 
   return (
     <>
-      {categoryId ? (
-        <CategoryDetail
-          categoryId={categoryId}
-          onUpdateCategory={handleCatetgory}
+      <div>
+        <Row style={{ margin: "20px 0px" }}>
+          <Col span={8} style={{ marginRight: "10px" }}>
+            <Input.Search
+              placeholder="Tìm kiếm"
+              onChange={(e) => setSearchGlobal(e.target.value)}
+              onSearch={(value) => setSearchGlobal(value)}
+              value={searchGlobal}
+            />
+          </Col>
+          <Col span={4}>
+            <Button
+              onClick={() => setSearchGlobal("")}
+              icon={<ClearOutlined />}
+            >
+              Xóa bộ lọc
+            </Button>
+          </Col>
+          <Col span={11}>
+            <Button
+              style={{ float: "right" }}
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => setModalCategory(true)}
+            >
+              Thêm danh mục
+            </Button>
+          </Col>
+        </Row>
+        <Table
+          onChange={handleSearch}
+          columns={columns}
+          dataSource={categories}
+          bordered
+          pagination={{
+            pageSize: 20,
+          }}
+          scroll={{
+            y: 450,
+          }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                // router.push(`/admin?categoryId=${record.categoryCode}`);
+                setCategorySelected(record.categoryCode);
+                setShowDrawer(true);
+              },
+            };
+          }}
         />
-      ) : (
-        <div>
-          <Row style={{ margin: "20px 0px" }}>
-            <Col span={8} style={{ marginRight: "10px" }}>
-              <Input.Search
-                placeholder="Tìm kiếm"
-                onChange={(e) => setSearchGlobal(e.target.value)}
-                onSearch={(value) => setSearchGlobal(value)}
-                value={searchGlobal}
-              />
-            </Col>
-            <Col span={4}>
-              <Button
-                onClick={() => setSearchGlobal("")}
-                icon={<ClearOutlined />}
-              >
-                Xóa bộ lọc
-              </Button>
-            </Col>
-            <Col span={11}>
-              <Button style={{float:"right"}} type="primary" icon={<PlusOutlined />}  onClick={() => setModalCategory(true)}>
-                Thêm danh mục
-              </Button>
-            </Col>
-          </Row>
-          <Table
-            onChange={handleSearch}
-            columns={columns}
-            dataSource={categories}
-            bordered
-            pagination={{
-              pageSize: 20,
-            }}
-            scroll={{
-              y: 450,
-            }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  router.push(`/admin?categoryId=${record.categoryCode}`);
-                },
-              };
-            }}
-          />
-        </div>
-      )}
+      </div>
+
       <ModalAddCategory
         show={modalCategory}
         handleCancel={() => setModalCategory(false)}
         onSuccess={(data) => handleSuccessCategory(data)}
+      />
+      <DrawerCategory
+        show={showDrawer}
+        handleCancel={() => setShowDrawer(false)}
+        categoryId={categorySelected}
       />
       {/* <ModalQuestion
         title="Bạn có chắc chắn muốn xóa người dùng này không?"

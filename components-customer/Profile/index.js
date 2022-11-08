@@ -114,7 +114,7 @@ export const ProfileCustomer = () => {
       openNotification("Thành công", "Cập nhật thông tin thành công");
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification(
           "Thất bại",
@@ -152,7 +152,7 @@ export const ProfileCustomer = () => {
       setModalUpload(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
         openNotification(
           "Thất bại",

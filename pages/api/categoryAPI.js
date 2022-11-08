@@ -24,7 +24,7 @@ const createCategory = (data) => {
 const updateCategory = (data, id) => {
   return axios({
     method: "POST",
-    url: API_URL + `/service-categories/${id}`,
+    url: API_URL + `/service-categories/update/${id}`,
     data: data,
   })
     .then((res) => {

@@ -36,6 +36,7 @@ export const Features = (props) => {
                 cursor: "pointer",
                 height: "270px",
                 transition: "all 0.3s ease",
+                boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
               }}
               hoverable
               cover={
@@ -72,6 +73,7 @@ export const Features = (props) => {
                 cursor: "pointer",
                 height: "270px",
                 transition: "all 0.3s ease",
+                boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
               }}
               hoverable
               cover={
@@ -106,6 +108,7 @@ export const Features = (props) => {
                 cursor: "pointer",
                 height: "270px",
                 transition: "all 0.3s ease",
+                boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
               }}
               hoverable
               cover={
@@ -138,6 +141,7 @@ export const Features = (props) => {
                 cursor: "pointer",
                 height: "270px",
                 transition: "all 0.3s ease",
+                boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)",
               }}
               hoverable
               cover={

@@ -21,7 +21,7 @@ const { Option } = Select;
 const ModalAddService = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
   const [currency, setCurrency] = useState("VND");
-  
+
   const onFinish = async (values) => {
     console.log(values);
     let dataCreate = {
@@ -43,12 +43,11 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
       handleCancel();
       onSuccess(res?.data?.Data);
       form.resetFields();
-
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotification(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -169,12 +168,12 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                   },
                 ]}
                 name="type"
+                initialValue='NEW'
               >
-                <Select>
-                  <Select.Option value="HOT">HOT</Select.Option>
-                  <Select.Option value="Yêu thích">Yêu thích</Select.Option>
-                  <Select.Option value="Mới">Mới</Select.Option>
-                  <Select.Option value="Thường">Thông thường</Select.Option>
+                <Select style={{ width: "100%" }}>
+                  <Option value="NORMAL">Thường</Option>
+                  <Option value="NEW">Mới</Option>
+                  <Option value="HOT">HOT</Option>
                 </Select>
               </Form.Item>
             </Col>

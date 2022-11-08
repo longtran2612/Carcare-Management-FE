@@ -1,6 +1,6 @@
 import { Table, Tag, Button, Input, Row, Col, Space, Select } from "antd";
 import React, { useState, useEffect, useRef } from "react";
-import { SearchOutlined, ClearOutlined,PlusOutlined } from "@ant-design/icons";
+import { SearchOutlined, ClearOutlined, PlusOutlined } from "@ant-design/icons";
 import { getServices, searchService } from "pages/api/serviceAPI";
 import { getCategories } from "pages/api/categoryAPI";
 import ModalAddService from "components/Modal/ModalAddService";
@@ -203,12 +203,6 @@ function ServiceTable({}) {
     },
 
     {
-      title: "Loại dịch vụ",
-      dataIndex: "type",
-      key: "type",
-      ...getColumnSearchProps("type"),
-    },
-    {
       title: "Thời gian xử lí",
       dataIndex: "estimateTime",
       key: "estimateTime",
@@ -230,6 +224,17 @@ function ServiceTable({}) {
             )}
           </>
         );
+      },
+    },
+    {
+      title: "Loại dịch vụ",
+      dataIndex: "type",
+      key: "type",
+      ...getColumnSearchProps("type"),
+      render: (text,record) => {
+        return (
+        handleTypeService(record.type)
+        )
       },
     },
     {
@@ -263,6 +268,19 @@ function ServiceTable({}) {
       },
     },
   ];
+
+  const handleTypeService = (value) => {
+    switch (value) {
+      case "NORMAL":
+        return <Tag color={"blue"}>{"Thông thường"}</Tag>;
+      case "NEW":
+        return  <Tag color={"green"}>{"Mới"}</Tag>;
+      case "LIKE":
+        return  <Tag color={"pink"}>{"Yêu thích"}</Tag>;
+        default:
+          break;
+    }
+  };
 
   return (
     <>

@@ -190,8 +190,6 @@ function UserTable() {
       dataIndex: "address",
       key: "address",
       ...getColumnSearchProps("address"),
-      sorter: (a, b) => a.address.length - b.address.length,
-      sortDirections: ["descend", "ascend"],
       render: (address) => (
         <Tooltip placement="topLeft" title={address}>
           {address}
@@ -202,8 +200,6 @@ function UserTable() {
       title: "Trạng thái",
       key: "status",
       dataIndex: "status",
-      sorter: (a, b) => a.status.length - b.status.length,
-      sortDirections: ["descend", "ascend"],
       filters: [
         {
           value: "ACTIVE",
