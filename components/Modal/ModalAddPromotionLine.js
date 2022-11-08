@@ -111,7 +111,7 @@ const ModalAddPromotionLine = ({
                   disabledDate={(d) =>
                     !d ||
                     d.isBefore(moment()) ||
-                    d.isAfter(form.getFieldValue("toDate"))
+                    form.getFieldValue("toDate") && d.isAfter(form.getFieldValue("toDate"))
                   }
                   placeholder="Ngày bắt đầu"
                   format={formatDate}

@@ -165,14 +165,14 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
               justifyContent: "center",
             }}
           >
-            <Upload
+            {/* <Upload
               onChange={(info) => handleFileChosen(info)}
               multiple
               showUploadList={false}
               fileList={listFiles.imageBlob}
             >
               <Button icon={<UploadOutlined />}>Tải hình lên</Button>
-            </Upload>
+            </Upload> */}
           </div>
         </Col>
         <Col span={18}>

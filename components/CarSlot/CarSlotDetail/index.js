@@ -33,12 +33,13 @@ import {
   CheckCircleOutlined,
   TagsOutlined,
   QuestionCircleOutlined,
+  EditOutlined
 } from "@ant-design/icons";
-import { getUserById, getUsers } from "pages/api/userAPI";
+import { getUserById, getUserAvaliable } from "pages/api/userAPI";
 import { useRouter } from "next/router";
 import { formatMoney } from "utils/format";
 import { getCarById } from "pages/api/carAPI";
-import { getOrderById,updateOrder } from "pages/api/orderAPI";
+import { getOrderById, updateOrder } from "pages/api/orderAPI";
 import { getCustomerById } from "pages/api/customerAPI";
 import Loading from "components/Loading";
 import Image from "next/image";
@@ -74,7 +75,8 @@ const CarSlotDetail = ({ carSlotId }) => {
   const [showConfimComplete, setShowConfimComplete] = useState(false);
   const [showConfimExecute, setShowConfimExecute] = useState(false);
   const [showUpdateServiceOrder, setShowUpdateServiceOrder] = useState(false);
-
+  const [showChangeUser, setShowChangeUser] = useState(false);
+  const [userChange, setUserChange] = useState(null);
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
 
@@ -100,14 +102,15 @@ const CarSlotDetail = ({ carSlotId }) => {
     try {
       const response = await getUserById(data);
       setUser(response.data.Data);
-      form.setFieldValue("executorId", response.data.Data.id);
+      // form.setFieldValue("executorId", response.data.Data.id);
     } catch (error) {
       console.log(error);
     }
   };
+
   const fetchUsers = async () => {
     try {
-      const response = await getUsers();
+      const response = await getUserAvaliable();
       setUsers(response.data.Data);
     } catch (error) {
       console.log(error);
@@ -231,7 +234,6 @@ const CarSlotDetail = ({ carSlotId }) => {
     try {
       const response = await executeCarSlot(dataExecute);
       openNotification("Thành công!", "Bắt đầu sử lý yêu cầu");
-
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
@@ -302,7 +304,7 @@ const CarSlotDetail = ({ carSlotId }) => {
           totalPromotion += total;
         }
       } else {
-        if (promotion.type === "MONEY"||promotion.type ==="SERVICE") {
+        if (promotion.type === "MONEY" || promotion.type === "SERVICE") {
           totalPromotion += promotion.amount;
         }
       }
@@ -319,15 +321,16 @@ const CarSlotDetail = ({ carSlotId }) => {
     fetchCarSlotDetail();
   };
 
-  const handleChangeUser = async (value) => {
+  const handleChangeUser = async () => {
     setLoading(true);
-    let dataUpdate= {
-      executorId: value,
+    let dataUpdate = {
+      executorId: userChange,
       serviceIds: order?.services?.map((service) => service.id),
-    }
+    };
     try {
       const res = await updateOrder(order?.id, dataUpdate);
       openNotification("Thành công!", "Cập nhật nhân viên xử lý thành công");
+      fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -356,16 +359,16 @@ const CarSlotDetail = ({ carSlotId }) => {
                     style={{ marginRight: "10px" }}
                     className="carslot-customer content-white"
                   >
-                    <Form.Item 
-                    label="Nhân viên xử lý" 
-                    name="executorId"
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Vui lòng chọn nhân viên xử lý yêu cầu này",
-                      },
-                    ]}
+                    {/* <Form.Item
+                      label="Nhân viên xử lý"
+                      name="executorId"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng chọn nhân viên xử lý yêu cầu này",
+                        },
+                      ]}
+                      initialValue={fetchUser()?.name+" - "+fetchUser()?.phoneNumber}
                     >
                       <Select
                         style={{ width: "100%", marginBottom: "10px" }}
@@ -383,12 +386,19 @@ const CarSlotDetail = ({ carSlotId }) => {
                         onChange={handleChangeUser}
                       >
                         {users.map((item) => (
-                          <Option value={item.id}>
-                            {item.name + " - " + item.phone}
+                          <Option value={item?.id}>
+                            {item?.name + " - " + item?.phone}
                           </Option>
                         ))}
                       </Select>
-                    </Form.Item>
+                    </Form.Item>  */}
+                    <Title level={4}>Nhân viên xử lý</Title>
+                    <Timeline>
+                      <Timeline.Item>
+                        <span>{user?.name + " - " + user?.phone}</span> 
+                        <Button style={{marginLeft:'5px'}} icon={<EditOutlined />} onClick={() => setShowChangeUser(true)} />
+                      </Timeline.Item>
+                    </Timeline>
                     <Title level={4}>Thông tin khách hàng</Title>
                     <Timeline>
                       <Timeline.Item>
@@ -627,13 +637,13 @@ const CarSlotDetail = ({ carSlotId }) => {
                               size="large"
                               onClick={() => {
                                 form
-                                .validateFields()
-                                .then((values) => {
-                                  setShowConfimComplete(true);
-                                })
-                                .catch((info) => {
-                                  console.log("Validate Failed:", info);
-                                });
+                                  .validateFields()
+                                  .then((values) => {
+                                    setShowConfimComplete(true);
+                                  })
+                                  .catch((info) => {
+                                    console.log("Validate Failed:", info);
+                                  });
                               }}
                             >
                               Hoàn thành - Thanh toán - In hóa đơn
@@ -755,6 +765,43 @@ const CarSlotDetail = ({ carSlotId }) => {
         promotionDetails={promotionDetails}
         handleCancel={() => setShowSelectPromotion(false)}
       />
+      <Modal
+        title="Thay đổi nhân viên xử lý"
+        width={700}
+        onCancel={() => setShowChangeUser(false)}
+        visible={showChangeUser}
+        onOk={() => {
+          handleChangeUser();
+          setShowChangeUser(false);
+        }}
+        okText="Thay đổi"
+        cancelText="Hủy"
+      >
+        <Row>
+          <Col span={24}>
+            <span>Danh sách nhân viên sẵn sàng</span>
+            <Select
+              style={{ width: "100%", marginBottom: "10px" }}
+              showSearch
+              placeholder="Nhân viên xử lý"
+              optionFilterProp="children"
+              filterOption={(input, option) => option.children.includes(input)}
+              filterSort={(optionA, optionB) =>
+                optionA.children
+                  .toLowerCase()
+                  .localeCompare(optionB.children.toLowerCase())
+              }
+              onChange={(value) =>{setUserChange(value)}}
+            >
+              {users.map((item) => (
+                <Option value={item.id}>
+                  {item.name + " - " + item.phone}
+                </Option>
+              ))}
+            </Select>
+          </Col>
+        </Row>
+      </Modal>
 
       <Loading loading={loading} />
     </>

@@ -323,7 +323,7 @@ function CustomerTable() {
             }}
             onRow={(record, rowIndex) => {
               return {
-                onDoubleClick: (event) => {
+                onClick: (event) => {
                   router.push(`/admin?customerId=${record.customerCode}`);
                 },
               };

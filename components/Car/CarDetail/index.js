@@ -136,7 +136,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       const response = await uploadImage(formData);
       setImageS3(response.data.Data[0]);
       setCarDetail((prevState) => {
-        return { ...prevState, image: response.data.Data[0] };
+        return { ...prevState, imageUrl: response.data.Data[0] };
       });
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);

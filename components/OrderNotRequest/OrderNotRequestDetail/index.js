@@ -15,6 +15,7 @@ import {
   Drawer,
   Avatar,
   List,
+  Modal
 } from "antd";
 import {
   LoadingOutlined,
@@ -22,8 +23,9 @@ import {
   SyncOutlined,
   PlusCircleFilled,
   PrinterOutlined,
+  EditOutlined 
 } from "@ant-design/icons";
-import { getUserById, getUsers } from "pages/api/userAPI";
+import { getUserById, getUserAvaliable } from "pages/api/userAPI";
 import { getOrderById, updateOrder } from "pages/api/orderAPI";
 import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
@@ -54,6 +56,9 @@ export const OrderNotRequestDetail = ({ orderId }) => {
 
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
+
+  const [showChangeUser, setShowChangeUser] = useState(false);
+  const [userChange, setUserChange] = useState(null);
 
   const getOrder = async () => {
     try {
@@ -89,7 +94,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
   };
   const fetchUsers = async () => {
     try {
-      const response = await getUsers();
+      const response = await getUserAvaliable();
       setUsers(response.data.Data);
     } catch (error) {
       console.log(error);
@@ -232,16 +237,17 @@ export const OrderNotRequestDetail = ({ orderId }) => {
     setShowUpdateServiceOrder(false);
     getOrder();
   };
-  const handleChangeUser = async (value) => {
+  const handleChangeUser = async () => {
     setLoading(true);
     let dataUpdate = {
-      executorId: value,
+      executorId: userChange,
       serviceIds: order?.services?.map((service) => service.id),
     };
     try {
       const res = await updateOrder(order?.id, dataUpdate);
       openNotification("Thành công!", "Cập nhật nhân viên xử lý thành công");
       setLoading(false);
+      getOrder();
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -268,7 +274,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
               style={{ marginRight: "10px" }}
               className="carslot-customer content-white"
             >
-              <Form.Item label="Nhân viên xử lý" name="executorId">
+              {/* <Form.Item label="Nhân viên xử lý" name="executorId">
                 <Select
                   style={{ width: "100%", marginBottom: "10px" }}
                   showSearch
@@ -295,7 +301,14 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                     </Option>
                   ))}
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
+               <Title level={4}>Nhân viên xử lý</Title>
+                    <Timeline>
+                      <Timeline.Item>
+                        <span>{user?.name + " - " + user?.phone}</span> 
+                        <Button style={{marginLeft:'5px'}} icon={<EditOutlined />} onClick={() => setShowChangeUser(true)} />
+                      </Timeline.Item>
+                    </Timeline>
               <Title level={4}>Thông tin khách hàng</Title>
               <Timeline>
                 <Timeline.Item>Mã: {order?.customerCode}</Timeline.Item>
@@ -558,6 +571,43 @@ export const OrderNotRequestDetail = ({ orderId }) => {
         promotionDetails={promotionDetails}
         handleCancel={() => setShowSelectPromotion(false)}
       />
+       <Modal
+        title="Thay đổi nhân viên xử lý"
+        width={700}
+        onCancel={() => setShowChangeUser(false)}
+        visible={showChangeUser}
+        onOk={() => {
+          handleChangeUser();
+          setShowChangeUser(false);
+        }}
+        okText="Thay đổi"
+        cancelText="Hủy"
+      >
+        <Row>
+          <Col span={24}>
+            <span>Danh sách nhân viên sẵn sàng</span>
+            <Select
+              style={{ width: "100%", marginBottom: "10px" }}
+              showSearch
+              placeholder="Nhân viên xử lý"
+              optionFilterProp="children"
+              filterOption={(input, option) => option.children.includes(input)}
+              filterSort={(optionA, optionB) =>
+                optionA.children
+                  .toLowerCase()
+                  .localeCompare(optionB.children.toLowerCase())
+              }
+              onChange={(value) =>{setUserChange(value)}}
+            >
+              {users.map((item) => (
+                <Option value={item.id}>
+                  {item.name + " - " + item.phone}
+                </Option>
+              ))}
+            </Select>
+          </Col>
+        </Row>
+      </Modal>
 
       <Loading loading={loading} />
     </>

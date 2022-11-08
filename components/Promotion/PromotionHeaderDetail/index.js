@@ -356,7 +356,9 @@ const PromotionHeaderDetail = ({
                         : false
                     }
                     disabledDate={(d) =>
-                      !d || d.isBefore(form.getFieldValue("toDate"))
+                      !d || 
+                      form.getFieldValue("toDate") && d.isAfter(form.getFieldValue("toDate"))
+
                     }
                     format={formatDate}
                   />

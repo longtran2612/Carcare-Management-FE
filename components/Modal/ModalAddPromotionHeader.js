@@ -84,7 +84,7 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
                   disabledDate={(d) =>
                     !d ||
                     d.isBefore(moment()) ||
-                    d.isAfter(form.getFieldValue("toDate"))
+                    form.getFieldValue("toDate") && d.isAfter(form.getFieldValue("toDate"))
                   }
                   placeholder="bắt đầu"
                   format={formatDate}

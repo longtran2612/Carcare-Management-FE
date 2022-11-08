@@ -298,7 +298,8 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                     }
                     disabledDate={(d) =>
                       d.isBefore(moment()) ||
-                      !d || d.isAfter(form.getFieldValue("toDate"))
+                      !d || 
+                      form.getFieldValue("toDate") && d.isAfter(form.getFieldValue("toDate"))
                     }
                     format={formatDate}
                   />

@@ -80,7 +80,7 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
                   disabledDate={(d) =>
                     !d ||
                     d.isBefore(moment()) ||
-                    d.isAfter(form.getFieldValue("expirationDate"))
+                    form.getFieldValue("expirationDate") && d.isAfter(form.getFieldValue("expirationDate"))
                   }
                   placeholder="bắt đầu"
                   format={formatDate}
