@@ -237,7 +237,11 @@ const CarSlotDetail = ({ carSlotId }) => {
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
-      openNotification("Thất bại!", "Đã có lỗi xảy ra");
+      if (error?.response?.data?.message) {
+        openNotification(error?.response?.data?.message);
+      } else {
+        openNotification("Thất bại", "có lỗi xảy ra");
+      }
       setLoading(false);
     }
   };

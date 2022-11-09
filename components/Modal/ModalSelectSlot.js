@@ -35,8 +35,12 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
       handleCancel();
       onSuccess();
       setLoading(false);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotification(error?.response?.data?.message);
+      } else {
+        openNotification("Thất bại", "có lỗi xảy ra");
+      }
       setLoading(false);
     }
   };

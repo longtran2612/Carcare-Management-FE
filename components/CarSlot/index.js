@@ -288,7 +288,7 @@ const CarSlot = () => {
                   lg={12}
                   xl={6}
                   style={{ marginBottom: "10px" }}
-                  onDoubleClick={() => {
+                  onClick={() => {
                     if (carSlot.status === "UNAVAILABLE") {
                       openNotification("Vị trí này đang sửa chữa");
                     } else {
@@ -312,7 +312,8 @@ const CarSlot = () => {
                     bordered={false}
                     extra={
                       <SettingOutlined
-                        onClick={() => {
+                        onClick={(event) => {
+                          event.stopPropagation();
                           setShowSetting(true);
                           form.setFieldsValue({
                             ...carSlot,
