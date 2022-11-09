@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Col,
   Row,
-  Image,
   Button,
   Form,
   Select,
@@ -10,24 +9,23 @@ import {
   Drawer,
   Space,
   Divider,
+  Upload,
   Typography,
   Table,
 } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { getCarModelByBrand } from "pages/api/carModel";
 import { updateCar } from "pages/api/carAPI";
 import { openNotification } from "utils/notification";
 import Loading from "components/Loading";
 const { TextArea } = Input;
 
-function DrawerCarDetail({ car, show, handleCancel }) {
+function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
   const [form] = Form.useForm();
   const [carDetail, setCarDetail] = useState({});
   const [loading, setLoading] = useState(false);
-  const [imageS3, setImageS3] = useState(null);
-
-  const [listFiles, setListFiles] = useState({
-    images: [],
-    imageBlob: [],
-  });
+  const [carModels, setCarModels] = useState([]);
+  const [brandSelected, setBrandSelected] = useState("");
 
   const [brands, setBrands] = useState([
     "Toyota",
@@ -51,16 +49,36 @@ function DrawerCarDetail({ car, show, handleCancel }) {
     "BMW",
   ]);
 
-  const onFinish = async (values) => {
+  const fetchCarModel = async (brand) => {
     try {
-      let body = {
-        name: values.name,
-        color: values.color,
-        licensePlate: values.licensePlate,
-        imageUrl: imageS3 || carDetail?.imageUrl,
-      };
+      const res = await getCarModelByBrand(brand);
+      setCarModels(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onFinish = async (values) => {
+    const carModel = carModels.find(
+      (c) => c.carModelCode === values.carModelCode
+    );
+    console.log(carModel);
+    let body = {
+      name:
+        (carModel?.brand || "") +
+        " " +
+        values.licensePlate +
+        " " +
+        (values.color || ""),
+      color: values.color,
+      licensePlate: values.licensePlate,
+      carModel: values.carModelCode,
+    };
+    try {
       console.log(body);
       const res = await updateCar(body, carDetail?.id);
+      onUpdate();
+      handleCancel();
       openNotification("Thành công", "Cập nhật xe thành công");
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -70,75 +88,24 @@ function DrawerCarDetail({ car, show, handleCancel }) {
       }
     }
   };
-  // handle upload image
-
-  const handleFileChosen = (info) => {
-    const result = info.fileList.map((file) => {
-      const blob = new Blob([file.originFileObj], {
-        type: file.type,
-      });
-      return (window.URL || window.webkitURL).createObjectURL(blob);
-    });
-    setListFiles({ images: info.fileList, imageBlob: result });
-    setModalUpload(true);
-  };
-
-  const handleUploadImages = async () => {
-    try {
-      const formData = new FormData();
-      listFiles.images.map((image) => {
-        formData.append("files", image.originFileObj);
-      });
-      const response = await uploadImage(formData);
-      setImageS3(response.data.Data[0]);
-      setCarDetail((prevState) => {
-        return { ...prevState, imageUrl: response.data.Data[0] };
-      });
-      setListFiles({ images: [], imageBlob: [] });
-      setModalUpload(false);
-    } catch (error) {
-      openNotification("Thất bại!", "Đã có lỗi xảy ra");
-    }
-  };
 
   useEffect(() => {
     if (car) {
       setCarDetail(car);
+      setBrandSelected(car?.brand);
+
       form.setFieldValue("name", car.name);
       form.setFieldValue("color", car.color);
+      form.setFieldValue("carModelCode", car.carModelCode);
+      form.setFieldValue("brand", car.brand);
       form.setFieldValue("licensePlate", car.licensePlate);
-      form.setFieldValue("imageUrl", car.imageUrl);
       form.setFieldValue("description", car.description);
     }
-  }, [car]);
+  }, [show]);
 
-  const columns = [
-    {
-      title: "MÃ",
-      dataIndex: "carCode",
-      key: "carCode",
-    },
-    {
-      title: "Model",
-      dataIndex: "model",
-      key: "model",
-    },
-    {
-      title: "Biển số xe",
-      dataIndex: "licensePlate",
-      key: "licensePlate",
-    },
-    {
-      title: "Thương hiệu",
-      dataIndex: "brand",
-      key: "brand",
-    },
-    {
-      title: "Màu xe",
-      dataIndex: "color",
-      key: "color",
-    },
-  ];
+  useEffect(() => {
+    fetchCarModel(form.getFieldValue("brand"));
+  }, [form, brandSelected]);
 
   return (
     <>
@@ -183,13 +150,9 @@ function DrawerCarDetail({ car, show, handleCancel }) {
                 <Form.Item
                   label="Tên xe"
                   name="name"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                 
                 >
-                  <Input />
+                  <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -208,7 +171,6 @@ function DrawerCarDetail({ car, show, handleCancel }) {
               <Col span={12}>
                 <Form.Item label="Hãng xe" name="brand">
                   <Select
-                    disabled
                     showSearch
                     placeholder="Chọn hãng xe"
                     optionFilterProp="children"
@@ -220,6 +182,10 @@ function DrawerCarDetail({ car, show, handleCancel }) {
                         .toLowerCase()
                         .localeCompare(optionB.children.toLowerCase())
                     }
+                    onChange={(value) => {
+                      setBrandSelected(value);
+                      form.setFieldsValue({ carModelCode: undefined });
+                    }}
                   >
                     {brands.map((brand) => (
                       <Option key={brand}>{brand}</Option>
@@ -228,8 +194,26 @@ function DrawerCarDetail({ car, show, handleCancel }) {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Model" name="model">
-                  <Input  />
+                <Form.Item label="Model" name="carModelCode">
+                  <Select
+                    showSearch
+                    placeholder="Chọn Model"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.includes(input)
+                    }
+                    filterSort={(optionA, optionB) =>
+                      optionA.children
+                        .toLowerCase()
+                        .localeCompare(optionB.children.toLowerCase())
+                    }
+                  >
+                    {carModels.map((carModel) => (
+                      <Select.Option key={carModel.carModelCode}>
+                        {carModel.model}
+                      </Select.Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </Col>
               <Col span={24}>

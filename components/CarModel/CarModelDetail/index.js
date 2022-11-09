@@ -156,7 +156,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
         Trở lại
       </Button>
       <Row gutter={16}>
-        <Col span={6}>
+        {/* <Col span={6}>
           <Image width={300} height={250} src={carModelDetail.imageUrl} />
           <div
             style={{
@@ -165,17 +165,17 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
               justifyContent: "center",
             }}
           >
-            {/* <Upload
+            <Upload
               onChange={(info) => handleFileChosen(info)}
               multiple
               showUploadList={false}
               fileList={listFiles.imageBlob}
             >
               <Button icon={<UploadOutlined />}>Tải hình lên</Button>
-            </Upload> */}
+            </Upload>
           </div>
-        </Col>
-        <Col span={18}>
+        </Col> */}
+        <Col span={24}>
           <Form
             form={form}
             layout="vertical"

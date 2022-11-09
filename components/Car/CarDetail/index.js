@@ -14,6 +14,7 @@ import {
   Select,
 } from "antd";
 import { useRouter } from "next/router";
+import { getCarModelByBrand } from "pages/api/carModel";
 import { uploadImage } from "pages/api/uploadAPI";
 import { openNotification } from "utils/notification";
 import { getCarByCode, updateCar } from "pages/api/carAPI";
@@ -28,6 +29,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
   const [carDetail, setCarDetail] = useState({});
+  const [carModels, setCarModels] = useState([]);
   const [modalUpload, setModalUpload] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageS3, setImageS3] = useState(null);
@@ -35,6 +37,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
     images: [],
     imageBlob: [],
   });
+  const [brandSelected, setBrandSelected] = useState("");
   const [brands, setBrands] = useState([
     "Toyota",
     "VinFast",
@@ -80,11 +83,21 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         customerName: response.data.Data.customerName,
         customerPhoneNumber: response.data.Data.customerPhoneNumber,
         customerCode: response.data.Data.customerCode,
+        carModelCode: response.data.Data.carModelCode,
       });
+      setBrandSelected(response.data.Data.brand);
       setLoading(false);
     } catch (error) {
       openNotification("Thất bại!", "Đã có lỗi xảy ra");
       setLoading(false);
+    }
+  };
+  const fetchCarModel = async (brand) => {
+    try {
+      const res = await getCarModelByBrand(brand);
+      setCarModels(res.data.Data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -94,23 +107,37 @@ const CarDetail = ({ carId, onUpdateCar }) => {
     }
   }, [carId]);
 
+  useEffect(() => {
+    fetchCarModel(form.getFieldValue("brand"));
+  }, [form, brandSelected]);
+
   const onFinish = async (values) => {
+    const carModel = carModels.find(
+      (c) => c.carModelCode === values.carModelCode
+    );
+    console.log(carModel);
+    let body = {
+      name:
+        (carModel?.brand || "") +
+        " " +
+        values.licensePlate +
+        " " +
+        (values.color || ""),
+      color: values.color,
+      licensePlate: values.licensePlate,
+      carModel: values.carModelCode,
+    };
     try {
-      let body = {
-        name: values.name,
-        color: values.color,
-        licensePlate: values.licensePlate,
-        imageUrl: imageS3 || carDetail?.imageUrl,
-      };
       console.log(body);
       const res = await updateCar(body, carDetail?.id);
       openNotification("Thành công", "Cập nhật xe thành công");
       onUpdateCar();
+      fetchcarDetail();
     } catch (error) {
       if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -151,7 +178,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         Trở lại
       </Button>
       <Row gutter={[4, 4]}>
-        <Col span={6}>
+        {/* <Col span={6}>
           <Image width={300} height={250} src={carDetail.imageUrl} />
           <div
             style={{
@@ -187,9 +214,9 @@ const CarDetail = ({ carId, onUpdateCar }) => {
               <Timeline.Item>Mã: {carDetail?.customerCode}</Timeline.Item>
             </Timeline>
           </div>
-        </Col>
+        </Col> */}
 
-        <Col span={18}>
+        <Col span={24}>
           <Form
             form={form}
             layout="vertical"
@@ -198,16 +225,8 @@ const CarDetail = ({ carId, onUpdateCar }) => {
           >
             <Row gutter={30}>
               <Col span={18}>
-                <Form.Item
-                  label="Tên xe"
-                  name="name"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <Input />
+                <Form.Item label="Tên xe" name="name">
+                  <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -242,9 +261,16 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="Hãng xe" name="brand">
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  label="Hãng xe"
+                  name="brand"
+                >
                   <Select
-                    disabled
                     showSearch
                     placeholder="Chọn hãng xe"
                     optionFilterProp="children"
@@ -256,6 +282,10 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                         .toLowerCase()
                         .localeCompare(optionB.children.toLowerCase())
                     }
+                    onChange={(value) => {
+                      setBrandSelected(value);
+                      form.setFieldsValue({ carModelCode: undefined });
+                    }}
                   >
                     {brands.map((brand) => (
                       <Option key={brand}>{brand}</Option>
@@ -264,8 +294,34 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="Model" name="model">
-                  <Input disabled />
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  label="Model"
+                  name="carModelCode"
+                >
+                  <Select
+                    showSearch
+                    placeholder="Chọn Model"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.includes(input)
+                    }
+                    filterSort={(optionA, optionB) =>
+                      optionA.children
+                        .toLowerCase()
+                        .localeCompare(optionB.children.toLowerCase())
+                    }
+                  >
+                    {carModels.map((carModel) => (
+                      <Select.Option key={carModel.carModelCode}>
+                        {carModel.model}
+                      </Select.Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </Col>
               <Col span={6}>

@@ -17,15 +17,15 @@ import {
 import { getCarbyCustomerId } from "pages/api/carAPI";
 import Loading from "components/Loading";
 import DrawerCarDetail from "./DrawerCarDetail";
+import ModalAddCarWithCustomer from "components/Modal/ModalAddCarWithCustomer";
+import { PlusCircleFilled } from "@ant-design/icons";
 
 function DrawerCar({ id, show, handleCancel }) {
   const [cars, setCars] = useState([]);
   const [carDetail, setCarDetail] = useState({});
   const [showDetail, setShowDetail] = useState(false);
   const [loading, setLoading] = useState(false);
-
-
-
+  const [modalCar, setModalCar] = useState(false);
 
   const fetchCar = async () => {
     try {
@@ -40,7 +40,14 @@ function DrawerCar({ id, show, handleCancel }) {
     if (id) {
       fetchCar();
     }
-  }, [id]);
+  }, [id,modalCar]);
+
+  const handleUpdate = () => {
+    fetchCar();
+  };
+  const handleSuccessCreateCar = () => {
+    fetchCar();
+  };
 
   const columns = [
     {
@@ -81,6 +88,17 @@ function DrawerCar({ id, show, handleCancel }) {
         }}
         open={show}
         bodyStyle={{ padding: 40 }}
+        extra={
+
+          <Button
+          icon={<PlusCircleFilled/>}
+            type="primary"
+            onClick={() => {
+              setModalCar(true);
+            }}
+          > Thêm xe
+          </Button>
+        }
       >
         <Divider>
           <Typography.Title level={4}>Danh sách xe</Typography.Title>
@@ -111,8 +129,15 @@ function DrawerCar({ id, show, handleCancel }) {
           show={showDetail}
           handleCancel={() => setShowDetail(false)}
           car={carDetail}
+          onUpdate={() => handleUpdate()}
         />
       </Drawer>
+      <ModalAddCarWithCustomer
+        show={modalCar}
+        handleCancel={() => setModalCar(false)}
+        onSuccess={(data) => handleSuccessCreateCar(data)}
+        customerId={id}
+      />
 
       <Loading loading={loading} />
     </>
