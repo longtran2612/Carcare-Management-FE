@@ -414,7 +414,7 @@ function OrderTable({}) {
               pageSize: 20,
             }}
             scroll={{
-              y: 450,
+              y: 425,
             }}
             expandable={{
               expandedRowRender: (record) => (

@@ -239,7 +239,7 @@ function PromotionHeaderTable({}) {
               pageSize: 20,
             }}
             scroll={{
-              y: 450,
+              y: 425,
             }}
             onRow={(record, rowIndex) => {
               return {

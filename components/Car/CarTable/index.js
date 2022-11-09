@@ -236,7 +236,7 @@ function CarTable({}) {
               pageSize: 20,
             }}
             scroll={{
-              y: 450,
+              y: 425,
               // x: 2000,
             }}
             onRow={(record, rowIndex) => {
