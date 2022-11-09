@@ -29,6 +29,28 @@ function DrawerCarDetail({ car, show, handleCancel }) {
     imageBlob: [],
   });
 
+  const [brands, setBrands] = useState([
+    "Toyota",
+    "VinFast",
+    "Nissan",
+    "Suzuki",
+    "Subaru",
+    "Lexus",
+    "Audi",
+    "Volkswagen",
+    "Honda",
+    "Volvo",
+    "Hyundai",
+    "Mazda",
+    "KIA",
+    "Mitsubishi",
+    "Maserati",
+    "Chevrolet",
+    "Ford",
+    "Mercedes-Benz",
+    "BMW",
+  ]);
+
   const onFinish = async (values) => {
     try {
       let body = {
@@ -181,6 +203,33 @@ function DrawerCarDetail({ car, show, handleCancel }) {
                   ]}
                 >
                   <Input />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Hãng xe" name="brand">
+                  <Select
+                    disabled
+                    showSearch
+                    placeholder="Chọn hãng xe"
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.includes(input)
+                    }
+                    filterSort={(optionA, optionB) =>
+                      optionA.children
+                        .toLowerCase()
+                        .localeCompare(optionB.children.toLowerCase())
+                    }
+                  >
+                    {brands.map((brand) => (
+                      <Option key={brand}>{brand}</Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Model" name="model">
+                  <Input  />
                 </Form.Item>
               </Col>
               <Col span={24}>
