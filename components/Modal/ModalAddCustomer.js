@@ -158,6 +158,20 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
               <Form.Item
                 rules={[
                   {
+                    required: true,
+                    message: "Vui lòng nhập số CMND!",
+                  },
+                ]}
+                name="identityNumber"
+                label="Số CMND"
+              >
+                <InputNumber />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                rules={[
+                  {
                     pattern: new RegExp(
                       "^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$"
                     ),
@@ -180,20 +194,7 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={8}>
-              <Form.Item
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng nhập số CMND!",
-                  },
-                ]}
-                name="identityNumber"
-                label="Số CMND"
-              >
-                <InputNumber />
-              </Form.Item>
-            </Col>
+ 
             <Col span={24}>
               <Form.Item name="addressvn" label="Tỉnh/Thành phố - Quận - Huyện">
                 <Cascader

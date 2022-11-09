@@ -12,7 +12,7 @@ import {
   Layout,
   Tabs,
   Popconfirm,
-  Cascader
+  Cascader,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification } from "utils/notification";
@@ -77,6 +77,9 @@ const UserProfile = () => {
         address: response.data.Data.address,
         image: response.data.Data.image,
         status: response.data.Data.status,
+        nationality: response.data.Data.nationality,
+        identityNumber: response.data.Data.identityNumber,
+        gender: response.data.Data.gender,
       });
       setLoading(false);
     } catch (error) {
@@ -111,6 +114,8 @@ const UserProfile = () => {
         // status: values.status,
         image: imageS3 || userDetail?.image,
         birthDay: values.birthDay,
+        gender: values.gender,
+        nationality: values.nationality,
       };
 
       const res = await updateUserById(body, userDetail?.id);
@@ -120,11 +125,7 @@ const UserProfile = () => {
       if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message[0]);
       } else {
-        openNotification(
-          "Thất bại",
-          "Có lỗi xảy ra, vui lòng thử lại sau",
-       
-        );
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -158,10 +159,7 @@ const UserProfile = () => {
       if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message);
       } else {
-        openNotification(
-          "Thất bại",
-          "Có lỗi xảy ra, vui lòng thử lại sau",
-        );
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -183,13 +181,15 @@ const UserProfile = () => {
         option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
     );
 
-
   return (
     <>
       <Layout>
         <MyHeader />
-        <Layout.Content  className="content">
-          <Row style={{paddingLeft:'40px',paddingRight:'40px'}} className="content-white">
+        <Layout.Content className="content">
+          <Row
+            style={{ paddingLeft: "40px", paddingRight: "40px" }}
+            className="content-white"
+          >
             <Col span={24}>
               <Button
                 type="link"
@@ -202,7 +202,7 @@ const UserProfile = () => {
               <br />
               <Tabs>
                 <Tabs.items tab="Thông tin người dùng" key="1">
-                  <Row gutter={[16,16]}>
+                  <Row gutter={[16, 16]}>
                     <Col span={6}>
                       <Image width={300} height={300} src={userDetail.image} />
                       <div
@@ -232,7 +232,7 @@ const UserProfile = () => {
                         validateMessages={validateMessages}
                       >
                         <Row gutter={[16]}>
-                          <Col span={18}>
+                          <Col span={12}>
                             <Form.Item
                               label="Tên"
                               name="name"
@@ -246,48 +246,20 @@ const UserProfile = () => {
                             </Form.Item>
                           </Col>
                           <Col span={6}>
-                            <Form.Item
-                              label="Ngày sinh"
-                              name="birthDay"
-                             
-                            >
+                            <Form.Item label="Ngày sinh" name="birthDay">
                               <DatePicker format={formatDate} />
                             </Form.Item>
                           </Col>
-                          {/* <Col span={6}>
-                            <Form.Item
-                              label="Trạng thái"
-                              rules={[
-                                {
-                                  required: true,
-                                },
-                              ]}
-                              name="status"
-                            >
+                          <Col span={6}>
+                            <Form.Item label="Giới tính" name="gender">
                               <Select>
-                                <Select.Option value="ACTIVE">
-                                  Hoạt động
-                                </Select.Option>
-                                <Select.Option value="INACTIVE">
-                                  Không hoạt động
-                                </Select.Option>
+                                <Select.Option value="Nam">Nam</Select.Option>
+                                <Select.Option value="Nữ">Nữ</Select.Option>
+                                <Select.Option value="Khác">Khác</Select.Option>
                               </Select>
                             </Form.Item>
-                          </Col> */}
-                          <Col span={12}>
-                            <Form.Item
-                              label="Email"
-                              name="email"
-                              rules={[
-                                {
-                                  required: true,
-                                },
-                              ]}
-                            >
-                              <Input />
-                            </Form.Item>
                           </Col>
-                          <Col span={12}>
+                          <Col span={6}>
                             <Form.Item
                               label="Số điện thoại"
                               name="phone"
@@ -300,6 +272,31 @@ const UserProfile = () => {
                               <Input disabled="true" />
                             </Form.Item>
                           </Col>
+                          <Col span={6}>
+                            <Form.Item
+                              label="Số CMND"
+                              name="identityNumber"
+                              rules={[
+                                {
+                                  required: true,
+                                },
+                              ]}
+                            >
+                              <Input disabled />
+                            </Form.Item>
+                          </Col>
+
+                          <Col span={6}>
+                            <Form.Item label="Email" name="email">
+                              <Input />
+                            </Form.Item>
+                          </Col>
+                          <Col span={6}>
+                            <Form.Item label="Quốc tịch" name="nationality">
+                              <Input />
+                            </Form.Item>
+                          </Col>
+
                           <Col span={24}>
                             <Form.Item
                               name="addressvn"
@@ -317,15 +314,7 @@ const UserProfile = () => {
                             </Form.Item>
                           </Col>
                           <Col span={24}>
-                            <Form.Item
-                              label="Địa chỉ"
-                              name="address"
-                              rules={[
-                                {
-                                  required: true,
-                                },
-                              ]}
-                            >
+                            <Form.Item label="Địa chỉ" name="address">
                               <TextArea rows={4} />
                             </Form.Item>
                           </Col>
@@ -381,7 +370,6 @@ const UserProfile = () => {
             </Col>
           </Row>
         </Layout.Content>
-       
       </Layout>
 
       <ModalUploadImage

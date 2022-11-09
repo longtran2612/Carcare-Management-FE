@@ -58,12 +58,16 @@ function UserDetail  ({ userId, onUpdateUser }) {
         email: response.data.Data.email,
         birthDay: moment(moment(response.data.Data.birthDay), formatDate),
         address: response.data.Data.address,
+        nationality: response.data.Data.nationality,
+        identityNumber: response.data.Data.identityNumber,
+        gender: response.data.Data.gender,
         addressvn: [
           response.data.Data.provinceCode,
           response.data.Data.districtCode,
           response.data.Data.wardCode,
         ],
         image: response.data.Data.image,
+        userCode: response.data.Data.userCode,
         status: response.data.Data.status,
       });
       setLoading(false);
@@ -95,6 +99,9 @@ function UserDetail  ({ userId, onUpdateUser }) {
         status: values.status,
         image: imageS3 || userDetail?.image,
         birthDay: values.birthDay,
+        // identityNumber: values.identityNumber,
+        gender: values.gender,
+        nationality: values.nationality,
       };
       const res = await updateUserById(body, userId);
       setUserDetail(res.data.Data);
@@ -211,8 +218,16 @@ function UserDetail  ({ userId, onUpdateUser }) {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="Ngày sinh" name="birthDay">
-                  <DatePicker format={formatDate} />
+                <Form.Item
+                  label="Mã nhân viên"
+                  name="userCode"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input disabled />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -233,12 +248,7 @@ function UserDetail  ({ userId, onUpdateUser }) {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item label="Email" name="email">
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
+              <Col span={8}>
                 <Form.Item
                   label="Số điện thoại"
                   name="phone"
@@ -251,6 +261,45 @@ function UserDetail  ({ userId, onUpdateUser }) {
                   <Input disabled="true" />
                 </Form.Item>
               </Col>
+              <Col span={8}>
+                <Form.Item
+                  label="Số CMND"
+                  name="identityNumber"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input disabled />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="Email" name="email">
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="Ngày sinh" name="birthDay">
+                  <DatePicker format={formatDate} />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="Giới tính" name="gender">
+                  <Select>
+                    <Select.Option value="Nam">Nam</Select.Option>
+                    <Select.Option value="Nữ">Nữ</Select.Option>
+                    <Select.Option value="Khác">Khác</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="Quốc tịch" name="nationality">
+                  <Input />
+                </Form.Item>
+              </Col>
+  
+             
               <Col span={24}>
                 <Form.Item
                   name="addressvn"

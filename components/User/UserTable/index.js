@@ -19,6 +19,8 @@ import { useRouter } from "next/router";
 import UserDetail from "../UserDetail";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
+import moment from "moment";
+const formatDate = "DD/MM/YYYY";
 
 function UserTable() {
   const [users, setUsers] = useState([]);
@@ -174,6 +176,13 @@ function UserTable() {
       ),
     },
     {
+      title: "Số căn cước",
+      dataIndex: "identityNumber",
+      key: "identityNumber",
+      width: 140,
+      ...getColumnSearchProps("identityNumber"),
+    },
+    {
       title: "Email",
       dataIndex: "email",
       key: "email",
@@ -186,33 +195,46 @@ function UserTable() {
     },
 
     {
-      title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
-      ...getColumnSearchProps("address"),
-      render: (address) => (
-        <Tooltip placement="topLeft" title={address}>
-          {address}
-        </Tooltip>
+      title: "Ngày sinh",
+      key: "birthDay",
+      dataIndex: "birthDay",
+      render: (birthDay) => (
+        <>{birthDay ? moment(birthDay).format(formatDate) : ""}</>
       ),
     },
+    {
+      title: "Giới tính",
+      dataIndex: "gender",
+      key: "gender",
+      with: 100,
+      // ...getColumnSearchProps("gender"),
+      render: (gender) => (
+        <>
+          {gender === "Nam" ? (
+            <Tag color="blue">Nam</Tag>
+          ) : (
+            <Tag color="pink">Nữ</Tag>
+          )}
+        </>
+      ),
+          },
     {
       title: "Trạng thái",
       key: "status",
       dataIndex: "status",
-      filters: [
-        {
-          value: "ACTIVE",
-          text: "Hoạt động",
-        },
-        {
-          value: "INACTIVE",
-          text: "Không hoạt động",
-        },
-      ],
-      filteredValue: filteredInfo.status || null,
-      onFilter: (value, record) => record.status.includes(value),
-      ellipsis: true,
+      // filters: [
+      //   {
+      //     value: "ACTIVE",
+      //     text: "Hoạt động",
+      //   },
+      //   {
+      //     value: "INACTIVE",
+      //     text: "Không hoạt động",
+      //   },
+      // ],
+      // filteredValue: filteredInfo.status || null,
+      // onFilter: (value, record) => record.status.includes(value),
+      // ellipsis: true,
       render: (status) => {
         return (
           <>

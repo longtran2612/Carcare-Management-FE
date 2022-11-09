@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Form, Input, Select, Col, Row, Cascader } from "antd";
+import { Modal, Form, Input, Select, Col, Row, Cascader,InputNumber ,DatePicker  } from "antd";
 import { createUser } from "pages/api/userAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification } from "utils/notification";
@@ -7,8 +7,8 @@ import JsonData from "data/address-vn.json";
 
 const { TextArea } = Input;
 const { Option } = Select;
-
-function ModalAddUser ({ show, onSuccess, handleCancel }) {
+const formatDate = "DD/MM/YYYY";
+function ModalAddUser({ show, onSuccess, handleCancel }) {
   const [form] = Form.useForm();
   const [addressData, setAddressData] = useState(JsonData);
 
@@ -24,15 +24,20 @@ function ModalAddUser ({ show, onSuccess, handleCancel }) {
       fullname: values.fullname,
       email: values.email,
       phone: values.phone,
-      address:values.address,
+      address: values.address,
       district: districtSelected,
       province: provinceSelected,
-      ward:wardSelected,
+      ward: wardSelected,
       districtCode: districtSelectedCode,
       provinceCode: provinceSelectedCode,
-      wardCode:wardSelectedCode,
+      wardCode: wardSelectedCode,
+      gender: values.gender,
+      birthDay: values.birthDay,
+      nationality: values.nationality,
+      identityType: 2,
+      identityNumber: values.identityNumber,
     };
-    console.log("data create",dataUser);
+    console.log("data create", dataUser);
 
     try {
       const res = await createUser(dataUser);
@@ -41,12 +46,11 @@ function ModalAddUser ({ show, onSuccess, handleCancel }) {
       handleCancel();
       onSuccess(res?.data?.Data);
       form.resetFields();
-
     } catch (error) {
       if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -94,8 +98,8 @@ function ModalAddUser ({ show, onSuccess, handleCancel }) {
           onFinish={onFinish}
           autoComplete="off"
         >
-          <Row gutter={[16, 4]}>
-            <Col span={24}>
+          <Row gutter={[16]}>
+            <Col span={18}>
               <Form.Item
                 rules={[
                   {
@@ -103,10 +107,19 @@ function ModalAddUser ({ show, onSuccess, handleCancel }) {
                     message: "Vui lòng nhập họ tên!",
                   },
                 ]}
-                label="Tên người dùng"
+                label="Tên nhân viên"
                 name="fullname"
               >
                 <Input />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item initialValue="Nam" name="gender" label="Giới tính">
+                <Select>
+                  <Option value="Nam">Nam</Option>
+                  <Option value="Nữ">Nữ</Option>
+                  <Option value="Khác">Khác</Option>
+                </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -130,7 +143,47 @@ function ModalAddUser ({ show, onSuccess, handleCancel }) {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name="email" label="Email">
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                    message: "Vui lòng nhập số CMND!",
+                  },
+                ]}
+                name="identityNumber"
+                label="Số CMND"
+              >
+                <InputNumber />
+              </Form.Item>
+            </Col>
+
+            <Col span={8}>
+              <Form.Item
+                rules={[
+                  {
+                    pattern: new RegExp(
+                      "^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$"
+                    ),
+                    message: "Email không hợp lệ!",
+                  },
+                ]}
+                name="email"
+                label="Email"
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item name="birthDay" label="Ngày sinh">
+                <DatePicker placeholder="Chọn ngày sinh" format={formatDate} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                initialValue="Việt Nam"
+                name="nationality"
+                label="Quốc gia"
+              >
                 <Input />
               </Form.Item>
             </Col>
@@ -157,6 +210,6 @@ function ModalAddUser ({ show, onSuccess, handleCancel }) {
       </Modal>
     </>
   );
-};
+}
 
 export default ModalAddUser;
