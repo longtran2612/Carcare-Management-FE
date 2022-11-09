@@ -15,7 +15,7 @@ import {
   Drawer,
   Avatar,
   List,
-  Modal
+  Modal,
 } from "antd";
 import {
   LoadingOutlined,
@@ -23,7 +23,7 @@ import {
   SyncOutlined,
   PlusCircleFilled,
   PrinterOutlined,
-  EditOutlined 
+  EditOutlined,
 } from "@ant-design/icons";
 import { getUserById, getUserAvaliable } from "pages/api/userAPI";
 import { getOrderById, updateOrder } from "pages/api/orderAPI";
@@ -36,6 +36,7 @@ import { openNotification } from "utils/notification";
 import UpDateServiceOrder from "components/Modal/ModalUpdateServiceOrder";
 import { getAllPromotionUseable } from "pages/api/promotionDetail";
 import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
+import ModalChangeExcutor from "components/Modal/ModalChangeExecutor";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -57,8 +58,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
 
-  const [showChangeUser, setShowChangeUser] = useState(false);
-  const [userChange, setUserChange] = useState(null);
+  const [showChangeExcutor, setShowChangeExcutor] = useState(false);
 
   const getOrder = async () => {
     try {
@@ -113,15 +113,16 @@ export const OrderNotRequestDetail = ({ orderId }) => {
   const handleStep = () => {
     switch (order?.status) {
       case 0:
-        setStep(0);
+        return 0
       case 2:
-        setStep(1);
+        return 1
       case 10:
-        setStep(2);
+        return 2
       case 100:
-        setStep(3);
+        return 4
       case -100:
-        setStep(2);
+        return 2
+      break;
     }
   };
 
@@ -151,7 +152,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
           totalPromotion += total;
         }
       } else {
-        if (promotion.type === "MONEY"|| promotion.type ==="SERVICE") {
+        if (promotion.type === "MONEY" || promotion.type === "SERVICE") {
           totalPromotion += promotion.amount;
         }
       }
@@ -237,21 +238,9 @@ export const OrderNotRequestDetail = ({ orderId }) => {
     setShowUpdateServiceOrder(false);
     getOrder();
   };
-  const handleChangeUser = async () => {
-    setLoading(true);
-    let dataUpdate = {
-      executorId: userChange,
-      serviceIds: order?.services?.map((service) => service.id),
-    };
-    try {
-      const res = await updateOrder(order?.id, dataUpdate);
-      openNotification("Thành công!", "Cập nhật nhân viên xử lý thành công");
-      setLoading(false);
-      getOrder();
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const handleSuccessChangeExcutor = () => {
+    setShowChangeExcutor(false);
+    getOrder();
   };
 
   return (
@@ -274,41 +263,17 @@ export const OrderNotRequestDetail = ({ orderId }) => {
               style={{ marginRight: "10px" }}
               className="carslot-customer content-white"
             >
-              {/* <Form.Item label="Nhân viên xử lý" name="executorId">
-                <Select
-                  style={{ width: "100%", marginBottom: "10px" }}
-                  showSearch
-                  placeholder="Nhân viên xử lý"
-                  optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    option.children.includes(input)
-                  }
-                  filterSort={(optionA, optionB) =>
-                    optionA.children
-                      .toLowerCase()
-                      .localeCompare(optionB.children.toLowerCase())
-                  }
-                  onChange={handleChangeUser}
-                  disabled={
-                    order?.status === 10 ||
-                    order?.status === -100 ||
-                    order?.status === -100
-                  }
-                >
-                  {users.map((item) => (
-                    <Option value={item.id}>
-                      {item.name + " - " + item.phone}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item> */}
-               <Title level={4}>Nhân viên xử lý</Title>
-                    <Timeline>
-                      <Timeline.Item>
-                        <span>{user?.name + " - " + user?.phone}</span> 
-                        <Button style={{marginLeft:'5px'}} icon={<EditOutlined />} onClick={() => setShowChangeUser(true)} />
-                      </Timeline.Item>
-                    </Timeline>
+              <Title level={4}>Nhân viên xử lý</Title>
+              <Timeline>
+                <span>{user?.name + " - " + user?.phone}</span>
+
+                {(order?.status === 0 || order?.status === 2) && (
+                  <EditOutlined
+                    style={{ marginLeft: "5px" }}
+                    onClick={() => setShowChangeExcutor(true)}
+                  />
+                )}
+              </Timeline>
               <Title level={4}>Thông tin khách hàng</Title>
               <Timeline>
                 <Timeline.Item>Mã: {order?.customerCode}</Timeline.Item>
@@ -376,7 +341,7 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                   style={{ marginBottom: "1rem" }}
                   span={24}
                 >
-                  <Steps current={step} className="site-navigation-steps">
+                  <Steps current={handleStep()} className="site-navigation-steps">
                     <Steps.Step
                       title="Tiếp nhận yêu cầu"
                       status="finish"
@@ -571,43 +536,13 @@ export const OrderNotRequestDetail = ({ orderId }) => {
         promotionDetails={promotionDetails}
         handleCancel={() => setShowSelectPromotion(false)}
       />
-       <Modal
-        title="Thay đổi nhân viên xử lý"
-        width={700}
-        onCancel={() => setShowChangeUser(false)}
-        visible={showChangeUser}
-        onOk={() => {
-          handleChangeUser();
-          setShowChangeUser(false);
-        }}
-        okText="Thay đổi"
-        cancelText="Hủy"
-      >
-        <Row>
-          <Col span={24}>
-            <span>Danh sách nhân viên sẵn sàng</span>
-            <Select
-              style={{ width: "100%", marginBottom: "10px" }}
-              showSearch
-              placeholder="Nhân viên xử lý"
-              optionFilterProp="children"
-              filterOption={(input, option) => option.children.includes(input)}
-              filterSort={(optionA, optionB) =>
-                optionA.children
-                  .toLowerCase()
-                  .localeCompare(optionB.children.toLowerCase())
-              }
-              onChange={(value) =>{setUserChange(value)}}
-            >
-              {users.map((item) => (
-                <Option value={item.id}>
-                  {item.name + " - " + item.phone}
-                </Option>
-              ))}
-            </Select>
-          </Col>
-        </Row>
-      </Modal>
+
+      <ModalChangeExcutor
+        show={showChangeExcutor}
+        handleCancel={() => setShowChangeExcutor(false)}
+        order={order}
+        onSuccess={() => handleSuccessChangeExcutor()}
+      />
 
       <Loading loading={loading} />
     </>

@@ -37,6 +37,7 @@ import { getAllPromotionUseable } from "pages/api/promotionDetail";
 import UpDateServiceOrder from "components/Modal/ModalUpdateServiceOrder";
 import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
 import ModalSelectSlot from "components/Modal/ModalSelectSlot";
+import ModalChangeExcutor from "components/Modal/ModalChangeExecutor";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -54,8 +55,7 @@ export const OrderDetail = ({ orderRequestId }) => {
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState(null);
 
-  const [showChangeUser, setShowChangeUser] = useState(false);
-  const [userChange, setUserChange] = useState(null);
+  const [showChangeExcutor, setShowChangeExcutor] = useState(false);
 
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
@@ -150,22 +150,9 @@ export const OrderDetail = ({ orderRequestId }) => {
     router.push("/admin");
     // router.replace("/admin");
   };
-
-  const handleChangeUser = async () => {
-    setLoading(true);
-    let dataUpdate = {
-      executorId: userChange,
-      serviceIds: order?.services?.map((service) => service.id),
-    };
-    try {
-      const res = await updateOrder(order?.id, dataUpdate);
-      openNotification("Thành công!", "Cập nhật nhân viên xử lý thành công");
-      fetchCarSlotDetail();
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const handleSuccessChangeExcutor = () => {
+    setShowChangeExcutor(false);
+    getOrder();
   };
 
   console.log("order", order);
@@ -202,14 +189,14 @@ export const OrderDetail = ({ orderRequestId }) => {
             >
               <Title level={4}>Nhân viên xử lý</Title>
               <Timeline>
-                <Timeline.Item>
-                  <span>{user?.name + " - " + user?.phone}</span>
-                  <Button
+                <span>{user?.name + " - " + user?.phone}</span>
+
+              
+                  <EditOutlined
                     style={{ marginLeft: "5px" }}
-                    icon={<EditOutlined />}
-                    onClick={() => setShowChangeUser(true)}
+                    onClick={() => setShowChangeExcutor(true)}
                   />
-                </Timeline.Item>
+                
               </Timeline>
               <Title level={4}>Thông tin khách hàng</Title>
               <Timeline>
@@ -439,45 +426,12 @@ export const OrderDetail = ({ orderRequestId }) => {
         handleCancel={() => setModalSelectSlot(false)}
         onSuccess={() => handkeSuccessSelectSlot()}
       />
-      <Modal
-        title="Thay đổi nhân viên xử lý"
-        width={700}
-        onCancel={() => setShowChangeUser(false)}
-        visible={showChangeUser}
-        onOk={() => {
-          handleChangeUser();
-          setShowChangeUser(false);
-        }}
-        okText="Thay đổi"
-        cancelText="Hủy"
-      >
-        <Row>
-          <Col span={24}>
-            <span>Danh sách nhân viên sẵn sàng</span>
-            <Select
-              style={{ width: "100%", marginBottom: "10px" }}
-              showSearch
-              placeholder="Nhân viên xử lý"
-              optionFilterProp="children"
-              filterOption={(input, option) => option.children.includes(input)}
-              filterSort={(optionA, optionB) =>
-                optionA.children
-                  .toLowerCase()
-                  .localeCompare(optionB.children.toLowerCase())
-              }
-              onChange={(value) => {
-                setUserChange(value);
-              }}
-            >
-              {users.map((item) => (
-                <Option value={item.id}>
-                  {item.name + " - " + item.phone}
-                </Option>
-              ))}
-            </Select>
-          </Col>
-        </Row>
-      </Modal>
+      <ModalChangeExcutor
+        show={showChangeExcutor}
+        handleCancel={() => setShowChangeExcutor(false)}
+        order={order}
+        onSuccess={() => handleSuccessChangeExcutor()}
+      />
 
       <Loading loading={loading} />
     </>

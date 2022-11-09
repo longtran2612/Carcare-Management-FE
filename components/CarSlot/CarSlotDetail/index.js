@@ -33,7 +33,7 @@ import {
   CheckCircleOutlined,
   TagsOutlined,
   QuestionCircleOutlined,
-  EditOutlined
+  EditOutlined,
 } from "@ant-design/icons";
 import { getUserById, getUserAvaliable } from "pages/api/userAPI";
 import { useRouter } from "next/router";
@@ -51,6 +51,8 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import UpDateServiceOrder from "components/Modal/ModalUpdateServiceOrder";
 import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
 import { getAllPromotionUseable } from "pages/api/promotionDetail";
+import ModalChangeExcutor from "components/Modal/ModalChangeExecutor";
+
 const { Option } = Select;
 
 const formatDate = "HH:mm DD/MM/YYYY";
@@ -75,11 +77,9 @@ const CarSlotDetail = ({ carSlotId }) => {
   const [showConfimComplete, setShowConfimComplete] = useState(false);
   const [showConfimExecute, setShowConfimExecute] = useState(false);
   const [showUpdateServiceOrder, setShowUpdateServiceOrder] = useState(false);
-  const [showChangeUser, setShowChangeUser] = useState(false);
-  const [userChange, setUserChange] = useState(null);
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
-
+  const [showChangeExcutor, setShowChangeExcutor] = useState(false);
   const [step, setStep] = useState(1);
 
   const [carSlotDetail, setCarSlotDetail] = useState();
@@ -108,14 +108,7 @@ const CarSlotDetail = ({ carSlotId }) => {
     }
   };
 
-  const fetchUsers = async () => {
-    try {
-      const response = await getUserAvaliable();
-      setUsers(response.data.Data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
 
   const fetchCarDetail = async (data) => {
     setLoading(true);
@@ -150,7 +143,6 @@ const CarSlotDetail = ({ carSlotId }) => {
       fetchCarDetail(response.data.Data.carId);
       fetchCustomerDetail(response.data.Data.customerId);
       fetchUser(response.data.Data.executorId);
-      fetchUsers();
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -325,23 +317,10 @@ const CarSlotDetail = ({ carSlotId }) => {
     fetchCarSlotDetail();
   };
 
-  const handleChangeUser = async () => {
-    setLoading(true);
-    let dataUpdate = {
-      executorId: userChange,
-      serviceIds: order?.services?.map((service) => service.id),
-    };
-    try {
-      const res = await updateOrder(order?.id, dataUpdate);
-      openNotification("Thành công!", "Cập nhật nhân viên xử lý thành công");
-      fetchCarSlotDetail();
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const handleSuccessChangeExcutor = () => {
+    setShowChangeExcutor(false);
+    fetchCarSlotDetail();
   };
-
   return (
     <>
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
@@ -398,10 +377,12 @@ const CarSlotDetail = ({ carSlotId }) => {
                     </Form.Item>  */}
                     <Title level={4}>Nhân viên xử lý</Title>
                     <Timeline>
-                      <Timeline.Item>
-                        <span>{user?.name + " - " + user?.phone}</span> 
-                        <Button style={{marginLeft:'5px'}} icon={<EditOutlined />} onClick={() => setShowChangeUser(true)} />
-                      </Timeline.Item>
+                      <span>{user?.name + " - " + user?.phone}</span>
+                  
+                      <EditOutlined
+                        style={{ marginLeft: "5px" }}
+                        onClick={() => setShowChangeExcutor(true)}
+                      />
                     </Timeline>
                     <Title level={4}>Thông tin khách hàng</Title>
                     <Timeline>
@@ -720,7 +701,6 @@ const CarSlotDetail = ({ carSlotId }) => {
         width={700}
         onCancel={() => setShowConfimComplete(false)}
         visible={showConfimComplete}
-        icon={<CheckCircleOutlined />}
         footer={
           <>
             <div className="steps-action">
@@ -769,43 +749,12 @@ const CarSlotDetail = ({ carSlotId }) => {
         promotionDetails={promotionDetails}
         handleCancel={() => setShowSelectPromotion(false)}
       />
-      <Modal
-        title="Thay đổi nhân viên xử lý"
-        width={700}
-        onCancel={() => setShowChangeUser(false)}
-        visible={showChangeUser}
-        onOk={() => {
-          handleChangeUser();
-          setShowChangeUser(false);
-        }}
-        okText="Thay đổi"
-        cancelText="Hủy"
-      >
-        <Row>
-          <Col span={24}>
-            <span>Danh sách nhân viên sẵn sàng</span>
-            <Select
-              style={{ width: "100%", marginBottom: "10px" }}
-              showSearch
-              placeholder="Nhân viên xử lý"
-              optionFilterProp="children"
-              filterOption={(input, option) => option.children.includes(input)}
-              filterSort={(optionA, optionB) =>
-                optionA.children
-                  .toLowerCase()
-                  .localeCompare(optionB.children.toLowerCase())
-              }
-              onChange={(value) =>{setUserChange(value)}}
-            >
-              {users.map((item) => (
-                <Option value={item.id}>
-                  {item.name + " - " + item.phone}
-                </Option>
-              ))}
-            </Select>
-          </Col>
-        </Row>
-      </Modal>
+      <ModalChangeExcutor
+        show={showChangeExcutor}
+        handleCancel={() => setShowChangeExcutor(false)}
+        order={order}
+        onSuccess={() => handleSuccessChangeExcutor()}
+      />
 
       <Loading loading={loading} />
     </>
