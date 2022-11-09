@@ -342,39 +342,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                     style={{ marginRight: "10px" }}
                     className="carslot-customer content-white"
                   >
-                    {/* <Form.Item
-                      label="Nhân viên xử lý"
-                      name="executorId"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Vui lòng chọn nhân viên xử lý yêu cầu này",
-                        },
-                      ]}
-                      initialValue={fetchUser()?.name+" - "+fetchUser()?.phoneNumber}
-                    >
-                      <Select
-                        style={{ width: "100%", marginBottom: "10px" }}
-                        showSearch
-                        placeholder="Nhân viên xử lý"
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                          option.children.includes(input)
-                        }
-                        filterSort={(optionA, optionB) =>
-                          optionA.children
-                            .toLowerCase()
-                            .localeCompare(optionB.children.toLowerCase())
-                        }
-                        onChange={handleChangeUser}
-                      >
-                        {users.map((item) => (
-                          <Option value={item?.id}>
-                            {item?.name + " - " + item?.phone}
-                          </Option>
-                        ))}
-                      </Select>
-                    </Form.Item>  */}
+                   
                     <Title level={4}>Nhân viên xử lý</Title>
                     <Timeline>
                       <span>{user?.name + " - " + user?.phone}</span>

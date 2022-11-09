@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Row, Col, Select, Form } from "antd";
+import { Modal, Row, Col, Select, Form, Divider } from "antd";
 
-import { getUserAvaliable } from "pages/api/userAPI";
+import { getUserAvaliable, getUsers } from "pages/api/userAPI";
 import { updateOrder } from "pages/api/orderAPI";
 import { openNotification } from "utils/notification";
 import Loading from "components/Loading";
-
 
 const ModalChangeExcutor = ({ order, show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
@@ -22,8 +21,9 @@ const ModalChangeExcutor = ({ order, show, onSuccess, handleCancel }) => {
     try {
       const res = await updateOrder(order?.id, dataUpdate);
       openNotification("Thành công!", "Cập nhật nhân viên xử lý thành công");
-      onSuccess();
+      getUsers();
       setLoading(false);
+      onSuccess();
     } catch (error) {
       if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message);
@@ -57,17 +57,20 @@ const ModalChangeExcutor = ({ order, show, onSuccess, handleCancel }) => {
         onCancel={() => handleCancel()}
         visible={show}
         onOk={() => {
-          handleChangeUser();
-          handleCancel();
+          {
+            userChange
+              ? handleChangeUser()
+              : openNotification("Thất bại", "Vui lòng chọn nhân viên xử lý");
+          }
         }}
         okText="Thay đổi"
         cancelText="Hủy"
       >
         <Row>
           <Col span={24}>
-            <span>Danh sách nhân viên sẵn sàng</span>
+            <Divider>Danh sách nhân viên sẵn sàng</Divider>
             <Select
-              style={{ width: "100%", marginBottom: "10px" }}
+              style={{ width: "100%", marginTop: "20px" }}
               showSearch
               placeholder="Nhân viên xử lý"
               optionFilterProp="children"
@@ -80,6 +83,7 @@ const ModalChangeExcutor = ({ order, show, onSuccess, handleCancel }) => {
               onChange={(value) => {
                 setUserChange(value);
               }}
+              value={userChange}
             >
               {users.map((item) => (
                 <Select.Option value={item.id}>

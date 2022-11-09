@@ -22,9 +22,12 @@ import {
   ClearOutlined,
   SearchOutlined,
   PlayCircleTwoTone,
+  EditOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
+import ModalChangeExcutor from "components/Modal/ModalChangeExecutor";
+
 const { Title } = Typography;
 
 function ModalSelectOrder({ onSelectOrder }) {
@@ -37,6 +40,9 @@ function ModalSelectOrder({ onSelectOrder }) {
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
+  const [showChangeExcutor, setShowChangeExcutor] = useState(false);
+  const [order, setOrder] = useState(null);
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
@@ -200,8 +206,30 @@ function ModalSelectOrder({ onSelectOrder }) {
       },
     },
     {
+      title: "Nhiên viên xử lý",
+      dataIndex: "executorName",
+      key: "executorName",
+      width: 200,
+      render: (text, record) => {
+        return (
+          <div>
+            {" "}
+            <EditOutlined
+              style={{ marginRight: "5px" }}
+              onClick={() => {
+                setOrder(record);
+                setShowChangeExcutor(true);
+              }}
+            />
+            {record.executorName}{" "}
+          </div>
+        );
+      },
+    },
+    {
       title: "Hành động",
       dataIndex: "action",
+      width: 70,
       render: (text, record, dataIndex) => {
         return (
           <>
@@ -226,7 +254,7 @@ function ModalSelectOrder({ onSelectOrder }) {
     let dataGetOrder = {
       keyword: "",
       pageSize: 20,
-      status:0,
+      status: 0,
       pageNumber: 0,
       sort: [
         {
@@ -289,6 +317,10 @@ function ModalSelectOrder({ onSelectOrder }) {
     },
   ];
   const handleSuccessCreateOrder = async () => {
+    handleGetorders();
+  };
+  const handleSuccessChangeExcutor = () => {
+    setShowChangeExcutor(false);
     handleGetorders();
   };
 
@@ -403,6 +435,12 @@ function ModalSelectOrder({ onSelectOrder }) {
         show={modalOrder}
         handleCancel={() => setModalOrder(false)}
         onSuccess={(data) => handleSuccessCreateOrder(data)}
+      />
+      <ModalChangeExcutor
+        show={showChangeExcutor}
+        handleCancel={() => setShowChangeExcutor(false)}
+        order={order}
+        onSuccess={() => handleSuccessChangeExcutor()}
       />
 
       <Loading loading={loading} />

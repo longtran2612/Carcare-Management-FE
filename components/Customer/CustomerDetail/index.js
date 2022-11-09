@@ -20,12 +20,14 @@ import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
-import { UploadOutlined } from "@ant-design/icons";
+import { CarOutlined, UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
-import JsonData from "data/address-vn.json"
+import JsonData from "data/address-vn.json";
+import DrawerCar from "components/Drawer/DrawerCar";
+
 const formatDate = "DD/MM/YYYY";
 
-function CustomerDetail ({ customerId, onUpdateCustomer }) {
+function CustomerDetail({ customerId, onUpdateCustomer }) {
   const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -47,6 +49,8 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
   const [districtSelectedCode, setDistrictSelectedCode] = useState("");
   const [wardSelectedCode, setWardSelectedCode] = useState("");
 
+  const [carDrawer, setCarDrawer] = useState(false);
+
   const fetchcustomerDetail = async () => {
     setLoading(true);
     try {
@@ -63,7 +67,11 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
         statusName: response.data.Data.statusName,
         dateOfBirth: moment(moment(response.data.Data.dateOfBirth), formatDate),
         address: response.data.Data.address,
-        addressvn: [response.data.Data.provinceCode, response.data.Data.districtCode, response.data.Data.wardCode],
+        addressvn: [
+          response.data.Data.provinceCode,
+          response.data.Data.districtCode,
+          response.data.Data.wardCode,
+        ],
         image: response.data.Data.image,
         status: response.data.Data.status,
       });
@@ -79,7 +87,6 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
       fetchcustomerDetail();
     }
   }, [customerId]);
-
 
   const onChange = (value, selectedOptions) => {
     console.log(value, selectedOptions);
@@ -170,7 +177,6 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
         Trở lại
       </Button>
       <br />
-      <br />
       <Row gutter={[16, 16]}>
         <Col span={6}>
           <Image width={300} height={250} src={customerDetail.image} />
@@ -226,50 +232,61 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Ngày sinh"
-                  name="dateOfBirth"
-                 
-                >
+                <Form.Item label="Xe Khách hàng">
+                  <Button
+                    type="primary"
+                    style={{ width: "100%" }}
+                    icon={<CarOutlined />}
+                    onClick={() => {
+                      setCarDrawer(true);
+                    }}
+                  >
+                    Xem xe
+                  </Button>
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item label="Ngày sinh" name="dateOfBirth">
                   <DatePicker format={formatDate} />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Nhóm khách hàng"
-                 
-                  name="statusName"
-                >
+                <Form.Item label="Nhóm khách hàng" name="statusName">
                   <Select>
-                    <Select.Option value="ACTIVE">Thông thường</Select.Option>
-                    <Select.Option value="INACTIVE">Thân thiết</Select.Option>
+                    <Select.Option value="0">Thông thường</Select.Option>
+                    <Select.Option value="2">Thân thiết</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
 
               <Col span={6}>
-                <Form.Item
-                  label="Giới tính"
-                  name="gender"
-                 
-                >
+                <Form.Item label="Giới tính" name="gender">
                   <Select>
                     <Select.Option value="Nam">Nam</Select.Option>
-                    <Select.Option value='Nữ'>Nữ</Select.Option>
-                    <Select.Option value='Khác'>Khác</Select.Option>
+                    <Select.Option value="Nữ">Nữ</Select.Option>
+                    <Select.Option value="Khác">Khác</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Quốc tịch"
-                  name="nationality"
-                  
-                >
+                <Form.Item label="Quốc tịch" name="nationality">
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={8}>
+                <Form.Item
+                  label="Số điện thoại"
+                  name="phoneNumber"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input disabled="true" />
+                </Form.Item>
+              </Col>
+              <Col span={8}>
                 <Form.Item
                   label="Số CMND"
                   name="identityNumber"
@@ -283,28 +300,12 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
                 </Form.Item>
               </Col>
 
-              <Col span={12}>
-                <Form.Item
-                  label="Email"
-                  name="email"
-                 
-                >
+              <Col span={8}>
+                <Form.Item label="Email" name="email">
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Số điện thoại"
-                  name="phoneNumber"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <Input disabled="true" />
-                </Form.Item>
-              </Col>
+
               <Col span={24}>
                 <Form.Item
                   name="addressvn"
@@ -372,9 +373,14 @@ function CustomerDetail ({ customerId, onUpdateCustomer }) {
         handleOk={() => handleUploadImages()}
         listImage={listFiles.imageBlob}
       />
+      <DrawerCar
+        show={carDrawer}
+        handleCancel={() => setCarDrawer(false)}
+        id={customerDetail?.id}
+      />
       <Loading loading={loading} />
     </>
   );
-};
+}
 
 export default CustomerDetail;
