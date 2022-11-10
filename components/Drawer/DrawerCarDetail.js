@@ -147,11 +147,7 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
           <Form form={form} layout="vertical" autoComplete="off">
             <Row gutter={10}>
               <Col span={18}>
-                <Form.Item
-                  label="Tên xe"
-                  name="name"
-                 
-                >
+                <Form.Item label="Tên xe" name="name">
                   <Input disabled />
                 </Form.Item>
               </Col>
@@ -169,7 +165,15 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Hãng xe" name="brand">
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  label="Hãng xe"
+                  name="brand"
+                >
                   <Select
                     showSearch
                     placeholder="Chọn hãng xe"
@@ -194,7 +198,15 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Model" name="carModelCode">
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  label="Model"
+                  name="carModelCode"
+                >
                   <Select
                     showSearch
                     placeholder="Chọn Model"

@@ -65,7 +65,7 @@ export const CustomerNavigation = () => {
           <Menu.Item key="3">
             <Link href="/customer/order">
               <a>
-                <ClearOutlined /> Đơn hàng
+                <BookOutlined /> Đơn hàng
               </a>
             </Link>
           </Menu.Item>

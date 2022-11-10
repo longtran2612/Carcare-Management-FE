@@ -80,6 +80,20 @@ const changePassword = async (data) => {
     });
 };
 
+const changePassword2 = async (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/auth/change-password2`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 const  checkExistPhone = async (data) => {
   return axios({
     method: "GET",
@@ -95,6 +109,7 @@ const  checkExistPhone = async (data) => {
 
 export {
   onRegister,
+  changePassword2,
   login,
   logout,
   loadUser,

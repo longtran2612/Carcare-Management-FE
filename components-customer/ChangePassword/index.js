@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Row, Col, Typography,notification } from "antd";
-import { LockOutlined,SmileOutlined } from "@ant-design/icons";
-import { changePassword } from "pages/api/authAPI";
+import { Form, Input, Button, Row, Col, Typography, notification } from "antd";
+import { LockOutlined, SmileOutlined } from "@ant-design/icons";
+import { changePassword2 } from "pages/api/authAPI";
 import Loading from "components/Loading";
 import Cookies from "js-cookie";
 import { openNotification } from "utils/notification";
@@ -15,31 +15,20 @@ function ChangePassword() {
     let changePasswordRequets = {
       username: username,
       newPassword: values.password,
+      oldPassword: values.oldPassword,
     };
     console.log(changePasswordRequets);
     try {
-      const res = await changePassword(changePasswordRequets);
-      notification.open({
-        message: "thành công",
-        description: "Đổi mật khẩu thành công",
-        icon:  <SmileOutlined style={{ color: '#4B31DE' }} />,
-        placement: "bottomRight",
-      
-        style: {
-         backgroundColor: "#D9EEE1",
-          color: "#4B31DE",
-          borderRadius: "10px",
-        },
-    
-      });
+      const res = await changePassword2(changePasswordRequets);
+      openNotification("thành công", "Đổi mật khẩu thành công");
       setLoading(false);
-    
     } catch (error) {
       if (error?.response?.data?.message) {
         openNotification(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
+      setLoading(false);
     }
   };
   return (
@@ -71,18 +60,6 @@ function ChangePassword() {
             wrapperCol={{ span: 18 }}
             onFinish={handleChangePassword}
           >
-            <Typography.Title
-              level={2}
-              style={{
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                color: "#1890ff",
-              }}
-            >
-              Thay đổi mật khẩu
-            </Typography.Title>
             <Form.Item
               label="Mật khẩu cũ"
               name="oldPassword"
