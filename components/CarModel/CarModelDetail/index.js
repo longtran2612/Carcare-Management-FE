@@ -13,7 +13,7 @@ import {
   Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import {
   updateUserById,
   uploadImagesUser,
@@ -117,7 +117,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
       if (error?.response?.data?.message) {
         openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotificationWarning("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

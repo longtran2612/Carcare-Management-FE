@@ -225,7 +225,7 @@ export const OrderDetail = ({ orderRequestId }) => {
                       {
                         order?.executorId
                           ? setModalSelectSlot(true)
-                          : openNotificationWarning(
+                          : openNotification(
                               "Vui lòng chọn nhân viên xử lý"
                             );
                       }

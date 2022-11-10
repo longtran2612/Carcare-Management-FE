@@ -28,7 +28,7 @@ import {
   PrinterOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import { useReactToPrint } from "react-to-print";
 import Image from "next/image";
 import logo from "public/images/logo-footer-customer.png";

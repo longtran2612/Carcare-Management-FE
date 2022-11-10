@@ -248,7 +248,7 @@ const CarSlotDetail = ({ carSlotId }) => {
     try {
       console.log(dataComplete);
       const response = await completeCarSlot(dataComplete);
-      openNotification("Hoàn thành xử lý thành công!", "");
+      openNotification("Hoàn thành xử lý thành công!");
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {

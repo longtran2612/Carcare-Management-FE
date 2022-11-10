@@ -39,7 +39,7 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
       if (error?.response?.data?.message) {
         openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotificaopenNotificationWarningtion( "có lỗi xảy ra");
+        openNotificationWarning( "có lỗi xảy ra");
       }
       setLoading(false);
     }
@@ -132,7 +132,7 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
                   if (carSlot.status === "AVAILABLE") {
                     onFinish(carSlot.id);
                   } else {
-                    openNotification("Thất bại", "Vui lòng chọn vị trí trống!");
+                    openNotification("Vui lòng chọn vị trí trống!");
                   }
                 }}
               >
