@@ -32,7 +32,7 @@ import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { openNotification } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import { getAllPromotionUseable } from "pages/api/promotionDetail";
 import UpDateServiceOrder from "components/Modal/ModalUpdateServiceOrder";
 import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
@@ -169,12 +169,12 @@ export const OrderDetail = ({ orderRequestId }) => {
         <div>
           {" "}
           <Tag
-            tyle={{
+            style={{
               height: "30px",
               alignItems: "center",
               fontSize: "15px",
             }}
-            color="blue"
+            color="orange"
           >
             Chờ xử lý
           </Tag>
@@ -222,7 +222,13 @@ export const OrderDetail = ({ orderRequestId }) => {
                   <Popconfirm
                     title="Bạn có chắc muốn Xử lý yêu cầu này?"
                     onConfirm={() => {
-                      setModalSelectSlot(true);
+                      {
+                        order?.executorId
+                          ? setModalSelectSlot(true)
+                          : openNotificationWarning(
+                              "Vui lòng chọn nhân viên xử lý"
+                            );
+                      }
                     }}
                     okText="Đồng ý"
                     cancelText="Hủy"

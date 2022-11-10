@@ -55,6 +55,7 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
       const res = await createCustomer(dataUser);
       console.log(res);
       openNotification("Thành công", "Tạo mới khách hàng thành công");
+      openNotification("Thành công", "Tài khoản khách hàng là số điện thoại,mật khẩu mặc định là 123456");
       handleCancel();
       onSuccess(res.data.Data);
       form.resetFields();

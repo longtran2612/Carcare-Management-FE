@@ -14,7 +14,7 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
     let priceCreateData = {
       name: serviceSelected.name,
       currency: currency,
-      type: "New",
+      type: "NEW",
       price: values.price,
       priceHeaderId: priceHeaderId,
       serviceId: values.serviceId,

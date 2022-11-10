@@ -96,12 +96,14 @@ export default function DrawerPromotionOrder({
                         </span>
                       </Col>
                     )}
+                    {item.type != "SERVICE" && (
                     <Col span={12}>
                       <span style={{ fontWeight: "bold" }}>
                         Số tiền đơn hàng tối thiểu:{" "}
                       </span>
                       {formatMoney(item.minimumSpend || 0)}
                     </Col>
+                    )}
 
                     <Col span={12}>
                       {item.type === "PERCENTAGE" && (

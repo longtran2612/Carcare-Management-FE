@@ -43,12 +43,19 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         maximumDiscount: response.data.Data[0].maximumDiscount,
         minimumSpend: response.data.Data[0].minimumSpend,
         categoryIds: response.data.Data[0].categoryIds,
-        serviceIds: response.data.Data[0].serviceIds,
+        
         customerType: response.data.Data[0].customerType,
         limitUsedTime: response.data.Data[0].limitUsedTime,
         limitPromotionAmount: response.data.Data[0].limitPromotionAmount,
         promotionUsedAmount: response.data.Data[0].promotionUsedAmount,
       });
+      if(response.data.Data[0].type === "SERVICE"){
+        if(response.data.Data[0].serviceIds){
+          form.setFieldsValue({
+            serviceIds: response.data.Data[0].serviceIds[0],
+          });
+        }
+      }
       setShowLimitAmount(response.data.Data[0].limitPromotionAmount);
       // setLoading(false);
     } catch (error) {
@@ -77,6 +84,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         (dataUpdate.limitPromotionAmount = values.limitPromotionAmount);
     }
     if (values.type === "SERVICE") {
+      dataUpdate.amount = values.amount,
       dataUpdate.serviceIds = [values.serviceIds];
     }
 
@@ -200,6 +208,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 </Select>
               </Form.Item>
             </Col>
+            {(promotionDetail?.type != "SERVICE")&& (
             <Col span={12}>
               <Form.Item
                 label="Giá trị đơn hàng tối thiểu"
@@ -220,7 +229,8 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 />
               </Form.Item>
             </Col>
-            {promotionDetail?.type === "MONEY" && (
+            )}
+            {(promotionDetail?.type === "MONEY" || promotionDetail?.type ==="SERVICE")&& (
               <Col span={12}>
                 <Form.Item
                   rules={[
