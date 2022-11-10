@@ -73,7 +73,7 @@ const SideBar = ({ handleOpenKey }) => {
         getItem("Thống kê - Báo cáo", "8", <BarChartOutlined />, [
           getItem("Doanh số", "bill-report"),
           // getItem("Dịch vụ", "service-report"),
-          getItem("Khuyến mãi", "promotion-report"),
+          // getItem("Khuyến mãi", "promotion-report"),
         ]),
       ]);
     } else {
@@ -107,7 +107,7 @@ const SideBar = ({ handleOpenKey }) => {
         getItem("Thống kê - Báo cáo", "8", <BarChartOutlined />, [
           getItem("Doanh số", "bill-report"),
           // getItem("Dịch vụ", "service-report"),
-          getItem("Khuyến mãi", "promotion-report"),
+          // getItem("Khuyến mãi", "promotion-report"),
         ]),
       ]);
     }
