@@ -117,6 +117,7 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
                       .toLowerCase()
                       .localeCompare(optionB.children.toLowerCase())
                   }
+                  
                 >
                   {brands.map((brand) => (
                     <Option key={brand}>{brand}</Option>

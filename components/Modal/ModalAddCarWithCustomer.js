@@ -155,6 +155,7 @@ const ModalAddCarWithCustomer = ({
                 <Select
                   showSearch
                   onChange={(value) => {
+                    form.setFieldsValue({ carModel: undefined });
                     setBrandSelected(value);
                   }}
                   placeholder="Chọn thương hiệu"
@@ -209,7 +210,10 @@ const ModalAddCarWithCustomer = ({
               <Button
                 icon={<PlusCircleOutlined />}
                 type="primary"
-                onClick={() => setModalCarModel(true)}
+                onClick={() => {
+                  form.getFieldValue("brand") ?
+                  setModalCarModel(true) : openNotification("Vui lòng chọn thương hiệu xe trước")}
+                }
               ></Button>
             </Col>
             {!customerId && (
