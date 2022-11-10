@@ -90,8 +90,6 @@ const ModalAddCarWithCustomer = ({
     form.setFieldsValue({ carModel: data.carModelCode });
   };
 
-
-
   useEffect(() => {
     if (!customerId) {
       getUsersData();
@@ -145,7 +143,15 @@ const ModalAddCarWithCustomer = ({
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item label="Thương hiệu" name="brand">
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                label="Thương hiệu"
+                name="brand"
+              >
                 <Select
                   showSearch
                   onChange={(value) => {
@@ -169,7 +175,15 @@ const ModalAddCarWithCustomer = ({
               </Form.Item>
             </Col>
             <Col span={10}>
-              <Form.Item label="Model" name="carModel">
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                label="Model"
+                name="carModel"
+              >
                 <Select
                   showSearch
                   placeholder="Chọn Model"

@@ -147,8 +147,13 @@ const ServicePage = () => {
                     hoverable
                     cover={<Image layout="fill" src={item.imageUrl} />}
                   />
+                  <div style={{textAlign:'center',padding:"5px"}}>
+                  <h5 style={{font:'bold'}}>{item.name}</h5>
+                  <span>{formatMoney(item.price)}</span>
+                  </div>
+                  
 
-                  <Card.Meta
+                  {/* <Card.Meta
                     style={{
                       display: "flex",
                       marginTop: "5px",
@@ -156,7 +161,7 @@ const ServicePage = () => {
                     }}
                     title={item.name}
                     description={formatMoney(item.price)}
-                  />
+                  /> */}
                 </List.Item>
               )}
             />

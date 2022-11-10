@@ -213,47 +213,6 @@ const ServiceCustomer = ({ status }) => {
         break;
     }
   };
-  const handleStatusInDrawer = () => {
-    switch (orderDetail.status) {
-      case -100:
-        return "Đã hủy";
-      case 10:
-        return "Đã hoàn thành";
-      case 100:
-        return "Đã xuất hóa đơn";
-      case 0:
-        return "Đang chờ xử lý";
-      case 2:
-        return (
-          <>
-            <Col span={8}>
-              <DescriptionItem
-                title="Tiếp nhận yêu cầu"
-                content={moment(orderDetail.createDate).format(formatDate)}
-              />
-            </Col>
-            <Col span={8}>
-              <DescriptionItem
-                title="Bắt đầu xử lý"
-                content={moment(orderDetail.carExecutingDate).format(
-                  formatDate
-                )}
-              />
-            </Col>
-            <Col span={8}>
-              <DescriptionItem
-                title="Hoàn thành dự kiến"
-                content={moment(orderDetail?.carExecutingDate)
-                  .add(orderDetail?.totalEstimateTime, "m")
-                  .format(formatDate)}
-              />
-            </Col>
-          </>
-        );
-      default:
-        break;
-    }
-  };
   const handleStatusInList = (item) => {
     switch (item.status) {
       case -100:
@@ -303,13 +262,13 @@ const ServiceCustomer = ({ status }) => {
             {" "}
             <Col span={8}>
               <DescriptionItem
-                title="Tiếp nhận yêu cầu"
-                content={moment(item.createDate).format(formatDate)}
+                title="Bắt đầu xử lý"
+                content={moment(item.carExecutingDate).format(formatDate)}
               />
             </Col>
             <Col span={8}>
               <DescriptionItem
-                title="hoàn thành"
+                title="Hoàn thành"
                 content={moment(item?.carExecutedDate).format(formatDate)}
               />
             </Col>
@@ -429,15 +388,14 @@ const ServiceCustomer = ({ status }) => {
                   content={item.totalEstimateTime + " phút"}
                 />
               </Col>
-              {item.status === 10 ||
-                (item.status === 100 && (
+              {(item.status === 10 || item.status === 100) && (
                   <Col span={8}>
                     <DescriptionItem
                       title="Thời gian xử lý thực tế"
                       content={item.totalExecuteTime + " phút"}
                     />
                   </Col>
-                ))}
+                )}
             </Row>
             {handleStatusInList(item)}
           </List.Item>

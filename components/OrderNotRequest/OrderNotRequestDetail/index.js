@@ -113,16 +113,16 @@ export const OrderNotRequestDetail = ({ orderId }) => {
   const handleStep = () => {
     switch (order?.status) {
       case 0:
-        return 0
+        return 0;
       case 2:
-        return 1
+        return 1;
       case 10:
-        return 2
+        return 2;
       case 100:
-        return 4
+        return 4;
       case -100:
-        return 2
-      break;
+        return 2;
+        break;
     }
   };
 
@@ -265,7 +265,11 @@ export const OrderNotRequestDetail = ({ orderId }) => {
             >
               <Title level={4}>Nhân viên xử lý</Title>
               <Timeline>
-                <span>{user?.name + " - " + user?.phone}</span>
+                {user ? (
+                  <span>{user?.name + " - " + user?.phone}</span>
+                ) : (
+                  <span style={{color:'red'}}> Chưa có nhân viên xử lý</span>
+                )}
 
                 {(order?.status === 0 || order?.status === 2) && (
                   <EditOutlined
@@ -341,7 +345,10 @@ export const OrderNotRequestDetail = ({ orderId }) => {
                   style={{ marginBottom: "1rem" }}
                   span={24}
                 >
-                  <Steps current={handleStep()} className="site-navigation-steps">
+                  <Steps
+                    current={handleStep()}
+                    className="site-navigation-steps"
+                  >
                     <Steps.Step
                       title="Tiếp nhận yêu cầu"
                       status="finish"

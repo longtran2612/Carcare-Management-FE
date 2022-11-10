@@ -23,6 +23,7 @@ import {
   SearchOutlined,
   PlayCircleTwoTone,
   EditOutlined,
+  PlusCircleFilled,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
@@ -209,7 +210,7 @@ function ModalSelectOrder({ onSelectOrder }) {
       title: "Nhiên viên xử lý",
       dataIndex: "executorName",
       key: "executorName",
-      width: 200,
+      width: 220,
       render: (text, record) => {
         return (
           <div>
@@ -221,7 +222,7 @@ function ModalSelectOrder({ onSelectOrder }) {
                 setShowChangeExcutor(true);
               }}
             />
-            {record.executorName}{" "}
+            {record.executorName ? record.executorName : <span style={{color:'red'}}>Chưa có nhân viên xử lý </span>}
           </div>
         );
       },
@@ -338,7 +339,7 @@ function ModalSelectOrder({ onSelectOrder }) {
             <Row>
               <Col span={8} style={{ marginRight: "10px" }}>
                 <Input.Search
-                  placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
+                  placeholder="Tìm kiếm"
                   onChange={(e) => setSearchGlobal(e.target.value)}
                   onSearch={(value) => setSearchGlobal(value)}
                   value={searchGlobal}
@@ -356,6 +357,7 @@ function ModalSelectOrder({ onSelectOrder }) {
                 <Button
                   style={{ float: "right" }}
                   type="primary"
+                  icon ={<PlusCircleFilled/>}
                   onClick={() => setModalOrder(true)}
                 >
                   {" "}

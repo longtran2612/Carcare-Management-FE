@@ -198,12 +198,6 @@ function ServiceOrder({ onSelected, selectedService }) {
       ...getColumnSearchProps("name"),
     },
     {
-      title: "Loại dịch vụ",
-      dataIndex: "type",
-      key: "type",
-      ...getColumnSearchProps("type"),
-    },
-    {
       title: "Thời gian xử lí",
       dataIndex: "estimateTime",
       key: "estimateTime",
@@ -263,7 +257,7 @@ function ServiceOrder({ onSelected, selectedService }) {
           totalPromotion += total;
         }
       } else {
-        if (promotion.type === "MONEY") {
+        if (promotion.type === "MONEY" || promotion.type === "SERVICE") {
           totalPromotion += promotion.amount;
         }
       }

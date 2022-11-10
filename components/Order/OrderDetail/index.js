@@ -189,14 +189,16 @@ export const OrderDetail = ({ orderRequestId }) => {
             >
               <Title level={4}>Nhân viên xử lý</Title>
               <Timeline>
-                <span>{user?.name + " - " + user?.phone}</span>
+                {user ? (
+                  <span>{user?.name + " - " + user?.phone}</span>
+                ) : (
+                  <span style={{ color: "red" }}> Chưa có nhân viên xử lý</span>
+                )}
 
-              
-                  <EditOutlined
-                    style={{ marginLeft: "5px" }}
-                    onClick={() => setShowChangeExcutor(true)}
-                  />
-                
+                <EditOutlined
+                  style={{ marginLeft: "5px" }}
+                  onClick={() => setShowChangeExcutor(true)}
+                />
               </Timeline>
               <Title level={4}>Thông tin khách hàng</Title>
               <Timeline>
