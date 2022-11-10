@@ -86,9 +86,9 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
     } catch (error) {
       setLoading(false);
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -115,9 +115,9 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
         onUpdateCarModel();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

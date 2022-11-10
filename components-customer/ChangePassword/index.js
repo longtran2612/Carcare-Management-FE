@@ -4,7 +4,7 @@ import { LockOutlined, SmileOutlined } from "@ant-design/icons";
 import { changePassword2 } from "pages/api/authAPI";
 import Loading from "components/Loading";
 import Cookies from "js-cookie";
-import { openNotification } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 
 function ChangePassword() {
   const [loading, setLoading] = useState(false);
@@ -24,9 +24,9 @@ function ChangePassword() {
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
       setLoading(false);
     }

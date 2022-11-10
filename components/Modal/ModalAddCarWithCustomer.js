@@ -3,7 +3,7 @@ import { Modal, Row, Col, Form, Input, Select, Button } from "antd";
 import { createCar } from "pages/api/carAPI";
 import { getCarModel, getCarModelByBrand } from "pages/api/carModel";
 import { validateMessages } from "utils/messageForm";
-import { openNotification } from "utils/notification";
+import { openNotification,openNotificationWarning } from "utils/notification";
 import ModalAddCarModel from "./ModalAddCarModal";
 import { getCustomers } from "pages/api/customerAPI";
 import { PlusCircleOutlined } from "@ant-design/icons";
@@ -65,7 +65,7 @@ const ModalAddCarWithCustomer = ({
       onSuccess(res?.data?.Data);
       form.resetFields();
     } catch (error) {
-      openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+      openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
     }
   };
   const getCarModels = async () => {

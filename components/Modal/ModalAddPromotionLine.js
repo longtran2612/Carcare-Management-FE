@@ -3,7 +3,7 @@ import { Modal, Form, Input, Row, Col, DatePicker, Select } from "antd";
 import moment from "moment";
 import { createPromotionLine } from "pages/api/promotionLineAPI";
 import { validateMessages } from "utils/messageForm";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 const formatDate = "DD/MM/YYYY";
 
 const ModalAddPromotionLine = ({
@@ -28,9 +28,9 @@ const ModalAddPromotionLine = ({
       form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

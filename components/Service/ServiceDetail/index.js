@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import { getServiceById, updateService } from "pages/api/serviceAPI";
 import { UploadOutlined } from "@ant-design/icons";
 import { uploadImage } from "pages/api/uploadAPI";
-import { openNotification } from "utils/notification";
+import { openNotification,openNotificationWarning } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -101,9 +101,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       onUpdateService();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Cập nhật bảng giá thất bại");
+        openNotificationWarning("Cập nhật bảng giá thất bại");
       }
     }
   };
@@ -136,9 +136,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       openNotification("Thành công", "Tải ảnh lên thành công");
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

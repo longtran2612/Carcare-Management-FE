@@ -164,7 +164,7 @@ const BillTable = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      openNotification("Thất bại", "Không thể hủy hóa đơn này");
+      openNotificationWarning("Thất bại", "Không thể hủy hóa đơn này");
       setLoading(false);
     }
   };

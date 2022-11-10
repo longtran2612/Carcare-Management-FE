@@ -15,7 +15,7 @@ import {
   Cascader,
 } from "antd";
 import { useRouter } from "next/router";
-import { openNotification } from "utils/notification";
+import { openNotification,openNotificationWarning } from "utils/notification";
 import {
   getUserByPhone,
   updateUserById,
@@ -85,12 +85,12 @@ const UserProfile = () => {
     } catch (error) {
       setLoading(false);
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotificationWarning(error?.response?.data?.message[0]);
       } else {
-        openNotification(
-          "Thất bại",
+        openNotificationWarning(
+       
           "Có lỗi xảy ra, vui lòng thử lại sau",
-          "bottomRight"
+        
         );
       }
     }
@@ -123,9 +123,9 @@ const UserProfile = () => {
       openNotification("Thành công!", "Cập nhật người dùng thành công");
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message[0]);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning( "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -154,12 +154,13 @@ const UserProfile = () => {
         return { ...prevState, image: response.data.Data[0] };
       });
       setListFiles({ images: [], imageBlob: [] });
+      openNotification("Thành công!", "Tải ảnh lên thành công");
       setModalUpload(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

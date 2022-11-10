@@ -16,7 +16,7 @@ import {
 import { UploadOutlined } from "@ant-design/icons";
 import { getCarModelByBrand } from "pages/api/carModel";
 import { updateCar } from "pages/api/carAPI";
-import { openNotification } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import Loading from "components/Loading";
 const { TextArea } = Input;
 
@@ -82,9 +82,9 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
       openNotification("Thành công", "Cập nhật xe thành công");
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

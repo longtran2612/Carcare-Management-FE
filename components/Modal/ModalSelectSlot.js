@@ -8,7 +8,7 @@ import slot_available from "public/images/slot_available.png";
 import slot_unavailable from "public/images/slot_unavailable.png";
 import Image from "next/image";
 import { executeCarSlot } from "pages/api/carSlotApi";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 
 const { Title } = Typography;
 
@@ -37,9 +37,9 @@ function ModalSelectSlot({ onSelectOrder, show, onSuccess, handleCancel }) {
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "có lỗi xảy ra");
+        openNotificaopenNotificationWarningtion( "có lỗi xảy ra");
       }
       setLoading(false);
     }

@@ -19,7 +19,7 @@ import { getCategories } from "pages/api/categoryAPI";
 import Loading from "components/Loading";
 import { validateMessages } from "utils/messageForm";
 import TextArea from "antd/lib/input/TextArea";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import { formatCountdown } from "antd/lib/statistic/utils";
 
 function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
@@ -92,9 +92,9 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
       getPromotionDetail();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

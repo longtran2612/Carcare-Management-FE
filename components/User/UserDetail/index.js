@@ -13,7 +13,7 @@ import {
   Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import { getUserById, updateUserById } from "pages/api/userAPI";
 import { uploadImage } from "pages/api/uploadAPI";
 import { validateMessages } from "utils/messageForm";
@@ -110,9 +110,9 @@ function UserDetail  ({ userId, onUpdateUser }) {
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Cập nhật thông tin nhân viên thất bại");
+        openNotificationWarning("Cập nhật thông tin nhân viên thất bại");
       }
       setLoading(false);
     }
@@ -146,9 +146,9 @@ function UserDetail  ({ userId, onUpdateUser }) {
       setModalUpload(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

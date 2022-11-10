@@ -27,7 +27,7 @@ import slot_available from "public/images/slot_available.png";
 import slot_unavailable from "public/images/slot_unavailable.png";
 import Loading from "components/Loading";
 import moment from "moment";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import {
   UserOutlined,
   CarOutlined,
@@ -59,9 +59,9 @@ const CarSlot = () => {
     } catch (error) {
       setLoading(false);
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -89,9 +89,9 @@ const CarSlot = () => {
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
       setLoading(false);
     }
@@ -180,9 +180,9 @@ const CarSlot = () => {
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
       setLoading(false);
     }
@@ -198,9 +198,9 @@ const CarSlot = () => {
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
       setLoading(false);
     }

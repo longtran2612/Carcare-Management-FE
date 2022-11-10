@@ -16,7 +16,7 @@ import {
 import { useRouter } from "next/router";
 import { getCarModelByBrand } from "pages/api/carModel";
 import { uploadImage } from "pages/api/uploadAPI";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import { getCarByCode, updateCar } from "pages/api/carAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
@@ -88,7 +88,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       setBrandSelected(response.data.Data.brand);
       setLoading(false);
     } catch (error) {
-      openNotification("Thất bại!", "Đã có lỗi xảy ra");
+      openNotificationWarning( "Đã có lỗi xảy ra");
       setLoading(false);
     }
   };
@@ -135,9 +135,9 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       fetchcarDetail();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -168,7 +168,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       setListFiles({ images: [], imageBlob: [] });
       setModalUpload(false);
     } catch (error) {
-      openNotification("Thất bại!", "Đã có lỗi xảy ra");
+      openNotificationWarning("Đã có lỗi xảy ra");
     }
   };
 

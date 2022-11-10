@@ -23,7 +23,7 @@ import {
 import { createBill } from "pages/api/billAPI";
 import { getCarbyCustomerId } from "pages/api/carAPI";
 import { validateMessages } from "utils/messageForm";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import { formatMoney } from "utils/format";
 import moment from "moment";
 import Image from "next/image";
@@ -148,9 +148,9 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       setShowPrint(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

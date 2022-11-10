@@ -45,7 +45,7 @@ import Loading from "components/Loading";
 import Image from "next/image";
 import moment from "moment";
 import ModalSelectOrder from "components/Modal/ModalSelectOrder";
-import { openNotification } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import UpDateServiceOrder from "components/Modal/ModalUpdateServiceOrder";
@@ -107,8 +107,6 @@ const CarSlotDetail = ({ carSlotId }) => {
       console.log(error);
     }
   };
-
-
 
   const fetchCarDetail = async (data) => {
     setLoading(true);
@@ -230,9 +228,9 @@ const CarSlotDetail = ({ carSlotId }) => {
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "có lỗi xảy ra");
+        openNotificationWarning("Đã có lỗi xảy ra");
       }
       setLoading(false);
     }
@@ -254,7 +252,11 @@ const CarSlotDetail = ({ carSlotId }) => {
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
-      openNotification("Thất bại!", "Đã có lỗi xảy ra");
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Đã có lỗi xảy ra");
+      }
       setLoading(false);
     }
   };
@@ -267,7 +269,11 @@ const CarSlotDetail = ({ carSlotId }) => {
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
-      openNotification("Thất bại!", "Đã có lỗi xảy ra");
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Đã có lỗi xảy ra");
+      }
       setLoading(false);
     }
   };
@@ -342,11 +348,10 @@ const CarSlotDetail = ({ carSlotId }) => {
                     style={{ marginRight: "10px" }}
                     className="carslot-customer content-white"
                   >
-                   
                     <Title level={4}>Nhân viên xử lý</Title>
                     <Timeline>
                       <span>{user?.name + " - " + user?.phone}</span>
-                  
+
                       <EditOutlined
                         style={{ marginLeft: "5px" }}
                         onClick={() => setShowChangeExcutor(true)}

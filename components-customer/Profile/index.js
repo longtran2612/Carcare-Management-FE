@@ -16,7 +16,7 @@ import {
   InputNumber,
 } from "antd";
 import { useRouter } from "next/router";
-import { openNotification } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import { updateUserById, uploadImagesUser } from "pages/api/userAPI";
 import { getCustomerById, updateCustomer } from "pages/api/customerAPI";
 import { validateMessages } from "utils/messageForm";
@@ -73,7 +73,11 @@ export const ProfileCustomer = () => {
           ? moment(moment(response.data.Data.dateOfBirth), formatDate)
           : null,
         address: response.data.Data.address,
-        addressvn: [response.data.Data.provinceCode, response.data.Data.districtCode, response.data.Data.wardCode],
+        addressvn: [
+          response.data.Data.provinceCode,
+          response.data.Data.districtCode,
+          response.data.Data.wardCode,
+        ],
         image: response.data.Data.image,
         status: response.data.Data.status,
       });
@@ -114,13 +118,9 @@ export const ProfileCustomer = () => {
       openNotification("Thành công", "Cập nhật thông tin thành công");
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification(
-          "Thất bại",
-          "Có lỗi xảy ra, vui lòng thử lại sau",
-          "bottomRight"
-        );
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -149,16 +149,13 @@ export const ProfileCustomer = () => {
         return { ...prevState, image: response.data.Data[0] };
       });
       setListFiles({ images: [], imageBlob: [] });
+      openNotification("Thành công", "Tải ảnh lên thành công");
       setModalUpload(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification(
-          "Thất bại",
-          "Có lỗi xảy ra, vui lòng thử lại sau",
-          "bottomRight"
-        );
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -225,21 +222,13 @@ export const ProfileCustomer = () => {
               </Col>
 
               <Col span={6}>
-                <Form.Item
-                  label="Ngày sinh"
-                  name="dateOfBirth"
-                  
-                >
+                <Form.Item label="Ngày sinh" name="dateOfBirth">
                   <DatePicker format={formatDate} />
                 </Form.Item>
               </Col>
 
               <Col span={6}>
-                <Form.Item
-                  label="Giới tính"
-                  name="gender"
-                  
-                >
+                <Form.Item label="Giới tính" name="gender">
                   <Select>
                     <Select.Option value="Nam">Nam</Select.Option>
                     <Select.Option value="Nữ">Nữ</Select.Option>
@@ -247,11 +236,7 @@ export const ProfileCustomer = () => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Quốc tịch"
-                  name="nationality"
-                  
-                >
+                <Form.Item label="Quốc tịch" name="nationality">
                   <Input />
                 </Form.Item>
               </Col>
@@ -282,11 +267,7 @@ export const ProfileCustomer = () => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item
-                  label="Email"
-                  name="email"
-                 
-                >
+                <Form.Item label="Email" name="email">
                   <Input />
                 </Form.Item>
               </Col>
@@ -312,11 +293,7 @@ export const ProfileCustomer = () => {
                 </Form.Item>
               </Col>
               <Col span={24}>
-                <Form.Item
-                  label="Địa chỉ"
-                  name="address"
-                 
-                >
+                <Form.Item label="Địa chỉ" name="address">
                   <TextArea rows={4} />
                 </Form.Item>
               </Col>

@@ -13,7 +13,7 @@ import {
   Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import { getPricesByHeader } from "pages/api/priceAPI";
 import {
   getPriceHeaderById,
@@ -241,9 +241,9 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Cập nhật bảng giá thất bại");
+        openNotificationWarning("Cập nhật bảng giá thất bại");
       }
       setLoading(false);
     }

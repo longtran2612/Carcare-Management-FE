@@ -1,6 +1,6 @@
 import { notification } from "antd";
-import {SmileOutlined} from '@ant-design/icons';
-const openNotification = (message = "", description = "",placement="topRight") => {
+import {SmileOutlined ,WarningOutlined} from '@ant-design/icons';
+const openNotification = (message = "Thành công", description = "",placement="topRight") => {
   notification.open({
     message: message,
     description: description,
@@ -16,5 +16,21 @@ const openNotification = (message = "", description = "",placement="topRight") =
 
   });
 };
+const openNotificationWarning = (description = "",message = "Có lỗi xảy ra",placement="topRight") => {
+  notification.open({
+    message: message,
+    description: description,
+    icon:  <WarningOutlined style={{ color: '#D8C235' }} />,
+    placement: placement,
+  
+    style: {
+     backgroundColor: "#E8EED9",
+      color: "#60801C",
+      // textAlign: "center",
+      borderRadius: "10px",
+    },
 
-export { openNotification };
+  });
+};
+
+export { openNotification ,openNotificationWarning};

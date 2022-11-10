@@ -3,7 +3,7 @@ import { Modal, Row, Col, Form, Input, Select, InputNumber } from "antd";
 import { createCarModel } from "pages/api/carModel";
 
 import { validateMessages } from "utils/messageForm";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 const { TextArea } = Input;
 import moment from "moment";
 
@@ -39,9 +39,9 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
       form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại","Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

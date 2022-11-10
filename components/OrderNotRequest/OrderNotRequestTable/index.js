@@ -27,7 +27,7 @@ import {
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 
 import { OrderNotRequestDetail } from "../OrderNotRequestDetail";
@@ -281,11 +281,7 @@ function OrderNotRequestTable({}) {
       setOrders(res.data.Data.content);
       setLoading(false);
     } catch (error) {
-      if (error.response.data.message) {
-        openNotification(error.response.data.message);
-      } else {
-        openNotification("Thất bại", "Đã có lỗi xảy ra");
-      }
+      console.log(error);
       setLoading(false);
     }
   };

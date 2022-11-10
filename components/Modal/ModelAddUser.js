@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Form, Input, Select, Col, Row, Cascader,InputNumber ,DatePicker  } from "antd";
 import { createUser } from "pages/api/userAPI";
 import { validateMessages } from "utils/messageForm";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import JsonData from "data/address-vn.json";
 
 const { TextArea } = Input;
@@ -48,9 +48,9 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
       form.resetFields();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };

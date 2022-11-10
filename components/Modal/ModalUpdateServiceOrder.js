@@ -22,7 +22,7 @@ import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
 import { updateOrder } from "pages/api/orderAPI";
 import moment from "moment";
-import { openNotification } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import { getAllPromotionUseAbleByServiceIds } from "pages/api/promotionDetail";
 import DrawerPromotionOrder from "components/Drawer/DrawerPromotionOrder";
 const { Title } = Typography;
@@ -259,7 +259,7 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
       onSuccess();
       setLoading(false);
     } catch (error) {
-      openNotification("Thất bại", "cập nhật yêu cầu thất bại");
+      openNotificationWarning("cập nhật yêu cầu thất bại");
       console.log(error);
     }
   };

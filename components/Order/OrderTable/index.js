@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import { getOrders, cancelOrder } from "pages/api/orderAPI";
 import moment from "moment";
 const formatDate = "HH:mm DD/MM/YYYY ";
-import { openNotification } from "utils/notification";
+import { openNotification,openNotificationWarning } from "utils/notification";
 import { PlusOutlined } from "@ant-design/icons";
 
 import Loading from "components/Loading";
@@ -145,7 +145,7 @@ function OrderTable({}) {
       openNotification("Thành công", "Hủy đơn hàng thành công");
       handleGetorders();
     } catch (err) {
-      openNotification("Thất bại", "Hủy đơn hàng thất bại");
+      openNotificationWarning("Hủy đơn hàng thất bại");
       setLoading(false);
     }
   };
@@ -309,7 +309,7 @@ function OrderTable({}) {
       setOrders(res.data.Data.content);
       setLoading(false);
     } catch (error) {
-      openNotification("Thất bại", "Lấy danh sách đơn hàng thất bại");
+      openNotificationWarning("Lấy danh sách đơn hàng thất bại");
       setLoading(false);
     }
   };

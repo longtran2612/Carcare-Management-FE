@@ -3,7 +3,7 @@ import { Modal, Row, Col, Select, Form, Divider } from "antd";
 
 import { getUserAvaliable, getUsers } from "pages/api/userAPI";
 import { updateOrder } from "pages/api/orderAPI";
-import { openNotification } from "utils/notification";
+import { openNotification ,openNotificationWarning } from "utils/notification";
 import Loading from "components/Loading";
 
 const ModalChangeExcutor = ({ order, show, onSuccess, handleCancel }) => {
@@ -26,9 +26,9 @@ const ModalChangeExcutor = ({ order, show, onSuccess, handleCancel }) => {
       onSuccess();
     } catch (error) {
       if (error?.response?.data?.message) {
-        openNotification(error?.response?.data?.message);
+        openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotification("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
       setLoading(false);
     }
@@ -60,7 +60,7 @@ const ModalChangeExcutor = ({ order, show, onSuccess, handleCancel }) => {
           {
             userChange
               ? handleChangeUser()
-              : openNotification("Thất bại", "Vui lòng chọn nhân viên xử lý");
+              : openNotificationWarning("Vui lòng chọn nhân viên xử lý");
           }
         }}
         okText="Thay đổi"
