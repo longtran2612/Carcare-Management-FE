@@ -13,14 +13,20 @@ import {
   Cascader,
 } from "antd";
 import { useRouter } from "next/router";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import { updateUserById, uploadImagesUser } from "pages/api/userAPI";
 import { getCustomerByCode, updateCustomer } from "pages/api/customerAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
-import { CarOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  CarOutlined,
+  UploadOutlined,
+  PhoneOutlined,
+  MailOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import Loading from "components/Loading";
 import JsonData from "data/address-vn.json";
 import DrawerCar from "components/Drawer/DrawerCar";
@@ -215,7 +221,9 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
+                  />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -247,7 +255,10 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
               </Col>
               <Col span={6}>
                 <Form.Item label="Ngày sinh" name="dateOfBirth">
-                  <DatePicker format={formatDate} />
+                  <DatePicker
+                    disabledDate={(d) => !d || d.isSameOrAfter(moment())}
+                    format={formatDate}
+                  />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -279,30 +290,54 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
                   name="phoneNumber"
                   rules={[
                     {
+                      pattern: new RegExp("^(84|0[3|5|7|8|9])+([0-9]{8})$"),
                       required: true,
+                      message:
+                        "Số điện thoại không hợp lệ! Số điện thoại bao gồm 10 ký tự số bắt đầu là 84 hoặc 03, 05, 07, 08, 09",
                     },
                   ]}
                 >
-                  <Input disabled="true" />
+                  <Input
+                    minLength={10}
+                    maxLength={10}
+                    prefix={<PhoneOutlined className="site-form-item-icon" />}
+                    placeholder="số điện thoại"
+                  />
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item
-                  label="Số CMND"
-                  name="identityNumber"
                   rules={[
                     {
                       required: true,
+                      pattern: new RegExp("[0-9]{12}"),
+                      message:
+                        "Số CMND/CCCD không hợp lệ!, Số CMND/CCCD bao gồm 12 ký tự số",
                     },
                   ]}
+                  name="identityNumber"
+                  label="Số CMND"
                 >
-                  <Input disabled />
+                  <Input maxLength={12} />
                 </Form.Item>
               </Col>
 
               <Col span={8}>
-                <Form.Item label="Email" name="email">
-                  <Input />
+                <Form.Item
+                  rules={[
+                    {
+                      pattern: new RegExp(
+                        "^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$"
+                      ),
+                      message: "Email không hợp lệ!",
+                    },
+                  ]}
+                  name="email"
+                  label="Email"
+                >
+                  <Input
+                    prefix={<MailOutlined className="site-form-item-icon" />}
+                  />
                 </Form.Item>
               </Col>
 

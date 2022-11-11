@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Form, Input, Select, Col, Row, Cascader,InputNumber ,DatePicker  } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Select,
+  Col,
+  Row,
+  Cascader,
+  InputNumber,
+  DatePicker,
+} from "antd";
+import { PhoneOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { createUser } from "pages/api/userAPI";
 import { validateMessages } from "utils/messageForm";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import JsonData from "data/address-vn.json";
+import moment from "moment";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -110,7 +122,9 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
                 label="Tên nhân viên"
                 name="fullname"
               >
-                <Input />
+                <Input
+                  prefix={<UserOutlined className="site-form-item-icon" />}
+                />
               </Form.Item>
             </Col>
             <Col span={6}>
@@ -138,6 +152,7 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
                 <Input
                   minLength={10}
                   maxLength={10}
+                  prefix={<PhoneOutlined className="site-form-item-icon" />}
                   placeholder="số điện thoại"
                 />
               </Form.Item>
@@ -147,13 +162,15 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
                 rules={[
                   {
                     required: true,
-                    message: "Vui lòng nhập số CMND!",
+                    pattern: new RegExp("[0-9]{12}"),
+                    message:
+                      "Số CMND/CCCD không hợp lệ!, Số CMND/CCCD bao gồm 12 ký tự số",
                   },
                 ]}
                 name="identityNumber"
                 label="Số CMND"
               >
-                <InputNumber />
+                <Input maxLength={12} />
               </Form.Item>
             </Col>
 
@@ -170,12 +187,18 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
                 name="email"
                 label="Email"
               >
-                <Input />
+                <Input
+                  prefix={<MailOutlined className="site-form-item-icon" />}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item name="birthDay" label="Ngày sinh">
-                <DatePicker placeholder="Chọn ngày sinh" format={formatDate} />
+                <DatePicker
+                  disabledDate={(d) => !d || d.isSameOrAfter(moment())}
+                  placeholder="Chọn ngày sinh"
+                  format={formatDate}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>

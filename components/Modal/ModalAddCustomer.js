@@ -10,15 +10,16 @@ import {
   DatePicker,
   Cascader,
 } from "antd";
+import { PhoneOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { createCustomer } from "pages/api/customerAPI";
 import { validateMessages } from "utils/messageForm";
 import { openNotification, openNotificationWarning } from "utils/notification";
 import JsonData from "data/address-vn.json";
-
+import moment from "moment";
 const { TextArea } = Input;
 const { Option } = Select;
 
-function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
+function ModalAddCustomer({ show, onSuccess, handleCancel }) {
   const [form] = Form.useForm();
 
   const [addressData, setAddressData] = useState(JsonData);
@@ -29,7 +30,7 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
   const [provinceSelectedCode, setProvinceSelectedCode] = useState("");
   const [districtSelectedCode, setDistrictSelectedCode] = useState("");
   const [wardSelectedCode, setWardSelectedCode] = useState("");
-  
+
   const formatDate = "DD/MM/YYYY";
 
   const onFinish = async (values) => {
@@ -37,13 +38,13 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
       name: values.name,
       email: values.email,
       phoneNumber: values.phone,
-      address:values.address,
+      address: values.address,
       district: districtSelected,
       province: provinceSelected,
-      ward:wardSelected,
+      ward: wardSelected,
       districtCode: districtSelectedCode,
       provinceCode: provinceSelectedCode,
-      wardCode:wardSelectedCode,
+      wardCode: wardSelectedCode,
       gender: values.gender,
       dateOfBirth: values.dateOfBirth,
       nationality: values.nationality,
@@ -55,7 +56,10 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
       const res = await createCustomer(dataUser);
       console.log(res);
       openNotification("Thành công", "Tạo mới khách hàng thành công");
-      openNotification("Thành công", "Tài khoản khách hàng là số điện thoại,mật khẩu mặc định là 123456");
+      openNotification(
+        "Thành công",
+        "Tài khoản khách hàng là số điện thoại,mật khẩu mặc định là 123456"
+      );
       handleCancel();
       onSuccess(res.data.Data);
       form.resetFields();
@@ -123,15 +127,17 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
                 label="Tên người dùng"
                 name="name"
               >
-                <Input />
+                <Input
+                  prefix={<UserOutlined className="site-form-item-icon" />}
+                />
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item initialValue='Nam' name="gender" label="Giới tính">
+              <Form.Item initialValue="Nam" name="gender" label="Giới tính">
                 <Select>
                   <Option value="Nam">Nam</Option>
                   <Option value="Nữ">Nữ</Option>
-                  <Option value='Khác'>Khác</Option>
+                  <Option value="Khác">Khác</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -151,6 +157,7 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
                 <Input
                   minLength={10}
                   maxLength={10}
+                  prefix={<PhoneOutlined className="site-form-item-icon" />}
                   placeholder="số điện thoại"
                 />
               </Form.Item>
@@ -160,13 +167,15 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
                 rules={[
                   {
                     required: true,
-                    message: "Vui lòng nhập số CMND!",
+                    pattern: new RegExp("[0-9]{12}"),
+                    message:
+                      "Số CMND/CCCD không hợp lệ!, Số CMND/CCCD bao gồm 12 ký tự số",
                   },
                 ]}
                 name="identityNumber"
                 label="Số CMND"
               >
-                <InputNumber />
+                <Input maxLength={12} />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -182,20 +191,30 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
                 name="email"
                 label="Email"
               >
-                <Input />
+                <Input
+                  prefix={<MailOutlined className="site-form-item-icon" />}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item name="dateOfBirth" label="Ngày sinh">
-                <DatePicker placeholder="Chọn ngày sinh" format={formatDate} />
+                <DatePicker
+                  disabledDate={(d) => !d || d.isSameOrAfter(moment())}
+                  placeholder="Chọn ngày sinh"
+                  format={formatDate}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item initialValue='Việt Nam' name="nationality" label="Quốc gia">
+              <Form.Item
+                initialValue="Việt Nam"
+                name="nationality"
+                label="Quốc gia"
+              >
                 <Input />
               </Form.Item>
             </Col>
- 
+
             <Col span={24}>
               <Form.Item name="addressvn" label="Tỉnh/Thành phố - Quận - Huyện">
                 <Cascader
@@ -219,6 +238,6 @@ function ModalAddCustomer ({ show, onSuccess, handleCancel }) {
       </Modal>
     </>
   );
-};
+}
 
 export default ModalAddCustomer;

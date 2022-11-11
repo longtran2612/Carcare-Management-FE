@@ -4,16 +4,15 @@ import { createPrice } from "pages/api/priceAPI";
 import { getServices } from "pages/api/serviceAPI";
 
 import { validateMessages } from "utils/messageForm";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 
 const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
-  const [currency, setCurrency] = useState("VND");
   const [serviceSelected, setServiceSelected] = useState(null);
   const onFinish = async (values) => {
     let priceCreateData = {
       name: serviceSelected.name,
-      currency: currency,
+      currency: "VND",
       type: "NEW",
       price: values.price,
       priceHeaderId: priceHeaderId,
@@ -56,22 +55,6 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
     }
   }, [show]);
 
-  const selectCurrency = (
-    <Select
-      defaultValue="VND"
-      style={{
-        width: 60,
-      }}
-      value={currency}
-      onChange={(value) => setCurrency(value)}
-    >
-      <Option value="VND">Đ</Option>
-      <Option value="USD">$</Option>
-      <Option value="EUR">€</Option>
-      <Option value="GBP">£</Option>
-      <Option value="CNY">¥</Option>
-    </Select>
-  );
   return (
     <>
       <Modal
@@ -137,15 +120,18 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
                 rules={[
                   {
                     required: true,
+                    pattern: new RegExp("[0-9]"),
+                    message: "Giá phải là số có giá trị lớn hơn 0",
                   },
                 ]}
               >
                 <InputNumber
+                min={0}
                   formatter={(value) =>
                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   }
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  addonAfter={selectCurrency}
+                  addonAfter="VNĐ"
                 />
               </Form.Item>
             </Col>

@@ -408,15 +408,7 @@ const PromotionHeaderDetail = ({
                 style={{ bottom: "0", right: "20px", margin: "10px" }}
                 className="service-action"
               >
-                <div style={{ marginRight: "20px" }}>
-                  <Button
-                    onClick={() => {
-                      fetchPromotionHeaderDetail();
-                    }}
-                  >
-                    Đặt lại
-                  </Button>
-                </div>
+                
                 <div>
                   <Popconfirm
                     title="Xác nhận?"

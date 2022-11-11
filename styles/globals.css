@@ -120,6 +120,9 @@ ant-card-head-title{
   font:bold 1.2rem "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   color: #444444 !important;
 }
+.ant-input-affix-wrapper{
+ padding: 0 0 0 10px !important;
+}
 
 .background-login{
   background: linear-gradient(to top right, #AE9CE1, #F5E7DB);

@@ -23,7 +23,7 @@ import { getCarById } from "pages/api/carAPI";
 import { createOrder } from "pages/api/orderAPI";
 import { getCarbyCustomerId } from "pages/api/carAPI";
 import { validateMessages } from "utils/messageForm";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import ServiceOrder from "./ModalService";
 import { formatMoney } from "utils/format";
 import ModalAddCustomer from "./ModalAddCustomer";
@@ -101,12 +101,6 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     if (current == 2) {
       handleFetchPromotion();
       handleGetData();
-      form.setFieldValue(
-        "deliverDate",
-        moment(form.getFieldValue("executeDate"))
-          .add(30, "m")
-          .format(formatDate)
-      );
     }
   }, [show, current, form]);
 
@@ -218,7 +212,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
           totalPromotion += total;
         }
       } else {
-        if (promotion.type === "MONEY"|| promotion.type ==="SERVICE") {
+        if (promotion.type === "MONEY" || promotion.type === "SERVICE") {
           totalPromotion += promotion.amount;
         }
       }
@@ -229,10 +223,10 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     let total = totalPriceService() - totalPromotionAmount();
     return total;
   };
-const handleChangeCustomer =(values) => {
-  const user = users.find((u) => u.id === values);
-  setUserSelected(user)
-}
+  const handleChangeCustomer = (values) => {
+    const user = users.find((u) => u.id === values);
+    setUserSelected(user);
+  };
   return (
     <>
       <Modal
@@ -416,6 +410,9 @@ const handleChangeCustomer =(values) => {
                     ]}
                   >
                     <DatePicker
+                      disabledDate={(d) => !d || d.isBefore(moment())}
+                      disabledTime={(d) => !d || d.isBefore(moment())}
+                      showTime
                       placeholder="Ngày nhận xe dự kiến"
                       format={formatDate}
                     />
@@ -433,6 +430,9 @@ const handleChangeCustomer =(values) => {
                     ]}
                   >
                     <DatePicker
+                      showTime
+                      disabledDate={(d) => !d || d.isBefore(moment())}
+                      disabledTime={(d) => !d || d.isBefore(moment())}
                       placeholder="Ngày xử lý dự kiến"
                       format={formatDate}
                     />
@@ -576,10 +576,9 @@ const handleChangeCustomer =(values) => {
                           >
                             <Divider>Thông tin</Divider>
                             <Timeline style={{ marginTop: "5px" }}>
-                            <Timeline.Item>
-                               Nhân viên xử lý:{" "}
-                               {userSelected?.name || "Chưa chọn"}
-                               
+                              <Timeline.Item>
+                                Nhân viên xử lý:{" "}
+                                {userSelected?.name || "Chưa chọn"}
                               </Timeline.Item>
                               <Timeline.Item>
                                 Thời gian nhận xe dự kiến:{" "}

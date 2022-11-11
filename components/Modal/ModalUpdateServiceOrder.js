@@ -162,6 +162,19 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
       ),
   });
 
+  const handleTypeService = (value) => {
+    switch (value) {
+      case "NORMAL":
+        return <Tag color={"blue"}>{"Thông thường"}</Tag>;
+      case "NEW":
+        return <Tag color={"green"}>{"Mới"}</Tag>;
+      case "LIKE":
+        return <Tag color={"pink"}>{"Yêu thích"}</Tag>;
+      default:
+        break;
+    }
+  };
+
   const columns = [
     {
       title: "STT",
@@ -203,6 +216,9 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
       dataIndex: "type",
       key: "type",
       ...getColumnSearchProps("type"),
+      render: (text, record) => {
+        return handleTypeService(record.type);
+      },
     },
     {
       title: "Thời gian xử lí",
@@ -249,6 +265,11 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
   };
 
   const onFinish = async () => {
+    if (selectedRowKeys.length <= 0) {
+      openNotificationWarning("","Vui lòng chọn ít nhất 1 dịch vụ");
+      return;
+    }
+
     setLoading(true);
     let dataUpdate = {
       serviceIds: selectedRowKeys,
@@ -281,7 +302,7 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
           totalPromotion += total;
         }
       } else {
-        if (promotion.type === "MONEY"|| promotion.type ==="SERVICE") {
+        if (promotion.type === "MONEY" || promotion.type === "SERVICE") {
           totalPromotion += promotion.amount;
         }
       }
@@ -304,6 +325,9 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
         cancelText="Hủy bỏ"
         onOk={() => {
           onFinish();
+        }}
+        bodyStyle={{
+          paddingBottom: "0px",
         }}
       >
         <Row style={{ margin: "10px 0px" }}>
@@ -341,7 +365,7 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
           footer={() => {
             return (
               <>
-                <Row gutter={[16,4]}>
+                <Row gutter={[16, 10]}>
                   <Col style={{ marginRight: "40px" }} span={10}></Col>
                   <Col style={{ marginRight: "25px" }} span={4}>
                     Tổng dịch vụ
@@ -387,7 +411,7 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
                       {formatMoney(totalPromotionAmount() || 0)}
                     </span>
                   </Col>
-                  <Divider style={{margin:'0',padding:'0'}}/>
+                  <Divider style={{ margin: "0", padding: "0" }} />
                   <Col style={{ marginRight: "40px" }} span={10}></Col>
                   <Col style={{ marginRight: "25px" }} span={4}>
                     <span style={{ color: "red", fontWeight: "bold" }}>

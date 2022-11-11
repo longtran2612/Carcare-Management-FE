@@ -225,9 +225,7 @@ export const OrderDetail = ({ orderRequestId }) => {
                       {
                         order?.executorId
                           ? setModalSelectSlot(true)
-                          : openNotification(
-                              "Vui lòng chọn nhân viên xử lý"
-                            );
+                          : openNotification("Vui lòng chọn nhân viên xử lý");
                       }
                     }}
                     okText="Đồng ý"
@@ -261,19 +259,23 @@ export const OrderDetail = ({ orderRequestId }) => {
                     }
                   />
                   <Steps.Step
-                    title="Băt đầu xử lý"
-                    description={
-                      order?.carExecutingDate != null
-                        ? moment(order?.carExecutingDate).format(formatDate)
-                        : ""
-                    }
+                    title="Dự kiến nhận xe"
+                    description={moment(order?.estimateReceiveDate).format(
+                      formatDate
+                    )}
                   />
                   <Steps.Step
-                    title="Hoàn thành"
+                    title="Dự kiến xử lý"
+                    description={moment(order?.estimateExecuteDate).format(
+                      formatDate
+                    )}
+                  />
+                  <Steps.Step
+                    title="Dự kiến hoàn thành"
                     description={
-                      order?.carExecutedDate != null
-                        ? moment(order?.carExecutedDate).format(formatDate)
-                        : ""
+                      moment(order?.estimateExecuteDate)
+                      .add(order?.totalEstimateTime, "m")
+                      .format(formatDate)
                     }
                   />
                 </Steps>

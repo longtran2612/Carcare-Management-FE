@@ -19,7 +19,7 @@ import { getCategories } from "pages/api/categoryAPI";
 import Loading from "components/Loading";
 import { validateMessages } from "utils/messageForm";
 import TextArea from "antd/lib/input/TextArea";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import { formatCountdown } from "antd/lib/statistic/utils";
 
 function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
@@ -43,14 +43,14 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         maximumDiscount: response.data.Data[0].maximumDiscount,
         minimumSpend: response.data.Data[0].minimumSpend,
         categoryIds: response.data.Data[0].categoryIds,
-        
+
         customerType: response.data.Data[0].customerType,
         limitUsedTime: response.data.Data[0].limitUsedTime,
         limitPromotionAmount: response.data.Data[0].limitPromotionAmount,
         promotionUsedAmount: response.data.Data[0].promotionUsedAmount,
       });
-      if(response.data.Data[0].type === "SERVICE"){
-        if(response.data.Data[0].serviceIds){
+      if (response.data.Data[0].type === "SERVICE") {
+        if (response.data.Data[0].serviceIds) {
           form.setFieldsValue({
             serviceIds: response.data.Data[0].serviceIds[0],
           });
@@ -84,8 +84,8 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
         (dataUpdate.limitPromotionAmount = values.limitPromotionAmount);
     }
     if (values.type === "SERVICE") {
-      dataUpdate.amount = values.amount,
-      dataUpdate.serviceIds = [values.serviceIds];
+      (dataUpdate.amount = values.amount),
+        (dataUpdate.serviceIds = [values.serviceIds]);
     }
 
     try {
@@ -208,34 +208,45 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                 </Select>
               </Form.Item>
             </Col>
-            {(promotionDetail?.type != "SERVICE")&& (
-            <Col span={12}>
-              <Form.Item
-                label="Giá trị đơn hàng tối thiểu"
-                name="minimumSpend"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <InputNumber
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  addonAfter="Đ"
-                  min={0}
-                />
-              </Form.Item>
-            </Col>
+            {promotionDetail?.type != "SERVICE" && (
+              <Col span={12}>
+                <Form.Item
+                  label="Giá trị đơn hàng tối thiểu"
+                  name="minimumSpend"
+                  rules={[
+                    {
+                      required: true,
+                      pattern: new RegExp("[0-9]"),
+                      message:
+                        "Giá trị đơn hàng tối thiểu phải lớn hơn giá trị tiền khuyến mãi",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={
+                      promotionDetail?.type === "MONEY" ||
+                      promotionDetail?.type === "SERVICE"
+                        ? form.getFieldValue("amount")
+                        : 0
+                    }
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    addonAfter="VNĐ"
+                  />
+                </Form.Item>
+              </Col>
             )}
-            {(promotionDetail?.type === "MONEY" || promotionDetail?.type ==="SERVICE")&& (
+            {(promotionDetail?.type === "MONEY" ||
+              promotionDetail?.type === "SERVICE") && (
               <Col span={12}>
                 <Form.Item
                   rules={[
                     {
                       required: true,
+                      pattern: new RegExp("[0-9]"),
+                      message: "Giá phải là số có giá trị lớn hơn 0",
                     },
                   ]}
                   label="Giá trị khuyến mãi (Tiền)"
@@ -258,6 +269,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   rules={[
                     {
                       required: true,
+
                       message: "Vui lòng nhập Số % giảm từ 0 - 100",
                     },
                   ]}

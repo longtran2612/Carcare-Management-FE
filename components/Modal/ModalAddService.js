@@ -13,14 +13,13 @@ import {
 import { createService } from "pages/api/serviceAPI";
 import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
 const ModalAddService = ({ show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
-  const [currency, setCurrency] = useState("VND");
 
   const onFinish = async (values) => {
     console.log(values);
@@ -32,7 +31,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
       estimateTime: values.estimateTime,
       servicePrice: {
         price: values.price,
-        currency: currency,
+        currency: "VND",
       },
     };
     console.log(dataCreate);
@@ -68,23 +67,6 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
       handleFetchCategory();
     }
   }, [show]);
-
-  const selectCurrency = (
-    <Select
-      defaultValue="VND"
-      style={{
-        width: 60,
-      }}
-      value={currency}
-      onChange={(value) => setCurrency(value)}
-    >
-      <Option value="VND">Đ</Option>
-      <Option value="USD">$</Option>
-      <Option value="EUR">€</Option>
-      <Option value="GBP">£</Option>
-      <Option value="CNY">¥</Option>
-    </Select>
-  );
 
   return (
     <>
@@ -168,7 +150,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                   },
                 ]}
                 name="type"
-                initialValue='NEW'
+                initialValue="NEW"
               >
                 <Select style={{ width: "100%" }}>
                   <Option value="NORMAL">Thường</Option>
@@ -183,16 +165,19 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 rules={[
                   {
                     required: true,
+                    pattern: new RegExp("[0-9]"),
+                    message: "Giá phải là số có giá trị lớn hơn 0",
                   },
                 ]}
                 name="price"
               >
                 <InputNumber
+                  min={0}
                   formatter={(value) =>
                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   }
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  addonAfter={selectCurrency}
+                  addonAfter="VNĐ"
                 />
               </Form.Item>
             </Col>
@@ -202,11 +187,13 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 rules={[
                   {
                     required: true,
+                    pattern: new RegExp("[0-9]"),
+                    message: "Thời gian phải là số có giá trị lớn hơn 0",
                   },
                 ]}
                 name="estimateTime"
               >
-                <InputNumber addonAfter="phút" />
+                <InputNumber min={0} addonAfter="phút" />
               </Form.Item>
             </Col>
             <Col span={24}>

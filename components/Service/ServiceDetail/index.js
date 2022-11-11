@@ -244,11 +244,13 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   rules={[
                     {
                       required: true,
+                      pattern: new RegExp("[0-9]"),
+                      message: "Thời gian phải là số có giá trị lớn hơn 0",
                     },
                   ]}
                   name="estimateTime"
                 >
-                  <InputNumber addonAfter="Phút" />
+                  <InputNumber min={0} addonAfter="phút" />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -262,7 +264,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   name="price"
                 >
                   <InputNumber
-                    addonAfter="Đ"
+                    addonAfter="VNĐ"
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }

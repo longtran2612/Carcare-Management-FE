@@ -45,64 +45,43 @@ export const CustomerNavigation = () => {
   };
 
   const handleMenu = () => {
-    if (accessToken) {
-      return (
-        <Menu>
-          <Menu.Item key="1">
-            <Link href="/customer/profile">
-              <a>
-                <UserOutlined /> Trang cá nhân
-              </a>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link href="/customer">
-              <a>
-                <BarsOutlined /> Chức năng
-              </a>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Link href="/customer/order">
-              <a>
-                <BookOutlined /> Đơn hàng
-              </a>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <Link href="/customer/bill">
-              <a>
-                <BookOutlined /> Hóa đơn
-              </a>
-            </Link>
-          </Menu.Item>
+    return (
+      <Menu>
+        <Menu.Item key="1">
+          <Link href="/customer/profile">
+            <a>
+              <UserOutlined /> Trang cá nhân
+            </a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <Link href="/customer">
+            <a>
+              <BarsOutlined /> Chức năng
+            </a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="3">
+          <Link href="/customer/order">
+            <a>
+              <BookOutlined /> Đơn hàng
+            </a>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="4">
+          <Link href="/customer/bill">
+            <a>
+              <BookOutlined /> Hóa đơn
+            </a>
+          </Link>
+        </Menu.Item>
 
-          <Menu.Divider />
-          <Menu.Item key="6" onClick={handleLogout}>
-            <LogoutOutlined /> Đăng xuất
-          </Menu.Item>
-        </Menu>
-      );
-    } else {
-      return (
-        <Menu>
-          <Menu.Item key="0">
-            <Link href="/login">
-              <a>
-                <LoginOutlined /> Đăng nhập
-              </a>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="1">
-            <Link href="/registry">
-              <a>
-                <HighlightOutlined /> Đăng ký
-              </a>
-            </Link>
-          </Menu.Item>
-        </Menu>
-      );
-    }
+        <Menu.Divider />
+        <Menu.Item key="6" onClick={handleLogout}>
+          <LogoutOutlined /> Đăng xuất
+        </Menu.Item>
+      </Menu>
+    );
   };
 
   return (
@@ -159,17 +138,23 @@ export const CustomerNavigation = () => {
               </>
             )}
 
-            <li>
-              <a className="page-scroll">
-                <Dropdown overlay={handleMenu}>
-                  <a onClick={(e) => e.preventDefault()}>
-                    {accessToken ? "Cá nhân" : "Đăng ký/Đăng nhập"}{" "}
-                    <DownOutlined />
-                    {/* Cá nhân <DownOutlined /> */}
-                  </a>
-                </Dropdown>
-              </a>
-            </li>
+            {accessToken ? (
+              <li>
+                <a className="page-scroll">
+                  <Dropdown overlay={handleMenu}>
+                    <a onClick={(e) => e.preventDefault()}>
+                      Cá nhân <DownOutlined />
+                    </a>
+                  </Dropdown>
+                </a>
+              </li>
+            ) : (
+              <li>
+                <Link href="/login">
+                  <a className="page-scroll">Đăng nhập</a>
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>

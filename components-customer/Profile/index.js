@@ -23,7 +23,13 @@ import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
-import { UploadOutlined, SmileOutlined } from "@ant-design/icons";
+import {
+  UploadOutlined,
+  SmileOutlined,
+  PhoneOutlined,
+  MailOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import Loading from "components/Loading";
 import Cookies from "js-cookie";
 import JsonData from "data/address-vn.json";
@@ -217,13 +223,18 @@ export const ProfileCustomer = () => {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
+                  />
                 </Form.Item>
               </Col>
 
               <Col span={6}>
                 <Form.Item label="Ngày sinh" name="dateOfBirth">
-                  <DatePicker format={formatDate} />
+                  <DatePicker
+                    disabledDate={(d) => !d || d.isSameOrAfter(moment())}
+                    format={formatDate}
+                  />
                 </Form.Item>
               </Col>
 
@@ -235,39 +246,65 @@ export const ProfileCustomer = () => {
                   </Select>
                 </Form.Item>
               </Col>
+
+              <Col span={6}>
+                <Form.Item
+                  rules={[
+                    {
+                      pattern: new RegExp("^(84|0[3|5|7|8|9])+([0-9]{8})$"),
+                      required: true,
+                      message:
+                        "Số điện thoại không hợp lệ! Số điện thoại bao gồm 10 ký tự số bắt đầu là 84 hoặc 03, 05, 07, 08, 09",
+                    },
+                  ]}
+                  name="phoneNumber"
+                  label="Số điện thoại"
+                >
+                  <Input
+                    minLength={10}
+                    maxLength={10}
+                    prefix={<PhoneOutlined className="site-form-item-icon" />}
+                    placeholder="số điện thoại"
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                      pattern: new RegExp("[0-9]{12}"),
+                      message:
+                        "Số CMND/CCCD không hợp lệ!, Số CMND/CCCD bao gồm 12 ký tự số",
+                    },
+                  ]}
+                  name="identityNumber"
+                  label="Số CMND"
+                >
+                  <Input maxLength={12} />
+                </Form.Item>
+              </Col>
+
+              <Col span={6}>
+                <Form.Item
+                  rules={[
+                    {
+                      pattern: new RegExp(
+                        "^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$"
+                      ),
+                      message: "Email không hợp lệ!",
+                    },
+                  ]}
+                  name="email"
+                  label="Email"
+                >
+                  <Input
+                    prefix={<MailOutlined className="site-form-item-icon" />}
+                  />
+                </Form.Item>
+              </Col>
               <Col span={6}>
                 <Form.Item label="Quốc tịch" name="nationality">
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  label="Số CMND"
-                  name="identityNumber"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <Input disabled />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  label="Số điện thoại"
-                  name="phoneNumber"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <Input disabled />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="Email" name="email">
                   <Input />
                 </Form.Item>
               </Col>

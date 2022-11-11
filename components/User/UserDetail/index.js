@@ -13,19 +13,24 @@ import {
   Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import { getUserById, updateUserById } from "pages/api/userAPI";
 import { uploadImage } from "pages/api/uploadAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  UploadOutlined,
+  PhoneOutlined,
+  MailOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
 import JsonData from "data/address-vn.json";
 
-function UserDetail  ({ userId, onUpdateUser }) {
+function UserDetail({ userId, onUpdateUser }) {
   const router = useRouter();
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -214,7 +219,9 @@ function UserDetail  ({ userId, onUpdateUser }) {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
+                  />
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -254,34 +261,61 @@ function UserDetail  ({ userId, onUpdateUser }) {
                   name="phone"
                   rules={[
                     {
+                      pattern: new RegExp("^(84|0[3|5|7|8|9])+([0-9]{8})$"),
                       required: true,
+                      message:
+                        "Số điện thoại không hợp lệ! Số điện thoại bao gồm 10 ký tự số bắt đầu là 84 hoặc 03, 05, 07, 08, 09",
                     },
                   ]}
                 >
-                  <Input disabled="true" />
+                  <Input
+                    maxLength={10}
+                    minLength={10}
+                    prefix={<PhoneOutlined className="site-form-item-icon" />}
+                    placeholder="Nhập vào số điện thoại"
+                  />
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item
-                  label="Số CMND"
+                  label="Số CMND/CCCD"
                   name="identityNumber"
                   rules={[
                     {
                       required: true,
+                      pattern: new RegExp("[0-9]{12}"),
+                      message:
+                        "Số CMND/CCCD không hợp lệ!, Số CMND/CCCD bao gồm 12 ký tự số",
                     },
                   ]}
                 >
-                  <Input disabled />
+                  <Input maxLength={12} disabled />
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label="Email" name="email">
-                  <Input />
+                <Form.Item
+                  rules={[
+                    {
+                      pattern: new RegExp(
+                        "^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$"
+                      ),
+                      message: "Email không hợp lệ!",
+                    },
+                  ]}
+                  label="Email"
+                  name="email"
+                >
+                  <Input
+                    prefix={<MailOutlined className="site-form-item-icon" />}
+                  />
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item label="Ngày sinh" name="birthDay">
-                  <DatePicker format={formatDate} />
+                  <DatePicker
+                    disabledDate={(d) => !d || d.isSameOrAfter(moment())}
+                    format={formatDate}
+                  />
                 </Form.Item>
               </Col>
               <Col span={8}>
@@ -298,8 +332,7 @@ function UserDetail  ({ userId, onUpdateUser }) {
                   <Input />
                 </Form.Item>
               </Col>
-  
-             
+
               <Col span={24}>
                 <Form.Item
                   name="addressvn"
@@ -371,6 +404,6 @@ function UserDetail  ({ userId, onUpdateUser }) {
       <Loading loading={loading} />
     </>
   );
-};
+}
 
 export default UserDetail;

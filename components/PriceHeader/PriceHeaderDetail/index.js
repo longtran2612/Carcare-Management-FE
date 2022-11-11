@@ -13,7 +13,7 @@ import {
   Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import { getPricesByHeader } from "pages/api/priceAPI";
 import {
   getPriceHeaderById,
@@ -24,7 +24,7 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";
 import moment from "moment";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
+import { ClearOutlined, SearchOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
 const formatDate = "DD/MM/YYYY";
@@ -298,8 +298,9 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                     }
                     disabledDate={(d) =>
                       d.isBefore(moment()) ||
-                      !d || 
-                      form.getFieldValue("toDate") && d.isAfter(form.getFieldValue("toDate"))
+                      !d ||
+                      (form.getFieldValue("toDate") &&
+                        d.isAfter(form.getFieldValue("toDate")))
                     }
                     format={formatDate}
                   />
@@ -333,7 +334,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                   ]}
                   name="status"
                 >
-                  <Select disabled>
+                  <Select >
                     <Select.Option value="ACTIVE">Hoạt động</Select.Option>
                     <Select.Option value="INACTIVE">
                       Không hoạt động
@@ -352,15 +353,6 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                 style={{ bottom: "0", right: "20px", margin: "10px" }}
                 className="service-action"
               >
-                <div style={{ marginRight: "20px" }}>
-                  <Button
-                    onClick={() => {
-                      fetchPriceHeaderDetail();
-                    }}
-                  >
-                    Đặt lại
-                  </Button>
-                </div>
                 <div>
                   <Popconfirm
                     title="Cập nhật?"
@@ -378,7 +370,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                         });
                     }}
                   >
-                    <Button type="primary">Cập nhật</Button>
+                    <Button  icon={<SaveOutlined/>} type="primary">Cập nhật</Button>
                   </Popconfirm>
                 </div>
               </div>
