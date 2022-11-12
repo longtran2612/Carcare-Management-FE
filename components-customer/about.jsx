@@ -12,9 +12,9 @@ export const About = (props) => {
             <div className="about-text">
               <h2>Về chúng tôi</h2>
               <p>Thành lập và hoạt động trong ngành Chăm sóc xe (Detailing) 
-                từ tháng 08 năm 2022, VLCarCare chuyên cung cấp đa dạng các dịch vụ Chăm sóc xe như: Phủ Ceramic sơn/kính; Phủ nano sơn/kính; Dán phim cách nhiệt; Đánh bóng,
+                từ tháng 08 năm 2022, LVCarCare chuyên cung cấp đa dạng các dịch vụ Chăm sóc xe như: Phủ Ceramic sơn/kính; Phủ nano sơn/kính; Dán phim cách nhiệt; Đánh bóng,
                 hiệu chỉnh sơn; Vệ sinh- bảo dưỡng khoang động cơ và nội thất...</p>
-              <h3>Tại sao nên sử dụng dịch vụ ở VLCARCARE?</h3>
+              <h3>Tại sao nên sử dụng dịch vụ ở LVCARCARE?</h3>
               <div className="list-style">
                 <div className="col-lg-6 col-sm-6 col-xs-12">
                   <ul>

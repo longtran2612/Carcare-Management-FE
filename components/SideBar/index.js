@@ -13,7 +13,7 @@ import { Typography, Affix } from "antd";
 import React, { useState, useEffect } from "react";
 const { Title } = Typography;
 import { useRouter } from "next/router";
-import logo from "public/images/logo-sibar.svg";
+import logo from "public/images/logo-sibar.png";
 import Image from "next/image";
 import Link from "next/link";
 import Cookies from "js-cookie";

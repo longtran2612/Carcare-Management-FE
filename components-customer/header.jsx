@@ -1,30 +1,29 @@
-import { Carousel } from "antd";
-import bg1 from "public/img/intro-bg.jpg";
-import bg2 from "public/img/intro-bg2.jpg";
-import bg3 from "public/img/intro-bg3.jpg";
-import bg4 from "public/img/rua-xe.jpg";
-import bg5 from "public/img/danh-bong.jpg";
+import { Button, Carousel } from "antd";
+import { useRouter } from "next/router";
 
 export const CustomerHeader = () => {
+  const router = useRouter();
   return (
     <header id="header">
-      <Carousel draggable effect='fade' autoplay>
+      <Carousel draggable effect="fade" autoplay>
         <div className="intro bg1">
           <div className="overlay">
             <div className="container">
               <div className="row">
                 <div className="col-md-12 intro-text">
                   <h1>
-                    VL CARCARE
+                    LVCARCARE
                     <span></span>
                   </h1>
                   <p>Hãy tặng chiếc xe của bạn món quà tuyệt vời nhất</p>
-                  <a
-                    href="#features"
-                    className="btn btn-custom btn-lg page-scroll"
+                  <Button
+                    onClick={() => router.push("/login")}
+                    size="large"
+                    
+                    style={{width:'150px' ,height:"40px",background:'linear-gradient(to top right, pink, cyan)'}}
                   >
-                    Xem thêm
-                  </a>{" "}
+                    Đăng nhập
+                  </Button>
                 </div>
               </div>
             </div>
@@ -36,16 +35,17 @@ export const CustomerHeader = () => {
               <div className="row">
                 <div className="col-md-12 intro-text">
                   <h1>
-                    VL CARCARE
+                    LVCARCARE
                     <span></span>
                   </h1>
                   <p>Hãy tặng chiếc xe của bạn món quà tuyệt vời nhất</p>
-                  <a
-                    href="#features"
-                    className="btn btn-custom btn-lg page-scroll"
+                  <Button
+                    onClick={() => router.push("/login")}
+                    size="large"
+                    style={{width:'150px' ,height:"40px",background:'linear-gradient(to top right, pink, cyan)'}}
                   >
-                    Xem thêm
-                  </a>{" "}
+                    Đăng nhập
+                  </Button>
                 </div>
               </div>
             </div>
@@ -57,16 +57,17 @@ export const CustomerHeader = () => {
               <div className="row">
                 <div className="col-md-12 intro-text">
                   <h1>
-                    VL CARCARE
+                    LVCARCARE
                     <span></span>
                   </h1>
                   <p>Hãy tặng chiếc xe của bạn món quà tuyệt vời nhất</p>
-                  <a
-                    href="#features"
-                    className="btn btn-custom btn-lg page-scroll"
+                  <Button
+                    onClick={() => router.push("/login")}
+                    size="large"
+                    style={{width:'150px' ,height:"40px",background:'linear-gradient(to top right, pink, cyan)'}}
                   >
-                    Xem thêm
-                  </a>{" "}
+                    Đăng nhập
+                  </Button>
                 </div>
               </div>
             </div>
@@ -78,16 +79,17 @@ export const CustomerHeader = () => {
               <div className="row">
                 <div className="col-md-12 intro-text">
                   <h1>
-                    VL CARCARE
+                    LVCARCARE
                     <span></span>
                   </h1>
                   <p>Hãy tặng chiếc xe của bạn món quà tuyệt vời nhất</p>
-                  <a
-                    href="#features"
-                    className="btn btn-custom btn-lg page-scroll"
+                  <Button
+                    onClick={() => router.push("/login")}
+                    size="large"
+                    style={{width:'150px' ,height:"40px",background:'linear-gradient(to top right, pink, cyan)'}}
                   >
-                    Xem thêm
-                  </a>{" "}
+                    Đăng nhập
+                  </Button>
                 </div>
               </div>
             </div>
@@ -99,16 +101,17 @@ export const CustomerHeader = () => {
               <div className="row">
                 <div className="col-md-12 intro-text">
                   <h1>
-                    VL CARCARE
+                    LVCARCARE
                     <span></span>
                   </h1>
                   <p>Hãy tặng chiếc xe của bạn món quà tuyệt vời nhất</p>
-                  <a
-                    href="#features"
-                    className="btn btn-custom btn-lg page-scroll"
+                  <Button
+                    onClick={() => router.push("/login")}
+                    size="large"
+                    style={{width:'150px' ,height:"40px",background:'linear-gradient(to top right, pink, cyan)'}}
                   >
-                    Xem thêm
-                  </a>{" "}
+                    Đăng nhập
+                  </Button>
                 </div>
               </div>
             </div>
