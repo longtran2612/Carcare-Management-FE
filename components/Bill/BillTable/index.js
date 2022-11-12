@@ -28,7 +28,7 @@ import {
   PrinterOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import { useReactToPrint } from "react-to-print";
 import Image from "next/image";
 import logo from "public/images/logo-footer-customer.png";
@@ -78,7 +78,7 @@ const BillTable = () => {
       >
         <Input
           ref={searchInput}
-          placeholder={`Tìm ${dataIndex}`}
+          placeholder={`Tìm kiếm`}
           value={selectedKeys[0]}
           onSearch={(value) => setSearchText(value)}
           onChange={(e) =>
@@ -152,13 +152,12 @@ const BillTable = () => {
     setShowDetail(false);
   };
 
-
   const handleCancelBill = async (id) => {
     setLoading(true);
     try {
       const res = await cancelBill(id);
       openNotification("Thành công", "Hủy hóa đơn thành công");
-      
+
       handleGetbills();
       setShowDetail(false);
       setLoading(false);
@@ -193,7 +192,17 @@ const BillTable = () => {
       dataIndex: "billCode",
       key: "billCode",
       width: 120,
-      render: (billCode) => <a style={{ color: "blue" }}>{billCode}</a>,
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            setBillDetail(record);
+            setShowDetail(true);
+          }}
+          style={{ color: "blue", textDecorationLine: "underline" }}
+        >
+          {record?.billCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -224,14 +233,12 @@ const BillTable = () => {
       title: "Biển số xe",
       dataIndex: "carLicensePlate",
       key: "carLicensePlate",
-      width: 120,
       ...getColumnSearchProps("carLicensePlate"),
     },
     {
       title: "Tổng tiền dịch vụ",
       dataIndex: "totalServicePrice",
       key: "totalServicePrice",
-      width: 150,
       render: (text, record) => (
         <div>{formatMoney(record.totalServicePrice)}</div>
       ),
@@ -240,17 +247,20 @@ const BillTable = () => {
       title: "Loại thanh toán",
       dataIndex: "paymentType",
       key: "paymentType",
-      width: 120,
-      ...getColumnSearchProps("paymentType"),
-      render: (texr, record) => (
-        <div>{record.paymentType == "CASH" ? "Tiền mặt" : "Thẻ"}</div>
-      ),
+
+      render: (text, record, dataIndex) => {
+        switch (record.paymentType) {
+          case "CASH":
+            return <Tag color="green">Tiền mặt</Tag>;
+          case "DEBIT":
+            return <Tag color="cyan">Chuyển khoản</Tag>;
+        }
+      },
     },
     {
       title: "Ngày thanh toán",
       dataIndex: "paymentDate",
       key: "paymentDate",
-      width: 120,
       render(paymentDate) {
         return <div>{moment(paymentDate).format(formatDate)}</div>;
       },
@@ -259,8 +269,6 @@ const BillTable = () => {
       title: "Trạng thái",
       key: "statusName",
       dataIndex: "statusName",
-      width: 120,
-      ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
         switch (record.statusName) {
           case "Đã thanh toán":
@@ -399,14 +407,14 @@ const BillTable = () => {
         scroll={{
           y: 425,
         }}
-        onRow={(record, rowIndex) => {
-          return {
-            onClick: (event) => {
-              setBillDetail(record);
-              setShowDetail(true);
-            },
-          };
-        }}
+        // onRow={(record, rowIndex) => {
+        //   return {
+        //     onClick: (event) => {
+        //       setBillDetail(record);
+        //       setShowDetail(true);
+        //     },
+        //   };
+        // }}
       />
       <Drawer
         title="Chi tiết hóa đơn"
@@ -500,7 +508,7 @@ const BillTable = () => {
                 />
               </Col>
               <Col span={8}>
-                <DescriptionItem  title={item?.name} />
+                <DescriptionItem title={item?.name} />
               </Col>
               <Col span={8}>
                 <DescriptionItem
@@ -539,13 +547,12 @@ const BillTable = () => {
                     />
                   </Col> */}
                   <Col span={8}>
-                    {(item?.type == "PERCENTAGE" ||
-                      item?.type == "MONEY") && (
-                        <DescriptionItem
-                          title="Tiền giảm"
-                          content={formatMoney(item?.promotionUsedAmount)}
-                        />
-                      )}
+                    {(item?.type == "PERCENTAGE" || item?.type == "MONEY") && (
+                      <DescriptionItem
+                        title="Tiền giảm"
+                        content={formatMoney(item?.promotionUsedAmount)}
+                      />
+                    )}
                   </Col>
                 </Row>
               </>

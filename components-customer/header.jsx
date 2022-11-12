@@ -38,7 +38,7 @@ export const CustomerHeader = () => {
                     LVCARCARE
                     <span></span>
                   </h1>
-                  <p>Hãy tặng chiếc xe của bạn món quà tuyệt vời nhất</p>
+                  <p>Chiếc xe của bạn xứng đáng với điều tốt nhất</p>
                   <Button
                     onClick={() => router.push("/login")}
                     size="large"
@@ -60,7 +60,7 @@ export const CustomerHeader = () => {
                     LVCARCARE
                     <span></span>
                   </h1>
-                  <p>Hãy tặng chiếc xe của bạn món quà tuyệt vời nhất</p>
+                  <p>Hiệu suất cao và dịch vụ cao cấp</p>
                   <Button
                     onClick={() => router.push("/login")}
                     size="large"
@@ -82,7 +82,7 @@ export const CustomerHeader = () => {
                     LVCARCARE
                     <span></span>
                   </h1>
-                  <p>Hãy tặng chiếc xe của bạn món quà tuyệt vời nhất</p>
+                  <p>Sự lựa chọn đúng đắn của việc sửa chữa phù hợp</p>
                   <Button
                     onClick={() => router.push("/login")}
                     size="large"
@@ -104,7 +104,7 @@ export const CustomerHeader = () => {
                     LVCARCARE
                     <span></span>
                   </h1>
-                  <p>Hãy tặng chiếc xe của bạn món quà tuyệt vời nhất</p>
+                  <p>Lấy lại hiệu suất tốt nhất của xe</p>
                   <Button
                     onClick={() => router.push("/login")}
                     size="large"

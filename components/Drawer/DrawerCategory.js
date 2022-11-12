@@ -140,7 +140,7 @@ function DrawerCategory({ categoryId, show, handleCancel }) {
                 <Select style={{ width: "100%" }}>
                   <Option value="NORMAL">Thường</Option>
                   <Option value="NEW">Mới</Option>
-                  <Option value="HOT">HOT</Option>
+                  <Option value="LIKE">Yêu thích</Option>
                 </Select>
               </Form.Item>
             </Col>

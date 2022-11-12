@@ -122,7 +122,16 @@ function PriceHeaderTable({}) {
       title: "Mã",
       dataIndex: "priceHeaderCode",
       key: "priceHeaderCode",
-      render: (priceHeaderCode) => <a style={{ color: "blue" }}>{priceHeaderCode}</a>,
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            router.push(`/admin?priceHeaderId=${record.id}`);
+          }}
+          style={{ color: "blue", textDecorationLine: "underline" }}
+        >
+          {record?.priceHeaderCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -142,6 +151,7 @@ function PriceHeaderTable({}) {
       title: "Từ ngày",
       dataIndex: "fromDate",
       key: "fromDate",
+      width: 150,
       render: (text, record, dataIndex) => {
         return <div>{moment(record.fromDate).format(formatDate)}</div>;
       },
@@ -150,6 +160,7 @@ function PriceHeaderTable({}) {
       title: "Đến ngày",
       dataIndex: "toDate",
       key: "toDate",
+      width: 150,
       render: (text, record, dataIndex) => {
         return <div>{moment(record.toDate).format(formatDate)}</div>;
       },
@@ -238,13 +249,13 @@ function PriceHeaderTable({}) {
             scroll={{
               y: 425,
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  router.push(`/admin?priceHeaderId=${record.id}`);
-                },
-              };
-            }}
+            // onRow={(record, rowIndex) => {
+            //   return {
+            //     onClick: (event) => {
+            //       router.push(`/admin?priceHeaderId=${record.id}`);
+            //     },
+            //   };
+            // }}
           />
           <ModalAddPriceHeader
             show={modalPriceHeader}

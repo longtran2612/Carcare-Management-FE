@@ -143,7 +143,16 @@ function CarModelTable({}) {
       title: "Mã",
       dataIndex: "carModelCode",
       key: "carModelCode",
-      render: (carModelCode) => <a style={{ color: "blue" }}>{carModelCode}</a>,
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            router.push(`/admin?carModelId=${record.id}`);
+          }}
+          style={{ color: "blue", textDecorationLine: "underline" }}
+        >
+          {record.carModelCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -319,13 +328,13 @@ function CarModelTable({}) {
             scroll={{
               y: 425,
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  router.push(`/admin?carModelId=${record.id}`);
-                },
-              };
-            }}
+            // onRow={(record, rowIndex) => {
+            //   return {
+            //     onClick: (event) => {
+            //       router.push(`/admin?carModelId=${record.id}`);
+            //     },
+            //   };
+            // }}
           />
         </div>
       )}

@@ -27,7 +27,7 @@ import {
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ModalAddOrder from "components/Modal/ModalAddOrder";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import ModalCreateBill from "components/Modal/ModalCreateBill";
 
 import { OrderNotRequestDetail } from "../OrderNotRequestDetail";
@@ -152,7 +152,16 @@ function OrderNotRequestTable({}) {
       dataIndex: "orderCode",
       key: "orderCode",
 
-      render: (orderCode) => <a style={{ color: "blue" }}>{orderCode}</a>,
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            router.push(`/admin?orderId=${record.id}`);
+          }}
+          style={{ color: "blue", textDecorationLine: "underline" }}
+        >
+          {record?.orderCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -266,7 +275,7 @@ function OrderNotRequestTable({}) {
     let dataGetOrder = {
       keyword: "",
       pageSize: 100,
-      status:status,
+      status: status,
       pageNumber: 0,
       sort: [
         {
@@ -275,7 +284,7 @@ function OrderNotRequestTable({}) {
         },
       ],
     };
-   
+
     try {
       const res = await getOrders(dataGetOrder);
       setOrders(res.data.Data.content);
@@ -448,13 +457,13 @@ function OrderNotRequestTable({}) {
               ),
               rowExpandable: (record) => record.name !== "Not Expandable",
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onDoubleClick: (event) => {
-                  router.push(`/admin?orderId=${record.id}`);
-                },
-              };
-            }}
+            // onRow={(record, rowIndex) => {
+            //   return {
+            //     onDoubleClick: (event) => {
+            //       router.push(`/admin?orderId=${record.id}`);
+            //     },
+            //   };
+            // }}
           />
         </div>
       )}

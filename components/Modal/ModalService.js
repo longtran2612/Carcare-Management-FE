@@ -198,6 +198,15 @@ function ServiceOrder({ onSelected, selectedService }) {
       ...getColumnSearchProps("name"),
     },
     {
+      title: "Loại dịch vụ",
+      dataIndex: "type",
+      key: "type",
+      ...getColumnSearchProps("type"),
+      render: (text, record) => {
+        return handleTypeService(record.type);
+      },
+    },
+    {
       title: "Thời gian xử lí",
       dataIndex: "estimateTime",
       key: "estimateTime",
@@ -267,6 +276,19 @@ function ServiceOrder({ onSelected, selectedService }) {
   const finalTotalPrice = () => {
     let total = totalPriceService() - totalPromotionAmount();
     return total;
+  };
+
+  const handleTypeService = (value) => {
+    switch (value) {
+      case "NORMAL":
+        return <Tag color={"blue"}>{"Thông thường"}</Tag>;
+      case "NEW":
+        return <Tag color={"green"}>{"Mới"}</Tag>;
+      case "LIKE":
+        return <Tag color={"pink"}>{"Yêu thích"}</Tag>;
+      default:
+        break;
+    }
   };
 
   return (

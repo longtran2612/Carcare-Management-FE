@@ -138,7 +138,16 @@ function CustomerTable() {
       dataIndex: "customerCode",
       key: "customerCode",
       width: 150,
-      render: (customerCode) => <a style={{ color: "blue" }}>{customerCode}</a>,
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            router.push(`/admin?customerId=${record.customerCode}`);
+          }}
+          style={{ color: "blue", textDecorationLine: "underline" }}
+        >
+          {record?.customerCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -321,13 +330,13 @@ function CustomerTable() {
               y: 425,
            
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  router.push(`/admin?customerId=${record.customerCode}`);
-                },
-              };
-            }}
+            // onRow={(record, rowIndex) => {
+            //   return {
+            //     onClick: (event) => {
+            //       router.push(`/admin?customerId=${record.customerCode}`);
+            //     },
+            //   };
+            // }}
           />
           <ModalAddCustomer
             show={modalCustomer}

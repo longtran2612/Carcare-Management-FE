@@ -11,6 +11,7 @@ import {
   DatePicker,
   Table,
   Popconfirm,
+  Drawer,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification, openNotificationWarning } from "utils/notification";
@@ -24,9 +25,17 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPrice from "components/Modal/ModalAddPrice";
 import moment from "moment";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
+import {
+  ClearOutlined,
+  SearchOutlined,
+  PlusOutlined,
+  SaveOutlined,
+  EditFilled,
+  EditOutlined,
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
+import DrawerPriceDetail from "components/Drawer/DrawerPriceDetail";
 const formatDate = "DD/MM/YYYY";
 const PriceHeaderDetail = ({ priceHeaderId }) => {
   const router = useRouter();
@@ -36,6 +45,9 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
   const [prices, setPrices] = useState([]);
   const [modalQuestion, setModalQuestion] = useState(false);
   const [modalPrice, setModalPrice] = useState(false);
+
+  const [modalPriceDetail, setModalPriceDetail] = useState(false);
+  const [priceSelected, setPriceSelected] = useState({});
 
   const [loading, setLoading] = useState(false);
 
@@ -211,20 +223,36 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
         return <div>{formatMoney(price)}</div>;
       },
     },
-    // {
-    //   title: "Trạng thái",
-    //   dataIndex: "statusName",
-    //   key: "statusName",
-    //   render: (statusName) => {
-    //     return (
-    //       <>
-    //         {" "}
-    //         <Tag color={"green"}>{statusName}</Tag>{" "}
-    //       </>
-    //     );
-    //   },
-    //   ...getColumnSearchProps("statusName"),
-    // },
+    {
+      title: "Trạng thái",
+      dataIndex: "statusName",
+      key: "statusName",
+      render: (statusName) => {
+        return (
+          <>
+            <Tag color={"green"}>{statusName}</Tag>{" "}
+          </>
+        );
+      },
+    },
+    {
+      dataIndex: "action",
+      key: "action",
+      width: 90,
+      render: (text, record) => {
+        return (
+          <>
+            <EditOutlined
+              onClick={() => {
+                setPriceSelected(record);
+                setModalPriceDetail(true);
+              }}
+              style={{ fontSize: "20px", color: "blue" }}
+            />
+          </>
+        );
+      },
+    },
   ];
 
   const onFinish = async (values) => {
@@ -252,6 +280,10 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
   const handleSuccessCreatePrice = () => {
     fetchPrice();
   };
+
+  const handleUpdatePrice = () => {
+    fetchPrice();
+  }
 
   return (
     <>
@@ -334,7 +366,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                   ]}
                   name="status"
                 >
-                  <Select >
+                  <Select>
                     <Select.Option value="ACTIVE">Hoạt động</Select.Option>
                     <Select.Option value="INACTIVE">
                       Không hoạt động
@@ -370,7 +402,9 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                         });
                     }}
                   >
-                    <Button  icon={<SaveOutlined/>} type="primary">Cập nhật</Button>
+                    <Button icon={<SaveOutlined />} type="primary">
+                      Cập nhật
+                    </Button>
                   </Popconfirm>
                 </div>
               </div>
@@ -386,7 +420,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                 <Row>
                   <Col span={8} style={{ marginRight: "10px" }}>
                     <Input.Search
-                      placeholder="Tìm kiếm mã/tên/giá dịch vụ"
+                      placeholder="Tìm kiếm mã/tên dịch vụ"
                       onChange={(e) => setSearchGlobal(e.target.value)}
                       onSearch={(value) => setSearchGlobal(value)}
                       value={searchGlobal}
@@ -416,16 +450,22 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
             )}
             columns={columns}
             dataSource={prices}
-            pagination={{
-              pageSize: 10,
-            }}
             scroll={{
               y: 200,
             }}
+            pagination={false}
             rowKey="id"
           />
         </Col>
       </Row>
+      <DrawerPriceDetail
+      show={modalPriceDetail}
+      handleCancel={() => setModalPriceDetail(false)}
+      onUpdate={handleUpdatePrice}
+      price={priceSelected}
+      canUpdatePrice={moment().isAfter(form.getFieldValue("fromDate"))}
+
+     />
 
       <ModalAddPrice
         show={modalPrice}

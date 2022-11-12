@@ -11,6 +11,7 @@ import Highlighter from "react-highlight-words";
 import { openNotification } from "utils/notification";
 // import ModalAddCarWithoutCustomer from "components/Modal/ModalAddCarWithoutCustomer";
 import ModalAddCarWithCustomer from "components/Modal/ModalAddCarWithCustomer";
+import Link from "next/link";
 
 function CarTable({}) {
   const [cars, setCars] = useState([]);
@@ -125,7 +126,16 @@ function CarTable({}) {
       title: "MÃ",
       dataIndex: "carCode",
       key: "carCode",
-      render: (carCode) => <a style={{ color: "blue" }}>{carCode}</a>,
+      render: (carCode) => (
+        <a
+          onClick={() => {
+            router.push(`/admin?carId=${carCode}`);
+          }}
+          style={{ color: "blue" ,textDecorationLine: 'underline'}}
+        >
+          {carCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -183,7 +193,7 @@ function CarTable({}) {
       setCars(res.data.Data);
       setLoading(false);
     } catch (err) {
-     console.log(err);
+      console.log(err);
       setLoading(false);
     }
   };
@@ -239,13 +249,13 @@ function CarTable({}) {
               y: 425,
               // x: 2000,
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  router.push(`/admin?carId=${record.carCode}`);
-                },
-              };
-            }}
+            // onRow={(record, rowIndex) => {
+            //   return {
+            //     onClick: (event) => {
+            //       router.push(`/admin?carId=${record.carCode}`);
+            //     },
+            //   };
+            // }}
           />
         </div>
       )}

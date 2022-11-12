@@ -165,7 +165,16 @@ function OrderTable({}) {
       dataIndex: "orderCode",
       key: "orderCode",
       width: 130,
-      render: (orderCode) => <a style={{ color: "blue" }}>{orderCode}</a>,
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            router.push(`/admin?orderRequestId=${record.id}`);
+          }}
+          style={{ color: "blue", textDecorationLine: "underline" }}
+        >
+          {record?.orderCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -195,7 +204,7 @@ function OrderTable({}) {
       ...getColumnSearchProps("customerName"),
     },
     {
-      title: "Biên số",
+      title: "Biên số xe",
       dataIndex: "carLicensePlate",
       key: "carLicensePlate",
       ...getColumnSearchProps("carLicensePlate"),
@@ -472,13 +481,13 @@ function OrderTable({}) {
               ),
               rowExpandable: (record) => record.name !== "Not Expandable",
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onDoubleClick: (event) => {
-                  router.push(`/admin?orderRequestId=${record.id}`);
-                },
-              };
-            }}
+            // onRow={(record, rowIndex) => {
+            //   return {
+            //     onDoubleClick: (event) => {
+            //       router.push(`/admin?orderRequestId=${record.id}`);
+            //     },
+            //   };
+            // }}
           />
         </div>
       )}

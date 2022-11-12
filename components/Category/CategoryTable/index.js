@@ -113,10 +113,9 @@ function CategoryTable({}) {
   const handleCatetgory = async () => {
     setLoading(true);
     try {
-        const res = await getCategories();
-        setCategories(res.data.Data);
-        setLoading(false);
-  
+      const res = await getCategories();
+      setCategories(res.data.Data);
+      setLoading(false);
     } catch (err) {
       setLoading(false);
       console.log(err);
@@ -145,7 +144,17 @@ function CategoryTable({}) {
       title: "Mã",
       dataIndex: "categoryCode",
       key: "categoryCode",
-      render: (categoryCode) => <a style={{ color: "blue" }}>{categoryCode}</a>,
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            setCategorySelected(record.categoryCode);
+            setShowDrawer(true);
+          }}
+          style={{ color: "blue", textDecorationLine: "underline" }}
+        >
+          {record?.categoryCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -245,15 +254,15 @@ function CategoryTable({}) {
           scroll={{
             y: 425,
           }}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                // router.push(`/admin?categoryId=${record.categoryCode}`);
-                setCategorySelected(record.categoryCode);
-                setShowDrawer(true);
-              },
-            };
-          }}
+          // onRow={(record, rowIndex) => {
+          //   return {
+          //     onClick: (event) => {
+          //       // router.push(`/admin?categoryId=${record.categoryCode}`);
+          //       setCategorySelected(record.categoryCode);
+          //       setShowDrawer(true);
+          //     },
+          //   };
+          // }}
         />
       </div>
 

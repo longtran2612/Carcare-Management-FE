@@ -82,7 +82,7 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
           validateMessages={validateMessages}
         >
           <Row gutter={[16]}>
-            <Col span={12}>
+            <Col span={16}>
               <Form.Item
                 label="Dịch vụ"
                 rules={[
@@ -106,14 +106,14 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
                   {listService?.map((item) => {
                     return (
                       <Select.Option key={item.id} value={item.id}>
-                        {item.name}
+                        {item.serviceCode +" - " +item.name}
                       </Select.Option>
                     );
                   })}
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item
                 label="Giá"
                 name="price"
