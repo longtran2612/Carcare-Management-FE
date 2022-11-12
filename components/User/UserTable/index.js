@@ -137,7 +137,16 @@ function UserTable() {
       title: "Mã",
       dataIndex: "userCode",
       key: "userCode",
-      render: (userCode) => <a style={{ color: "blue" }}>{userCode}</a>,
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            router.push(`/admin?userId=${record.id}`);
+          }}
+          style={{ color: "blue", textDecorationLine: "underline" }}
+        >
+          {record?.userCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -309,13 +318,13 @@ function UserTable() {
             scroll={{
               y: 425,
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  router.push(`/admin?userId=${record.id}`);
-                },
-              };
-            }}
+            // onRow={(record, rowIndex) => {
+            //   return {
+            //     onClick: (event) => {
+            //       router.push(`/admin?userId=${record.id}`);
+            //     },
+            //   };
+            // }}
           />
           <ModalAddUser
             show={modalUser}

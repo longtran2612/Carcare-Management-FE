@@ -104,7 +104,7 @@ function UserDetail({ userId, onUpdateUser }) {
         status: values.status,
         image: imageS3 || userDetail?.image,
         birthDay: values.birthDay,
-        // identityNumber: values.identityNumber,
+        identityNumber: values.identityNumber,
         gender: values.gender,
         nationality: values.nationality,
       };
@@ -269,6 +269,7 @@ function UserDetail({ userId, onUpdateUser }) {
                   ]}
                 >
                   <Input
+                    disabled
                     maxLength={10}
                     minLength={10}
                     prefix={<PhoneOutlined className="site-form-item-icon" />}
@@ -289,7 +290,7 @@ function UserDetail({ userId, onUpdateUser }) {
                     },
                   ]}
                 >
-                  <Input maxLength={12} disabled />
+                  <Input maxLength={12} />
                 </Form.Item>
               </Col>
               <Col span={8}>

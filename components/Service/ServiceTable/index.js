@@ -179,7 +179,16 @@ function ServiceTable({}) {
       title: "Mã dịch vụ",
       dataIndex: "serviceCode",
       key: "serviceCode",
-      render: (serviceCode) => <a style={{ color: "blue" }}>{serviceCode}</a>,
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            router.push(`/admin?serviceId=${record.id}`);
+          }}
+          style={{ color: "blue", textDecorationLine: "underline" }}
+        >
+          {record?.serviceCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -330,13 +339,13 @@ function ServiceTable({}) {
             scroll={{
               y: 425,
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  router.push(`/admin?serviceId=${record.id}`);
-                },
-              };
-            }}
+            // onRow={(record, rowIndex) => {
+            //   return {
+            //     onClick: (event) => {
+            //       router.push(`/admin?serviceId=${record.id}`);
+            //     },
+            //   };
+            // }}
           />
         </div>
       )}

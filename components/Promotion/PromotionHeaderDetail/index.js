@@ -193,6 +193,7 @@ const PromotionHeaderDetail = ({
       dataIndex: "promotionLineCode",
       key: "promotionLineCode",
       filteredValue: [searchGlobal],
+      render: (promotionLineCode) => <a style={{color:'blue'}} >{promotionLineCode}</a>,
       onFilter: (value, record) => {
         return (
           String(record.promotionLineCode)

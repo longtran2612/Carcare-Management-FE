@@ -127,7 +127,17 @@ function PromotionHeaderTable({}) {
       title: "Mã",
       dataIndex: "promotionHeaderCode",
       key: "promotionHeaderCode",
-      render: (promotionHeaderCode) => <a style={{ color: "blue" }}>{promotionHeaderCode}</a>,
+      width:290,
+      render: (text, record) => (
+        <a
+          onClick={() => {
+            router.push(`/admin?promotionHeaderId=${record.id}`);
+          }}
+          style={{ color: "blue", textDecorationLine: "underline" }}
+        >
+          {record?.promotionHeaderCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -147,6 +157,7 @@ function PromotionHeaderTable({}) {
       title: "Từ ngày",
       dataIndex: "fromDate",
       key: "fromDate",
+      width: 120,
       render: (text, record, dataIndex) => {
         return <div>{moment(record.fromDate).format(formatDate)}</div>;
       },
@@ -155,6 +166,7 @@ function PromotionHeaderTable({}) {
       title: "Đến ngày",
       dataIndex: "toDate",
       key: "toDate",
+      width: 120,
       render: (text, record, dataIndex) => {
         return <div>{moment(record.toDate).format(formatDate)}</div>;
       },
@@ -163,6 +175,7 @@ function PromotionHeaderTable({}) {
       title: "Trạng thái",
       key: "status",
       dataIndex: "status",
+      width: 120,
       ...getColumnSearchProps("status"),
       render: (status) => {
         return (
@@ -241,13 +254,13 @@ function PromotionHeaderTable({}) {
             scroll={{
               y: 425,
             }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  router.push(`/admin?promotionHeaderId=${record.id}`);
-                },
-              };
-            }}
+            // onRow={(record, rowIndex) => {
+            //   return {
+            //     onClick: (event) => {
+            //       router.push(`/admin?promotionHeaderId=${record.id}`);
+            //     },
+            //   };
+            // }}
           />
           <ModalAddPromotionHeader
             show={modalPromotionHeader}
