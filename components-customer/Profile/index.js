@@ -112,11 +112,11 @@ export const ProfileCustomer = () => {
         provinceCode: provinceSelectedCode,
         wardCode: wardSelectedCode,
         status: values.status,
-        image: imageS3 || customerDetail?.image,
+        // image: imageS3 || customerDetail?.image,
         dateOfBirth: values.dateOfBirth,
         nationality: values.nationality,
-        // phoneNumber: values.phoneNumber,
-        // identityNumber: values.identityNumber,
+        phoneNumber: values.phoneNumber,
+        identityNumber: values.identityNumber,
         gender: values.gender,
       };
       const res = await updateCustomer(id, body);
@@ -142,8 +142,25 @@ export const ProfileCustomer = () => {
     setListFiles({ images: info.fileList, imageBlob: result });
     setModalUpload(true);
   };
+  const handleUpdateImage = async (imageUpload) => {
+    let id = Cookies.get("id");
+    let body = {
+      image: imageUpload
+    };
+    try {
+      const res = await updateCustomer(id,body);
+      openNotification("Thành công!", "Cập nhật ảnh đại diện thành công");
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+    }
+  }
 
   const handleUploadImages = async () => {
+    setLoading(true);
     try {
       const formData = new FormData();
       listFiles.images.map((image) => {
@@ -155,14 +172,17 @@ export const ProfileCustomer = () => {
         return { ...prevState, image: response.data.Data[0] };
       });
       setListFiles({ images: [], imageBlob: [] });
+      handleUpdateImage(response.data.Data[0]);
       openNotification("Thành công", "Tải ảnh lên thành công");
       setModalUpload(false);
+      setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
         openNotificationWarning(error?.response?.data?.message);
       } else {
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
+      setLoading(false);
     }
   };
   const onChange = (value, selectedOptions) => {
@@ -197,7 +217,9 @@ export const ProfileCustomer = () => {
           >
             <Upload
               onChange={(info) => handleFileChosen(info)}
-              multiple
+              maxCount={1}
+              listType="picture"
+              accept="image/*"
               showUploadList={false}
               fileList={listFiles.imageBlob}
             >

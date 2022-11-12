@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import { getServiceById, updateService } from "pages/api/serviceAPI";
 import { UploadOutlined } from "@ant-design/icons";
 import { uploadImage } from "pages/api/uploadAPI";
-import { openNotification,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -91,7 +91,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         description: values.description,
         categoryId: values.categoryId,
         estimateTime: values.estimateTime,
-        imageUrl: imageS3 || serviceDetail?.image,
+        // imageUrl: imageS3 || serviceDetail?.image,
       };
       if (values.statusName === "INACTIVE") {
         disableService(serviceId);
@@ -120,7 +120,25 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
     setModalUpload(true);
   };
 
+  const handleUpdateImage = async (imageUpload) => {
+    let body = {
+      imageUrl: imageUpload,
+      estimateTime: form.getFieldValue("estimateTime"),
+    };
+    try {
+      const res = await updateService(body, serviceDetail.id);
+      openNotification("Thành công!", "Cập nhật ảnh dịch vụ thành công");
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+    }
+  };
+
   const handleUploadImages = async () => {
+    setLoading(true);
     try {
       const formData = new FormData();
       listFiles.images.map((image) => {
@@ -130,15 +148,17 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       setImageS3(response.data.Data[0]);
       setServiceDetail((prevState) => {
         return { ...prevState, imageUrl: response.data.Data[0] };
-      })
+      });
       setListFiles({ images: [], imageBlob: [] });
-      setModalUpload(false);
       openNotification("Thành công", "Tải ảnh lên thành công");
+      handleUpdateImage(response.data.Data[0]);
+      setModalUpload(false);
+      setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
         openNotificationWarning(error?.response?.data?.message);
       } else {
-        openNotificationWarning("Thất bại", "Có lỗi xảy ra, vui lòng thử lại sau");
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
   };
@@ -159,7 +179,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
           >
             <Upload
               onChange={(info) => handleFileChosen(info)}
-              multiple
+              maxCount={1}
+              listType="picture"
+              accept="image/*"
               showUploadList={false}
               fileList={listFiles.imageBlob}
             >
@@ -211,7 +233,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   <Select style={{ width: "100%" }}>
                     <Option value="NORMAL">Thường</Option>
                     <Option value="NEW">Mới</Option>
-                    <Option value="HOT">HOT</Option>
+                    <Option value="LIKE">Yêu thích</Option>
                   </Select>
                 </Form.Item>
               </Col>

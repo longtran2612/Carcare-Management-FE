@@ -16,7 +16,7 @@ import {
 import { useRouter } from "next/router";
 import { getCarModelByBrand } from "pages/api/carModel";
 import { uploadImage } from "pages/api/uploadAPI";
-import { openNotification ,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 import { getCarByCode, updateCar } from "pages/api/carAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
@@ -88,7 +88,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       setBrandSelected(response.data.Data.brand);
       setLoading(false);
     } catch (error) {
-      openNotificationWarning( "Đã có lỗi xảy ra");
+      openNotificationWarning("Đã có lỗi xảy ra");
       setLoading(false);
     }
   };
@@ -126,7 +126,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       color: values.color,
       licensePlate: values.licensePlate,
       carModel: values.carModelCode,
-      imageUrl: imageS3 || carDetail?.imageUrl,
+      // imageUrl: imageS3 || carDetail?.imageUrl,
     };
     try {
       console.log(body);
@@ -155,7 +155,24 @@ const CarDetail = ({ carId, onUpdateCar }) => {
     setModalUpload(true);
   };
 
+  const handleUpdateImage = async (imageUpload) => {
+    let body = {
+      imageUrl: imageUpload,
+    };
+    try {
+      const res = await updateCar(body, carDetail?.id);
+      openNotification("Thành công!", "Cập nhật ảnh xe thành công");
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+    }
+  };
+
   const handleUploadImages = async () => {
+    setLoading(true);
     try {
       const formData = new FormData();
       listFiles.images.map((image) => {
@@ -167,9 +184,17 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         return { ...prevState, imageUrl: response.data.Data[0] };
       });
       setListFiles({ images: [], imageBlob: [] });
+      openNotification("Thành công", "Tải ảnh lên thành công");
+      handleUpdateImage(response.data.Data[0]);
       setModalUpload(false);
+      setLoading(false);
     } catch (error) {
-      openNotificationWarning("Đã có lỗi xảy ra");
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+      setLoading(false);
     }
   };
 
@@ -190,7 +215,9 @@ const CarDetail = ({ carId, onUpdateCar }) => {
           >
             <Upload
               onChange={(info) => handleFileChosen(info)}
-              multiple
+              maxCount={1}
+              listType="picture"
+              accept="image/*"
               showUploadList={false}
               fileList={listFiles.imageBlob}
             >

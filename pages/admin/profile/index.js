@@ -113,7 +113,7 @@ const UserProfile = () => {
         provinceCode: provinceSelectedCode,
         wardCode: wardSelectedCode,
         // status: values.status,
-        image: imageS3 || userDetail?.image,
+        // image: imageS3 || userDetail?.image,
         birthDay: values.birthDay,
         gender: values.gender,
         nationality: values.nationality,
@@ -143,7 +143,23 @@ const UserProfile = () => {
     setModalUpload(true);
   };
 
+  const handleUpdateImage = async (imageUpload) => {
+    let body = {
+      image: imageUpload
+    };
+    try {
+      const res = await updateUserById(body, userDetail?.id);
+      openNotification("Thành công!", "Cập nhật ảnh đại diện thành công");
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+    }
+  }
   const handleUploadImages = async () => {
+    setLoading(true);
     try {
       const formData = new FormData();
       listFiles.images.map((image) => {
@@ -155,14 +171,17 @@ const UserProfile = () => {
         return { ...prevState, image: response.data.Data[0] };
       });
       setListFiles({ images: [], imageBlob: [] });
+      handleUpdateImage(response.data.Data[0]);
       openNotification("Thành công!", "Tải ảnh lên thành công");
       setModalUpload(false);
+      setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
         openNotificationWarning(error?.response?.data?.message);
       } else {
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
+      setLoading(false);
     }
   };
   const onChange = (value, selectedOptions) => {
@@ -216,7 +235,9 @@ const UserProfile = () => {
                       >
                         <Upload
                           onChange={(info) => handleFileChosen(info)}
-                          multiple
+                          maxCount={1}
+                          listType="picture"
+                          accept="image/*"
                           showUploadList={false}
                           fileList={listFiles.imageBlob}
                         >

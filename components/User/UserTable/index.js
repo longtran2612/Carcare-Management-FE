@@ -215,7 +215,7 @@ function UserTable() {
       title: "Giới tính",
       dataIndex: "gender",
       key: "gender",
-      with: 100,
+      width: 90,
       // ...getColumnSearchProps("gender"),
       render: (gender) => (
         <>

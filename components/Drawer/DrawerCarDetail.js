@@ -86,7 +86,7 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
       color: values.color,
       licensePlate: values.licensePlate,
       carModel: values.carModelCode,
-      imageUrl: imageS3 || carDetail?.imageUrl,
+      // imageUrl: imageS3 || carDetail?.imageUrl,
     };
     try {
       console.log(body);
@@ -114,7 +114,25 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
     setModalUpload(true);
   };
 
+  const handleUpdateImage = async (imageUpload) => {
+    let body = {
+      imageUrl: imageUpload,
+    };
+    try {
+      const res = await updateCar(body, carDetail?.id);
+      onUpdate();
+      openNotification("Thành công!", "Cập nhật ảnh xe thành công");
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+    }
+  };
+
   const handleUploadImages = async () => {
+    setLoading(true);
     try {
       const formData = new FormData();
       listFiles.images.map((image) => {
@@ -126,9 +144,17 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
         return { ...prevState, imageUrl: response.data.Data[0] };
       });
       setListFiles({ images: [], imageBlob: [] });
+      openNotification("Thành công", "Tải ảnh lên thành công");
+      handleUpdateImage(response.data.Data[0]);
       setModalUpload(false);
+      setLoading(false);
     } catch (error) {
-      openNotificationWarning("Đã có lỗi xảy ra");
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+      setLoading(false);
     }
   };
 
@@ -204,7 +230,8 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
                 <div>
                   <Upload
                     onChange={(info) => handleFileChosen(info)}
-                    multiple
+                    maxCount={1}
+                    listType="picture"
                     accept="image/*"
                     showUploadList={false}
                     fileList={listFiles.imageBlob}

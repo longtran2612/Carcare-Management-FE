@@ -102,7 +102,7 @@ function UserDetail({ userId, onUpdateUser }) {
         provinceCode: provinceSelectedCode,
         wardCode: wardSelectedCode,
         status: values.status,
-        image: imageS3 || userDetail?.image,
+        // image: imageS3 || userDetail?.image,
         birthDay: values.birthDay,
         identityNumber: values.identityNumber,
         gender: values.gender,
@@ -112,7 +112,6 @@ function UserDetail({ userId, onUpdateUser }) {
       const res = await updateUserById(body, userId);
       setUserDetail(res.data.Data);
       openNotification("Thành công!", "Cập nhật nhân viên thành công");
-      onUpdateUser();
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -123,6 +122,23 @@ function UserDetail({ userId, onUpdateUser }) {
       setLoading(false);
     }
   };
+  
+  const handleUpdateImage = async (imageUpload) => {
+    let body = {
+      image: imageUpload
+    };
+    try {
+      const res = await updateUserById(body, userId);
+      openNotification("Thành công!", "Cập nhật ảnh đại diện thành công");
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+    }
+  }
+
   // handle upload image
 
   const handleFileChosen = (info) => {
@@ -137,6 +153,7 @@ function UserDetail({ userId, onUpdateUser }) {
   };
 
   const handleUploadImages = async () => {
+    setLoading(true);
     try {
       const formData = new FormData();
       listFiles.images.map((image) => {
@@ -149,14 +166,18 @@ function UserDetail({ userId, onUpdateUser }) {
       });
       setListFiles({ images: [], imageBlob: [] });
       openNotification("Thành công", "Tải ảnh lên thành công");
+      handleUpdateImage(response.data.Data[0]);
       setModalUpload(false);
+      setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
         openNotificationWarning(error?.response?.data?.message);
       } else {
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
+      setLoading(false);
     }
+
   };
   const onChange = (value, selectedOptions) => {
     console.log(value, selectedOptions);
@@ -194,9 +215,11 @@ function UserDetail({ userId, onUpdateUser }) {
           >
             <Upload
               onChange={(info) => handleFileChosen(info)}
-              multiple
               showUploadList={false}
               fileList={listFiles.imageBlob}
+              maxCount={1}
+              listType="picture"
+              accept="image/*"
             >
               <Button icon={<UploadOutlined />}>Thay đổi ảnh đại diện</Button>
             </Upload>
