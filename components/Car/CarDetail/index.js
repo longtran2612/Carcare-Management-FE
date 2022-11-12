@@ -126,6 +126,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
       color: values.color,
       licensePlate: values.licensePlate,
       carModel: values.carModelCode,
+      imageUrl: imageS3 || carDetail?.imageUrl,
     };
     try {
       console.log(body);
@@ -178,7 +179,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
         Trở lại
       </Button>
       <Row gutter={[4, 4]}>
-        {/* <Col span={6}>
+        <Col span={6}>
           <Image width={300} height={250} src={carDetail.imageUrl} />
           <div
             style={{
@@ -214,9 +215,9 @@ const CarDetail = ({ carId, onUpdateCar }) => {
               <Timeline.Item>Mã: {carDetail?.customerCode}</Timeline.Item>
             </Timeline>
           </div>
-        </Col> */}
+        </Col>
 
-        <Col span={24}>
+        <Col span={18}>
           <Form
             form={form}
             layout="vertical"

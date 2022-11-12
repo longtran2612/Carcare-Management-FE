@@ -87,7 +87,6 @@ function DrawerCar({ id, show, handleCancel }) {
           handleCancel();
         }}
         open={show}
-        bodyStyle={{ padding: 40 }}
         extra={
 
           <Button

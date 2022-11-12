@@ -3,6 +3,7 @@ import {
   Col,
   Row,
   Button,
+  Image,
   Form,
   Select,
   Input,
@@ -13,12 +14,16 @@ import {
   Typography,
   Table,
 } from "antd";
+// import Image from "next/image";
+import { uploadImage } from "pages/api/uploadAPI";
 import { UploadOutlined } from "@ant-design/icons";
 import { getCarModelByBrand } from "pages/api/carModel";
 import { updateCar } from "pages/api/carAPI";
 import { openNotification, openNotificationWarning } from "utils/notification";
 import Loading from "components/Loading";
+import ModalUploadImage from "components/Modal/ModalUploadImage";
 const { TextArea } = Input;
+const { Title } = Typography;
 
 function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
   const [form] = Form.useForm();
@@ -26,6 +31,14 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
   const [loading, setLoading] = useState(false);
   const [carModels, setCarModels] = useState([]);
   const [brandSelected, setBrandSelected] = useState("");
+
+  const [modalUpload, setModalUpload] = useState(false);
+
+  const [imageS3, setImageS3] = useState(null);
+  const [listFiles, setListFiles] = useState({
+    images: [],
+    imageBlob: [],
+  });
 
   const [brands, setBrands] = useState([
     "Toyota",
@@ -73,6 +86,7 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
       color: values.color,
       licensePlate: values.licensePlate,
       carModel: values.carModelCode,
+      imageUrl: imageS3 || carDetail?.imageUrl,
     };
     try {
       console.log(body);
@@ -86,6 +100,35 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
       } else {
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
+    }
+  };
+
+  const handleFileChosen = (info) => {
+    const result = info.fileList.map((file) => {
+      const blob = new Blob([file.originFileObj], {
+        type: file.type,
+      });
+      return (window.URL || window.webkitURL).createObjectURL(blob);
+    });
+    setListFiles({ images: info.fileList, imageBlob: result });
+    setModalUpload(true);
+  };
+
+  const handleUploadImages = async () => {
+    try {
+      const formData = new FormData();
+      listFiles.images.map((image) => {
+        formData.append("files", image.originFileObj);
+      });
+      const response = await uploadImage(formData);
+      setImageS3(response.data.Data[0]);
+      setCarDetail((prevState) => {
+        return { ...prevState, imageUrl: response.data.Data[0] };
+      });
+      setListFiles({ images: [], imageBlob: [] });
+      setModalUpload(false);
+    } catch (error) {
+      openNotificationWarning("Đã có lỗi xảy ra");
     }
   };
 
@@ -117,7 +160,6 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
           handleCancel();
         }}
         open={show}
-        bodyStyle={{ padding: 40 }}
         extra={
           <Space>
             <Button onClick={() => handleCancel()}>Hủy</Button>
@@ -139,13 +181,38 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
           </Space>
         }
       >
-        <Divider>
-          <Typography.Title level={4}>Thông tin xe</Typography.Title>
-        </Divider>
-
         <Form form={form} layout="vertical">
           <Form form={form} layout="vertical" autoComplete="off">
             <Row gutter={10}>
+              <Col
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                span={24}
+              >
+                <Image width={170} height={170} src={carDetail.imageUrl} />
+              </Col>
+              <Col
+                style={{
+                  marginTop: "3px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                span={24}
+              >
+                <div>
+                  <Upload
+                    onChange={(info) => handleFileChosen(info)}
+                    multiple
+                    accept="image/*"
+                    showUploadList={false}
+                    fileList={listFiles.imageBlob}
+                  >
+                    <Button icon={<UploadOutlined />}>Tải hình lên</Button>
+                  </Upload>
+                </div>
+              </Col>
               <Col span={18}>
                 <Form.Item label="Tên xe" name="name">
                   <Input disabled />
@@ -242,6 +309,12 @@ function DrawerCarDetail({ car, show, onUpdate, handleCancel }) {
           </Form>
         </Form>
       </Drawer>
+      <ModalUploadImage
+        visible={modalUpload}
+        handleCancel={() => setModalUpload(false)}
+        handleOk={() => handleUploadImages()}
+        listImage={listFiles.imageBlob}
+      />
 
       <Loading loading={loading} />
     </>

@@ -108,6 +108,7 @@ function UserDetail({ userId, onUpdateUser }) {
         gender: values.gender,
         nationality: values.nationality,
       };
+      console.log(body);
       const res = await updateUserById(body, userId);
       setUserDetail(res.data.Data);
       openNotification("Thành công!", "Cập nhật nhân viên thành công");
