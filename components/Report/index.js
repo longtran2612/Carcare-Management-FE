@@ -22,8 +22,8 @@ const ReportPage = () => {
   const [users, setUsers] = useState([]);
   const [status, setStatus] = useState(100);
   const [loading, setLoading] = useState(false);
-  const [fromDate, setFromDate] = useState(moment());
-  const [toDate, setToDate] = useState(moment());
+  // const [fromDate, setFromDate] = useState(moment());
+  // const [toDate, setToDate] = useState(moment());
 
   const handleFetchCustomer = async () => {
     try {
@@ -50,22 +50,30 @@ const ReportPage = () => {
   const handleDatePicker = () => {
     switch (typeDate) {
       case "d":
-        return (
-          <RangePicker
-            // defaultValue={[moment("2021-01-01"), moment("2021-01-31")]}'
-            format={dateFormat}
-          />
-        );
+        return <RangePicker format={dateFormat} />;
       case "m":
         return <RangePicker picker="month" />;
       case "y":
-        return <RangePicker  picker="year" />;
+        return <RangePicker picker="year" />;
     }
   };
 
   const onFinish = async (values) => {
-    console.log(values);
-    // handleDate(values);
+    let fromDate;
+    let toDate;
+    if (values.typeDate === "d") {
+      fromDate = values.rangerDate[0];
+      toDate = values.rangerDate[1];
+    }
+    if (values.typeDate === "m") {
+      fromDate = moment(values.rangerDate[0]).startOf("month").add(1, "days");
+      toDate = moment(values.rangerDate[1]).endOf("month");
+    }
+    if (values.typeDate === "y") {
+      fromDate = moment(values.rangerDate[0]).startOf("year").add(1, "days");
+      toDate = moment(values.rangerDate[1]).endOf("year");
+    }
+
     setLoading(true);
     let body = {
       reportType: values.reportType,
@@ -73,21 +81,7 @@ const ReportPage = () => {
       toDate: toDate,
     };
     try {
-      console.log(body);
-      // const response = await getReport(body);
-
-      // const outputFilename = `bang_ke_huy_hoa_don.xlsx`;
-
-      // // If you want to download file automatically using link attribute.
-      // const url = URL.createObjectURL(new Blob([response.data]));
-      // const link = document.createElement('a');
-      // link.href = url;
-      // link.setAttribute('download', outputFilename);
-      // document.body.appendChild(link);
-      // link.click();
-
-      // OR you can save/write file locally.
-      // fs.writeFileSync(outputFilename, response.data);
+      const response = await getReport(body);
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -99,20 +93,23 @@ const ReportPage = () => {
     }
   };
 
-  const handleDate = (values) => {
-    console.log(values);
-    switch (typeDate) {
-      case "d":
-        setFromDate(moment(values?.rangerDate[0]).startOf("day"));
-        setToDate(moment(values?.rangerDate[1]).endOf("day"));
-      case "m":
-        setFromDate(moment(values?.rangerDate[0]).startOf("month"));
-        setToDate(moment(values?.rangerDate[1]).endOf("month"));
-      case "y":
-        setFromDate(moment(values?.rangerDate[0]).startOf("year"));
-        setToDate(moment(values?.rangerDate[1]).endOf("year"));
-    }
-  };
+  // const handleDate = () => {
+  //   console.log(form.getFieldValue('rangerDate'));
+  //   switch (typeDate) {
+  //     case "d":
+  //       setFromDate(moment(form.getFieldValue('rangerDate') && form.getFieldValue('rangerDate')[0]).startOf("day"));
+  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("day"));
+  //     case "m":
+  //       setFromDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[0]).startOf("month"));
+  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("month"));
+  //     case "y":
+  //       setFromDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[0]).startOf("year"));
+  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("year"));
+  //   }
+  // };
+  // useEffect(() => {
+  //   handleDate();
+  // }, [typeDate,form]);
 
   useEffect(() => {
     handleFetchCustomer();
@@ -186,6 +183,10 @@ const ReportPage = () => {
               ]}
               name="rangerDate"
               label="Khoảng thời gian"
+              initialValue={[
+                moment().startOf("month"),
+                moment().endOf("month"),
+              ]}
             >
               {handleDatePicker()}
             </Form.Item>

@@ -6,17 +6,20 @@ const dateFormat = "DD/MM/YYYY";
 
 const handleType = (data) => {
   console.log(data);
+  let fromDate = moment(data.fromDate).format("DD/MM/YYYY");
+  let toDate = moment(data.toDate).format("DD/MM/YYYY");
+
   switch (data?.reportType) {
     case 0:
-      return "bang_ke_hoa_don.xlsx";
+      return "bang_ke_hoa_don("+fromDate+"-"+toDate+").xlsx";
     case 1:
-      return "bang_ke_hoa_don_huy.xlsx";
+      return "bang_ke_hoa_don_huy("+fromDate+"-"+toDate+").xlsx";
     case 2:
-      return "bang_ke_hoa_don.xlsx";
+      return "bang_ke_hoa_don("+fromDate+"-"+toDate+").xlsx";
     case 3:
-      return "bang_ke_theo_khach_hang.xlsx";
+      return "bang_ke_theo_khach_hang("+fromDate+"-"+toDate+").xlsx";
     case 4:
-      return "bang_ke_khuyen_mai.xlsx";
+      return "bang_ke_khuyen_mai("+fromDate+"-"+toDate+").xlsx";
   }
 };
 
