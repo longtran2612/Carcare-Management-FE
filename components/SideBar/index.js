@@ -71,9 +71,8 @@ const SideBar = ({ handleOpenKey }) => {
           getItem("Khuyến mãi", "promotion"),
         ]),
         getItem("Thống kê - Báo cáo", "8", <BarChartOutlined />, [
-          getItem("Doanh số", "bill-report"),
-          // getItem("Dịch vụ", "service-report"),
-          // getItem("Khuyến mãi", "promotion-report"),
+          getItem("Thống kê", "statistic"),
+          getItem("Báo cáo", "report"),
         ]),
       ]);
     } else {
@@ -105,9 +104,8 @@ const SideBar = ({ handleOpenKey }) => {
           getItem("Khuyến mãi", "promotion"),
         ]),
         getItem("Thống kê - Báo cáo", "8", <BarChartOutlined />, [
-          getItem("Doanh số", "bill-report"),
-          // getItem("Dịch vụ", "service-report"),
-          // getItem("Khuyến mãi", "promotion-report"),
+          getItem("Thống kê", "statistic"),
+          getItem("Báo cáo", "report"),
         ]),
       ]);
     }

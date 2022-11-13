@@ -10,7 +10,7 @@ const { RangePicker } = DatePicker;
 
 const dateFormat = "DD/MM/YYYY";
 
-const BillReport = () => {
+const StatisticalPage = () => {
   const [typeDate, setTypeDate] = useState("d");
   const [customers, setCustomers] = useState([]);
   const [users, setUsers] = useState([]);
@@ -124,7 +124,7 @@ const BillReport = () => {
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item href=""> Báo cáo doanh số</Breadcrumb.Item>
+        <Breadcrumb.Item href=""> Thống kê</Breadcrumb.Item>
       </Breadcrumb>
       <Row style={{ marginTop: "20px" }} gutter={[16, 16]}>
         <Col span={3}>
@@ -198,4 +198,4 @@ const BillReport = () => {
     </>
   );
 };
-export default BillReport;
+export default StatisticalPage;
