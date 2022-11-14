@@ -10,7 +10,6 @@ import {
   Drawer,
   Divider,
   Table,
-  Column,
   Button,
   Avatar,
 } from "antd";
