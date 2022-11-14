@@ -529,7 +529,7 @@ const ServiceCustomer = ({ status }) => {
               </>
             )}
           >
-            <Column
+            <Col
               title="STT"
               dataIndex="stt"
               key="stt"
@@ -538,16 +538,16 @@ const ServiceCustomer = ({ status }) => {
                 return <div>{dataIndex + 1}</div>;
               }}
             />
-            <Column title="Tên dịch vụ" dataIndex="name" key="name" />
-            <Column
+            <Col title="Tên dịch vụ" dataIndex="name" key="name" />
+            <Col
               dataIndex="estimateTime"
               key="estimateTime"
               render={(text, record) => {
                 return <div>{record.estimateTime} phút</div>;
               }}
               title="Thời gian sử lý"
-            ></Column>
-            <Column
+            ></Col>
+            <Col
               title="Giá dịch vụ"
               dataIndex="price"
               key="price"
