@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { openNotification, openNotificationWarning } from "utils/notification";
 import { getPricesByHeader } from "pages/api/priceAPI";
 import {
+  deletePriceHeader,
   getPriceHeaderById,
   updatePriceHeader,
 } from "pages/api/PriceHeaderAPI";
@@ -32,6 +33,7 @@ import {
   SaveOutlined,
   EditFilled,
   EditOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
@@ -283,7 +285,25 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
 
   const handleUpdatePrice = () => {
     fetchPrice();
+  };
+
+  const handleDeletePrice = async () => {
+    setLoading(true);
+    try{
+      const res = await deletePriceHeader(priceHeaderId);
+      openNotification("Thành công", "Xóa bảng giá thành công!");
+      router.push("/admin");
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
   }
+
 
   return (
     <>
@@ -386,6 +406,26 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                 className="service-action"
               >
                 <div>
+                  {moment().isBefore(priceHeaderDetail?.fromDate) && (
+                <Popconfirm
+                    title="Bạn có chắc chắn xóa bảng giá này?"
+                    placement="topLeft"
+                    okText="Xóa"
+                    cancelText="Hủy"
+                    onConfirm={() => {
+                      handleDeletePrice(priceHeaderDetail.id);
+                    }}
+                  >
+                <Button
+                    style={{marginRight: "20px" }}
+                    icon={<DeleteOutlined />}
+                    type="danger"
+                  >
+                    Xóa bảng giá
+                  </Button>
+                  </Popconfirm>
+                  )}
+               
                   <Popconfirm
                     title="Cập nhật?"
                     placement="topLeft"
@@ -406,6 +446,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                       Cập nhật
                     </Button>
                   </Popconfirm>
+                 
                 </div>
               </div>
             </Row>
@@ -459,13 +500,12 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
         </Col>
       </Row>
       <DrawerPriceDetail
-      show={modalPriceDetail}
-      handleCancel={() => setModalPriceDetail(false)}
-      onUpdate={handleUpdatePrice}
-      price={priceSelected}
-      canUpdatePrice={moment().isAfter(form.getFieldValue("fromDate"))}
-
-     />
+        show={modalPriceDetail}
+        handleCancel={() => setModalPriceDetail(false)}
+        onUpdate={handleUpdatePrice}
+        price={priceSelected}
+        canUpdatePrice={moment().isAfter(form.getFieldValue("fromDate"))}
+      />
 
       <ModalAddPrice
         show={modalPrice}

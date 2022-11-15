@@ -62,6 +62,7 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
     try {
       const response = await getCustomerByCode(customerId);
       setCustomerDetail(response.data.Data);
+      console.log(response);
       form.setFieldsValue({
         name: response.data.Data.name,
         customerCode: response.data.Data.customerCode,
@@ -71,7 +72,7 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
         nationality: response.data.Data.nationality,
         identityNumber: response.data.Data.identityNumber,
         statusName: response.data.Data.statusName,
-        dateOfBirth: moment(moment(response.data.Data.dateOfBirth), formatDate),
+        dateOfBirth: response.data.Data.dateOfBirth ?  moment(moment(response.data.Data.dateOfBirth), formatDate) : "",
         address: response.data.Data.address,
         addressvn: [
           response.data.Data.provinceCode,
@@ -132,6 +133,7 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
         nationality: values.nationality,
       };
       const res = await updateCustomer(customerDetail.id, body);
+ 
       setCustomerDetail(res.data.Data);
       openNotification("Cập nhật khách hàng thành công!", "");
     } catch (error) {

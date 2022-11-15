@@ -1,4 +1,4 @@
-import { Affix, Col, Layout, Row, Space, Typography } from "antd";
+import { Affix, Col, Layout, Row, Space, Typography, Modal } from "antd";
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
@@ -7,12 +7,15 @@ import SideBar from "components/SideBar";
 import MyContent from "components/Content";
 import { loadUser } from "pages/api/authAPI";
 import Loading from "components/Loading";
+import ModalChangePassword from "components/Modal/ModalChangePassword";
 const { Content, Sider, Footer } = Layout;
 
 const AdminPage = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [key, setKey] = useState("car-slot");
   const [loading, setLoading] = useState(false);
+
+  const [showModalChangePassword, setShowModalChangePassword] = useState(false);
 
   const router = useRouter();
 
@@ -27,11 +30,18 @@ const AdminPage = () => {
     }
     try {
       const res = await loadUser();
-     
-      if (res.data.Data.roles == "ROLE_USER" || res.data.Data.roles == "ROLE_ADMIN") {
+      if (
+        res.data.Data.roles == "ROLE_USER" ||
+        res.data.Data.roles == "ROLE_ADMIN"
+      ) {
         router.push("/admin");
       } else {
         router.push("/home");
+      }
+      console.log(res.data.Data);
+      if (res?.data?.Data?.loginBefore === false) {
+        setShowModalChangePassword(true);
+        countDown();
       }
       setLoading(false);
     } catch (err) {
@@ -42,6 +52,26 @@ const AdminPage = () => {
   useEffect(() => {
     handleAuthentication();
   }, []);
+
+  const countDown = () => {
+    let secondsToGo = 30;
+    const modal = Modal.success({
+      title: "Chào mừng bạn đến với LVCARCARE",
+      content: <>Vì lý do bảo mật! Xin vui lòng đổi mật khẩu ({secondsToGo}) </>,
+    });
+    const timer = setInterval(() => {
+      secondsToGo -= 1;
+      modal.update({
+        content: <>Vì lý do bảo mật! Xin vui lòng đổi mật khẩu ({secondsToGo})</>,
+      });
+    }, 1000);
+    setTimeout(() => {
+      clearInterval(timer);
+      modal.destroy();
+    }, secondsToGo * 1000);
+  };
+
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -93,6 +123,11 @@ const AdminPage = () => {
           </Footer> */}
         </Layout>
       </Layout>
+      <ModalChangePassword
+        show={showModalChangePassword}
+        handleCancel={() => setShowModalChangePassword(false)}
+        onFinish={() => setShowModalChangePassword(false)}
+      />
       <Loading loading={loading} />
     </>
   );

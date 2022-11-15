@@ -79,7 +79,21 @@ const updatePrice = async (id, data) => {
     });
 };
 
+const deletePrice = (id) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/prices/delete/${id}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 export {
+  deletePrice,
   getPriceById,
   getPricesByHeader,
   getPricesByParent,

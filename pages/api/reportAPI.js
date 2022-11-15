@@ -11,15 +11,15 @@ const handleType = (data) => {
 
   switch (data?.reportType) {
     case 0:
-      return "bang_ke_hoa_don("+fromDate+"-"+toDate+").xlsx";
+      return "bao_cao_tong_hop_"+fromDate+"-"+toDate+".xlsx";
     case 1:
-      return "bang_ke_hoa_don_huy("+fromDate+"-"+toDate+").xlsx";
+      return "bang_ke_hoa_don_huy_"+fromDate+"-"+toDate+".xlsx";
     case 2:
-      return "bang_ke_hoa_don("+fromDate+"-"+toDate+").xlsx";
+      return "doanh_so_theo_ngay("+fromDate+"-"+toDate+".xlsx";
     case 3:
-      return "bang_ke_theo_khach_hang("+fromDate+"-"+toDate+").xlsx";
+      return "doanh_so_theo_khach_hang_"+fromDate+"-"+toDate+".xlsx";
     case 4:
-      return "bang_ke_khuyen_mai("+fromDate+"-"+toDate+").xlsx";
+      return "tong_ket_khuyen_mai_"+fromDate+"-"+toDate+".xlsx";
   }
 };
 

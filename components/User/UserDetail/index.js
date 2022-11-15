@@ -57,6 +57,7 @@ function UserDetail({ userId, onUpdateUser }) {
     try {
       const response = await getUserById(userId);
       setUserDetail(response.data.Data);
+      console.log(response)
       form.setFieldsValue({
         name: response.data.Data.name,
         phone: response.data.Data.phone,

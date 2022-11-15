@@ -42,8 +42,8 @@ const getPriceHeaders = () => {
   };
   const deletePriceHeader = (data) => {
     return axios({
-      method: "DELETE",
-      url: API_URL + `/price-headers/${data}`,
+      method: "POST",
+      url: API_URL + `/price-headers/delete/${data}`,
     })
       .then((res) => {
         return res;

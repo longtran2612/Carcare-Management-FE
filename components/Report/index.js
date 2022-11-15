@@ -144,11 +144,11 @@ const ReportPage = () => {
                 // defaultValue="d"
                 style={{ width: "100%" }}
               >
-                <Select.Option value={0}>Tất cả</Select.Option>
-                <Select.Option value={1}>Hóa đơn hủy</Select.Option>
-                <Select.Option value={2}>Theo ngày</Select.Option>
-                <Select.Option value={3}>Nhân viên</Select.Option>
-                <Select.Option value={4}>Khuyến mãi</Select.Option>
+                <Select.Option value={0}>Báo cáo tổng hợp</Select.Option>
+                <Select.Option value={1}>Bảng kê hủy hóa đơn</Select.Option>
+                <Select.Option value={2}>Doanh số theo ngày theo ngày</Select.Option>
+                <Select.Option value={3}>Doanh số theo khách hàng</Select.Option>
+                <Select.Option value={4}>Tổng kết khuyến mãi</Select.Option>
               </Select>
             </Form.Item>
           </Col>
@@ -191,7 +191,7 @@ const ReportPage = () => {
               {handleDatePicker()}
             </Form.Item>
           </Col>
-          <Col span={24}>
+          {/* <Col span={24}>
             <Form.Item name="customer" label="Khách hàng">
               <Select
                 style={{ width: "100%" }}
@@ -238,7 +238,7 @@ const ReportPage = () => {
                 ))}
               </Select>
             </Form.Item>
-          </Col>
+          </Col> */}
           <Col style={{ display: "flex", justifyContent: "center" }} span={24}>
             <Button
               onClick={() => {
