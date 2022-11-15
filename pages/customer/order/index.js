@@ -60,7 +60,7 @@ export default function CustomerOrderPage() {
               <Option value={10}>Đã hoàn thành</Option>
               <Option value={2}>Đang xử lý</Option>
               <Option value={-100}>Đã hủy</Option>
-              <Option value={100}>Đã xuất hóa đơn</Option>
+              {/* <Option value={100}>Đã xuất hóa đơn</Option> */}
             </Select>
           </Col>
 
