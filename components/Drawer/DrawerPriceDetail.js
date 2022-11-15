@@ -156,7 +156,7 @@ function DrawerPriceDetail({
                 >
                   <Select disabled={!canUpdatePrice}>
                     <Select.Option value={100}>Hoạt động</Select.Option>
-                    <Select.Option value={-100}>Không hoạt động</Select.Option>
+                    <Select.Option value={10}>Không hoạt động</Select.Option>
                     {!canUpdatePrice && (
                     <Select.Option disabled value={10}>
                       Chưa tới hiệu lực

@@ -462,7 +462,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                     </Popconfirm>
                   ) : (
                     <Popconfirm
-                      title="Bạn có chắc chắn kính hoạt bảng giá này?"
+                      title="Bạn có chắc chắn kích hoạt bảng giá này?"
                       placement="topLeft"
                       okText="Đông ý"
                       cancelText="Hủy"
