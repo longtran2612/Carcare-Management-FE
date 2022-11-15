@@ -375,15 +375,14 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   >
                     <InputNumber
                       addonAfter="Đ"
+                      min={0}
                       formatter={(value) =>
                         `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                       }
                       parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                      min={0}
                     />
                   </Form.Item>
                 </Col>
-
                 <Col span={12}>
                   <Form.Item
                     label="Tổng tiền đã giảm"
@@ -396,7 +395,6 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                         `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                       }
                       parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                      min={0}
                     />
                   </Form.Item>
                 </Col>
