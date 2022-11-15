@@ -7,7 +7,12 @@ import ModalAddPriceHeader from "components/Modal/ModalAddPriceHeader";
 import moment from "moment";
 const formatDate = "DD/MM/YYYY";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined ,PlusOutlined, DeleteOutlined} from "@ant-design/icons";
+import {
+  ClearOutlined,
+  SearchOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
 function PriceHeaderTable({}) {
@@ -135,7 +140,9 @@ function PriceHeaderTable({}) {
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
-          String(record.priceHeaderCode).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.priceHeaderCode)
+            .toLowerCase()
+            .includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.status).toLowerCase().includes(value.toLowerCase())
         );
@@ -190,12 +197,12 @@ function PriceHeaderTable({}) {
       getPriceHeaders().then((res) => {
         if (res.data.StatusCode == 200) {
           setPriceHeaders(res.data.Data);
-        } 
+        }
         setLoading(false);
       });
     } catch (err) {
       setLoading(false);
-     console.log(err);
+      console.log(err);
     }
   };
 
@@ -234,8 +241,12 @@ function PriceHeaderTable({}) {
               </Button>
             </Col>
             <Col span={11}>
-           
-              <Button style={{float:"right"}} icon={<PlusOutlined />} type="primary" onClick={() => setModalPriceHeader(true)}>
+              <Button
+                style={{ float: "right" }}
+                icon={<PlusOutlined />}
+                type="primary"
+                onClick={() => setModalPriceHeader(true)}
+              >
                 Thêm bảng giá
               </Button>
             </Col>

@@ -20,6 +20,8 @@ import {
   deletePriceHeader,
   getPriceHeaderById,
   updatePriceHeader,
+  activePriceHeader,
+  inActivePriceHeader,
 } from "pages/api/PriceHeaderAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -296,6 +298,40 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
     fetchPrice();
   };
 
+  const handleActivePrice = async () => {
+    setLoading(true);
+    try {
+      const res = await activePriceHeader(priceHeaderId);
+      openNotification("Thành công", "Kích hoạt bảng giá thành công!");
+      fetchPriceHeaderDetail();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
+
+  const handleInActivePrice = async () => {
+    setLoading(true);
+    try {
+      const res = await inActivePriceHeader(priceHeaderId);
+      openNotification("Thành công", "Vô hiệu bảng giá thành công!");
+      fetchPriceHeaderDetail();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
+
   const handleDeletePrice = async () => {
     setLoading(true);
     try {
@@ -384,7 +420,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={4}>
+              {/* <Col span={4}>
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -401,7 +437,45 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                     </Select.Option>
                   </Select>
                 </Form.Item>
+              </Col> */}
+              <Col span={4}>
+                <Form.Item
+                  label="Trạng thái"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  name="status"
+                >
+                  {priceHeaderDetail?.status === "ACTIVE" ? (
+                    <Popconfirm
+                      title="Bạn có chắc chắn vô hiệu bảng giá này?"
+                      placement="topLeft"
+                      okText="Đông ý"
+                      cancelText="Hủy"
+                      onConfirm={() => {
+                        handleInActivePrice();
+                      }}
+                    >
+                      <Button  style={{ backgroundColor: "#7DC67E" ,width:'100%' }}>Hoạt dộng</Button>
+                    </Popconfirm>
+                  ) : (
+                    <Popconfirm
+                      title="Bạn có chắc chắn kính hoạt bảng giá này?"
+                      placement="topLeft"
+                      okText="Đông ý"
+                      cancelText="Hủy"
+                      onConfirm={() => {
+                        handleActivePrice();
+                      }}
+                    >
+                      <Button style={{width:'100%'}} type="danger">Không hoạt dộng</Button>
+                    </Popconfirm>
+                  )}
+                </Form.Item>
               </Col>
+
               <Col span={24}>
                 <Form.Item label="Mô tả" name="description">
                   <TextArea rows={2} />

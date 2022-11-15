@@ -67,4 +67,29 @@ const getPriceHeaders = () => {
       });
   };
 
-export { getPriceHeaderById,updatePriceHeader, getPriceHeaders, createPriceHeader, deletePriceHeader };
+  const activePriceHeader = (data) => {
+    return axios({
+      method: "POST",
+      url: API_URL + `/price-headers/active/${data}`,
+    })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+  const inActivePriceHeader = (data) => {
+    return axios({
+      method: "POST",
+      url: API_URL + `/price-headers/inactive/${data}`,
+    })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  };
+
+export {activePriceHeader,inActivePriceHeader, getPriceHeaderById,updatePriceHeader, getPriceHeaders, createPriceHeader, deletePriceHeader };
