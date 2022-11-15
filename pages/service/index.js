@@ -149,7 +149,7 @@ const ServicePage = () => {
                   />
                   <div style={{textAlign:'center',padding:"5px"}}>
                   <h5 style={{font:'bold'}}>{item.name}</h5>
-                  <span>{formatMoney(item.price)}</span>
+                  <span>{formatMoney(item.servicePrice.price)}</span>
                   </div>
                   
 
