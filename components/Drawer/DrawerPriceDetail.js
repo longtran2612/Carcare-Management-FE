@@ -13,20 +13,32 @@ import {
   Typography,
   Table,
   InputNumber,
+  Popconfirm,
 } from "antd";
-import { updatePrice } from "pages/api/priceAPI";
-import { UploadOutlined } from "@ant-design/icons";
+import { updatePrice, deletePrice } from "pages/api/priceAPI";
+import {
+  DeleteOutlined,
+  SaveOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import { getCarModelByBrand } from "pages/api/carModel";
 import { updateCar } from "pages/api/carAPI";
 import { openNotification, openNotificationWarning } from "utils/notification";
 import Loading from "components/Loading";
 const { TextArea } = Input;
 
-function DrawerPriceDetail({canUpdatePrice, price, show, onUpdate, handleCancel }) {
+function DrawerPriceDetail({
+  canUpdatePrice,
+  price,
+  show,
+  onUpdate,
+  handleCancel,
+}) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
+    console.log("values", values);
     setLoading(true);
     let dataUpdate = {
       price: values.price,
@@ -44,6 +56,21 @@ function DrawerPriceDetail({canUpdatePrice, price, show, onUpdate, handleCancel 
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
       setLoading(false);
+    }
+  };
+
+  const handleDeletePrice = async () => {
+    try {
+      const res = await deletePrice(price?.id);
+      openNotification("Thành công", "Xóa giá thành công");
+      handleCancel();
+      onUpdate();
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
     }
   };
 
@@ -71,7 +98,23 @@ function DrawerPriceDetail({canUpdatePrice, price, show, onUpdate, handleCancel 
         extra={
           <Space>
             <Button onClick={() => handleCancel()}>Hủy</Button>
+            {!canUpdatePrice && (
+              <Popconfirm
+                title="Bạn có chắc chắn xóa giá này?"
+                placement="topLeft"
+                okText="Xóa"
+                cancelText="Hủy"
+                onConfirm={() => {
+                  handleDeletePrice();
+                }}
+              >
+                <Button type="danger" icon={<DeleteOutlined />}>
+                  Xóa
+                </Button>
+              </Popconfirm>
+            )}
             <Button
+              icon={<SaveOutlined />}
               onClick={() => {
                 form
                   .validateFields()
@@ -111,9 +154,12 @@ function DrawerPriceDetail({canUpdatePrice, price, show, onUpdate, handleCancel 
                   label="Trạng thái"
                   name="status"
                 >
-                  <Select>
+                  <Select disabled={!canUpdatePrice}>
                     <Select.Option value={100}>Hoạt động</Select.Option>
-                    <Select.Option value={0}>Không hoạt động</Select.Option>
+                    <Select.Option value={-100}>Không hoạt động</Select.Option>
+                    <Select.Option disabled value={10}>
+                      Chưa tới hiệu lực
+                    </Select.Option>
                   </Select>
                 </Form.Item>
               </Col>

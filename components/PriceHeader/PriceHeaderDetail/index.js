@@ -196,6 +196,11 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
       title: "Mã dịch vụ",
       dataIndex: "serviceCode",
       key: "serviceCode",
+      render: (text, record) => (
+        <a style={{ color: "blue", textDecorationLine: "underline" }}>
+          {record?.serviceCode}
+        </a>
+      ),
       filteredValue: [searchGlobal],
       onFilter: (value, record) => {
         return (
@@ -227,12 +232,16 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
     },
     {
       title: "Trạng thái",
-      dataIndex: "statusName",
-      key: "statusName",
-      render: (statusName) => {
+      dataIndex: "status",
+      key: "status",
+      render: (status) => {
         return (
           <>
-            <Tag color={"green"}>{statusName}</Tag>{" "}
+            {status === 100 ? (
+              <Tag color={"green"}>Đang hoạt động</Tag>
+            ) : (
+              <Tag color={"red"}>Không hoạt động</Tag>
+            )}
           </>
         );
       },
@@ -289,7 +298,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
 
   const handleDeletePrice = async () => {
     setLoading(true);
-    try{
+    try {
       const res = await deletePriceHeader(priceHeaderId);
       openNotification("Thành công", "Xóa bảng giá thành công!");
       router.push("/admin");
@@ -302,8 +311,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
       }
       setLoading(false);
     }
-  }
-
+  };
 
   return (
     <>
@@ -407,25 +415,25 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
               >
                 <div>
                   {moment().isBefore(priceHeaderDetail?.fromDate) && (
-                <Popconfirm
-                    title="Bạn có chắc chắn xóa bảng giá này?"
-                    placement="topLeft"
-                    okText="Xóa"
-                    cancelText="Hủy"
-                    onConfirm={() => {
-                      handleDeletePrice(priceHeaderDetail.id);
-                    }}
-                  >
-                <Button
-                    style={{marginRight: "20px" }}
-                    icon={<DeleteOutlined />}
-                    type="danger"
-                  >
-                    Xóa bảng giá
-                  </Button>
-                  </Popconfirm>
+                    <Popconfirm
+                      title="Bạn có chắc chắn xóa bảng giá này?"
+                      placement="topLeft"
+                      okText="Xóa"
+                      cancelText="Hủy"
+                      onConfirm={() => {
+                        handleDeletePrice(priceHeaderDetail.id);
+                      }}
+                    >
+                      <Button
+                        style={{ marginRight: "20px" }}
+                        icon={<DeleteOutlined />}
+                        type="danger"
+                      >
+                        Xóa bảng giá
+                      </Button>
+                    </Popconfirm>
                   )}
-               
+
                   <Popconfirm
                     title="Cập nhật?"
                     placement="topLeft"
@@ -446,7 +454,6 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                       Cập nhật
                     </Button>
                   </Popconfirm>
-                 
                 </div>
               </div>
             </Row>

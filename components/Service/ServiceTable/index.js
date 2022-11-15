@@ -329,7 +329,7 @@ function ServiceTable({}) {
             </Col>
           </Row>
           <Table
-            onChange={handleSearch}
+            // onChange={handleSearch}
             columns={columns}
             dataSource={services}
             bordered
