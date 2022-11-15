@@ -15,7 +15,7 @@ import {
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { SearchOutlined, ClearOutlined, TagsOutlined } from "@ant-design/icons";
-import { getServices } from "pages/api/serviceAPI";
+import { getServices,searchService } from "pages/api/serviceAPI";
 import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
@@ -41,11 +41,15 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
 
   const [promotionDetails, setPromotionDetails] = useState([]);
   const [showSelectPromotion, setShowSelectPromotion] = useState(false);
-
+  
   const handleGetServices = async () => {
     setLoading(true);
+    let dataGetOrder = {
+      status: 100,
+    };
     try {
-      const response = await getServices();
+      const response = await searchService(dataGetOrder);
+      // const response = await getServices();
       setServices(response.data.Data);
       setLoading(false);
     } catch (err) {
