@@ -53,5 +53,18 @@ const createPromotionHeader = (data) => {
             throw err;
         });
 };
+const updatePromotionHeader = (id,data) => {
+    return axios({
+        method: "POST",
+        url: API_URL + `/promotion-headers/update/${id}`,
+        data: data,
+    })
+        .then((res) => {
+            return res;
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
 
-export { getPromotionHeaders,getPromotionHeaderByCode, getPromotionHeaderById, createPromotionHeader };
+export { updatePromotionHeader, getPromotionHeaders,getPromotionHeaderByCode, getPromotionHeaderById, createPromotionHeader };

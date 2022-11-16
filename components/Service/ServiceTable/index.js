@@ -1,7 +1,7 @@
 import { Table, Tag, Button, Input, Row, Col, Space, Select } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { SearchOutlined, ClearOutlined, PlusOutlined } from "@ant-design/icons";
-import { getServices, searchService } from "pages/api/serviceAPI";
+import { getServices ,searchService } from "pages/api/serviceAPI";
 import { getCategories } from "pages/api/categoryAPI";
 import ModalAddService from "components/Modal/ModalAddService";
 import { useRouter } from "next/router";
@@ -32,8 +32,11 @@ function ServiceTable({}) {
 
   const handleGetServices = async () => {
     setLoading(true);
+    let body = {
+      key:""
+    };
     try {
-      const response = await getServices();
+      const response = await searchService(body);
       setServices(response.data.Data);
       setLoading(false);
     } catch (err) {
@@ -67,17 +70,6 @@ function ServiceTable({}) {
     fetchCategoryServices();
   };
 
-  const handleSearchService = async () => {
-    setLoading(true);
-    try {
-      const response = await searchService(searchValue);
-      console.log(response);
-      setServices(response.data.Data.data);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
@@ -239,7 +231,6 @@ function ServiceTable({}) {
       title: "Loại dịch vụ",
       dataIndex: "type",
       key: "type",
-      ...getColumnSearchProps("type"),
       render: (text,record) => {
         return (
         handleTypeService(record.type)
@@ -248,29 +239,15 @@ function ServiceTable({}) {
     },
     {
       title: "Trạng thái",
-      key: "statusName",
-      dataIndex: "statusName",
-      ...getColumnSearchProps("statusName"),
-      filters: [
-        {
-          value: "Đang có hiệu lực",
-          text: "Đang có hiệu lực",
-        },
-        {
-          value: "Không có hiệu lực",
-          text: "Không có hiệu lực",
-        },
-      ],
-      filteredValue: filteredInfo.statusName || null,
-      onFilter: (value, record) => record.statusName.includes(value),
-      ellipsis: true,
-      render: (statusName) => {
+      key: "status",
+      dataIndex: "status",
+      render: (status) => {
         return (
           <>
-            {statusName === "Đang có hiệu lực" ? (
-              <Tag color={"green"}>{"Đang có hiệu lực"}</Tag>
+            {status === 100 ? (
+              <Tag color={"green"}>{"Đang hoạt động"}</Tag>
             ) : (
-              <Tag color={"red"}>{"Không có hiệu lực"}</Tag>
+              <Tag color={"red"}>{"Không hoạt động"}</Tag>
             )}
           </>
         );

@@ -17,8 +17,9 @@ import { openNotification,openNotificationWarning } from "utils/notification";
 
 import { getPromotionLineByHeaderId } from "pages/api/promotionLineAPI";
 import {
-  getPromotionHeaderByCode,
   getPromotionHeaderById,
+  updatePromotionHeader,
+
 } from "pages/api/promotionHeaderAPI";
 
 import { validateMessages } from "utils/messageForm";
@@ -34,8 +35,7 @@ const formatDate = "DD/MM/YYYY";
 import DrawerPromorionDetail from "components/Drawer/DrawerPromotionDetail";
 
 const PromotionHeaderDetail = ({
-  promotionHeaderId,
-  onUpdatePromotionHeader,
+  promotionHeaderId
 }) => {
   const router = useRouter();
   const [form] = Form.useForm();
@@ -159,7 +159,7 @@ const PromotionHeaderDetail = ({
       setPromotionHeaderDetail(response.data.Data);
       console.log(response.data.Data);
       form.setFieldsValue({
-        name: response.data.Data.description,
+        description: response.data.Data.description,
         fromDate: moment(moment(response.data.Data.fromDate), formatDate),
         toDate: moment(moment(response.data.Data.toDate), formatDate),
         status: response.data.Data.status,
@@ -287,17 +287,16 @@ const PromotionHeaderDetail = ({
   const onFinish = async (values) => {
     setLoading(true);
     let body = {
-      id: promotionHeaderDetail.id,
-      type: values.type,
-      name: values.name,
       description: values.description,
-      categoryId: values.categoryId,
-      status: values.status,
+      toDate: values.toDate,
     };
+    if(moment().isBefore(values.fromDate)){
+      body.fromDate = values.fromDate;
+    }
+
     try {
-      const res = await updatePriceHeader(body, promotionHeaderDetail.id);
-      openNotification("Cập nhật chương trình khuyến mãi thành công!", "");
-      onUpdatePromotionHeader();
+      const res = await updatePromotionHeader(promotionHeaderDetail.id,body);
+      openNotification("Thành công","Cập nhật chương trình khuyến mãi thành công!");
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -330,7 +329,7 @@ const PromotionHeaderDetail = ({
               <Col span={12}>
                 <Form.Item
                   label="Tên chương trình"
-                  name="name"
+                  name="description"
                   rules={[
                     {
                       required: true,
@@ -378,7 +377,7 @@ const PromotionHeaderDetail = ({
                 >
                   <DatePicker
                     disabledDate={(d) =>
-                      !d || d.isSameOrBefore(form.getFieldValue("fromDate"))
+                      !d || d.isSameOrBefore(form.getFieldValue("fromDate")) || d.isSameOrBefore(moment())
                     }
                     format={formatDate}
                   />

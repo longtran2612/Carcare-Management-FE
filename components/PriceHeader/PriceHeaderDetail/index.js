@@ -271,10 +271,12 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
   const onFinish = async (values) => {
     setLoading(true);
     let body = {
-      description: values.description,
-      // fromDate: values.fromDate,
+      name: values.name,
       toDate: values.toDate,
     };
+    if(moment().isBefore(values.fromDate)){
+      body.fromDate = values.fromDate;
+    }
     try {
       const res = await updatePriceHeader(body, priceHeaderDetail.id);
       openNotification("Thành công", "Cập nhật bảng giá thành công!");
@@ -414,7 +416,9 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                 >
                   <DatePicker
                     disabledDate={(d) =>
-                      !d || d.isSameOrBefore(form.getFieldValue("fromDate"))
+                      !d ||
+                      d.isSameOrBefore(form.getFieldValue("fromDate")) ||
+                      d.isSameOrBefore(moment())
                     }
                     format={formatDate}
                   />
@@ -458,7 +462,11 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                         handleInActivePrice();
                       }}
                     >
-                      <Button  style={{ backgroundColor: "#7DC67E" ,width:'100%' }}>Hoạt dộng</Button>
+                      <Button
+                        style={{ backgroundColor: "#7DC67E", width: "100%" }}
+                      >
+                        Hoạt dộng
+                      </Button>
                     </Popconfirm>
                   ) : (
                     <Popconfirm
@@ -470,17 +478,15 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                         handleActivePrice();
                       }}
                     >
-                      <Button style={{width:'100%'}} type="danger">Không hoạt dộng</Button>
+                      <Button style={{ width: "100%" }} type="danger">
+                        Không hoạt dộng
+                      </Button>
                     </Popconfirm>
                   )}
                 </Form.Item>
               </Col>
 
-              <Col span={24}>
-                <Form.Item label="Mô tả" name="description">
-                  <TextArea rows={2} />
-                </Form.Item>
-              </Col>
+             
             </Row>
             <Row className="PullRight">
               <div
@@ -573,7 +579,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
             columns={columns}
             dataSource={prices}
             scroll={{
-              y: 200,
+              y: 320,
             }}
             pagination={false}
             rowKey="id"
