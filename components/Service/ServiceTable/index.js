@@ -211,22 +211,22 @@ function ServiceTable({}) {
         return <div>{estimateTime} phút</div>;
       },
     },
-    {
-      title: "Giá",
-      dataIndex: "servicePrice",
-      key: "servicePrice",
-      render: (servicePrice) => {
-        return (
-          <>
-            {servicePrice === null ? (
-              <Tag color={"red"}>{"Chưa có giá"}</Tag>
-            ) : (
-              <div>{formatMoney(servicePrice.price)}</div>
-            )}
-          </>
-        );
-      },
-    },
+    // {
+    //   title: "Giá",
+    //   dataIndex: "servicePrice",
+    //   key: "servicePrice",
+    //   render: (servicePrice) => {
+    //     return (
+    //       <>
+    //         {servicePrice === null ? (
+    //           <Tag color={"red"}>{"Chưa có giá"}</Tag>
+    //         ) : (
+    //           <div>{formatMoney(servicePrice.price)}</div>
+    //         )}
+    //       </>
+    //     );
+    //   },
+    // },
     {
       title: "Loại dịch vụ",
       dataIndex: "type",

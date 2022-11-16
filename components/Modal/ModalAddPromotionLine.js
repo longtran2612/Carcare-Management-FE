@@ -11,6 +11,7 @@ const ModalAddPromotionLine = ({
   show,
   onSuccess,
   handleCancel,
+  startDate,
   endDate
 }) => {
   const [form] = Form.useForm();
@@ -105,13 +106,12 @@ const ModalAddPromotionLine = ({
                     required: true,
                   },
                 ]}
-                initialValue={moment()}
               >
                 <DatePicker
                   disabledDate={(d) =>
                     !d ||
                     d.isBefore(moment()) ||
-                    form.getFieldValue("toDate") && d.isAfter(form.getFieldValue("toDate"))
+                    form.getFieldValue("toDate") && d.isAfter(form.getFieldValue("toDate")) || d.isBefore(startDate)
                   }
                   placeholder="Ngày bắt đầu"
                   format={formatDate}
@@ -130,7 +130,7 @@ const ModalAddPromotionLine = ({
               >
                 <DatePicker
                   disabledDate={(d) =>
-                    !d || d.isSameOrBefore(form.getFieldValue("fromDate")) || d.isAfter(endDate)
+                    !d || form.getFieldValue("fromDate") && d.isSameOrBefore(form.getFieldValue("fromDate")) || d.isAfter(endDate)
                   }
                   placeholder="Ngày kết thúc"
                   format={formatDate}

@@ -95,7 +95,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
           validateMessages={validateMessages}
         >
           <Row gutter={[16, 16]}>
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item
                 label="Tên dịch vụ"
                 name="name"
@@ -108,7 +108,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 <Input />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item
                 label="Danh mục dịch vụ"
                 rules={[
@@ -159,7 +159,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={8}>
+            {/* <Col span={8}>
               <Form.Item
                 label="Giá dịch vụ"
                 rules={[
@@ -180,7 +180,7 @@ const ModalAddService = ({ show, onSuccess, handleCancel }) => {
                   addonAfter="VNĐ"
                 />
               </Form.Item>
-            </Col>
+            </Col> */}
             <Col span={8}>
               <Form.Item
                 label="Thời gian xử lý"

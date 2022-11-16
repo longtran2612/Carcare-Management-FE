@@ -103,7 +103,7 @@ const ModalAddPromotionHeader = ({ show, onSuccess, handleCancel }) => {
               >
                 <DatePicker
                   disabledDate={(d) =>
-                    !d || d.isSameOrBefore(form.getFieldValue("fromDate")) 
+                    !d || d.isBefore(form.getFieldValue("fromDate")) 
                   }
                   placeholder="kết thúc"
                   format={formatDate}

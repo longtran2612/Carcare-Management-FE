@@ -99,7 +99,7 @@ const ModalAddPriceHeader = ({ show, onSuccess, handleCancel }) => {
               >
                 <DatePicker
                   disabledDate={(d) =>
-                    !d || d.isSameOrBefore(form.getFieldValue("effectiveDate"))
+                    !d || d.isBefore(form.getFieldValue("effectiveDate"))
                   }
                   placeholder="kết thúc"
                   format={formatDate}

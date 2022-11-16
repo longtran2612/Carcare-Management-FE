@@ -483,6 +483,7 @@ const PromotionHeaderDetail = ({
         </Col>
       </Row>
       <DrawerPromorionDetail
+        canUpdate={moment().isAfter(form.getFieldValue("fromDate"))}
         show={showDrawer}
         handleCancel={() => setShowDrawer(false)}
         lineId={promotionLineSelected}
@@ -492,6 +493,7 @@ const PromotionHeaderDetail = ({
         handleCancel={() => setModalPrice(false)}
         onSuccess={(data) => handleSuccessCreatePromotionLine(data)}
         promotionHeaderId={promotionHeaderId}
+        startDate={form.getFieldValue("fromDate")}
         endDate={form.getFieldValue("toDate")}
       />
       <Loading show={loading} />

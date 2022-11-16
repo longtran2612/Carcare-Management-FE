@@ -228,7 +228,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={8}>
                 <Form.Item label="Kiểu dịch vụ" name="type">
                   <Select style={{ width: "100%" }}>
                     <Option value="NORMAL">Thường</Option>
@@ -238,7 +238,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                 </Form.Item>
               </Col>
 
-              <Col span={6}>
+              <Col span={8}>
                 <Form.Item
                   label="Danh mục dịch vụ"
                   rules={[
@@ -260,7 +260,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col span={8}>
                 <Form.Item
                   label="Thời gian xử lý"
                   rules={[
@@ -275,7 +275,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   <InputNumber min={0} addonAfter="phút" />
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              {/* <Col span={6}>
                 <Form.Item
                   label="Giá"
                   rules={[
@@ -295,7 +295,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                     disabled="true"
                   />
                 </Form.Item>
-              </Col>
+              </Col> */}
               <Col span={24}>
                 <Form.Item label="Mô tả" name="description">
                   <TextArea rows={4} />

@@ -22,7 +22,13 @@ import TextArea from "antd/lib/input/TextArea";
 import { openNotification, openNotificationWarning } from "utils/notification";
 import { formatCountdown } from "antd/lib/statistic/utils";
 
-function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
+function DrawerPromorionDetail({
+  canUpdate,
+  lineId,
+  show,
+  onSuccess,
+  handleCancel,
+}) {
   const [promotionDetail, setPromotionDetail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -223,6 +229,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   ]}
                 >
                   <InputNumber
+                    disabled={canUpdate}
                     min={
                       promotionDetail?.type === "MONEY" ||
                       promotionDetail?.type === "SERVICE"
@@ -253,6 +260,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   name="amount"
                 >
                   <InputNumber
+                    disabled={canUpdate}
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
@@ -276,7 +284,12 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   label="Giá trị khuyến mãi (%)"
                   name="amount"
                 >
-                  <InputNumber addonAfter="%" min={0} max={100} />
+                  <InputNumber
+                    disabled={canUpdate}
+                    addonAfter="%"
+                    min={0}
+                    max={100}
+                  />
                 </Form.Item>
               </Col>
             )}
@@ -292,6 +305,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   name="serviceIds"
                 >
                   <Select
+                    disabled={canUpdate}
                     showSearch
                     placeholder="Chọn dịch vụ khuyến mãi"
                     optionFilterProp="children"
@@ -326,6 +340,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                   ]}
                 >
                   <InputNumber
+                    disabled={canUpdate}
                     addonAfter="Đ"
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -338,8 +353,11 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
             )}
             {promotionDetail?.type === "MONEY" && <Col span={12}></Col>}
             <Col span={12}>
-              <Form.Item label="Nhóm người dùng áp dụng" name="customerType">
-                <Select>
+              <Form.Item
+                label="Nhóm người dùng áp dụng"
+                name="customerType"
+              >
+                <Select   disabled={canUpdate}>
                   <Select.Option value={0}>Tất cả</Select.Option>
                   <Select.Option value={1}>Thân thiết</Select.Option>
                 </Select>
@@ -348,7 +366,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
             {promotionDetail?.type != "SERVICE" && (
               <Col span={12}>
                 <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
-                  <Select mode="multiple">
+                  <Select   disabled={canUpdate} mode="multiple">
                     {categories.map((category) => (
                       <Select.Option value={category.id}>
                         {category.name}
@@ -360,7 +378,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
             )}
             <Col span={12}>
               <Form.Item label="Giới hạn ngân sách" name="limitUsedTime">
-                <Select onChange={onChange}>
+                <Select disabled={canUpdate} onChange={onChange}>
                   <Select.Option value={false}>Không</Select.Option>
                   <Select.Option value={true}>Có</Select.Option>
                 </Select>
@@ -374,6 +392,7 @@ function DrawerPromorionDetail({ lineId, show, onSuccess, handleCancel }) {
                     name="limitPromotionAmount"
                   >
                     <InputNumber
+                    disabled={canUpdate}
                       addonAfter="Đ"
                       min={0}
                       formatter={(value) =>

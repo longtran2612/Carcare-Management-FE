@@ -306,6 +306,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
       const res = await activePriceHeader(priceHeaderId);
       openNotification("Thành công", "Kích hoạt bảng giá thành công!");
       fetchPriceHeaderDetail();
+      fetchPrice();
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -323,6 +324,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
       const res = await inActivePriceHeader(priceHeaderId);
       openNotification("Thành công", "Vô hiệu bảng giá thành công!");
       fetchPriceHeaderDetail();
+      fetchPrice();
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
