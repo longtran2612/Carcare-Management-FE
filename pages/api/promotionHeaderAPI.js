@@ -67,4 +67,29 @@ const updatePromotionHeader = (id,data) => {
         });
 };
 
-export { updatePromotionHeader, getPromotionHeaders,getPromotionHeaderByCode, getPromotionHeaderById, createPromotionHeader };
+const activePromotionHeader = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/promotion-headers/active/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+const inActivePromotionHeader = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/promotion-headers/inactive/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+export {activePromotionHeader,inActivePromotionHeader, updatePromotionHeader, getPromotionHeaders,getPromotionHeaderByCode, getPromotionHeaderById, createPromotionHeader };

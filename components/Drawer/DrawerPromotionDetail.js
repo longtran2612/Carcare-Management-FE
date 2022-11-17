@@ -219,6 +219,7 @@ function DrawerPromorionDetail({
                 <Form.Item
                   label="Giá trị đơn hàng tối thiểu"
                   name="minimumSpend"
+           
                   rules={[
                     {
                       required: true,
@@ -230,6 +231,7 @@ function DrawerPromorionDetail({
                 >
                   <InputNumber
                     disabled={canUpdate}
+                    step={1000}
                     min={
                       promotionDetail?.type === "MONEY" ||
                       promotionDetail?.type === "SERVICE"
@@ -260,12 +262,13 @@ function DrawerPromorionDetail({
                   name="amount"
                 >
                   <InputNumber
+                    step={1000}
                     disabled={canUpdate}
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
                     parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    addonAfter="Đ"
+                    addonAfter="VNĐ"
                     min={0}
                   />
                 </Form.Item>
@@ -285,6 +288,7 @@ function DrawerPromorionDetail({
                   name="amount"
                 >
                   <InputNumber
+                      step={1}
                     disabled={canUpdate}
                     addonAfter="%"
                     min={0}
@@ -340,8 +344,9 @@ function DrawerPromorionDetail({
                   ]}
                 >
                   <InputNumber
+                      step={1000}
                     disabled={canUpdate}
-                    addonAfter="Đ"
+                    addonAfter="VNĐ"
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
@@ -392,8 +397,9 @@ function DrawerPromorionDetail({
                     name="limitPromotionAmount"
                   >
                     <InputNumber
+                        step={1000}
                     disabled={canUpdate}
-                      addonAfter="Đ"
+                      addonAfter="VNĐ"
                       min={0}
                       formatter={(value) =>
                         `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -409,7 +415,7 @@ function DrawerPromorionDetail({
                   >
                     <InputNumber
                       disabled
-                      addonAfter="Đ"
+                      addonAfter="VNĐ"
                       formatter={(value) =>
                         `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                       }

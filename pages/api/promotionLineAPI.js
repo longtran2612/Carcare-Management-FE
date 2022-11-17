@@ -67,7 +67,34 @@ const createPromotionLine = (data) => {
     });
 };
 
+const activePromotionLine = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/promotion-lines/active/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+const inActivePromotionLine = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/promotion-lines/inactive/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 export {
+  activePromotionLine,
+  inActivePromotionLine,
   getPromotionLines,
   getPromotionLineByHeaderId,
   getPromotionLineById,

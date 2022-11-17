@@ -299,9 +299,12 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
   const handleUpdatePrice = () => {
     fetchPrice();
   };
-
   const handleActivePrice = async () => {
     setLoading(true);
+    if(prices.length === 0){
+      openNotificationWarning("không có giá dịch vụ nào trong bảng giá");
+      return;
+    }
     try {
       const res = await activePriceHeader(priceHeaderId);
       openNotification("Thành công", "Kích hoạt bảng giá thành công!");
@@ -465,7 +468,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                       }}
                     >
                       <Button
-                        style={{ backgroundColor: "#7DC67E", width: "100%" }}
+                        style={{ backgroundColor: "#22C55E", width: "100%",color:"white" }}
                       >
                         Hoạt dộng
                       </Button>

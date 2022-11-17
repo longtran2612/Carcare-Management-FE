@@ -126,6 +126,7 @@ const ModalAddPrice = ({ priceHeaderId, show, onSuccess, handleCancel }) => {
                 ]}
               >
                 <InputNumber
+                step={1000}
                 min={0}
                   formatter={(value) =>
                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")

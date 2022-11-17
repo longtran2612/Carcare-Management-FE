@@ -15,11 +15,12 @@ import {
 import { useRouter } from "next/router";
 import { openNotification,openNotificationWarning } from "utils/notification";
 
-import { getPromotionLineByHeaderId } from "pages/api/promotionLineAPI";
+import { getPromotionLineByHeaderId ,activePromotionLine,inActivePromotionLine } from "pages/api/promotionLineAPI";
 import {
   getPromotionHeaderById,
   updatePromotionHeader,
-
+  inActivePromotionHeader,
+  activePromotionHeader,
 } from "pages/api/promotionHeaderAPI";
 
 import { validateMessages } from "utils/messageForm";
@@ -236,26 +237,53 @@ const PromotionHeaderDetail = ({
         return handleType(record.type);
       },
     },
-    // {
-    //   title: "Trạng thái",
-    //   dataIndex: "status",
-    //   key: "status",
-    //   render: (text, record) => {
-    //     return (
-    //       <div>
-    //         {record.status == "ACTIVE" ? (
-    //           <Tag color="green">Hoạt động</Tag>
-    //         ) : (
-    //           <Tag color="red">Không hoạt động</Tag>
-    //         )}
-    //       </div>
-    //     );
-    //   },
-    //   ...getColumnSearchProps("status"),
-    // },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (text,record) => {
+        return (
+          <div>
+            {record.status == "ACTIVE" ? (
+             <Popconfirm
+             title="Bạn có chắc chắn ngưng hoạt động dòng khuyến mã này?"
+             placement="topLeft"
+             okText="Đông ý"
+             cancelText="Hủy"
+             onConfirm={() => {
+               handleInActivePromotionLine(record.id);
+             }}
+           >
+             <Button
+               style={{ backgroundColor: "#22C55E", color: "white" }}
+             >
+               Hoạt dộng
+             </Button>
+           </Popconfirm>
+            ) : (
+              <Popconfirm
+            title="Bạn có chắc chắn kích hoạt dòng khuyến mãi này?"
+            placement="topLeft"
+            okText="Đông ý"
+            cancelText="Hủy"
+            onConfirm={() => {
+              handleActivePromotionLine(record.id);
+            }}
+          >
+            <Button  type="danger">
+              Không hoạt dộng
+            </Button>
+          </Popconfirm>
+            )}
+          </div>
+        );
+      
+      },
+    },
     {
       dataIndex: "action",
       key: "action",
+      width: 100,
       render: (text, record) => {
         return (
           <div>
@@ -310,6 +338,77 @@ const PromotionHeaderDetail = ({
 
   const handleSuccessCreatePromotionLine = () => {
     fetchPromotionLine();
+  };
+
+  const handleActivePromotion= async () => {
+    setLoading(true);
+   
+    try {
+      const res = await activePromotionHeader(promotionHeaderId);
+      openNotification("Thành công", "Kích hoạt chương trình khuyến mãi thành công!");
+      fetchPromotionHeaderDetail();
+      fetchPromotionLine();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
+
+  const handleInActivePromotion = async () => {
+    setLoading(true);
+    try {
+      const res = await inActivePromotionHeader(promotionHeaderId);
+      openNotification("Thành công", "Ngưng hoạt động chương trình khuyến mãi thành công!");
+      fetchPromotionHeaderDetail();
+      fetchPromotionLine();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
+  const handleActivePromotionLine = async (id) => {
+    setLoading(true);
+   
+    try {
+      const res = await activePromotionLine(id);
+      openNotification("Thành công", "Kích hoạt dòng khuyến mãi thành công!");
+      fetchPromotionLine();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
+
+  const handleInActivePromotionLine = async (id) => {
+    setLoading(true);
+    try {
+      const res = await inActivePromotionLine(id);
+      openNotification("Thành công", "Ngưng hoạt động dòng khuyến mãi thành công!");
+      fetchPromotionLine();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
   };
 
   return (
@@ -384,7 +483,7 @@ const PromotionHeaderDetail = ({
                   {/* <Input /> */}
                 </Form.Item>
               </Col>
-              <Col span={4}>
+              {/* <Col span={4}>
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -400,6 +499,49 @@ const PromotionHeaderDetail = ({
                       Không hoạt động
                     </Select.Option>
                   </Select>
+                </Form.Item>
+              </Col> */}
+                <Col span={4}>
+                <Form.Item
+                  label="Trạng thái"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  name="status"
+                >
+                  {promotionHeaderDetail?.status === "ACTIVE" ? (
+                    <Popconfirm
+                      title="Bạn có chắc chắn ngưng hoạt động chương trình khuyến mãi này?"
+                      placement="topLeft"
+                      okText="Đông ý"
+                      cancelText="Hủy"
+                      onConfirm={() => {
+                        handleInActivePromotion();
+                      }}
+                    >
+                      <Button
+                        style={{ backgroundColor: "#22C55E", width: "100%",color:"white" }}
+                      >
+                        Hoạt dộng
+                      </Button>
+                    </Popconfirm>
+                  ) : (
+                    <Popconfirm
+                      title="Bạn có chắc chắn kích hoạt hương trình khuyến mãi này?"
+                      placement="topLeft"
+                      okText="Đông ý"
+                      cancelText="Hủy"
+                      onConfirm={() => {
+                        handleActivePromotion();
+                      }}
+                    >
+                      <Button style={{ width: "100%" }} type="danger">
+                        Không hoạt dộng
+                      </Button>
+                    </Popconfirm>
+                  )}
                 </Form.Item>
               </Col>
             </Row>

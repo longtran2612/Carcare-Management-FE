@@ -86,19 +86,20 @@ const AdminPage = () => {
           onCollapse={(value) => setCollapsed(value)}
           theme="dark"
           style={{
-            overflow: "auto",
+            overflow: "hidden",
             height: "100vh",
+            // position: "fixed",
             left: 0,
             top: 0,
             bottom: 0,
           }}
         >
-          {/* <Affix style={{ top: 0, left: 0 }}> */}
+          <Affix style={{ top: 0, left: 0 }}>
           <SideBar
             // collapsed={collapsed}
             handleOpenKey={(key) => setKey(key)}
           />
-          {/* </Affix> */}
+          </Affix>
         </Sider>
         <Layout
         

@@ -174,9 +174,8 @@ function PromotionHeaderTable({}) {
     {
       title: "Trạng thái",
       key: "status",
+      width: 200,
       dataIndex: "status",
-      width: 120,
-      ...getColumnSearchProps("status"),
       render: (status) => {
         return (
           <>

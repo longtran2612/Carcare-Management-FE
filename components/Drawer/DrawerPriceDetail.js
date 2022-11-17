@@ -184,6 +184,7 @@ function DrawerPriceDetail({
                   <InputNumber
                     disabled={canUpdatePrice}
                     min={0}
+                    step={1000}
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
