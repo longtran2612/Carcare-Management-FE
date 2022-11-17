@@ -10,17 +10,23 @@ import {
   Input,
   DatePicker,
   Table,
-  Popconfirm,
+  Popconfirm
 } from "antd";
 import { useRouter } from "next/router";
-import { openNotification,openNotificationWarning } from "utils/notification";
+import { openNotification, openNotificationWarning } from "utils/notification";
 
-import { getPromotionLineByHeaderId ,activePromotionLine,inActivePromotionLine } from "pages/api/promotionLineAPI";
+import {
+  getPromotionLineByHeaderId,
+  activePromotionLine,
+  inActivePromotionLine,
+  updatePromotionLine
+} from "pages/api/promotionLineAPI";
 import {
   getPromotionHeaderById,
   updatePromotionHeader,
   inActivePromotionHeader,
   activePromotionHeader,
+  deletePromotionHeader,
 } from "pages/api/promotionHeaderAPI";
 
 import { validateMessages } from "utils/messageForm";
@@ -28,16 +34,20 @@ import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddPromotionLine from "components/Modal/ModalAddPromotionLine";
 import moment from "moment";
 import Loading from "components/Loading";
-import { ClearOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  ClearOutlined,
+  SearchOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+  SaveOutlined
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { EditOutlined } from "@ant-design/icons";
 import { formatMoney } from "utils/format";
 const formatDate = "DD/MM/YYYY";
 import DrawerPromorionDetail from "components/Drawer/DrawerPromotionDetail";
 
-const PromotionHeaderDetail = ({
-  promotionHeaderId
-}) => {
+const PromotionHeaderDetail = ({ promotionHeaderId }) => {
   const router = useRouter();
   const [form] = Form.useForm();
   const [promotionHeaderDetail, setPromotionHeaderDetail] = useState({});
@@ -194,7 +204,9 @@ const PromotionHeaderDetail = ({
       dataIndex: "promotionLineCode",
       key: "promotionLineCode",
       filteredValue: [searchGlobal],
-      render: (promotionLineCode) => <a style={{color:'blue'}} >{promotionLineCode}</a>,
+      render: (promotionLineCode) => (
+        <a style={{ color: "blue" }}>{promotionLineCode}</a>
+      ),
       onFilter: (value, record) => {
         return (
           String(record.promotionLineCode)
@@ -237,49 +249,44 @@ const PromotionHeaderDetail = ({
         return handleType(record.type);
       },
     },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (text,record) => {
-        return (
-          <div>
-            {record.status == "ACTIVE" ? (
-             <Popconfirm
-             title="Bạn có chắc chắn ngưng hoạt động dòng khuyến mã này?"
-             placement="topLeft"
-             okText="Đông ý"
-             cancelText="Hủy"
-             onConfirm={() => {
-               handleInActivePromotionLine(record.id);
-             }}
-           >
-             <Button
-               style={{ backgroundColor: "#22C55E", color: "white" }}
-             >
-               Hoạt dộng
-             </Button>
-           </Popconfirm>
-            ) : (
-              <Popconfirm
-            title="Bạn có chắc chắn kích hoạt dòng khuyến mãi này?"
-            placement="topLeft"
-            okText="Đông ý"
-            cancelText="Hủy"
-            onConfirm={() => {
-              handleActivePromotionLine(record.id);
-            }}
-          >
-            <Button  type="danger">
-              Không hoạt dộng
-            </Button>
-          </Popconfirm>
-            )}
-          </div>
-        );
-      
-      },
-    },
+    // {
+    //   title: "Trạng thái",
+    //   dataIndex: "status",
+    //   key: "status",
+    //   render: (text, record) => {
+    //     return (
+    //       <div>
+    //         {record.status == "ACTIVE" ? (
+    //           <Popconfirm
+    //             title="Bạn có chắc chắn ngưng hoạt động dòng khuyến mã này?"
+    //             placement="topLeft"
+    //             okText="Đông ý"
+    //             cancelText="Hủy"
+    //             onConfirm={() => {
+    //               handleInActivePromotionLine(record.id);
+    //             }}
+    //           >
+    //             <Button style={{ backgroundColor: "#22C55E", color: "white" }}>
+    //               Hoạt dộng
+    //             </Button>
+    //           </Popconfirm>
+    //         ) : (
+    //           <Popconfirm
+    //             title="Bạn có chắc chắn kích hoạt dòng khuyến mãi này?"
+    //             placement="topLeft"
+    //             okText="Đông ý"
+    //             cancelText="Hủy"
+    //             onConfirm={() => {
+    //               handleActivePromotionLine(record.id);
+    //             }}
+    //           >
+    //             <Button type="danger">Không hoạt dộng</Button>
+    //           </Popconfirm>
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       dataIndex: "action",
       key: "action",
@@ -289,7 +296,7 @@ const PromotionHeaderDetail = ({
           <div>
             <EditOutlined
               onClick={() => {
-                setPromotionLineSelected(record.id);
+                setPromotionLineSelected(record);
                 setShowDrawer(true);
               }}
               style={{ color: "#6B92F2", fontSize: "25px" }}
@@ -318,13 +325,16 @@ const PromotionHeaderDetail = ({
       description: values.description,
       toDate: values.toDate,
     };
-    if(moment().isBefore(values.fromDate)){
+    if (moment().isBefore(values.fromDate)) {
       body.fromDate = values.fromDate;
     }
 
     try {
-      const res = await updatePromotionHeader(promotionHeaderDetail.id,body);
-      openNotification("Thành công","Cập nhật chương trình khuyến mãi thành công!");
+      const res = await updatePromotionHeader(promotionHeaderDetail.id, body);
+      openNotification(
+        "Thành công",
+        "Cập nhật chương trình khuyến mãi thành công!"
+      );
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -339,13 +349,20 @@ const PromotionHeaderDetail = ({
   const handleSuccessCreatePromotionLine = () => {
     fetchPromotionLine();
   };
+  const handleUpdatePromotionLine = () => {
+    fetchPromotionLine();
+    setShowDrawer(false);
+  };
 
-  const handleActivePromotion= async () => {
+  const handleActivePromotion = async () => {
     setLoading(true);
-   
+
     try {
       const res = await activePromotionHeader(promotionHeaderId);
-      openNotification("Thành công", "Kích hoạt chương trình khuyến mãi thành công!");
+      openNotification(
+        "Thành công",
+        "Kích hoạt chương trình khuyến mãi thành công!"
+      );
       fetchPromotionHeaderDetail();
       fetchPromotionLine();
       setLoading(false);
@@ -363,7 +380,10 @@ const PromotionHeaderDetail = ({
     setLoading(true);
     try {
       const res = await inActivePromotionHeader(promotionHeaderId);
-      openNotification("Thành công", "Ngưng hoạt động chương trình khuyến mãi thành công!");
+      openNotification(
+        "Thành công",
+        "Ngưng hoạt động chương trình khuyến mãi thành công!"
+      );
       fetchPromotionHeaderDetail();
       fetchPromotionLine();
       setLoading(false);
@@ -378,7 +398,7 @@ const PromotionHeaderDetail = ({
   };
   const handleActivePromotionLine = async (id) => {
     setLoading(true);
-   
+
     try {
       const res = await activePromotionLine(id);
       openNotification("Thành công", "Kích hoạt dòng khuyến mãi thành công!");
@@ -398,8 +418,29 @@ const PromotionHeaderDetail = ({
     setLoading(true);
     try {
       const res = await inActivePromotionLine(id);
-      openNotification("Thành công", "Ngưng hoạt động dòng khuyến mãi thành công!");
+      openNotification(
+        "Thành công",
+        "Ngưng hoạt động dòng khuyến mãi thành công!"
+      );
       fetchPromotionLine();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
+
+  
+  const handleDeletePromotion = async () => {
+    setLoading(true);
+    try {
+      const res = await deletePromotionHeader(promotionHeaderId);
+      openNotification("Thành công", "Xóa chương trình khuyến mãi thành công!");
+      router.push("/admin");
       setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -424,7 +465,7 @@ const PromotionHeaderDetail = ({
             autoComplete="off"
             validateMessages={validateMessages}
           >
-            <Row gutter={[32, 8]}>
+            <Row gutter={[32]}>
               <Col span={12}>
                 <Form.Item
                   label="Tên chương trình"
@@ -455,9 +496,9 @@ const PromotionHeaderDetail = ({
                         : false
                     }
                     disabledDate={(d) =>
-                      !d || 
-                      form.getFieldValue("toDate") && d.isAfter(form.getFieldValue("toDate"))
-
+                      !d ||
+                      (form.getFieldValue("toDate") &&
+                        d.isAfter(form.getFieldValue("toDate")))
                     }
                     format={formatDate}
                   />
@@ -476,7 +517,9 @@ const PromotionHeaderDetail = ({
                 >
                   <DatePicker
                     disabledDate={(d) =>
-                      !d || d.isSameOrBefore(form.getFieldValue("fromDate")) || d.isSameOrBefore(moment())
+                      !d ||
+                      d.isSameOrBefore(form.getFieldValue("fromDate")) ||
+                      d.isSameOrBefore(moment())
                     }
                     format={formatDate}
                   />
@@ -501,7 +544,7 @@ const PromotionHeaderDetail = ({
                   </Select>
                 </Form.Item>
               </Col> */}
-                <Col span={4}>
+              <Col span={4}>
                 <Form.Item
                   label="Trạng thái"
                   rules={[
@@ -522,7 +565,11 @@ const PromotionHeaderDetail = ({
                       }}
                     >
                       <Button
-                        style={{ backgroundColor: "#22C55E", width: "100%",color:"white" }}
+                        style={{
+                          backgroundColor: "#22C55E",
+                          width: "100%",
+                          color: "white",
+                        }}
                       >
                         Hoạt dộng
                       </Button>
@@ -550,8 +597,26 @@ const PromotionHeaderDetail = ({
                 style={{ bottom: "0", right: "20px", margin: "10px" }}
                 className="service-action"
               >
-                
                 <div>
+                  {moment().isBefore(promotionHeaderDetail?.fromDate) && (
+                    <Popconfirm
+                      title="Bạn có chắc chắn xóa bảng giá này?"
+                      placement="topLeft"
+                      okText="Xóa"
+                      cancelText="Hủy"
+                      onConfirm={() => {
+                        handleDeletePromotion(promotionHeaderDetail.id);
+                      }}
+                    >
+                      <Button
+                        style={{ marginRight: "20px" }}
+                        icon={<DeleteOutlined />}
+                        type="danger"
+                      >
+                        Xóa
+                      </Button>
+                    </Popconfirm>
+                  )}
                   <Popconfirm
                     title="Xác nhận?"
                     placement="topLeft"
@@ -568,7 +633,7 @@ const PromotionHeaderDetail = ({
                         });
                     }}
                   >
-                    <Button type="primary">Cập nhật</Button>
+                    <Button icon={<SaveOutlined/>} type="primary">Cập nhật</Button>
                   </Popconfirm>
                 </div>
               </div>
@@ -628,7 +693,10 @@ const PromotionHeaderDetail = ({
         canUpdate={moment().isAfter(form.getFieldValue("fromDate"))}
         show={showDrawer}
         handleCancel={() => setShowDrawer(false)}
-        lineId={promotionLineSelected}
+        promotionLine={promotionLineSelected}
+        onUpdate={handleUpdatePromotionLine}
+        endDate={form.getFieldValue("toDate")}
+        startDate={form.getFieldValue("fromDate")}
       />
       <ModalAddPromotionLine
         show={modalPrice}

@@ -91,5 +91,17 @@ const inActivePromotionHeader = (data) => {
       throw err;
     });
 };
+const deletePromotionHeader = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/promotion-headers/delete/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
-export {activePromotionHeader,inActivePromotionHeader, updatePromotionHeader, getPromotionHeaders,getPromotionHeaderByCode, getPromotionHeaderById, createPromotionHeader };
+export {deletePromotionHeader,activePromotionHeader,inActivePromotionHeader, updatePromotionHeader, getPromotionHeaders,getPromotionHeaderByCode, getPromotionHeaderById, createPromotionHeader };

@@ -91,8 +91,36 @@ const inActivePromotionLine = (data) => {
       throw err;
     });
 };
+const deletePromotionLine = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/promotion-lines/delete/${data}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+const updatePromotionLine = (id,data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/promotion-lines/update/${id}`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
 export {
+  updatePromotionLine,
+  deletePromotionLine,
   activePromotionLine,
   inActivePromotionLine,
   getPromotionLines,

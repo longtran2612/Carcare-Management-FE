@@ -231,9 +231,10 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
     <>
       <Modal
         title="Tạo mới yêu cầu"
+        centered
         visible={show}
         width="90%"
-        bodyStyle={{ height: "65vh" }}
+        bodyStyle={{ minHeight: "65vh" }}
         closable
         onCancel={handleCancel}
         cancelText="Hủy bỏ"

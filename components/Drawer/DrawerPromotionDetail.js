@@ -12,7 +12,15 @@ import {
   InputNumber,
   Typography,
   Divider,
+  Popconfirm,
+  DatePicker,
 } from "antd";
+import {
+  updatePromotionLine,
+  deletePromotionLine,
+  activePromotionLine,
+  inActivePromotionLine,
+} from "pages/api/promotionLineAPI";
 import { updatePromotionDetail } from "pages/api/promotionDetail";
 import { getServices } from "pages/api/serviceAPI";
 import { getCategories } from "pages/api/categoryAPI";
@@ -20,14 +28,22 @@ import Loading from "components/Loading";
 import { validateMessages } from "utils/messageForm";
 import TextArea from "antd/lib/input/TextArea";
 import { openNotification, openNotificationWarning } from "utils/notification";
-import { formatCountdown } from "antd/lib/statistic/utils";
+import {
+  DeleteOutlined,
+  SaveOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
+import moment from "moment";
+const formatDate = "DD/MM/YYYY";
 
 function DrawerPromorionDetail({
   canUpdate,
-  lineId,
+  promotionLine,
   show,
-  onSuccess,
+  onUpdate,
   handleCancel,
+  endDate,
+  startDate,
 }) {
   const [promotionDetail, setPromotionDetail] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -38,7 +54,7 @@ function DrawerPromorionDetail({
   const getPromotionDetail = async () => {
     // setLoading(true);
     try {
-      const response = await getPromotionDetailByLineId(lineId);
+      const response = await getPromotionDetailByLineId(promotionLine?.id);
       setPromotionDetail(response.data.Data[0]);
       console.log(response.data.Data[0]);
       form.setFieldsValue({
@@ -94,15 +110,23 @@ function DrawerPromorionDetail({
         (dataUpdate.serviceIds = [values.serviceIds]);
     }
 
+    const body = {
+      description: values.name,
+      fromDate: values.fromDate,
+      toDate: values.toDate,
+    };
+
     try {
       console.log("data update", dataUpdate);
       const response = await updatePromotionDetail(
         dataUpdate,
         promotionDetail.id
       );
+      const response1 = await updatePromotionLine(promotionLine?.id, body);
       // onSuccess(response.data.Data);
       // handleCancel();
       openNotification("Thành công", "Cập nhật chi tiết khuyến mãi thành công");
+      onUpdate();
       getPromotionDetail();
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -132,24 +156,81 @@ function DrawerPromorionDetail({
   const onChange = () => {
     setShowLimitAmount(form.getFieldValue("limitUsedTime"));
   };
-  // useEffect(() => {
-  //   if (form.getFieldValue("limitUsedTime")) {
-  //     setShowLimitAmount(form.getFieldValue("limitUsedTime"));
-  //   }
-  // }, [show, form]);
+
+  const handleDeletePromotionLine = async () => {
+    setLoading(true);
+    try {
+      const res = await deletePromotionLine(promotionLine?.id);
+      openNotification("Thành công", "Xóa chương trình khuyến mãi thành công!");
+      handleCancel();
+      onUpdate();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
+  const handleActivePromotionLine = async () => {
+    setLoading(true);
+
+    try {
+      const res = await activePromotionLine(promotionLine?.id);
+      openNotification("Thành công", "Kích hoạt dòng khuyến mãi thành công!");
+      getPromotionDetail();
+      onUpdate();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
+
+  const handleInActivePromotionLine = async () => {
+    setLoading(true);
+    try {
+      const res = await inActivePromotionLine(promotionLine?.id);
+      openNotification(
+        "Thành công",
+        "Ngưng hoạt động dòng khuyến mãi thành công!"
+      );
+      onUpdate();
+      getPromotionDetail();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (show) {
       getPromotionDetail();
       fetchCategories();
       fetchService();
+      form.setFieldsValue({
+        name: promotionLine.description,
+        fromDate: moment(promotionLine?.fromDate),
+        toDate: moment(promotionLine?.toDate),
+      });
     }
-  }, [show, lineId]);
+  }, [show, promotionLine]);
 
   return (
     <>
       <Drawer
-        width={640}
+        width={800}
         placement="right"
         closable
         onClose={() => {
@@ -161,8 +242,50 @@ function DrawerPromorionDetail({
         bodyStyle={{ padding: 40 }}
         extra={
           <Space>
-            <Button onClick={handleCancel}>Hủy</Button>
+            {!canUpdate && (
+              <Popconfirm
+                title="Bạn có chắc chắn dòng khuyến mãi này?"
+                placement="topLeft"
+                okText="Xóa"
+                cancelText="Hủy"
+                onConfirm={() => {
+                  handleDeletePromotionLine();
+                }}
+              >
+                <Button type="danger" icon={<DeleteOutlined />}>
+                  Xóa
+                </Button>
+              </Popconfirm>
+            )}
+            {promotionLine?.status == "ACTIVE" ? (
+              <Popconfirm
+                title="Bạn có chắc chắn ngưng hoạt động dòng khuyến mã này?"
+                placement="topLeft"
+                okText="Đông ý"
+                cancelText="Hủy"
+                onConfirm={() => {
+                  handleInActivePromotionLine();
+                }}
+              >
+                <Button style={{ backgroundColor: "#22C55E", color: "white" }}>
+                  Hoạt dộng
+                </Button>
+              </Popconfirm>
+            ) : (
+              <Popconfirm
+                title="Bạn có chắc chắn kích hoạt dòng khuyến mãi này?"
+                placement="topLeft"
+                okText="Đông ý"
+                cancelText="Hủy"
+                onConfirm={() => {
+                  handleActivePromotionLine();
+                }}
+              >
+                <Button type="danger">Không hoạt dộng</Button>
+              </Popconfirm>
+            )}
             <Button
+              icon={<SaveOutlined />}
               onClick={() => {
                 form
                   .validateFields()
@@ -186,15 +309,77 @@ function DrawerPromorionDetail({
           autoComplete="off"
           validateMessages={validateMessages}
         >
-          <Divider>
-            <span>Chi tiết khuyến mãi</span>
-          </Divider>
           <Row gutter={[16, 2]}>
-            <Col span={24}>
-              <Form.Item label="Mô tả" name="description">
-                <TextArea rows={2} />
+            <Col span={8}>
+              <Form.Item
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+                label="Tên"
+                name="name"
+              >
+                <Input />
               </Form.Item>
             </Col>
+
+            <Col span={8}>
+              <Form.Item
+                label="Ngày bắt đầu"
+                name="fromDate"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <DatePicker
+                  disabled={
+                    moment().isAfter(form.getFieldValue("fromDate"))
+                      ? true
+                      : false
+                  }
+                  disabledDate={(d) =>
+                    !d ||
+                    d.isBefore(moment()) ||
+                    (form.getFieldValue("toDate") &&
+                      d.isAfter(form.getFieldValue("toDate"))) ||
+                    d.isBefore(startDate)
+                  }
+                  format={formatDate}
+                />
+                {/* <Input /> */}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                label="Ngày kết thúc"
+                name="toDate"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <DatePicker
+                  disabledDate={(d) =>
+                    !d ||
+                    (form.getFieldValue("fromDate") &&
+                      d.isSameOrBefore(form.getFieldValue("fromDate"))) ||
+                    d.isAfter(endDate)
+                  }
+                  format={formatDate}
+                />
+                {/* <Input /> */}
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item label="Mô tả" name="description">
+                <TextArea  rows={2} />
+              </Form.Item>
+            </Col>
+            <Divider />
             <Col span={12}>
               <Form.Item
                 label="Loại khuyến mãi"
@@ -219,7 +404,6 @@ function DrawerPromorionDetail({
                 <Form.Item
                   label="Giá trị đơn hàng tối thiểu"
                   name="minimumSpend"
-           
                   rules={[
                     {
                       required: true,
@@ -288,7 +472,7 @@ function DrawerPromorionDetail({
                   name="amount"
                 >
                   <InputNumber
-                      step={1}
+                    step={1}
                     disabled={canUpdate}
                     addonAfter="%"
                     min={0}
@@ -331,7 +515,6 @@ function DrawerPromorionDetail({
                 </Form.Item>
               </Col>
             )}
-
             {promotionDetail?.type === "PERCENTAGE" && (
               <Col span={12}>
                 <Form.Item
@@ -344,7 +527,7 @@ function DrawerPromorionDetail({
                   ]}
                 >
                   <InputNumber
-                      step={1000}
+                    step={1000}
                     disabled={canUpdate}
                     addonAfter="VNĐ"
                     formatter={(value) =>
@@ -358,11 +541,8 @@ function DrawerPromorionDetail({
             )}
             {promotionDetail?.type === "MONEY" && <Col span={12}></Col>}
             <Col span={12}>
-              <Form.Item
-                label="Nhóm người dùng áp dụng"
-                name="customerType"
-              >
-                <Select   disabled={canUpdate}>
+              <Form.Item label="Nhóm người dùng áp dụng" name="customerType">
+                <Select disabled={canUpdate}>
                   <Select.Option value={0}>Tất cả</Select.Option>
                   <Select.Option value={1}>Thân thiết</Select.Option>
                 </Select>
@@ -371,7 +551,7 @@ function DrawerPromorionDetail({
             {promotionDetail?.type != "SERVICE" && (
               <Col span={12}>
                 <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
-                  <Select   disabled={canUpdate} mode="multiple">
+                  <Select disabled={canUpdate} mode="multiple">
                     {categories.map((category) => (
                       <Select.Option value={category.id}>
                         {category.name}
@@ -397,8 +577,8 @@ function DrawerPromorionDetail({
                     name="limitPromotionAmount"
                   >
                     <InputNumber
-                        step={1000}
-                    disabled={canUpdate}
+                      step={1000}
+                      disabled={canUpdate}
                       addonAfter="VNĐ"
                       min={0}
                       formatter={(value) =>
