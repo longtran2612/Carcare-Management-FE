@@ -43,9 +43,9 @@ const SideBar = ({ handleOpenKey }) => {
     if (roles === "ROLE_ADMIN") {
       setItems([
         getItem("Đơn hàng", "1", <ShopOutlined />, [
-          getItem("Danh sách yêu cầu", "order"),
-          getItem("Danh sách đơn hàng", "order-not-request"),
+          getItem("Yêu cầu xử lý", "order"),
           getItem("Vị trí xử lý", "car-slot"),
+          getItem("Danh sách đơn hàng", "order-not-request"),
         ]),
         getItem("Hóa đơn", "2", <BookOutlined />, [
           getItem("Hóa đơn", "bills"),
@@ -54,23 +54,20 @@ const SideBar = ({ handleOpenKey }) => {
         getItem("Dịch vụ", "3", <ClearOutlined />, [
           getItem("Dịch vụ", "service"),
           getItem("Danh mục", "category"),
-        ]),
-        getItem("Bảng giá", "4", <DollarOutlined />, [
           getItem("Bảng giá", "price"),
         ]),
-        getItem("Xe", "5", <CarOutlined />, [
+        getItem("Xe", "4", <CarOutlined />, [
           getItem("Xe khách hàng", "car"),
           getItem("Mẫu xe", "car-model"),
         ]),
-        getItem("Người dùng", "6", <UserOutlined />, [
+        getItem("Người dùng", "5", <UserOutlined />, [
           getItem("Nhân viên", "user"),
           getItem("Khách hàng", "customer"),
-          // getItem("Nhóm người dùng", "user-group"),
         ]),
-        getItem("Khuyến mãi", "7", <TagsOutlined />, [
+        getItem("Khuyến mãi", "6", <TagsOutlined />, [
           getItem("Khuyến mãi", "promotion"),
         ]),
-        getItem("Thống kê - Báo cáo", "8", <BarChartOutlined />, [
+        getItem("Thống kê - Báo cáo", "7", <BarChartOutlined />, [
           getItem("Thống kê", "statistic"),
           getItem("Báo cáo", "report"),
         ]),
@@ -78,32 +75,30 @@ const SideBar = ({ handleOpenKey }) => {
     } else {
       setItems([
         getItem("Đơn hàng", "1", <ShopOutlined />, [
-          getItem("Danh sách yêu cầu", "order"),
-          getItem("Danh sách đơn hàng", "order-not-request"),
+          getItem("Yêu cầu xử lý", "order"),
           getItem("Vị trí xử lý", "car-slot"),
+          getItem("Danh sách đơn hàng", "order-not-request"),
         ]),
         getItem("Hóa đơn", "2", <BookOutlined />, [
           getItem("Hóa đơn", "bills"),
-          // getItem("Hóa đơn hủy", "bills"),
         ]),
         getItem("Dịch vụ", "3", <ClearOutlined />, [
           getItem("Dịch vụ", "service"),
           getItem("Danh mục", "category"),
-        ]),
-        getItem("Bảng giá", "4", <DollarOutlined />, [
           getItem("Bảng giá", "price"),
         ]),
-        getItem("Xe", "5", <CarOutlined />, [
+      
+        getItem("Xe", "4", <CarOutlined />, [
           getItem("Xe khách hàng", "car"),
           getItem("Mẫu xe", "car-model"),
         ]),
-        getItem("Người dùng", "6", <UserOutlined />, [
+        getItem("Người dùng", "5", <UserOutlined />, [
           getItem("Khách hàng", "customer"),
         ]),
-        getItem("Khuyến mãi", "7", <TagsOutlined />, [
+        getItem("Khuyến mãi", "5", <TagsOutlined />, [
           getItem("Khuyến mãi", "promotion"),
         ]),
-        getItem("Thống kê - Báo cáo", "8", <BarChartOutlined />, [
+        getItem("Thống kê - Báo cáo", "7", <BarChartOutlined />, [
           getItem("Thống kê", "statistic"),
           getItem("Báo cáo", "report"),
         ]),
@@ -114,6 +109,17 @@ const SideBar = ({ handleOpenKey }) => {
   useEffect(() => {
     handleRole(roles);
   }, [roles]);
+
+  const rootSubmenuKeys = ['1', '2', '3','4','5','6','7'];
+  const [openKeys, setOpenKeys] = useState(['car-slot']);
+  const onOpenChange = (keys) => {
+    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
+    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    }
+  };
 
   return (
     <div style={{ height: "100%" }}>
@@ -131,10 +137,12 @@ const SideBar = ({ handleOpenKey }) => {
       <Menu
         mode="inline"
         theme="dark"
-        // style={{ height: "100%" }}
+        openKeys={openKeys}
+        style={{ height: "100%" }}
+        onOpenChange={onOpenChange}
         items={items}
         onClick={onClick}
-        defaultSelectedKeys={["car-slot"]}
+        // defaultSelectedKeys={["car-slot"]}
       />
     </div>
   );

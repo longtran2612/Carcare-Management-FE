@@ -82,13 +82,12 @@ const AdminPage = () => {
       >
         <Sider
           className="site-layout-background"
-          // collapsible
-          // onCollapse={(value) => setCollapsed(value)}
+          collapsible
+          onCollapse={(value) => setCollapsed(value)}
           theme="dark"
           style={{
             overflow: "auto",
             height: "100vh",
-            position: "fixed",
             left: 0,
             top: 0,
             bottom: 0,
@@ -102,9 +101,7 @@ const AdminPage = () => {
           {/* </Affix> */}
         </Sider>
         <Layout
-          style={{
-            marginLeft: 200,
-          }}
+        
           className="site-layout"
         >
           <Affix style={{ top: 0, left: 0 }}>
