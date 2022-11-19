@@ -72,7 +72,9 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
         nationality: response.data.Data.nationality,
         identityNumber: response.data.Data.identityNumber,
         statusName: response.data.Data.statusName,
-        dateOfBirth: response.data.Data.dateOfBirth ?  moment(moment(response.data.Data.dateOfBirth), formatDate) : "",
+        dateOfBirth: response.data.Data.dateOfBirth
+          ? moment(moment(response.data.Data.dateOfBirth), formatDate)
+          : "",
         address: response.data.Data.address,
         addressvn: [
           response.data.Data.provinceCode,
@@ -133,7 +135,7 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
         nationality: values.nationality,
       };
       const res = await updateCustomer(customerDetail.id, body);
- 
+
       setCustomerDetail(res.data.Data);
       openNotification("Cập nhật khách hàng thành công!", "");
     } catch (error) {
@@ -158,10 +160,10 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
   };
   const handleUpdateImage = async (imageUpload) => {
     let body = {
-      image: imageUpload
+      image: imageUpload,
     };
     try {
-      const res = await updateCustomer(customerDetail.id,body);
+      const res = await updateCustomer(customerDetail.id, body);
       openNotification("Thành công!", "Cập nhật ảnh đại diện thành công");
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -170,7 +172,7 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
-  }
+  };
 
   const handleUploadImages = async () => {
     setLoading(true);
@@ -217,7 +219,6 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
           >
             <Upload
               onChange={(info) => handleFileChosen(info)}
-             
               showUploadList={false}
               fileList={listFiles.imageBlob}
               maxCount={1}
@@ -242,7 +243,11 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
                   name="name"
                   rules={[
                     {
+                      pattern: new RegExp(
+                        "^[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*( *[a-zA-Z0-9_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)*$"
+                      ),
                       required: true,
+                      message: "Tên người dùng không hợp lệ!",
                     },
                   ]}
                 >
@@ -335,15 +340,18 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
                   rules={[
                     {
                       required: true,
-                      pattern: new RegExp("[0-9]{12}"),
-                      message:
-                        "Số CMND/CCCD không hợp lệ!, Số CMND/CCCD bao gồm 12 ký tự số",
+                      pattern: new RegExp("[0-9]{9,12}"),
+                      message: "Số CMND/CCCD không hợp lệ!",
                     },
                   ]}
                   name="identityNumber"
                   label="Số CMND"
                 >
-                  <Input maxLength={12} />
+                  <Input
+                    placeholder="Số Căn cước/Chứng minh"
+                    minLength={9}
+                    maxLength={12}
+                  />
                 </Form.Item>
               </Col>
 
@@ -369,12 +377,13 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
               <Col span={24}>
                 <Form.Item
                   name="addressvn"
-                  label="Tỉnh/Thành phố - Quận - Huyện"
+                  label="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                 >
                   <Cascader
+                    changeOnSelect
                     options={addressData}
                     onChange={onChange}
-                    placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                    placeholder="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                     showSearch={{
                       filter,
                     }}
@@ -383,8 +392,8 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
                 </Form.Item>
               </Col>
               <Col span={24}>
-                <Form.Item label="Địa chỉ chi tiết" name="address">
-                  <TextArea rows={4} />
+                <Form.Item label="Số nhà / Tên đường" name="address">
+                  <TextArea rows={2} />
                 </Form.Item>
               </Col>
             </Row>

@@ -92,6 +92,7 @@ function ModalAddCustomer({ show, onSuccess, handleCancel }) {
   return (
     <>
       <Modal
+        centered
         title="Thêm khách hàng mới"
         visible={show}
         onOk={() => {
@@ -120,20 +121,24 @@ function ModalAddCustomer({ show, onSuccess, handleCancel }) {
               <Form.Item
                 rules={[
                   {
+                    pattern: new RegExp(
+                      "^[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*( *[a-zA-Z0-9_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)*$"
+                    ),
                     required: true,
-                    message: "Vui lòng nhập họ tên!",
+                    message: "Tên người dùng không hợp lệ!",
                   },
                 ]}
                 label="Tên người dùng"
                 name="name"
               >
                 <Input
+                  placeholder="Tên khách hàng"
                   prefix={<UserOutlined className="site-form-item-icon" />}
                 />
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item initialValue="Nam" name="gender" label="Giới tính">
+              <Form.Item initialValue="Khác" name="gender" label="Giới tính">
                 <Select>
                   <Option value="Nam">Nam</Option>
                   <Option value="Nữ">Nữ</Option>
@@ -158,7 +163,7 @@ function ModalAddCustomer({ show, onSuccess, handleCancel }) {
                   minLength={10}
                   maxLength={10}
                   prefix={<PhoneOutlined className="site-form-item-icon" />}
-                  placeholder="số điện thoại"
+                  placeholder="Số điện thoại"
                 />
               </Form.Item>
             </Col>
@@ -167,15 +172,18 @@ function ModalAddCustomer({ show, onSuccess, handleCancel }) {
                 rules={[
                   {
                     required: true,
-                    pattern: new RegExp("[0-9]{12}"),
-                    message:
-                      "Số CMND/CCCD không hợp lệ!, Số CMND/CCCD bao gồm 12 ký tự số",
+                    pattern: new RegExp("[0-9]{9,12}"),
+                    message: "Số CMND/CCCD không hợp lệ!",
                   },
                 ]}
                 name="identityNumber"
                 label="Số CMND"
               >
-                <Input maxLength={12} />
+                <Input
+                  placeholder="Số Căn cước/Chứng minh"
+                  minLength={9}
+                  maxLength={12}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -216,11 +224,12 @@ function ModalAddCustomer({ show, onSuccess, handleCancel }) {
             </Col>
 
             <Col span={24}>
-              <Form.Item name="addressvn" label="Tỉnh/Thành phố - Quận - Huyện">
+              <Form.Item name="addressvn" label="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã">
                 <Cascader
+                  changeOnSelect
                   options={addressData}
                   onChange={onChange}
-                  placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                  placeholder="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                   showSearch={{
                     filter,
                   }}
@@ -229,7 +238,7 @@ function ModalAddCustomer({ show, onSuccess, handleCancel }) {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item name="address" label="Số nhà / tên đường">
+              <Form.Item name="address" label="Số nhà / Tên đường">
                 <TextArea rows={2} />
               </Form.Item>
             </Col>

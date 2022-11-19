@@ -57,7 +57,7 @@ function UserDetail({ userId, onUpdateUser }) {
     try {
       const response = await getUserById(userId);
       setUserDetail(response.data.Data);
-      console.log(response)
+      console.log(response);
       form.setFieldsValue({
         name: response.data.Data.name,
         phone: response.data.Data.phone,
@@ -123,10 +123,10 @@ function UserDetail({ userId, onUpdateUser }) {
       setLoading(false);
     }
   };
-  
+
   const handleUpdateImage = async (imageUpload) => {
     let body = {
-      image: imageUpload
+      image: imageUpload,
     };
     try {
       const res = await updateUserById(body, userId);
@@ -138,7 +138,7 @@ function UserDetail({ userId, onUpdateUser }) {
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
-  }
+  };
 
   // handle upload image
 
@@ -178,7 +178,6 @@ function UserDetail({ userId, onUpdateUser }) {
       }
       setLoading(false);
     }
-
   };
   const onChange = (value, selectedOptions) => {
     console.log(value, selectedOptions);
@@ -240,7 +239,11 @@ function UserDetail({ userId, onUpdateUser }) {
                   name="name"
                   rules={[
                     {
+                      pattern: new RegExp(
+                        "^[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*( *[a-zA-Z0-9_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)*$"
+                      ),
                       required: true,
+                      message: "Tên người dùng không hợp lệ!",
                     },
                   ]}
                 >
@@ -304,18 +307,21 @@ function UserDetail({ userId, onUpdateUser }) {
               </Col>
               <Col span={8}>
                 <Form.Item
-                  label="Số CMND/CCCD"
-                  name="identityNumber"
                   rules={[
                     {
                       required: true,
-                      pattern: new RegExp("[0-9]{12}"),
-                      message:
-                        "Số CMND/CCCD không hợp lệ!, Số CMND/CCCD bao gồm 12 ký tự số",
+                      pattern: new RegExp("[0-9]{9,12}"),
+                      message: "Số CMND/CCCD không hợp lệ!",
                     },
                   ]}
+                  name="identityNumber"
+                  label="Số CMND"
                 >
-                  <Input maxLength={12} />
+                  <Input
+                    placeholder="Số Căn cước/Chứng minh"
+                    minLength={9}
+                    maxLength={12}
+                  />
                 </Form.Item>
               </Col>
               <Col span={8}>
@@ -362,13 +368,14 @@ function UserDetail({ userId, onUpdateUser }) {
               <Col span={24}>
                 <Form.Item
                   name="addressvn"
-                  label="Tỉnh/Thành phố - Quận - Huyện"
+                  label="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                 >
                   <Cascader
+                    changeOnSelect
                     id="addressDetail"
                     options={addressData}
                     onChange={onChange}
-                    placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                    placeholder="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                     showSearch={{
                       filter,
                     }}
@@ -377,8 +384,8 @@ function UserDetail({ userId, onUpdateUser }) {
                 </Form.Item>
               </Col>
               <Col span={24}>
-                <Form.Item label="Địa chỉ" name="address">
-                  <TextArea rows={4} />
+                <Form.Item label="Số nhà / Tên Đường" name="address">
+                  <TextArea rows={2} />
                 </Form.Item>
               </Col>
             </Row>

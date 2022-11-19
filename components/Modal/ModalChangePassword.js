@@ -21,6 +21,11 @@ function ModalChangePassword({ show, onFinish, handleCancel }) {
 
   const handleChangePassword = async (values) => {
     setLoading(true);
+    if(values.password ==='123456'){
+      openNotificationWarning("Mật khẩu mới không được trùng với mật khẩu cũ");
+      setLoading(false);
+      return;
+    }
     const username = Cookies.get("username");
     let changePasswordRequets = {
       username: username,

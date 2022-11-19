@@ -145,7 +145,7 @@ const UserProfile = () => {
 
   const handleUpdateImage = async (imageUpload) => {
     let body = {
-      image: imageUpload
+      image: imageUpload,
     };
     try {
       const res = await updateUserById(body, userDetail?.id);
@@ -157,7 +157,7 @@ const UserProfile = () => {
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
-  }
+  };
   const handleUploadImages = async () => {
     setLoading(true);
     try {
@@ -206,7 +206,7 @@ const UserProfile = () => {
     <>
       <Layout>
         <MyHeader />
-        <Layout.Content className="content">
+        <Layout.Content style={{minHeight:'87vh'}} className="content">
           <Row
             style={{ paddingLeft: "40px", paddingRight: "40px" }}
             className="content-white"
@@ -261,7 +261,11 @@ const UserProfile = () => {
                               name="name"
                               rules={[
                                 {
+                                  pattern: new RegExp(
+                                    "^[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*( *[a-zA-Z0-9_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)*$"
+                                  ),
                                   required: true,
+                                  message: "Tên người dùng không hợp lệ!",
                                 },
                               ]}
                             >
@@ -329,7 +333,7 @@ const UserProfile = () => {
                               name="identityNumber"
                               label="Số CMND"
                             >
-                              <Input maxLength={12} />
+                              <Input minLength={9} maxLength={12} />
                             </Form.Item>
                           </Col>
 
@@ -362,12 +366,13 @@ const UserProfile = () => {
                           <Col span={24}>
                             <Form.Item
                               name="addressvn"
-                              label="Tỉnh/Thành phố - Quận - Huyện"
+                              label="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                             >
                               <Cascader
+                              changeOnSelect
                                 options={addressData}
                                 onChange={onChange}
-                                placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                                placeholder="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                                 showSearch={{
                                   filter,
                                 }}
@@ -376,8 +381,11 @@ const UserProfile = () => {
                             </Form.Item>
                           </Col>
                           <Col span={24}>
-                            <Form.Item label="Địa chỉ" name="address">
-                              <TextArea rows={4} />
+                            <Form.Item
+                              label="Số nhà / Tên đường"
+                              name="address"
+                            >
+                              <TextArea rows={2} />
                             </Form.Item>
                           </Col>
                         </Row>

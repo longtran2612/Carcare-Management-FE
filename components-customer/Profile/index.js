@@ -145,10 +145,10 @@ export const ProfileCustomer = () => {
   const handleUpdateImage = async (imageUpload) => {
     let id = Cookies.get("id");
     let body = {
-      image: imageUpload
+      image: imageUpload,
     };
     try {
-      const res = await updateCustomer(id,body);
+      const res = await updateCustomer(id, body);
       openNotification("Thành công!", "Cập nhật ảnh đại diện thành công");
     } catch (error) {
       if (error?.response?.data?.message) {
@@ -157,7 +157,7 @@ export const ProfileCustomer = () => {
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
     }
-  }
+  };
 
   const handleUploadImages = async () => {
     setLoading(true);
@@ -241,7 +241,11 @@ export const ProfileCustomer = () => {
                   name="name"
                   rules={[
                     {
+                      pattern: new RegExp(
+                        "^[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*( *[a-zA-Z0-9_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)*$"
+                      ),
                       required: true,
+                      message: "Tên người dùng không hợp lệ!",
                     },
                   ]}
                 >
@@ -303,7 +307,7 @@ export const ProfileCustomer = () => {
                   name="identityNumber"
                   label="Số CMND"
                 >
-                  <Input maxLength={12} />
+                  <Input minLength={9} maxLength={12} />
                 </Form.Item>
               </Col>
 
@@ -333,27 +337,22 @@ export const ProfileCustomer = () => {
               <Col span={24}>
                 <Form.Item
                   name="addressvn"
-                  label="Tỉnh/Thành phố - Quận - Huyện"
+                  label="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                 >
                   <Cascader
                     options={addressData}
                     onChange={onChange}
-                    placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                    placeholder="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                     showSearch={{
                       filter,
                     }}
-                    // defaultValue={[
-                    //  customerDetail.provinceCode,
-                    //   customerDetail.districtCode,
-                    //   customerDetail.wardCode,
-                    // ]}
                     onSearch={(value) => console.log(value)}
                   />
                 </Form.Item>
               </Col>
               <Col span={24}>
-                <Form.Item label="Địa chỉ" name="address">
-                  <TextArea rows={4} />
+                <Form.Item label="Số nhà / Tên đường" name="address">
+                  <TextArea rows={2} />
                 </Form.Item>
               </Col>
             </Row>

@@ -87,6 +87,7 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
   return (
     <>
       <Modal
+        centered
         title="Thêm nhân viên mới"
         visible={show}
         onOk={() => {
@@ -115,20 +116,24 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
               <Form.Item
                 rules={[
                   {
+                    pattern: new RegExp(
+                      "^[A-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰỲỴÝỶỸ]+[a-zA-Z_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*( *[a-zA-Z0-9_ÀÁÂÃÈÉÊẾÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêếìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*)*$"
+                    ),
                     required: true,
-                    message: "Vui lòng nhập họ tên!",
+                    message: "Tên người dùng không hợp lệ!",
                   },
                 ]}
                 label="Tên nhân viên"
                 name="fullname"
               >
                 <Input
+                  placeholder="Tên nhân viên"
                   prefix={<UserOutlined className="site-form-item-icon" />}
                 />
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item initialValue="Nam" name="gender" label="Giới tính">
+              <Form.Item initialValue="Khác" name="gender" label="Giới tính">
                 <Select>
                   <Option value="Nam">Nam</Option>
                   <Option value="Nữ">Nữ</Option>
@@ -162,15 +167,18 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
                 rules={[
                   {
                     required: true,
-                    pattern: new RegExp("[0-9]{12}"),
-                    message:
-                      "Số CMND/CCCD không hợp lệ!, Số CMND/CCCD bao gồm 12 ký tự số",
+                    pattern: new RegExp("[0-9]{9,12}"),
+                    message: "Số CMND/CCCD không hợp lệ!",
                   },
                 ]}
                 name="identityNumber"
                 label="Số CMND"
               >
-                <Input maxLength={12} />
+                <Input
+                  placeholder="Số Căn cước/Chứng minh"
+                  minLength={9}
+                  maxLength={12}
+                />
               </Form.Item>
             </Col>
 
@@ -213,6 +221,7 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
             <Col span={24}>
               <Form.Item name="addressvn" label="Tỉnh/Thành phố - Quận - Huyện">
                 <Cascader
+                  changeOnSelect
                   options={addressData}
                   onChange={onChange}
                   placeholder="Tỉnh/Thành phố - Quận - Huyện"
@@ -224,7 +233,7 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item name="address" label="Địa chỉ chi tiết">
+              <Form.Item name="address" label="Số nhà / tên đường">
                 <TextArea rows={2} />
               </Form.Item>
             </Col>

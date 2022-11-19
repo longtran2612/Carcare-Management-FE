@@ -86,6 +86,17 @@ function ChangePassword() {
                   message:
                     "Mật khẩu không hợp lệ! Mật khẩu bao gồm 6-32 ký tự bao gồm chữ, số và ký tự đặc biệt",
                 },
+                ,
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("oldPassword") != value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Mật khẩu mới không được trùng với mật khẩu cũ!")
+                    );
+                  },
+                }),
               ]}
             >
               <Input.Password
