@@ -83,10 +83,22 @@ const searchService = async (data) => {
     });
 };
 
-const disableService = (id) => {
+const inActiveService = (id) => {
   return axios({
     method: "POST",
-    url: API_URL + `/services/disable-service/${id}`,
+    url: API_URL + `/services/inactive/${id}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+const activeService = (id) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/services/active/${id}`,
   })
     .then((res) => {
       return res;
@@ -97,7 +109,8 @@ const disableService = (id) => {
 };
 
 export {
-  disableService,
+  activeService,
+  inActiveService,
   getServices,
   getServiceById,
   getServiceByCode,

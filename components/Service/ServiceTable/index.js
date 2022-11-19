@@ -1,7 +1,7 @@
 import { Table, Tag, Button, Input, Row, Col, Space, Select } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { SearchOutlined, ClearOutlined, PlusOutlined } from "@ant-design/icons";
-import { getServices ,searchService } from "pages/api/serviceAPI";
+import { getServices, searchService } from "pages/api/serviceAPI";
 import { getCategories } from "pages/api/categoryAPI";
 import ModalAddService from "components/Modal/ModalAddService";
 import { useRouter } from "next/router";
@@ -33,7 +33,7 @@ function ServiceTable({}) {
   const handleGetServices = async () => {
     setLoading(true);
     let body = {
-      key:""
+      key: "",
     };
     try {
       const response = await searchService(body);
@@ -69,7 +69,6 @@ function ServiceTable({}) {
     handleGetServices();
     fetchCategoryServices();
   };
-
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
@@ -231,10 +230,8 @@ function ServiceTable({}) {
       title: "Loại dịch vụ",
       dataIndex: "type",
       key: "type",
-      render: (text,record) => {
-        return (
-        handleTypeService(record.type)
-        )
+      render: (text, record) => {
+        return handleTypeService(record.type);
       },
     },
     {
@@ -244,11 +241,12 @@ function ServiceTable({}) {
       render: (status) => {
         return (
           <>
-            {status === 100 ? (
+            {status === 0 && <Tag color={"orange"}>{"Chưa có giá"}</Tag>}
+            {status === 100 && (
               <Tag color={"green"}>{"Đang hoạt động"}</Tag>
-            ) : (
-              <Tag color={"red"}>{"Không hoạt động"}</Tag>
             )}
+             {status === 10 && <Tag color={"orange"}>{"Không hoạt động"}</Tag>}
+            {status === -100 && <Tag color={"red"}>{"Ngừng hoạt động"}</Tag>}
           </>
         );
       },
@@ -260,11 +258,11 @@ function ServiceTable({}) {
       case "NORMAL":
         return <Tag color={"blue"}>{"Thông thường"}</Tag>;
       case "NEW":
-        return  <Tag color={"green"}>{"Mới"}</Tag>;
+        return <Tag color={"green"}>{"Mới"}</Tag>;
       case "LIKE":
-        return  <Tag color={"pink"}>{"Yêu thích"}</Tag>;
-        default:
-          break;
+        return <Tag color={"pink"}>{"Yêu thích"}</Tag>;
+      default:
+        break;
     }
   };
 

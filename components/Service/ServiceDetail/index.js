@@ -12,14 +12,18 @@ import {
   Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
-import { getServiceById, updateService } from "pages/api/serviceAPI";
+import {
+  getServiceById,
+  updateService,
+  activeService,
+  inActiveService,
+} from "pages/api/serviceAPI";
 import { UploadOutlined } from "@ant-design/icons";
 import { uploadImage } from "pages/api/uploadAPI";
 import { openNotification, openNotificationWarning } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
-import { disableService } from "pages/api/serviceAPI";
 import Loading from "components/Loading";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
 
@@ -93,9 +97,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
         estimateTime: values.estimateTime,
         // imageUrl: imageS3 || serviceDetail?.image,
       };
-      if (values.statusName === "INACTIVE") {
-        disableService(serviceId);
-      }
+
       const res = await updateService(body, serviceDetail.id);
       openNotification("Thành công!", "Cập nhật dịch vụ thành công");
       onUpdateService();
@@ -162,6 +164,42 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
       }
     }
   };
+
+  const handleActiveService = async () => {
+    setLoading(true);
+
+    try {
+      const res = await activeService(serviceId);
+      openNotification("Thành công", "Kích hoạt bảng giá thành công!");
+      fetchServiceDetail();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
+
+  const handleInActiveService = async () => {
+    setLoading(true);
+    try {
+      const res = await inActiveService(serviceId);
+      openNotification("Thành công", "Vô hiệu bảng giá thành công!");
+      fetchServiceDetail();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Thất bại! Có lỗi xảy ra");
+      }
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Button type="link" size="small" onClick={() => router.push("/admin")}>
@@ -218,14 +256,62 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                       required: true,
                     },
                   ]}
-                  name="statusName"
+                  name="status"
                 >
-                  <Select>
-                    <Select.Option value="ACTIVE">Hoạt động</Select.Option>
-                    <Select.Option value="INACTIVE">
-                      Không hoạt động
-                    </Select.Option>
-                  </Select>
+                  {serviceDetail?.status === 100 && (
+                    <Popconfirm
+                      title="Bạn có chắc chắn ngưng hoạt động dịch vụ này?"
+                      placement="topLeft"
+                      okText="Đông ý"
+                      cancelText="Hủy"
+                      onConfirm={() => {
+                        handleInActiveService();
+                      }}
+                    >
+                      <Button
+                        style={{
+                          backgroundColor: "#22C55E",
+                          width: "100%",
+                          color: "white",
+                        }}
+                      >
+                        Hoạt dộng
+                      </Button>
+                    </Popconfirm>
+                  )}
+                  {serviceDetail?.status === -100 && (
+                    <Popconfirm
+                      title="Bạn có chắc chắn kích hoạt dịch vụ này này?"
+                      placement="topLeft"
+                      okText="Đông ý"
+                      cancelText="Hủy"
+                      onConfirm={() => {
+                        handleActiveService();
+                      }}
+                    >
+                      <Button style={{ width: "100%" }} type="danger">
+                        Không hoạt dộng
+                      </Button>
+                    </Popconfirm>
+                  )}
+                  {(serviceDetail?.status === 0 || serviceDetail?.status === 10) && (
+                    <Button
+                      onClick={() => {
+                        openNotificationWarning(
+                          "Vui lòng đến bảng giá để thêm",
+                          "Dịch vụ chưa có giá"
+                        );
+                      }}
+                      style={{
+                        width: "100%",
+                        background: "#AA962F",
+                        color: "white",
+                      }}
+                    >
+                      Chưa có giá
+                    </Button>
+                  )}
+                   
                 </Form.Item>
               </Col>
               <Col span={8}>

@@ -154,7 +154,7 @@ function DrawerPriceDetail({
                   label="Trạng thái"
                   name="status"
                 >
-                  <Select disabled={!canUpdatePrice}>
+                  <Select disabled>
                     <Select.Option value={100}>Hoạt động</Select.Option>
                     <Select.Option value={10}>Không hoạt động</Select.Option>
                     {!canUpdatePrice && (

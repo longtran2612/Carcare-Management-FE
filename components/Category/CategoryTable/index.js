@@ -182,22 +182,22 @@ function CategoryTable({}) {
         return handleTypeService(record.type);
       },
     },
-    {
-      title: "Trạng thái",
-      key: "status",
-      dataIndex: "status",
-      render: (status) => {
-        return (
-          <>
-            {status === "ACTIVE" ? (
-              <Tag color={"green"}>{"Hoạt động"}</Tag>
-            ) : (
-              <Tag color={"red"}>{"Không hoạt động"}</Tag>
-            )}
-          </>
-        );
-      },
-    },
+    // {
+    //   title: "Trạng thái",
+    //   key: "status",
+    //   dataIndex: "status",
+    //   render: (status) => {
+    //     return (
+    //       <>
+    //         {status === "ACTIVE" ? (
+    //           <Tag color={"green"}>{"Hoạt động"}</Tag>
+    //         ) : (
+    //           <Tag color={"red"}>{"Không hoạt động"}</Tag>
+    //         )}
+    //       </>
+    //     );
+    //   },
+    // },
   ];
   const handleTypeService = (value) => {
     switch (value) {

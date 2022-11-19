@@ -232,22 +232,22 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
         return <div>{formatMoney(price)}</div>;
       },
     },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => {
-        return (
-          <>
-            {status === 100 ? (
-              <Tag color={"green"}>Đang hoạt động</Tag>
-            ) : (
-              <Tag color={"red"}>Không hoạt động</Tag>
-            )}
-          </>
-        );
-      },
-    },
+    // {
+    //   title: "Trạng thái",
+    //   dataIndex: "status",
+    //   key: "status",
+    //   render: (status) => {
+    //     return (
+    //       <>
+    //         {status === 100 ? (
+    //           <Tag color={"green"}>Đang hoạt động</Tag>
+    //         ) : (
+    //           <Tag color={"red"}>Không hoạt động</Tag>
+    //         )}
+    //       </>
+    //     );
+    //   },
+    // },
     {
       dataIndex: "action",
       key: "action",
@@ -274,7 +274,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
       name: values.name,
       toDate: values.toDate,
     };
-    if(moment().isBefore(values.fromDate)){
+    if (moment().isBefore(values.fromDate)) {
       body.fromDate = values.fromDate;
     }
     try {
@@ -301,7 +301,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
   };
   const handleActivePrice = async () => {
     setLoading(true);
-    if(prices.length === 0){
+    if (prices.length === 0) {
       openNotificationWarning("không có giá dịch vụ nào trong bảng giá");
       return;
     }
@@ -395,9 +395,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                 >
                   <DatePicker
                     disabled={
-                      moment().isAfter(form.getFieldValue("fromDate"))
-                        ? true
-                        : false
+                      moment().isAfter(priceHeaderDetail?.fromDate)
                     }
                     disabledDate={(d) =>
                       d.isBefore(moment()) ||
@@ -468,7 +466,11 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                       }}
                     >
                       <Button
-                        style={{ backgroundColor: "#22C55E", width: "100%",color:"white" }}
+                        style={{
+                          backgroundColor: "#22C55E",
+                          width: "100%",
+                          color: "white",
+                        }}
                       >
                         Hoạt dộng
                       </Button>
@@ -490,8 +492,6 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                   )}
                 </Form.Item>
               </Col>
-
-             
             </Row>
             <Row className="PullRight">
               <div
