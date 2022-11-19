@@ -491,9 +491,8 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
                 >
                   <DatePicker
                     disabled={
-                      moment().isAfter(form.getFieldValue("fromDate"))
-                        ? true
-                        : false
+                      moment().isAfter(promotionHeaderDetail?.fromDate)
+                      
                     }
                     disabledDate={(d) =>
                       !d ||
@@ -502,7 +501,6 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
                     }
                     format={formatDate}
                   />
-                  {/* <Input /> */}
                 </Form.Item>
               </Col>
               <Col span={4}>
@@ -523,27 +521,9 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
                     }
                     format={formatDate}
                   />
-                  {/* <Input /> */}
                 </Form.Item>
               </Col>
-              {/* <Col span={4}>
-                <Form.Item
-                  label="Trạng thái"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                  name="status"
-                >
-                  <Select>
-                    <Select.Option value="ACTIVE">Hoạt động</Select.Option>
-                    <Select.Option value="INACTIVE">
-                      Không hoạt động
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col> */}
+           
               <Col span={4}>
                 <Form.Item
                   label="Trạng thái"
@@ -600,7 +580,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
                 <div>
                   {moment().isBefore(promotionHeaderDetail?.fromDate) && (
                     <Popconfirm
-                      title="Bạn có chắc chắn xóa bảng giá này?"
+                      title="Bạn có chắc chắn xóa chương trình khuyến mãi này?"
                       placement="topLeft"
                       okText="Xóa"
                       cancelText="Hủy"

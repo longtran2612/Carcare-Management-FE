@@ -588,6 +588,7 @@ function DrawerPromorionDetail({
                     />
                   </Form.Item>
                 </Col>
+                
                 <Col span={12}>
                   <Form.Item
                     label="Tổng tiền đã giảm"
