@@ -92,7 +92,7 @@ const getPromotionReport = (data) => {
 const getCancelBillReport = (data) => {
   return axios({
     method: "POST",
-    url: API_URL + `/report/get-canceled-bill-report"`,
+    url: API_URL + `/report/get-canceled-bill-report`,
     data: data,
   })
     .then((res) => {

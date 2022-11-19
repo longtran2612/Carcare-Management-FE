@@ -16,7 +16,7 @@ import {
   FileExcelOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
-import { getReport, getSaleReportByDate } from "pages/api/reportAPI";
+import { getReport, getCancelBillReport } from "pages/api/reportAPI";
 import { getUsers } from "pages/api/userAPI";
 import { getServices } from "pages/api/serviceAPI";
 import Loading from "components/Loading";
@@ -43,7 +43,7 @@ const ReportCancelBill = () => {
       console.log(error);
     }
   };
-  const handleFetcheService = async () => {
+  const handleFetchService = async () => {
     try {
       const res = await getServices();
       setServices(res.data.Data);
@@ -86,8 +86,9 @@ const ReportCancelBill = () => {
 
     setLoading(true);
     let body = {
-      reportType: 2,
-      username: values.user,
+      reportType: 1,
+      userId: values.user,
+      serviceId: values.service,
       fromDate: fromDate,
       toDate: toDate,
     };
@@ -122,37 +123,23 @@ const ReportCancelBill = () => {
     }
 
     let body = {
-      username: values.user,
+      userId: values.user,
       fromDate: fromDate,
+      serviceId: values.service,
       toDate: toDate,
     };
     try {
-      const res = await getSaleReportByDate(body);
+      const res = await getCancelBillReport(body);
       setDataSaleReport(res.data.Data);
       setLoading(false);
-    } catch (error) {}
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
-  // const handleDate = () => {
-  //   console.log(form.getFieldValue('rangerDate'));
-  //   switch (typeDate) {
-  //     case "d":
-  //       setFromDate(moment(form.getFieldValue('rangerDate') && form.getFieldValue('rangerDate')[0]).startOf("day"));
-  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("day"));
-  //     case "m":
-  //       setFromDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[0]).startOf("month"));
-  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("month"));
-  //     case "y":
-  //       setFromDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[0]).startOf("year"));
-  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("year"));
-  //   }
-  // };
-  // useEffect(() => {
-  //   handleDate();
-  // }, [typeDate,form]);
 
   useEffect(() => {
-    handleFetcheService();
+    handleFetchService();
     handleFetchUser();
   }, []);
 
@@ -167,30 +154,48 @@ const ReportCancelBill = () => {
       },
     },
     {
-      title: "Mã nhân viên",
-      dataIndex: "userCode",
-      key: "userCode",
-      render: (userCode) => <a style={{ color: "blue" }}>{userCode}</a>,
+      title: "Mã hóa đơn",
+      dataIndex: "billCode",
+      key: "billCode",
+      render: (billCode) => <a style={{ color: "blue" }}>{billCode}</a>,
     },
     {
-      title: "Tên nhân viên",
-      dataIndex: "userName",
-      key: "userName",
-    },
-    {
-      title: "Ngày",
-      dataIndex: "date",
-      key: "date",
+      title: "Ngày tạo hóa đơn",
+      dataIndex: "billCreatedDate",
+      key: "billCreatedDate",
       render: (text, record) => {
-        return <div>{moment(record.date).format(dateFormat)}</div>;
+        return <div>{moment(record.billCreatedDate).format(dateFormat)}</div>;
       },
+    },
+    {
+      title: "Ngày hủy hóa đơn",
+      dataIndex: "billCanceledDate",
+      key: "billCanceledDate",
+      render: (text, record) => {
+        return <div>{moment(record.billCanceledDate).format(dateFormat)}</div>;
+      },
+    },
+    {
+      title: "Mã nhân viên hủy",
+      dataIndex: "canceledUserCode",
+      key: "canceledUserCode",
+    },
+    {
+      title: "Tên nhân viên hủy",
+      dataIndex: "canceledUserName",
+      key: "canceledUserName",
+    },
+    {
+      title: "Dịch vụ",
+      dataIndex: "services",
+      key: "services",
     },
     {
       title: "Tổng tiền dịch vụ",
       dataIndex: "totalServicePrice",
       key: "totalServicePrice",
       render: (text, record) => {
-        return <div>{formatMoney(record.totalServicePrice)}</div>;
+        return <div>{formatMoney(record.totalPromotionAmount)}</div>;
       },
     },
     {
@@ -217,14 +222,14 @@ const ReportCancelBill = () => {
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item href="">Báo cáo doanh số</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Báo cáo hóa đơn hủy</Breadcrumb.Item>
       </Breadcrumb>
 
       <Form form={form} autoComplete="off">
         <Row style={{ padding: "2rem 8rem 2rem 8rem" }} gutter={[16, 10]}>
           <Col span={24}>
             <Typography.Title level={2} className="content-center">
-              Báo cáo doanh số
+              Báo cáo hóa đơn hủy
             </Typography.Title>
           </Col>
 
@@ -283,8 +288,32 @@ const ReportCancelBill = () => {
                 }
               >
                 {users.map((item) => (
-                  <Option value={item.phone}>
+                  <Option value={item.id}>
                     {item?.name + " - " + item?.phone}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={7}>
+            <Form.Item name="service">
+              <Select
+                style={{ width: "100%" }}
+                showSearch
+                placeholder="Chọn dịch vụ"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  optionA.children
+                    .toLowerCase()
+                    .localeCompare(optionB.children.toLowerCase())
+                }
+              >
+                {services.map((item) => (
+                  <Option value={item.id}>
+                    {item?.serviceCode + " - " + item?.name}
                   </Option>
                 ))}
               </Select>

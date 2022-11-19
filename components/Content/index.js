@@ -16,6 +16,7 @@ import StatisticalPage from "components/Statistics";
 import SaleReport from "components/Report/SaleReport";
 import SaleReportCustomer from "components/Report/SaleReportCustomer";
 import ReportCancelBill from "components/Report/CancelBill";
+import ReportPromotion from "components/Report/Promotion";
 const MyContent = ({ keyMenu }) => {
   const renderViewByKey = () => {
     switch (keyMenu) {
@@ -51,8 +52,10 @@ const MyContent = ({ keyMenu }) => {
         return <SaleReport />;
       case "report-bill-customer":
         return <SaleReportCustomer />;
-        case "report-bill-cancel":
-          return <ReportCancelBill />;
+      case "report-bill-cancel":
+        return <ReportCancelBill />;
+      case "report-promotion":
+        return <ReportPromotion />;
       case "statistic":
         return <StatisticalPage />;
       default:
