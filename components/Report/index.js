@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Breadcrumb, Col, Row, Select, Form, DatePicker, Button } from "antd";
+import { Breadcrumb, Col, Row, Select, Form, DatePicker, Button,Typography } from "antd";
 import {
   ExportOutlined,
   HomeOutlined,
@@ -126,22 +126,21 @@ const ReportPage = () => {
       </Breadcrumb>
 
       <Form form={form} layout="vertical" autoComplete="off">
-        <Row style={{ padding: "0 8rem 0 8rem" }} gutter={[16, 16]}>
+      <Row style={{ padding: "0 5rem 0 5rem" }} gutter={[16]}>
+        <Col span={24}>
+            <Typography.Title level={2} className="content-center">
+              Báo cáo tổng hợp
+            </Typography.Title>
+          </Col>
           <Col span={24}>
             <Form.Item
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
+            
               initialValue={0}
               name="reportType"
               label="Loại báo cáo"
             >
               <Select
-                // onChange={onChangeTypeDate}
-                // value={typeDate}
-                // defaultValue="d"
+            
                 style={{ width: "100%" }}
               >
                 <Select.Option value={0}>Báo cáo tổng hợp</Select.Option>
@@ -160,7 +159,7 @@ const ReportPage = () => {
                 },
               ]}
               name="typeDate"
-              label="Kiểu Thời gian"
+             
               initialValue="d"
             >
               <Select
@@ -182,7 +181,7 @@ const ReportPage = () => {
                 },
               ]}
               name="rangerDate"
-              label="Khoảng thời gian"
+             
               initialValue={[
                 moment().startOf("month"),
                 moment().endOf("month"),
@@ -191,54 +190,6 @@ const ReportPage = () => {
               {handleDatePicker()}
             </Form.Item>
           </Col>
-          {/* <Col span={24}>
-            <Form.Item name="customer" label="Khách hàng">
-              <Select
-                style={{ width: "100%" }}
-                showSearch
-                placeholder="Chọn khách hàng"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.children.includes(input)
-                }
-                filterSort={(optionA, optionB) =>
-                  optionA.children
-                    .toLowerCase()
-                    .localeCompare(optionB.children.toLowerCase())
-                }
-              >
-                {customers.map((item) => (
-                  <Option value={item.id}>
-                    {item?.name + " - " + item?.phoneNumber}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item name="user" label="Nhân viên">
-              <Select
-                style={{ width: "100%" }}
-                showSearch
-                placeholder="Chọn nhân viên"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.children.includes(input)
-                }
-                filterSort={(optionA, optionB) =>
-                  optionA.children
-                    .toLowerCase()
-                    .localeCompare(optionB.children.toLowerCase())
-                }
-              >
-                {users.map((item) => (
-                  <Option value={item.id}>
-                    {item?.name + " - " + item?.phone}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col> */}
           <Col style={{ display: "flex", justifyContent: "center" }} span={24}>
             <Button
               onClick={() => {
@@ -258,28 +209,6 @@ const ReportPage = () => {
               Xuất báo cáo
             </Button>
           </Col>
-          {/* <Col span={4}>
-            <Form.Item
-              label="Trạng thái"
-              name="status"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              {" "}
-              <Select
-                placeholder="Trạng thái"
-                style={{ width: "100%" }}
-                onChange={(value) => setStatus(value)}
-                value={status}
-              >
-                <Option value={100}>Đã xuất hóa đơn</Option>
-                <Option value={-100}>Đã hủy</Option>
-              </Select>
-            </Form.Item>
-          </Col> */}
         </Row>
       </Form>
       <Loading loading={loading} />

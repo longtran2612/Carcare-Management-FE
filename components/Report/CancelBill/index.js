@@ -14,6 +14,7 @@ import {
   ExportOutlined,
   HomeOutlined,
   FileExcelOutlined,
+  ClearOutlined
 } from "@ant-design/icons";
 import moment from "moment";
 import { getReport, getCancelBillReport } from "pages/api/reportAPI";
@@ -226,7 +227,7 @@ const ReportCancelBill = () => {
       </Breadcrumb>
 
       <Form form={form} autoComplete="off">
-        <Row style={{ padding: "0 8rem 0 8rem" }} gutter={[16]}>
+        <Row style={{ padding: "0 5rem 0 5rem" }} gutter={[16]}>
           <Col span={24}>
             <Typography.Title level={2} className="content-center">
               Báo cáo hóa đơn hủy
@@ -295,8 +296,22 @@ const ReportCancelBill = () => {
               </Select>
             </Form.Item>
           </Col>
+          <Col span={1}>
+            <Button
+            icon={<ClearOutlined/>}
+              style={{ width: "100%" }}
+              onClick={() => {
+                form.setFieldsValue({
+                  user: undefined,
+                  service: undefined,
+                });
+              }}
+              type="dashed"
+            >
+            </Button>
+          </Col>
          
-          <Col span={4}>
+          <Col span={3}>
             <Button
               style={{ width: "100%" }}
               onClick={() => {
