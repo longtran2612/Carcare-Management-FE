@@ -126,7 +126,7 @@ const ReportPage = () => {
       </Breadcrumb>
 
       <Form form={form} layout="vertical" autoComplete="off">
-        <Row style={{ padding: "2rem 8rem 2rem 8rem" }} gutter={[16, 16]}>
+        <Row style={{ padding: "0 8rem 0 8rem" }} gutter={[16, 16]}>
           <Col span={24}>
             <Form.Item
               rules={[

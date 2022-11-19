@@ -226,7 +226,7 @@ const ReportCancelBill = () => {
       </Breadcrumb>
 
       <Form form={form} autoComplete="off">
-        <Row style={{ padding: "2rem 8rem 2rem 8rem" }} gutter={[16, 10]}>
+        <Row style={{ padding: "0 8rem 0 8rem" }} gutter={[16]}>
           <Col span={24}>
             <Typography.Title level={2} className="content-center">
               Báo cáo hóa đơn hủy
@@ -295,10 +295,47 @@ const ReportCancelBill = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={7}>
+         
+          <Col span={4}>
+            <Button
+              style={{ width: "100%" }}
+              onClick={() => {
+                form
+                  .validateFields()
+                  .then((values) => {
+                    onFinish(values);
+                  })
+                  .catch((info) => {
+                    console.log("Validate Failed:", info);
+                  });
+              }}
+              type="dashed"
+            >
+              Thống kê
+            </Button>
+          </Col>
+          <Col span={4}>
+            <Button
+            style={{ width: "100%" }}
+              onClick={() => {
+                form
+                  .validateFields()
+                  .then((values) => {
+                    handleExportExcel(values);
+                  })
+                  .catch((info) => {
+                    console.log("Validate Failed:", info);
+                  });
+              }}
+              icon={<FileExcelOutlined />}
+              type="primary"
+            >
+              Xuất báo cáo
+            </Button>
+          </Col>
+          <Col span={24}>
             <Form.Item name="service">
               <Select
-                style={{ width: "100%" }}
                 showSearch
                 placeholder="Chọn dịch vụ"
                 optionFilterProp="children"
@@ -318,42 +355,6 @@ const ReportCancelBill = () => {
                 ))}
               </Select>
             </Form.Item>
-          </Col>
-          <Col span={3}>
-            <Button
-              style={{ width: "100%" }}
-              onClick={() => {
-                form
-                  .validateFields()
-                  .then((values) => {
-                    onFinish(values);
-                  })
-                  .catch((info) => {
-                    console.log("Validate Failed:", info);
-                  });
-              }}
-              type="dashed"
-            >
-              Thống kê
-            </Button>
-          </Col>
-          <Col span={3}>
-            <Button
-              onClick={() => {
-                form
-                  .validateFields()
-                  .then((values) => {
-                    handleExportExcel(values);
-                  })
-                  .catch((info) => {
-                    console.log("Validate Failed:", info);
-                  });
-              }}
-              icon={<FileExcelOutlined />}
-              type="primary"
-            >
-              Xuất báo cáo
-            </Button>
           </Col>
         </Row>
         <Row>

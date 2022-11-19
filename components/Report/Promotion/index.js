@@ -237,7 +237,7 @@ const ReportPromotion = () => {
       </Breadcrumb>
 
       <Form form={form} autoComplete="off">
-        <Row style={{ padding: "2rem 8rem 2rem 8rem" }} gutter={[16, 10]}>
+        <Row style={{ padding: "0 8rem 0 8rem" }} gutter={[16, 10]}>
           <Col span={24}>
             <Typography.Title level={2} className="content-center">
               Báo cáo khuyến mãi
@@ -304,7 +304,7 @@ const ReportPromotion = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={3}>
+          <Col span={4}>
             <Button
               style={{ width: "100%" }}
               onClick={() => {
@@ -322,8 +322,9 @@ const ReportPromotion = () => {
               Thống kê
             </Button>
           </Col>
-          <Col span={3}>
+          <Col span={4}>
             <Button
+            style={{ width: "100%" }}
               onClick={() => {
                 form
                   .validateFields()

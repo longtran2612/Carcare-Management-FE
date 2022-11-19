@@ -229,7 +229,7 @@ function ModalAddCustomer({ show, onSuccess, handleCancel }) {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item name="address" label="Địa chỉ chi tiết">
+              <Form.Item name="address" label="Số nhà / tên đường">
                 <TextArea rows={2} />
               </Form.Item>
             </Col>

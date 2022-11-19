@@ -9,6 +9,7 @@ import {
   Button,
   Typography,
   Table,
+  Cascader,
 } from "antd";
 import {
   ExportOutlined,
@@ -22,6 +23,7 @@ import Loading from "components/Loading";
 import { formatMoney } from "utils/format";
 import { openNotification, openNotificationWarning } from "utils/notification";
 const { RangePicker } = DatePicker;
+import JsonData from "data/address-vn.json";
 
 const dateFormat = "DD/MM/YYYY";
 
@@ -31,6 +33,15 @@ const SaleReportCustomer = () => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dataSaleReport, setDataSaleReport] = useState([]);
+
+  const [addressData, setAddressData] = useState(JsonData);
+
+  const [provinceSelected, setProvinceSelected] = useState("");
+  const [districtSelected, setDistrictSelected] = useState("");
+  const [wardSelected, setWardSelected] = useState("");
+  const [provinceSelectedCode, setProvinceSelectedCode] = useState("");
+  const [districtSelectedCode, setDistrictSelectedCode] = useState("");
+  const [wardSelectedCode, setWardSelectedCode] = useState("");
 
   const handleFetchCustomer = async () => {
     try {
@@ -76,6 +87,9 @@ const SaleReportCustomer = () => {
     setLoading(true);
     let body = {
       reportType: 3,
+      customerDistrict: districtSelectedCode,
+      customerProvince: provinceSelectedCode,
+      customerWard: wardSelectedCode,
       username: values.customer,
       fromDate: fromDate,
       toDate: toDate,
@@ -111,6 +125,9 @@ const SaleReportCustomer = () => {
     }
 
     let body = {
+      customerDistrict: districtSelectedCode,
+      customerProvince: provinceSelectedCode,
+      customerWard: wardSelectedCode,
       customerId: values.customer,
       fromDate: fromDate,
       toDate: toDate,
@@ -209,6 +226,23 @@ const SaleReportCustomer = () => {
     },
   ];
 
+  const onChange = (value, selectedOptions) => {
+    console.log(value, selectedOptions);
+    if (selectedOptions) {
+      setProvinceSelected(selectedOptions[0]?.label);
+      setDistrictSelected(selectedOptions[1]?.label);
+      setWardSelected(selectedOptions[2]?.label);
+      setProvinceSelectedCode(selectedOptions[0]?.value);
+      setDistrictSelectedCode(selectedOptions[1]?.value);
+      setWardSelectedCode(selectedOptions[2]?.value);
+    }
+  };
+  const filter = (inputValue, path) =>
+    path.some(
+      (option) =>
+        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+    );
+
   return (
     <>
       <Breadcrumb style={{ margin: "5px", alignItems: "center" }}>
@@ -221,7 +255,7 @@ const SaleReportCustomer = () => {
       </Breadcrumb>
 
       <Form form={form} autoComplete="off">
-        <Row style={{ padding: "2rem 8rem 2rem 8rem" }} gutter={[16, 10]}>
+        <Row style={{ padding: "0 8rem 0 8rem" }} gutter={[16, 10]}>
           <Col span={24}>
             <Typography.Title level={2} className="content-center">
               Báo cáo doanh số theo khách hàng
@@ -290,7 +324,7 @@ const SaleReportCustomer = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={3}>
+          <Col span={4}>
             <Button
               style={{ width: "100%" }}
               onClick={() => {
@@ -308,8 +342,9 @@ const SaleReportCustomer = () => {
               Thống kê
             </Button>
           </Col>
-          <Col span={3}>
+          <Col span={4}>
             <Button
+              style={{ width: "100%" }}
               onClick={() => {
                 form
                   .validateFields()
@@ -325,6 +360,20 @@ const SaleReportCustomer = () => {
             >
               Xuất báo cáo
             </Button>
+          </Col>
+          <Col span={24}>
+            <Form.Item name="addressvn">
+              <Cascader
+                changeOnSelect
+                options={addressData}
+                onChange={onChange}
+                placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                showSearch={{
+                  filter,
+                }}
+                onSearch={(value) => console.log(value)}
+              />
+            </Form.Item>
           </Col>
         </Row>
         <Row>
