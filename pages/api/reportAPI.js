@@ -48,4 +48,60 @@ const getReport = (data) => {
     });
 };
 
-export { getReport };
+
+const getSaleReportByDate = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/report/get-sales-by-date-report`,
+  data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+const getSaleReportByCustomer = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/report/get-sales-by-customer-report`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+const getPromotionReport = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/report/get-promotion-report`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+const getCancelBillReport = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/report/get-canceled-bill-report"`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+
+export { getReport, getSaleReportByDate, getSaleReportByCustomer, getPromotionReport, getCancelBillReport };

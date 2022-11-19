@@ -1,42 +1,41 @@
 import React, { useState, useEffect } from "react";
-import { Breadcrumb, Col, Row, Select, Form, DatePicker, Button } from "antd";
+import {
+  Breadcrumb,
+  Col,
+  Row,
+  Select,
+  Form,
+  DatePicker,
+  Button,
+  Typography,
+  Table,
+} from "antd";
 import {
   ExportOutlined,
   HomeOutlined,
   FileExcelOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
-import { getReport } from "pages/api/reportAPI";
+import { getReport, getSaleReportByCustomer } from "pages/api/reportAPI";
 import { getCustomers } from "pages/api/customerAPI";
-import { getUsers } from "pages/api/userAPI";
 import Loading from "components/Loading";
+import { formatMoney } from "utils/format";
 import { openNotification, openNotificationWarning } from "utils/notification";
 const { RangePicker } = DatePicker;
 
 const dateFormat = "DD/MM/YYYY";
 
-const ReportPage = () => {
+const SaleReportCustomer = () => {
   const [form] = Form.useForm();
   const [typeDate, setTypeDate] = useState("d");
   const [customers, setCustomers] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [status, setStatus] = useState(100);
   const [loading, setLoading] = useState(false);
-  // const [fromDate, setFromDate] = useState(moment());
-  // const [toDate, setToDate] = useState(moment());
+  const [dataSaleReport, setDataSaleReport] = useState([]);
 
   const handleFetchCustomer = async () => {
     try {
       const res = await getCustomers();
       setCustomers(res.data.Data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleFetchUser = async () => {
-    try {
-      const res = await getUsers();
-      setUsers(res.data.Data);
     } catch (error) {
       console.log(error);
     }
@@ -58,7 +57,7 @@ const ReportPage = () => {
     }
   };
 
-  const onFinish = async (values) => {
+  const handleExportExcel = async (values) => {
     let fromDate;
     let toDate;
     if (values.typeDate === "d") {
@@ -76,7 +75,8 @@ const ReportPage = () => {
 
     setLoading(true);
     let body = {
-      reportType: values.reportType,
+      reportType: 3,
+      username: values.customer,
       fromDate: fromDate,
       toDate: toDate,
     };
@@ -93,28 +93,121 @@ const ReportPage = () => {
     }
   };
 
-  // const handleDate = () => {
-  //   console.log(form.getFieldValue('rangerDate'));
-  //   switch (typeDate) {
-  //     case "d":
-  //       setFromDate(moment(form.getFieldValue('rangerDate') && form.getFieldValue('rangerDate')[0]).startOf("day"));
-  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("day"));
-  //     case "m":
-  //       setFromDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[0]).startOf("month"));
-  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("month"));
-  //     case "y":
-  //       setFromDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[0]).startOf("year"));
-  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("year"));
-  //   }
-  // };
-  // useEffect(() => {
-  //   handleDate();
-  // }, [typeDate,form]);
+  const onFinish = async (values) => {
+    setLoading(true);
+    let fromDate;
+    let toDate;
+    if (values.typeDate === "d") {
+      fromDate = values.rangerDate[0];
+      toDate = values.rangerDate[1];
+    }
+    if (values.typeDate === "m") {
+      fromDate = moment(values.rangerDate[0]).startOf("month").add(1, "days");
+      toDate = moment(values.rangerDate[1]).endOf("month");
+    }
+    if (values.typeDate === "y") {
+      fromDate = moment(values.rangerDate[0]).startOf("year").add(1, "days");
+      toDate = moment(values.rangerDate[1]).endOf("year");
+    }
+
+    let body = {
+      customerId: values.customer,
+      fromDate: fromDate,
+      toDate: toDate,
+    };
+    try {
+      const res = await getSaleReportByCustomer(body);
+      console.log(res.data.Data);
+      setDataSaleReport(res.data.Data);
+      setLoading(false);
+    } catch (error) {}
+  };
 
   useEffect(() => {
     handleFetchCustomer();
-    handleFetchUser();
   }, []);
+
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "key",
+      key: "key",
+      width: 70,
+      render: (text, record, dataIndex) => {
+        return <div>{dataIndex + 1}</div>;
+      },
+    },
+    {
+      title: "Mã khách hàng",
+      dataIndex: "customerCode",
+      key: "customerCode",
+      render: (customerCode) => <a style={{ color: "blue" }}>{customerCode}</a>,
+    },
+    {
+      title: "Tên khách hàng",
+      dataIndex: "customerName",
+      key: "customerName",
+    },
+    {
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "Phường/Xã",
+      dataIndex: "ward",
+      key: "ward",
+    },
+    {
+      title: "Quận/Huyện",
+      dataIndex: "district",
+      key: "district",
+    },
+    {
+      title: "Tỉnh/Thành",
+      dataIndex: "province",
+      key: "province",
+    },
+    {
+      title: "Nhóm khách hàng",
+      dataIndex: "statusName",
+      key: "statusName",
+    },
+    {
+      title: "Mã xe",
+      dataIndex: "carCode",
+      key: "carCode",
+    },
+    {
+      title: "Thương hiệu",
+      dataIndex: "carBrand",
+      key: "carBrand",
+    },
+    {
+      title: "Tổng tiền dịch vụ",
+      dataIndex: "totalServicePrice",
+      key: "totalServicePrice",
+      render: (text, record) => {
+        return <div>{formatMoney(record.totalServicePrice)}</div>;
+      },
+    },
+    {
+      title: "Tổng tiền khuyến mãi",
+      dataIndex: "totalPromotionAmount",
+      key: "totalPromotionAmount",
+      render: (text, record) => {
+        return <div>{formatMoney(record.totalPromotionAmount)}</div>;
+      },
+    },
+    {
+      title: "Tổng tiền thanh toán",
+      dataIndex: "totalPaymentAmount",
+      key: "totalPaymentAmount",
+      render: (text, record) => {
+        return <div>{formatMoney(record.totalPaymentAmount)}</div>;
+      },
+    },
+  ];
 
   return (
     <>
@@ -122,37 +215,20 @@ const ReportPage = () => {
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item href="">Báo cáo tổng hợp</Breadcrumb.Item>
+        <Breadcrumb.Item href="">
+          Báo cáo doanh số theo khách hàng
+        </Breadcrumb.Item>
       </Breadcrumb>
 
-      <Form form={form} layout="vertical" autoComplete="off">
-        <Row style={{ padding: "2rem 8rem 2rem 8rem" }} gutter={[16, 16]}>
+      <Form form={form} autoComplete="off">
+        <Row style={{ padding: "2rem 8rem 2rem 8rem" }} gutter={[16, 10]}>
           <Col span={24}>
-            <Form.Item
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-              initialValue={0}
-              name="reportType"
-              label="Loại báo cáo"
-            >
-              <Select
-                // onChange={onChangeTypeDate}
-                // value={typeDate}
-                // defaultValue="d"
-                style={{ width: "100%" }}
-              >
-                <Select.Option value={0}>Báo cáo tổng hợp</Select.Option>
-                <Select.Option value={1}>Bảng kê hủy hóa đơn</Select.Option>
-                <Select.Option value={2}>Doanh số theo ngày theo ngày</Select.Option>
-                <Select.Option value={3}>Doanh số theo khách hàng</Select.Option>
-                <Select.Option value={4}>Tổng kết khuyến mãi</Select.Option>
-              </Select>
-            </Form.Item>
+            <Typography.Title level={2} className="content-center">
+              Báo cáo doanh số theo khách hàng
+            </Typography.Title>
           </Col>
-          <Col span={6}>
+
+          <Col span={3}>
             <Form.Item
               rules={[
                 {
@@ -160,7 +236,6 @@ const ReportPage = () => {
                 },
               ]}
               name="typeDate"
-              label="Kiểu Thời gian"
               initialValue="d"
             >
               <Select
@@ -174,7 +249,7 @@ const ReportPage = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={18}>
+          <Col span={6}>
             <Form.Item
               rules={[
                 {
@@ -182,7 +257,6 @@ const ReportPage = () => {
                 },
               ]}
               name="rangerDate"
-              label="Khoảng thời gian"
               initialValue={[
                 moment().startOf("month"),
                 moment().endOf("month"),
@@ -191,8 +265,9 @@ const ReportPage = () => {
               {handleDatePicker()}
             </Form.Item>
           </Col>
-          {/* <Col span={24}>
-            <Form.Item name="customer" label="Khách hàng">
+
+          <Col span={7}>
+            <Form.Item name="customer">
               <Select
                 style={{ width: "100%" }}
                 showSearch
@@ -215,32 +290,9 @@ const ReportPage = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={24}>
-            <Form.Item name="user" label="Nhân viên">
-              <Select
-                style={{ width: "100%" }}
-                showSearch
-                placeholder="Chọn nhân viên"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.children.includes(input)
-                }
-                filterSort={(optionA, optionB) =>
-                  optionA.children
-                    .toLowerCase()
-                    .localeCompare(optionB.children.toLowerCase())
-                }
-              >
-                {users.map((item) => (
-                  <Option value={item.id}>
-                    {item?.name + " - " + item?.phone}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col> */}
-          <Col style={{ display: "flex", justifyContent: "center" }} span={24}>
+          <Col span={3}>
             <Button
+              style={{ width: "100%" }}
               onClick={() => {
                 form
                   .validateFields()
@@ -251,39 +303,45 @@ const ReportPage = () => {
                     console.log("Validate Failed:", info);
                   });
               }}
+              type="dashed"
+            >
+              Thống kê
+            </Button>
+          </Col>
+          <Col span={3}>
+            <Button
+              onClick={() => {
+                form
+                  .validateFields()
+                  .then((values) => {
+                    handleExportExcel(values);
+                  })
+                  .catch((info) => {
+                    console.log("Validate Failed:", info);
+                  });
+              }}
               icon={<FileExcelOutlined />}
               type="primary"
-              size="large"
             >
               Xuất báo cáo
             </Button>
           </Col>
-          {/* <Col span={4}>
-            <Form.Item
-              label="Trạng thái"
-              name="status"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              {" "}
-              <Select
-                placeholder="Trạng thái"
-                style={{ width: "100%" }}
-                onChange={(value) => setStatus(value)}
-                value={status}
-              >
-                <Option value={100}>Đã xuất hóa đơn</Option>
-                <Option value={-100}>Đã hủy</Option>
-              </Select>
-            </Form.Item>
-          </Col> */}
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Table
+              bordered
+              columns={columns}
+              dataSource={dataSaleReport}
+              scroll={{
+                y: 280,
+              }}
+            />
+          </Col>
         </Row>
       </Form>
       <Loading loading={loading} />
     </>
   );
 };
-export default ReportPage;
+export default SaleReportCustomer;
