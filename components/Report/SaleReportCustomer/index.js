@@ -201,6 +201,11 @@ const SaleReportCustomer = () => {
       key: "carBrand",
     },
     {
+      title: "Biển số xe",
+      dataIndex: "licensePlate",
+      key: "licensePlate",
+    },
+    {
       title: "Tổng tiền dịch vụ",
       dataIndex: "totalServicePrice",
       key: "totalServicePrice",
