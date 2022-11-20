@@ -15,19 +15,9 @@ const dateFormat = "DD/MM/YYYY";
 
 const StatisticalPage = () => {
   const [form] = Form.useForm();
-  const [customers, setCustomers] = useState([]);
   const [users, setUsers] = useState([]);
   const [dataStatistic, setDataStatistic] = useState([]);
-  const [status, setStatus] = useState(100);
 
-  const handleFetchCustomer = async () => {
-    try {
-      const res = await getCustomers();
-      setCustomers(res.data.Data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const handleFetchUser = async () => {
     try {
       const res = await getUsers();
@@ -69,7 +59,6 @@ const StatisticalPage = () => {
   };
 
   useEffect(() => {
-    handleFetchCustomer();
     handleFetchUser();
     handleFetchData();
   }, []);
@@ -153,6 +142,7 @@ const StatisticalPage = () => {
                     .toLowerCase()
                     .localeCompare(optionB.children.toLowerCase())
                 }
+                // initialValue = "ádsadasd"
               >
                 {users.map((item) => (
                   <Option value={item.id}>

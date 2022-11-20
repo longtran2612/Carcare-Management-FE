@@ -66,7 +66,7 @@ const SideBar = ({ handleOpenKey }) => {
         getItem("Thống kê - Báo cáo", "7", <BarChartOutlined />, [
           // getItem("Thống kê", "statistic"),
           getItem("Doanh số", "report-bill"),
-          getItem("Doanh số theo khách hàng", "report-bill-customer"),
+          getItem("Khách hàng", "report-bill-customer"),
           getItem("Hóa đơn hủy", "report-bill-cancel"),
           getItem("Khuyến mãi", "report-promotion"),
           getItem("Báo cáo tổng hợp", "report"),
@@ -74,12 +74,11 @@ const SideBar = ({ handleOpenKey }) => {
       ]);
     } else {
       setItems([
-        getItem("Đơn hàng", "1", <ShopOutlined />, [
+        getItem("Dashboard", "1", <ShopOutlined />),
+        getItem("Đơn hàng", "2", <BookOutlined />, [
           getItem("Yêu cầu xử lý", "order"),
           getItem("Vị trí xử lý", "car-slot"),
           getItem("Danh sách đơn hàng", "order-not-request"),
-        ]),
-        getItem("Hóa đơn", "2", <BookOutlined />, [
           getItem("Hóa đơn", "bills"),
         ]),
         getItem("Dịch vụ", "3", <ClearOutlined />, [
@@ -87,15 +86,15 @@ const SideBar = ({ handleOpenKey }) => {
           getItem("Danh mục", "category"),
           getItem("Bảng giá", "price"),
         ]),
-      
         getItem("Xe", "4", <CarOutlined />, [
           getItem("Xe khách hàng", "car"),
           getItem("Mẫu xe", "car-model"),
         ]),
         getItem("Người dùng", "5", <UserOutlined />, [
+          // getItem("Nhân viên", "user"),
           getItem("Khách hàng", "customer"),
         ]),
-        getItem("Khuyến mãi", "5", <TagsOutlined />),
+        getItem("Khuyến mãi", "6", <TagsOutlined />),
         getItem("Thống kê - Báo cáo", "7", <BarChartOutlined />, [
           // getItem("Thống kê", "statistic"),
           getItem("Doanh số", "report-bill"),
