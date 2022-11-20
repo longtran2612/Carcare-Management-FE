@@ -14,7 +14,7 @@ import {
   ExportOutlined,
   HomeOutlined,
   FileExcelOutlined,
-  ClearOutlined
+  ClearOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import { getReport, getCancelBillReport } from "pages/api/reportAPI";
@@ -70,6 +70,11 @@ const ReportCancelBill = () => {
   };
 
   const handleExportExcel = async (values) => {
+    if (dataSaleReport.length === 0) {
+      openNotificationWarning("Không có dữ liệu để xuất file");
+      return;
+    }
+    openNotification("Đang xuất file excel");
     let fromDate;
     let toDate;
     if (values.typeDate === "d") {
@@ -137,7 +142,6 @@ const ReportCancelBill = () => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     handleFetchService();
@@ -297,7 +301,7 @@ const ReportCancelBill = () => {
           </Col>
           <Col span={1}>
             <Button
-            icon={<ClearOutlined/>}
+              icon={<ClearOutlined />}
               style={{ width: "100%" }}
               onClick={() => {
                 form.setFieldsValue({
@@ -306,10 +310,9 @@ const ReportCancelBill = () => {
                 });
               }}
               type="dashed"
-            >
-            </Button>
+            ></Button>
           </Col>
-         
+
           <Col span={3}>
             <Button
               style={{ width: "100%" }}
@@ -330,7 +333,7 @@ const ReportCancelBill = () => {
           </Col>
           <Col span={4}>
             <Button
-            style={{ width: "100%" }}
+              style={{ width: "100%" }}
               onClick={() => {
                 form
                   .validateFields()

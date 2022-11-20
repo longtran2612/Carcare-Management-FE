@@ -67,6 +67,11 @@ const ReportPromotion = () => {
   };
 
   const handleExportExcel = async (values) => {
+    if (dataSaleReport.length === 0) {
+      openNotificationWarning("Không có dữ liệu để xuất file");
+      return;
+    }
+    openNotification("Đang xuất file excel");
     let fromDate;
     let toDate;
     if (values.typeDate === "d") {

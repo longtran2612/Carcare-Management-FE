@@ -59,6 +59,7 @@ const ReportPage = () => {
   };
 
   const onFinish = async (values) => {
+    openNotification("Đang xuất file excel");
     let fromDate;
     let toDate;
     if (values.typeDate === "d") {

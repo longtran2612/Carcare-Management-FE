@@ -15,7 +15,7 @@ import {
   ExportOutlined,
   HomeOutlined,
   FileExcelOutlined,
-  ClearOutlined
+  ClearOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import { getReport, getSaleReportByCustomer } from "pages/api/reportAPI";
@@ -70,6 +70,11 @@ const SaleReportCustomer = () => {
   };
 
   const handleExportExcel = async (values) => {
+    if (dataSaleReport.length === 0) {
+      openNotificationWarning("Không có dữ liệu để xuất file");
+      return;
+    }
+    openNotification("Đang xuất file excel");
     let fromDate;
     let toDate;
     if (values.typeDate === "d") {
@@ -260,7 +265,7 @@ const SaleReportCustomer = () => {
       </Breadcrumb>
 
       <Form form={form} autoComplete="off">
-      <Row style={{ padding: "0 5rem 0 5rem" }} gutter={[16]}>
+        <Row style={{ padding: "0 5rem 0 5rem" }} gutter={[16]}>
           <Col span={24}>
             <Typography.Title level={2} className="content-center">
               Báo cáo doanh số theo khách hàng
@@ -331,7 +336,7 @@ const SaleReportCustomer = () => {
           </Col>
           <Col span={1}>
             <Button
-            icon={<ClearOutlined/>}
+              icon={<ClearOutlined />}
               style={{ width: "100%" }}
               onClick={() => {
                 form.setFieldsValue({
@@ -340,8 +345,7 @@ const SaleReportCustomer = () => {
                 });
               }}
               type="dashed"
-            >
-            </Button>
+            ></Button>
           </Col>
           <Col span={3}>
             <Button
