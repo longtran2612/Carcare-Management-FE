@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Column } from "@ant-design/plots";
-import { Breadcrumb, Col, Row, Select } from "antd";
+import { Breadcrumb, Col, Row, Select, Form, Button, Typography, Input } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import { DatePicker, Space } from "antd";
+import { getStatistic } from "pages/api/statisticAPI";
+import { ClearOutlined } from "@ant-design/icons";
 import moment from "moment";
+import { formatMoney } from "utils/format";
 import { getCustomers } from "pages/api/customerAPI";
 import { getUsers } from "pages/api/userAPI";
 const { RangePicker } = DatePicker;
@@ -11,9 +14,10 @@ const { RangePicker } = DatePicker;
 const dateFormat = "DD/MM/YYYY";
 
 const StatisticalPage = () => {
-  const [typeDate, setTypeDate] = useState("d");
+  const [form] = Form.useForm();
   const [customers, setCustomers] = useState([]);
   const [users, setUsers] = useState([]);
+  const [dataStatistic, setDataStatistic] = useState([]);
   const [status, setStatus] = useState(100);
 
   const handleFetchCustomer = async () => {
@@ -33,68 +37,47 @@ const StatisticalPage = () => {
     }
   };
 
-  const onChangeTypeDate = (value) => {
-    setTypeDate(value);
-    handleDatePicker();
+  const handleFetchData = async () => {
+    let body = {
+      fromDate: moment(moment().subtract(7, "days")),
+      toDate: moment(),
+    };
+    try {
+      const res = await getStatistic(body);
+      setDataStatistic(res.data.Data);
+      console.log(res.data.Data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleDatePicker = () => {
-    switch (typeDate) {
-      case "d":
-        return (
-          <RangePicker
-            defaultValue={[moment("2021-01-01"), moment("2021-01-31")]}
-            format={dateFormat}
-          />
-        );
-      case "m":
-        return <RangePicker picker="month" />;
-      // case "q":
-      //   return <RangePicker picker="quarter" />;
-      case "y":
-        return <RangePicker picker="year" />;
+  const handleFetchData2 = async (values) => {
+    console.log(values);
+    let body = {
+      fromDate: moment(values.rangerDate[0]),
+      toDate: moment(values.rangerDate[1]),
+      userId: values.user,
+    };
+    try {
+      console.log(body);
+      const res = await getStatistic(body);
+      setDataStatistic(res.data.Data);
+      console.log(res.data.Data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   useEffect(() => {
     handleFetchCustomer();
     handleFetchUser();
+    handleFetchData();
   }, []);
 
-  const data = [
-    {
-      type: "Tháng 1",
-      sales: 38,
-    },
-    {
-      type: "Tháng 2",
-      sales: 12,
-    },
-    {
-      type: "Tháng 3",
-      sales: 26,
-    },
-    {
-      type: "Tháng 4",
-      sales: 52,
-    },
-    {
-      type: "Tháng 5",
-      sales: 67,
-    },
-    {
-      type: "Tháng 6",
-      sales: 52,
-    },
-    {
-      type: "Tháng 7",
-      sales: 52,
-    },
-  ];
   const config = {
-    data,
-    xField: "type",
-    yField: "sales",
+    data: dataStatistic,
+    xField: "date",
+    yField: "value",
     label: {
       position: "middle",
       style: {
@@ -108,12 +91,20 @@ const StatisticalPage = () => {
         autoRotate: false,
       },
     },
+
+    title: {
+      position: "center",
+      text: "Biểu đồ thống kê doanh thu",
+    },
     meta: {
-      type: {
+      date: {
         alias: "Tháng",
       },
-      sales: {
+      value: {
         alias: "Doanh số",
+        formatter: (v) => {
+          return formatMoney(v);
+        },
       },
     },
   };
@@ -126,75 +117,89 @@ const StatisticalPage = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item href=""> Thống kê</Breadcrumb.Item>
       </Breadcrumb>
-      <Row style={{ marginTop: "20px" }} gutter={[16, 16]}>
-        <Col span={3}>
-          <Select
-            onChange={onChangeTypeDate}
-            value={typeDate}
-            defaultValue="d"
-            style={{ width: "100%" }}
-          >
-            <Select.Option value="d">Ngày</Select.Option>
-            <Select.Option value="m">Tháng</Select.Option>
-            {/* <Select.Option value="q">Quý</Select.Option> */}
-            <Select.Option value="y">Năm</Select.Option>
-          </Select>
-        </Col>
-        <Col span={7}>{handleDatePicker()}</Col>
-        <Col span={5}>
-          <Select
-            style={{ width: "100%" }}
-            showSearch
-            placeholder="Chọn khách hàng"
-            optionFilterProp="children"
-            filterOption={(input, option) => option.children.includes(input)}
-            filterSort={(optionA, optionB) =>
-              optionA.children
-                .toLowerCase()
-                .localeCompare(optionB.children.toLowerCase())
-            }
-          >
-            {customers.map((item) => (
-              <Option value={item.id}>
-                {item.name + " - " + item.phoneNumber}
-              </Option>
-            ))}
-          </Select>
-        </Col>
-        <Col span={5}>
-          <Select
-            style={{ width: "100%" }}
-            showSearch
-            placeholder="Chọn nhân viên"
-            optionFilterProp="children"
-            filterOption={(input, option) => option.children.includes(input)}
-            filterSort={(optionA, optionB) =>
-              optionA.children
-                .toLowerCase()
-                .localeCompare(optionB.children.toLowerCase())
-            }
-          >
-            {users.map((item) => (
-              <Option value={item.id}>{item.name + " - " + item.phone}</Option>
-            ))}
-          </Select>
-        </Col>
-        <Col span={4}>
-          {" "}
-          <Select
-            placeholder="Trạng thái"
-            style={{ width: "100%" }}
-            onChange={(value) => setStatus(value)}
-            value={status}
-          >
-            <Option value={100}>Đã xuất hóa đơn</Option>
-            <Option value={-100}>Đã hủy</Option>
-          </Select>
-        </Col>
-        <Col span={24}>
-          <Column style={{ paddingTop: "3rem" }} {...config} />;
-        </Col>
-      </Row>
+      <Form form={form} autoComplete="off">
+        <Row style={{ padding: "0 5rem 0 5rem" }} gutter={[16]}>
+          <Col span={24}>
+            <Typography.Title level={2} className="content-center">
+              Thống kê doanh số
+            </Typography.Title>
+          </Col>
+          <Col span={13}>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              name="rangerDate"
+              initialValue={[moment(moment().subtract(7, "days")), moment()]}
+            >
+              <RangePicker format={dateFormat} />;
+            </Form.Item>
+          </Col>
+
+          <Col span={7}>
+            <Form.Item name="user">
+              <Select
+                style={{ width: "100%" }}
+                showSearch
+                placeholder="Nhân viên"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  optionA.children
+                    .toLowerCase()
+                    .localeCompare(optionB.children.toLowerCase())
+                }
+              >
+                {users.map((item) => (
+                  <Option value={item.id}>
+                    {item?.name + " - " + item?.phone}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={1}>
+            <Button
+              icon={<ClearOutlined />}
+              style={{ width: "100%" }}
+              onClick={() => {
+                form.setFieldsValue({
+                  rangerDate: [moment(moment().subtract(7, "days")), moment()],
+                  user: undefined,
+                });
+              }}
+              type="dashed"
+            ></Button>
+          </Col>
+          <Col span={3}>
+            <Button
+              style={{ width: "100%" }}
+              onClick={() => {
+                form
+                  .validateFields()
+                  .then((values) => {
+                    handleFetchData2(values);
+                  })
+                  .catch((info) => {
+                    console.log("Validate Failed:", info);
+                  });
+              }}
+              type="primary"
+            >
+              Thống kê
+            </Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Column {...config} />;
+          </Col>
+        </Row>
+      </Form>
     </>
   );
 };

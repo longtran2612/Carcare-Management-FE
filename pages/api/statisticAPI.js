@@ -15,4 +15,18 @@ const getStatisticCustomer = (id) => {
     });
 };
 
-export { getStatisticCustomer };
+const getStatistic = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/statistic`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+export { getStatisticCustomer,getStatistic};

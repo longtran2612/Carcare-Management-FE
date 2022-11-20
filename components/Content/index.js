@@ -42,7 +42,7 @@ const MyContent = ({ keyMenu }) => {
         return <CarSlot />;
       case "customer":
         return <CustomerPage />;
-      case "promotion":
+      case "6":
         return <PromotionHeaderPage />;
       case "bills":
         return <BillPage />;
@@ -56,7 +56,7 @@ const MyContent = ({ keyMenu }) => {
         return <ReportCancelBill />;
       case "report-promotion":
         return <ReportPromotion />;
-      case "statistic":
+      case "1":
         return <StatisticalPage />;
       default:
         break;
