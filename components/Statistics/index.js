@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Column } from "@ant-design/plots";
-import { Breadcrumb, Col, Row, Select, Form, Button, Typography, Input } from "antd";
+import {
+  Breadcrumb,
+  Col,
+  Row,
+  Select,
+  Form,
+  Button,
+  Typography,
+  Input,
+} from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import { DatePicker, Space } from "antd";
 import { getStatistic } from "pages/api/statisticAPI";
@@ -68,9 +77,9 @@ const StatisticalPage = () => {
     xField: "date",
     yField: "value",
     label: {
-      position: "middle",
+      position: "top",
       style: {
-        fill: "#FFFFFF",
+        fill: "#100101",
         opacity: 0.6,
       },
     },
@@ -88,6 +97,7 @@ const StatisticalPage = () => {
     meta: {
       date: {
         alias: "Tháng",
+        
       },
       value: {
         alias: "Doanh số",
@@ -96,6 +106,12 @@ const StatisticalPage = () => {
         },
       },
     },
+  };
+  const handleDatePicker = () => {
+    return <RangePicker
+    disabledDate={(current) => current && current > moment().endOf('day') || current && current < moment().subtract(14, 'days')
+  }
+     format={dateFormat} />;
   };
 
   return (
@@ -118,12 +134,13 @@ const StatisticalPage = () => {
               rules={[
                 {
                   required: true,
+                  message: "Vui lòng chọn ngày",
                 },
               ]}
               name="rangerDate"
               initialValue={[moment(moment().subtract(7, "days")), moment()]}
             >
-              <RangePicker format={dateFormat} />;
+              {handleDatePicker()}
             </Form.Item>
           </Col>
 
@@ -142,7 +159,6 @@ const StatisticalPage = () => {
                     .toLowerCase()
                     .localeCompare(optionB.children.toLowerCase())
                 }
-                // initialValue = "ádsadasd"
               >
                 {users.map((item) => (
                   <Option value={item.id}>
