@@ -171,7 +171,6 @@ function ModalAddCustomer({ show, onSuccess, handleCancel }) {
               <Form.Item
                 rules={[
                   {
-                    required: true,
                     pattern: new RegExp("[0-9]{9,12}"),
                     message: "Số CMND/CCCD không hợp lệ!",
                   },

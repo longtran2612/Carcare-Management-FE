@@ -315,7 +315,7 @@ function UserDetail({ userId, onUpdateUser }) {
                     },
                   ]}
                   name="identityNumber"
-                  label="Số CMND"
+                  label="Số CMND / CCCD"
                 >
                   <Input
                     placeholder="Số Căn cước/Chứng minh"

@@ -8,6 +8,7 @@ import { CustomerNavigation } from "components-customer/navigation";
 import Loading from "components/Loading";
 import { useRouter } from "next/router";
 import CarCustomer from "components-customer/Car";
+import StatisticCustomer from "components-customer/statistic";
 
 export default function CustomerProfilePage() {
   const [loading, setLoading] = useState(false);
@@ -54,6 +55,9 @@ export default function CustomerProfilePage() {
               <Tabs defaultActiveKey={1}>
                 <Tabs.items tab="Thông tin cá nhân" key="1">
                   <ProfileCustomer />
+                </Tabs.items>
+                <Tabs.items tab="Thống kê chi tiêu" key="4">
+                  <StatisticCustomer />
                 </Tabs.items>
                 <Tabs.items tab="Xe của tôi" key="2">
                   <CarCustomer />

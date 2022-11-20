@@ -298,14 +298,13 @@ export const ProfileCustomer = () => {
                 <Form.Item
                   rules={[
                     {
-                      required: true,
-                      pattern: new RegExp("[0-9]{12}"),
+                      pattern: new RegExp("[0-9]"),
                       message:
-                        "Số CMND/CCCD không hợp lệ!, Số CMND/CCCD bao gồm 12 ký tự số",
+                        "Số CMND/CCCD không hợp lệ!",
                     },
                   ]}
                   name="identityNumber"
-                  label="Số CMND"
+                  label="Số CMND / CCCD"
                 >
                   <Input minLength={9} maxLength={12} />
                 </Form.Item>

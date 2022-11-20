@@ -292,10 +292,12 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="Nhóm khách hàng" name="statusName">
+                <Form.Item label="Nhóm khách hàng" name="status">
                   <Select>
-                    <Select.Option value="0">Thông thường</Select.Option>
-                    <Select.Option value="2">Thân thiết</Select.Option>
+                  <Select.Option value={0}>Tiền năng</Select.Option>
+                    <Select.Option value={1}>Thông thường</Select.Option>
+                    <Select.Option value={2}>VIP</Select.Option>
+
                   </Select>
                 </Form.Item>
               </Col>
@@ -339,13 +341,12 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
                 <Form.Item
                   rules={[
                     {
-                      required: true,
                       pattern: new RegExp("[0-9]{9,12}"),
                       message: "Số CMND/CCCD không hợp lệ!",
                     },
                   ]}
                   name="identityNumber"
-                  label="Số CMND"
+                  label="Số CMND / CCCD"
                 >
                   <Input
                     placeholder="Số Căn cước/Chứng minh"
