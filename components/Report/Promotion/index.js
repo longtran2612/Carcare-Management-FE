@@ -14,7 +14,7 @@ import {
   ExportOutlined,
   HomeOutlined,
   FileExcelOutlined,
-  ClearOutlined
+  ClearOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import { getReport, getPromotionReport } from "pages/api/reportAPI";
@@ -84,6 +84,8 @@ const ReportPromotion = () => {
 
     setLoading(true);
     let body = {
+      promotionType: values.promotionType,
+      promotionHeaderId: values.promotionHeaderId,
       reportType: 4,
       fromDate: fromDate,
       toDate: toDate,
@@ -119,6 +121,7 @@ const ReportPromotion = () => {
     }
 
     let body = {
+      promotionType: values.promotionType,
       promotionHeaderId: values.promotionHeaderId,
       fromDate: fromDate,
       toDate: toDate,
@@ -148,9 +151,6 @@ const ReportPromotion = () => {
       title: "Mã khuyến mãi",
       dataIndex: "promotionDetailCode",
       key: "promotionDetailCode",
-      render: (promotionDetailCode) => (
-        <a style={{ color: "blue" }}>{promotionDetailCode}</a>
-      ),
     },
     {
       title: "Tên khuyến mãi",
@@ -193,7 +193,13 @@ const ReportPromotion = () => {
       dataIndex: "promotionAmount",
       key: "promotionAmount",
       render: (text, record) => {
-        return <div>{record.promotionType === 'Giảm theo %' ? record.promotionAmount + '%' : formatMoney(record.promotionAmount)}</div>;
+        return (
+          <div>
+            {record.promotionType === "Giảm theo %"
+              ? record.promotionAmount + "%"
+              : formatMoney(record.promotionAmount)}
+          </div>
+        );
       },
     },
     {
@@ -214,7 +220,7 @@ const ReportPromotion = () => {
       dataIndex: "limitPromotionAmountLeft",
       key: "limitPromotionAmountLeft",
       render: (text, record) => {
-        return <div>{ formatMoney(record.limitPromotionAmountLeft || 0)}</div>;
+        return <div>{formatMoney(record.limitPromotionAmountLeft || 0)}</div>;
       },
     },
 
@@ -238,7 +244,7 @@ const ReportPromotion = () => {
       </Breadcrumb>
 
       <Form form={form} autoComplete="off">
-      <Row style={{ padding: "0 5rem 0 5rem" }} gutter={[16]}>
+        <Row style={{ padding: "0 5rem 0 5rem" }} gutter={[16]}>
           <Col span={24}>
             <Typography.Title level={2} className="content-center">
               Báo cáo khuyến mãi
@@ -283,31 +289,24 @@ const ReportPromotion = () => {
             </Form.Item>
           </Col>
 
+         
           <Col span={7}>
-            <Form.Item name="promotionHeaderId">
-              <Select
-                style={{ width: "100%" }}
-                showSearch
-                placeholder="Chọn chương trình khuyến mãi"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.children.includes(input)
-                }
-                filterSort={(optionA, optionB) =>
-                  optionA.children
-                    .toLowerCase()
-                    .localeCompare(optionB.children.toLowerCase())
-                }
-              >
-                {promotion.map((item) => (
-                  <Option value={item.id}>{item?.description}</Option>
-                ))}
+            <Form.Item
+              name="promotionType"
+             
+            >
+              <Select placeholder='Loại khuyến mãi'>
+                <Select.Option value="MONEY">Giảm tiền</Select.Option>
+                <Select.Option value="PERCENTAGE">
+                  Giảm tiền theo %
+                </Select.Option>
+                <Select.Option value="SERVICE">Giảm tiền dịch vụ</Select.Option>
               </Select>
             </Form.Item>
           </Col>
           <Col span={1}>
             <Button
-            icon={<ClearOutlined/>}
+              icon={<ClearOutlined />}
               style={{ width: "100%" }}
               onClick={() => {
                 form.setFieldsValue({
@@ -315,8 +314,7 @@ const ReportPromotion = () => {
                 });
               }}
               type="dashed"
-            >
-            </Button>
+            ></Button>
           </Col>
           <Col span={3}>
             <Button
@@ -338,7 +336,7 @@ const ReportPromotion = () => {
           </Col>
           <Col span={4}>
             <Button
-            style={{ width: "100%" }}
+              style={{ width: "100%" }}
               onClick={() => {
                 form
                   .validateFields()
@@ -354,6 +352,28 @@ const ReportPromotion = () => {
             >
               Xuất báo cáo
             </Button>
+          </Col>
+          <Col span={24}>
+            <Form.Item name="promotionHeaderId">
+              <Select
+                style={{ width: "100%" }}
+                showSearch
+                placeholder="Chương trình khuyến mãi"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  optionA.children
+                    .toLowerCase()
+                    .localeCompare(optionB.children.toLowerCase())
+                }
+              >
+                {promotion.map((item) => (
+                  <Option value={item.id}>{item?.promotionHeaderCode+ " - "+ item?.description}</Option>
+                ))}
+              </Select>
+            </Form.Item>
           </Col>
         </Row>
         <Row>

@@ -158,7 +158,6 @@ const ReportCancelBill = () => {
       title: "Mã hóa đơn",
       dataIndex: "billCode",
       key: "billCode",
-      render: (billCode) => <a style={{ color: "blue" }}>{billCode}</a>,
     },
     {
       title: "Ngày tạo hóa đơn",

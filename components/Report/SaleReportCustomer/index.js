@@ -159,7 +159,6 @@ const SaleReportCustomer = () => {
       title: "Mã khách hàng",
       dataIndex: "customerCode",
       key: "customerCode",
-      render: (customerCode) => <a style={{ color: "blue" }}>{customerCode}</a>,
     },
     {
       title: "Tên khách hàng",

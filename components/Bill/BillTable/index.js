@@ -393,7 +393,7 @@ const BillTable = () => {
                 >
                   <Option value={null}>Tất cả</Option>
                   <Option value={1}>Đã thanh toán</Option>
-                  <Option value={2}>Đang hủy</Option>
+                  <Option value={2}>Đã hủy</Option>
                 </Select>
               </Col>
             </Row>

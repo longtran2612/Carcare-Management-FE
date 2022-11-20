@@ -36,8 +36,7 @@ const SaleReport = () => {
   const [loading, setLoading] = useState(false);
   const [dataSaleReport, setDataSaleReport] = useState([]);
   const [dataSaleReportCustomer, setDataSaleReportCustomer] = useState([]);
-  // const [fromDate, setFromDate] = useState(moment());
-  // const [toDate, setToDate] = useState(moment());
+
 
   const handleFetchCustomer = async () => {
     try {
@@ -136,25 +135,6 @@ const SaleReport = () => {
       setLoading(false);
     } catch (error) {}
   };
-
-  // const handleDate = () => {
-  //   console.log(form.getFieldValue('rangerDate'));
-  //   switch (typeDate) {
-  //     case "d":
-  //       setFromDate(moment(form.getFieldValue('rangerDate') && form.getFieldValue('rangerDate')[0]).startOf("day"));
-  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("day"));
-  //     case "m":
-  //       setFromDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[0]).startOf("month"));
-  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("month"));
-  //     case "y":
-  //       setFromDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[0]).startOf("year"));
-  //       setToDate(moment(form.getFieldValue('rangerDate') &&form.getFieldValue('rangerDate')[1]).endOf("year"));
-  //   }
-  // };
-  // useEffect(() => {
-  //   handleDate();
-  // }, [typeDate,form]);
-
   useEffect(() => {
     handleFetchCustomer();
     handleFetchUser();
@@ -174,7 +154,6 @@ const SaleReport = () => {
       title: "Mã nhân viên",
       dataIndex: "userCode",
       key: "userCode",
-      render: (userCode) => <a style={{ color: "blue" }}>{userCode}</a>,
     },
     {
       title: "Tên nhân viên",
