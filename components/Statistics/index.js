@@ -9,14 +9,14 @@ import {
   Button,
   Typography,
   Input,
+  Card,
 } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import { DatePicker, Space } from "antd";
-import { getStatistic } from "pages/api/statisticAPI";
-import { ClearOutlined } from "@ant-design/icons";
+import { getStatistic, getAdminStatistic } from "pages/api/statisticAPI";
+import { ClearOutlined, DollarOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { formatMoney } from "utils/format";
-import { getCustomers } from "pages/api/customerAPI";
 import { getUsers } from "pages/api/userAPI";
 const { RangePicker } = DatePicker;
 
@@ -26,6 +26,7 @@ const StatisticalPage = () => {
   const [form] = Form.useForm();
   const [users, setUsers] = useState([]);
   const [dataStatistic, setDataStatistic] = useState([]);
+  const [adminStatistic, setAdminStatistic] = useState([]);
 
   const handleFetchUser = async () => {
     try {
@@ -44,6 +45,8 @@ const StatisticalPage = () => {
     try {
       const res = await getStatistic(body);
       setDataStatistic(res.data.Data);
+      const resAdmin = await getAdminStatistic(body);
+      setAdminStatistic(resAdmin.data.Data);
       console.log(res.data.Data);
     } catch (error) {
       console.log(error);
@@ -61,6 +64,8 @@ const StatisticalPage = () => {
       console.log(body);
       const res = await getStatistic(body);
       setDataStatistic(res.data.Data);
+      const resAdmin = await getAdminStatistic(body);
+      setAdminStatistic(resAdmin.data.Data);
       console.log(res.data.Data);
     } catch (error) {
       console.log(error);
@@ -94,10 +99,13 @@ const StatisticalPage = () => {
       position: "center",
       text: "Biểu đồ thống kê doanh thu",
     },
+    slider: {
+      start: 0,
+      end: 1,
+    },
     meta: {
       date: {
         alias: "Tháng",
-        
       },
       value: {
         alias: "Doanh số",
@@ -108,10 +116,26 @@ const StatisticalPage = () => {
     },
   };
   const handleDatePicker = () => {
-    return <RangePicker
-    disabledDate={(current) => current && current > moment().endOf('day') || current && current < moment().subtract(14, 'days')
-  }
-     format={dateFormat} />;
+    return (
+      <RangePicker
+        disabledDate={(current) =>
+          (current && current > moment().endOf("day")) ||
+          (current && current < moment().subtract(30, "days"))
+        }
+        format={dateFormat}
+      />
+    );
+  };
+
+  const cardStyle = {
+    borderRadius: "8px",
+    overflow: "hidden",
+    cursor: "pointer",
+    height: "70px",
+    padding: "10px 0 10px 0",
+    background: "#C9DEE6",
+    border: "0.5px solid #0E5599",
+    boxShadow: " 4px 4px #053A6Cx #ADBBF3",
   };
 
   return (
@@ -200,6 +224,81 @@ const StatisticalPage = () => {
             </Button>
           </Col>
         </Row>
+        <Row gutter={10} style={{marginBottom:'20px'}}>
+        <Col span={2}></Col>
+          <Col style={{padding:'0'}} span={4}>
+            <Card  style={cardStyle}>
+              <Row>
+                <Col  style={{textAlign:'center'}} span={24}>
+                  <span>Tổng tiền dịch vụ</span>
+                </Col>
+                <Col  className="content-center" span={24}>
+                  <span style={{ color: "green", fontSize: "17px" }}>
+                    {formatMoney(adminStatistic?.totalServicePrice || 0)}
+                  </span>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+          <Col style={{padding:'0'}} span={4}>
+            <Card  style={cardStyle}>
+              <Row>
+                <Col  style={{textAlign:'center'}} span={24}>
+                  <span>Tổng tiền khuyến mãi</span>
+                </Col>
+                <Col  className="content-center" span={24}>
+                  <span style={{ color: "green", fontSize: "17px" }}>
+                    {formatMoney(adminStatistic?.totalPromotionAmount || 0)}
+                  </span>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+          <Col style={{padding:'0'}} span={4}>
+            <Card  style={cardStyle}>
+              <Row>
+                <Col  style={{textAlign:'center'}} span={24}>
+                  <span>Doanh số</span>
+                </Col>
+                <Col  className="content-center" span={24}>
+                  <span style={{ color: "green", fontSize: "17px" }}>
+                    {formatMoney(adminStatistic?.totalPaymentAmount || 0)}
+                  </span>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+          <Col style={{padding:'0'}} span={4}>
+            <Card  style={cardStyle}>
+              <Row>
+                <Col  style={{textAlign:'center'}} span={24}>
+                  <span>Hóa đơn</span>
+                </Col>
+                <Col  className="content-center" span={24}>
+                  <span style={{ color: "green", fontSize: "17px" }}>
+                    {adminStatistic?.totalBill || 0}
+                  </span>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+          <Col style={{padding:'0'}} span={4}>
+            <Card  style={cardStyle}>
+              <Row>
+                <Col  style={{textAlign:'center'}} span={24}>
+                  <span>Hóa đơn hủy</span>
+                </Col>
+                <Col  className="content-center" span={24}>
+                  <span style={{ color: "red", fontSize: "17px" }}>
+                    {adminStatistic?.totalCancelBill || 0}
+                  </span>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+          <Col span={2}></Col>
+        </Row>
+        
         <Row>
           <Col span={24}>
             <Column {...config} />;

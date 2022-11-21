@@ -28,5 +28,18 @@ const getStatistic = (data) => {
       throw err;
     });
 };
+const getAdminStatistic = (data) => {
+  return axios({
+    method: "POST",
+    url: API_URL + `/statistic/get-admin-statistic`,
+    data: data,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
 
-export { getStatisticCustomer,getStatistic};
+export { getStatisticCustomer,getStatistic,getAdminStatistic};

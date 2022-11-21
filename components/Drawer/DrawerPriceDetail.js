@@ -146,11 +146,7 @@ function DrawerPriceDetail({
               </Col>
               <Col span={12}>
                 <Form.Item
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                
                   label="Trạng thái"
                   name="status"
                 >
