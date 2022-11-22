@@ -258,7 +258,7 @@ function CarModelTable({}) {
         />
       ) : (
         <div>
-          <Row style={{ margin: "20px 0px" }}>
+          <Row style={{ margin: "5px" }}>
             <Col span={8} style={{ marginRight: "10px" }}>
               <Input.Search
                 placeholder="Tìm kiếm"

@@ -18,7 +18,11 @@ import {
   activeService,
   inActiveService,
 } from "pages/api/serviceAPI";
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  UploadOutlined,
+  SaveOutlined,
+  RollbackOutlined,
+} from "@ant-design/icons";
 import { uploadImage } from "pages/api/uploadAPI";
 import { openNotification, openNotificationWarning } from "utils/notification";
 import { getCategories } from "pages/api/categoryAPI";
@@ -202,9 +206,6 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
       <Row gutter={[16, 16]}>
         <Col span={6}>
           <Image width={300} height={250} src={serviceDetail.imageUrl} />
@@ -294,7 +295,8 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                       </Button>
                     </Popconfirm>
                   )}
-                  {(serviceDetail?.status === 0 || serviceDetail?.status === 10) && (
+                  {(serviceDetail?.status === 0 ||
+                    serviceDetail?.status === 10) && (
                     <Button
                       onClick={() => {
                         openNotificationWarning(
@@ -311,7 +313,6 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                       Chưa có giá
                     </Button>
                   )}
-                   
                 </Form.Item>
               </Col>
               <Col span={8}>
@@ -393,7 +394,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                 style={{ bottom: "0", right: "20px", margin: "10px" }}
                 className="service-action"
               >
-                <div style={{ marginRight: "20px" }}>
+                {/* <div style={{ marginRight: "20px" }}>
                   <Button
                     onClick={() => {
                       fetchServiceDetail();
@@ -401,7 +402,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   >
                     Đặt lại
                   </Button>
-                </div>
+                </div> */}
                 <div>
                   <Popconfirm
                     title="Xác nhận?"
@@ -419,7 +420,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                         });
                     }}
                   >
-                    <Button type="primary">Cập nhật</Button>
+                    <Button icon={<SaveOutlined />} type="primary">Cập nhật</Button>
                   </Popconfirm>
                 </div>
               </div>

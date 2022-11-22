@@ -66,7 +66,7 @@ const createBill =async (data) => {
 };
 
 const cancelBill =(data)=>{
-  return axios({
+  return axiosClient()({
     method: "POST",
     url: API_URL + `/bills/cancel/${data}`,
   })

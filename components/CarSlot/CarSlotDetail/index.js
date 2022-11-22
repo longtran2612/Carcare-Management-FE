@@ -15,6 +15,7 @@ import {
   List,
   Avatar,
   Select,
+  Breadcrumb,
   Form,
 } from "antd";
 import {
@@ -32,6 +33,9 @@ import {
   ExclamationCircleOutlined,
   CheckCircleOutlined,
   TagsOutlined,
+  HomeOutlined,
+  CarOutlined,
+  RollbackOutlined,
   QuestionCircleOutlined,
   EditOutlined,
 } from "@ant-design/icons";
@@ -181,7 +185,7 @@ const CarSlotDetail = ({ carSlotId }) => {
             }}
             color="green"
           >
-            Chưa sử dụng
+            Đang trống
           </Tag>
         );
       case "INAVAILABLE":
@@ -194,7 +198,7 @@ const CarSlotDetail = ({ carSlotId }) => {
             }}
             color="red"
           >
-            Dang sửa chữa
+            Đang sửa chữa
           </Tag>
         );
       case "IN_USE":
@@ -329,316 +333,352 @@ const CarSlotDetail = ({ carSlotId }) => {
   };
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
-      <Form form={form} layout="vertical">
-        <div className="carslot">
-          <div className="carslot-content">
-            <div className="carslot-content--header">
-              <Title style={{ padding: "0px", color: "blue" }} level={3}>
-                {carSlotDetail?.name}
-              </Title>
-              <div> {convertStatusCarSlot(carSlotDetail?.status)}</div>
-            </div>
-            {carSlotDetail?.status == "IN_USE" && (
-              <Row>
-                <Col span={6}>
-                  <div
-                    style={{ marginRight: "10px" }}
-                    className="carslot-customer content-white"
-                  >
-                    <Title level={4}>Nhân viên xử lý</Title>
-                    <Timeline>
-                      <span>{user?.name + " - " + user?.phone}</span>
-
-                      <EditOutlined
-                        style={{ marginLeft: "5px" }}
-                        onClick={() => setShowChangeExcutor(true)}
-                      />
-                    </Timeline>
-                    <Title level={4}>Thông tin khách hàng</Title>
-                    <Timeline>
-                      <Timeline.Item>
-                        Mã: {customer?.customerCode}
-                      </Timeline.Item>
-                      <Timeline.Item>Tên: {customer?.name}</Timeline.Item>
-                      <Timeline.Item>
-                        Số điện thoại: {customer?.phoneNumber}
-                      </Timeline.Item>
-                    </Timeline>
-                    <Title level={4}>Thông tin xe</Title>
-                    <Timeline>
-                      <Timeline.Item>Tên xe: {car?.name}</Timeline.Item>
-                      <Timeline.Item>Nhãn hiệu: {car?.brand}</Timeline.Item>
-                      <Timeline.Item>Loại xe: {car?.model}</Timeline.Item>
-                      <Timeline.Item>Nhiên liệu: {car?.fuel}</Timeline.Item>
-                      <Timeline.Item>Chỗ ngồi: {car?.seats}</Timeline.Item>
-                      <Timeline.Item>
-                        Biển số: {car?.licensePlate}
-                      </Timeline.Item>
-                      <Timeline.Item>Màu xe: {car?.color}</Timeline.Item>
-                    </Timeline>
-                  </div>
-                </Col>
-                <Col span={18}>
-                  <Row>
-                    <Col
-                      className="content-white"
-                      style={{ marginBottom: "1rem" }}
-                      span={24}
+      <Row style={{ paddingBottom: "10px" }}>
+        <Col span={12}>
+          <Breadcrumb style={{ margin: "5px", alignItems: "center" }}>
+            <Breadcrumb.Item href="/admin">
+              <HomeOutlined />
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="">
+              <CarOutlined /> Quản lý vị trí chăm sóc xe
+            </Breadcrumb.Item>
+            <Breadcrumb.Item href="">
+              {carSlotDetail?.name}
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        </Col>
+        <Col span={12}>
+          <Button
+            style={{ float: "right" }}
+            icon={<RollbackOutlined />}
+            onClick={() => router.back()}
+          >
+            Trở lại
+          </Button>
+        </Col>
+      </Row>
+    
+        <Form form={form} layout="vertical">
+          <div className="carslot">
+            <div className="carslot-content">
+              <div className="carslot-content--header">
+                {/* <Title style={{ padding: "0px", color: "blue" }} level={3}>
+                  {carSlotDetail?.name}
+                </Title> */}
+                <div></div>
+                <div> {convertStatusCarSlot(carSlotDetail?.status)}</div>
+              </div>
+              {carSlotDetail?.status == "IN_USE" && (
+                <Row>
+                  <Col span={6}>
+                    <div
+                      style={{ marginRight: "10px" }}
+                      className="carslot-customer content-white"
                     >
-                      <Steps current={step} className="site-navigation-steps">
-                        <Steps.Step
-                          title="Tiếp nhận yêu cầu"
-                          status="finish"
-                          description={
-                            moment(order?.createDate).format(formatDate) || ""
-                          }
+                      <Title level={4}>Nhân viên xử lý</Title>
+                      <Timeline>
+                        <span>{user?.name + " - " + user?.phone}</span>
+
+                        <EditOutlined
+                          style={{ marginLeft: "5px" }}
+                          onClick={() => setShowChangeExcutor(true)}
                         />
-                        <Steps.Step
-                          title="Băt đầu xử lý"
-                          status="process"
-                          icon={<LoadingOutlined />}
-                          description={
-                            moment(carSlotDetail?.orderStartExecuting).format(
-                              formatDate
-                            ) || ""
-                          }
-                        />
-                        <Steps.Step
-                          title="Dự kiến hoàn thành"
-                          status="wait"
-                          description={moment(
-                            carSlotDetail?.orderStartExecuting
-                          )
-                            .add(totalTimeService(), "m")
-                            .format(formatDate)}
-                        />
-                      </Steps>
-                    </Col>
-                    <Col span={24}>
-                      <Table
-                        size="small"
-                        pagination={false}
-                        bordered
-                        dataSource={order?.services}
-                        scroll={{ y: 260 }}
-                        summary={() => {
-                          return (
-                            <>
-                              <Table.Summary.Row>
-                                <Table.Summary.Cell
-                                  index={0}
-                                ></Table.Summary.Cell>
-                                <Table.Summary.Cell index={1}>
-                                  Tổng dịch vụ
-                                </Table.Summary.Cell>
-                                <Table.Summary.Cell index={2}>
-                                  {totalTimeService() || 0} phút
-                                </Table.Summary.Cell>
-                                <Table.Summary.Cell index={3}>
-                                  {formatMoney(totalPriceService() || 0)}
-                                </Table.Summary.Cell>
-                              </Table.Summary.Row>
-                              <Table.Summary.Row>
-                                <Table.Summary.Cell
-                                  index={0}
-                                ></Table.Summary.Cell>
-                                <Table.Summary.Cell index={1}>
-                                  <Button
-                                    icon={<TagsOutlined />}
-                                    type="ghost"
-                                    style={{
-                                      backgroundColor: "#B6D433",
-                                      color: "white",
-                                    }}
-                                    onClick={() => setShowSelectPromotion(true)}
-                                  >
-                                    Khuyến mãi được áp dụng
-                                  </Button>
-                                </Table.Summary.Cell>
-                                <Table.Summary.Cell index={2}>
-                                  <span
-                                    style={{
-                                      fontWeight: "bold",
-                                      color: "#677E31",
-                                    }}
-                                  >
-                                    Tổng tiền khuyến mãi
-                                  </span>
-                                </Table.Summary.Cell>
-                                <Table.Summary.Cell index={3}>
-                                  <span
-                                    style={{
-                                      fontWeight: "bold",
-                                      color: "#677E31",
-                                    }}
-                                  >
-                                    {formatMoney(totalPromotionAmount() || 0)}
-                                  </span>
-                                </Table.Summary.Cell>
-                              </Table.Summary.Row>
-                              <Table.Summary.Row>
-                                <Table.Summary.Cell
-                                  index={0}
-                                ></Table.Summary.Cell>
-                                <Table.Summary.Cell
-                                  index={1}
-                                ></Table.Summary.Cell>
-                                <Table.Summary.Cell index={2}>
-                                  <span
-                                    style={{ color: "red", fontWeight: "bold" }}
-                                  >
-                                    Tổng thanh toán (tạm tính)
-                                  </span>
-                                </Table.Summary.Cell>
-                                <Table.Summary.Cell index={3}>
-                                  {" "}
-                                  <span
-                                    style={{
-                                      fontWeight: "bold",
-                                      color: "red",
-                                    }}
-                                  >
-                                    {formatMoney(finalTotalPrice() || 0)}
-                                  </span>
-                                </Table.Summary.Cell>
-                              </Table.Summary.Row>
-                            </>
-                          );
-                        }}
-                        title={() => (
-                          <>
-                            <Row>
-                              <Col span={12}>
-                                <span
-                                  style={{ fontSize: "1rem", font: "bold" }}
-                                >
-                                  Dịch vụ sử dụng
-                                </span>
-                              </Col>
-                              <Col span={12}>
-                                <Button
-                                  style={{ float: "right" }}
-                                  type="primary"
-                                  icon={<PlusCircleFilled />}
-                                  onClick={() =>
-                                    setShowUpdateServiceOrder(true)
-                                  }
-                                >
-                                  Thêm dịch vụ
-                                </Button>
-                              </Col>
-                            </Row>
-                          </>
-                        )}
+                      </Timeline>
+                      <Title level={4}>Thông tin khách hàng</Title>
+                      <Timeline>
+                        <Timeline.Item>
+                          Mã: {customer?.customerCode}
+                        </Timeline.Item>
+                        <Timeline.Item>Tên: {customer?.name}</Timeline.Item>
+                        <Timeline.Item>
+                          Số điện thoại: {customer?.phoneNumber}
+                        </Timeline.Item>
+                      </Timeline>
+                      <Title level={4}>Thông tin xe</Title>
+                      <Timeline>
+                        <Timeline.Item>Tên xe: {car?.name}</Timeline.Item>
+                        <Timeline.Item>Nhãn hiệu: {car?.brand}</Timeline.Item>
+                        <Timeline.Item>Loại xe: {car?.model}</Timeline.Item>
+                        <Timeline.Item>Nhiên liệu: {car?.fuel}</Timeline.Item>
+                        <Timeline.Item>Chỗ ngồi: {car?.seats}</Timeline.Item>
+                        <Timeline.Item>
+                          Biển số: {car?.licensePlate}
+                        </Timeline.Item>
+                        <Timeline.Item>Màu xe: {car?.color}</Timeline.Item>
+                      </Timeline>
+                    </div>
+                  </Col>
+                  <Col span={18}>
+                    <Row>
+                      <Col
+                        className="content-white"
+                        style={{ marginBottom: "1rem" }}
+                        span={24}
                       >
-                        <Column
-                          title="STT"
-                          dataIndex="stt"
-                          key="stt"
-                          width={70}
-                          render={(text, record, dataIndex) => {
-                            return <div>{dataIndex + 1}</div>;
-                          }}
-                        />
-                        <Column
-                          title="Tên dịch vụ"
-                          dataIndex="name"
-                          key="name"
-                        />
-                        <Column
-                          dataIndex="estimateTime"
-                          key="estimateTime"
-                          render={(text, record) => {
-                            return <div>{record.estimateTime} phút</div>;
-                          }}
-                          title="Thời gian sử lý"
-                        ></Column>
-                        <Column
-                          title="Giá dịch vụ"
-                          dataIndex="price"
-                          key="price"
-                          render={(text, record, dataIndex) => {
+                        <Steps current={step} className="site-navigation-steps">
+                          <Steps.Step
+                            title="Tiếp nhận yêu cầu"
+                            status="finish"
+                            description={
+                              moment(order?.createDate).format(formatDate) || ""
+                            }
+                          />
+                          <Steps.Step
+                            title="Băt đầu xử lý"
+                            status="process"
+                            icon={<LoadingOutlined />}
+                            description={
+                              moment(carSlotDetail?.orderStartExecuting).format(
+                                formatDate
+                              ) || ""
+                            }
+                          />
+                          <Steps.Step
+                            title="Dự kiến hoàn thành"
+                            status="wait"
+                            description={moment(
+                              carSlotDetail?.orderStartExecuting
+                            )
+                              .add(totalTimeService(), "m")
+                              .format(formatDate)}
+                          />
+                        </Steps>
+                      </Col>
+                      <Col span={24}>
+                        <Table
+                          size="small"
+                          pagination={false}
+                          bordered
+                          dataSource={order?.services}
+                          scroll={{ y: 260 }}
+                          summary={() => {
                             return (
-                              <div>
-                                {formatMoney(record?.servicePrice?.price || 0)}
-                              </div>
+                              <>
+                                <Table.Summary.Row>
+                                  <Table.Summary.Cell
+                                    index={0}
+                                  ></Table.Summary.Cell>
+                                  <Table.Summary.Cell index={1}>
+                                    Tổng dịch vụ
+                                  </Table.Summary.Cell>
+                                  <Table.Summary.Cell index={2}>
+                                    {totalTimeService() || 0} phút
+                                  </Table.Summary.Cell>
+                                  <Table.Summary.Cell index={3}>
+                                    {formatMoney(totalPriceService() || 0)}
+                                  </Table.Summary.Cell>
+                                </Table.Summary.Row>
+                                <Table.Summary.Row>
+                                  <Table.Summary.Cell
+                                    index={0}
+                                  ></Table.Summary.Cell>
+                                  <Table.Summary.Cell index={1}>
+                                    <Button
+                                      icon={<TagsOutlined />}
+                                      type="ghost"
+                                      style={{
+                                        backgroundColor: "#B6D433",
+                                        color: "white",
+                                      }}
+                                      onClick={() =>
+                                        setShowSelectPromotion(true)
+                                      }
+                                    >
+                                      Khuyến mãi được áp dụng
+                                    </Button>
+                                  </Table.Summary.Cell>
+                                  <Table.Summary.Cell index={2}>
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        color: "#677E31",
+                                      }}
+                                    >
+                                      Tổng tiền khuyến mãi
+                                    </span>
+                                  </Table.Summary.Cell>
+                                  <Table.Summary.Cell index={3}>
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        color: "#677E31",
+                                      }}
+                                    >
+                                      {formatMoney(totalPromotionAmount() || 0)}
+                                    </span>
+                                  </Table.Summary.Cell>
+                                </Table.Summary.Row>
+                                <Table.Summary.Row>
+                                  <Table.Summary.Cell
+                                    index={0}
+                                  ></Table.Summary.Cell>
+                                  <Table.Summary.Cell
+                                    index={1}
+                                  ></Table.Summary.Cell>
+                                  <Table.Summary.Cell index={2}>
+                                    <span
+                                      style={{
+                                        color: "red",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      Tổng thanh toán (tạm tính)
+                                    </span>
+                                  </Table.Summary.Cell>
+                                  <Table.Summary.Cell index={3}>
+                                    {" "}
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        color: "red",
+                                      }}
+                                    >
+                                      {formatMoney(finalTotalPrice() || 0)}
+                                    </span>
+                                  </Table.Summary.Cell>
+                                </Table.Summary.Row>
+                              </>
                             );
                           }}
-                        />
-                      </Table>
-                    </Col>
-
-                    <Col span={24}>
-                      <Row className="PullRight">
-                        <div
-                          style={{ bottom: "0", right: "20px", margin: "10px" }}
-                          className="service-action"
+                          title={() => (
+                            <>
+                              <Row>
+                                <Col span={12}>
+                                  <span
+                                    style={{ fontSize: "1rem", font: "bold" }}
+                                  >
+                                    Dịch vụ sử dụng
+                                  </span>
+                                </Col>
+                                <Col span={12}>
+                                  <Button
+                                    style={{ float: "right" }}
+                                    type="primary"
+                                    icon={<PlusCircleFilled />}
+                                    onClick={() =>
+                                      setShowUpdateServiceOrder(true)
+                                    }
+                                  >
+                                    Thêm dịch vụ
+                                  </Button>
+                                </Col>
+                              </Row>
+                            </>
+                          )}
                         >
-                          <div style={{ marginRight: "20px" }}>
-                            <Button
-                              onClick={() => {
-                                setShowConfimCancel(true);
-                              }}
-                              size="large"
-                              type="primary"
-                              danger={true}
-                            >
-                              Hủy yêu cầu
-                            </Button>
-                          </div>
-                          <div>
-                            <Button
-                              type="primary"
-                              size="large"
-                              onClick={() => {
-                                form
-                                  .validateFields()
-                                  .then((values) => {
-                                    setShowConfimComplete(true);
-                                  })
-                                  .catch((info) => {
-                                    console.log("Validate Failed:", info);
-                                  });
-                              }}
-                            >
-                              Hoàn thành - Thanh toán - In hóa đơn
-                            </Button>
-                          </div>
-                        </div>
-                      </Row>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            )}
-            {carSlotDetail?.status == "AVAILABLE" && (
-              <Row className="content-white" span={24}>
-                <Col span={24}>
-                  <Typography.Title
-                    className="content-center"
-                    style={{ color: "#829822" }}
-                    level={2}
-                  >
-                    Vị trí đang trống !!! vui lòng chọn yêu cầu sử lý
-                  </Typography.Title>
-                </Col>
-                <Col span={24}>
-                  <ModalSelectOrder
-                    onSelectOrder={(value) => {
-                      setOrderSelected(value);
-                      setShowConfimExecute(true);
-                    }}
-                  />
-                </Col>
-              </Row>
-            )}
-          </div>
-        </div>
-      </Form>
+                          <Column
+                            title="STT"
+                            dataIndex="stt"
+                            key="stt"
+                            width={70}
+                            render={(text, record, dataIndex) => {
+                              return <div>{dataIndex + 1}</div>;
+                            }}
+                          />
+                          <Column
+                            title="Tên dịch vụ"
+                            dataIndex="name"
+                            key="name"
+                          />
+                          <Column
+                            dataIndex="estimateTime"
+                            key="estimateTime"
+                            render={(text, record) => {
+                              return <div>{record.estimateTime} phút</div>;
+                            }}
+                            title="Thời gian sử lý"
+                          ></Column>
+                          <Column
+                            title="Giá dịch vụ"
+                            dataIndex="price"
+                            key="price"
+                            render={(text, record, dataIndex) => {
+                              return (
+                                <div>
+                                  {formatMoney(
+                                    record?.servicePrice?.price || 0
+                                  )}
+                                </div>
+                              );
+                            }}
+                          />
+                        </Table>
+                      </Col>
 
+                      <Col span={24}>
+                        <Row className="PullRight">
+                          <div
+                            style={{
+                              bottom: "0",
+                              right: "20px",
+                              margin: "10px",
+                            }}
+                            className="service-action"
+                          >
+                            <div style={{ marginRight: "20px" }}>
+                              <Button
+                                onClick={() => {
+                                  setShowConfimCancel(true);
+                                }}
+                                size="large"
+                                type="primary"
+                                danger={true}
+                              >
+                                Hủy yêu cầu
+                              </Button>
+                            </div>
+                            <div>
+                              <Button
+                                type="primary"
+                                size="large"
+                                onClick={() => {
+                                  form
+                                    .validateFields()
+                                    .then((values) => {
+                                      setShowConfimComplete(true);
+                                    })
+                                    .catch((info) => {
+                                      console.log("Validate Failed:", info);
+                                    });
+                                }}
+                              >
+                                Hoàn thành - Thanh toán - In hóa đơn
+                              </Button>
+                            </div>
+                          </div>
+                        </Row>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              )}
+              {carSlotDetail?.status == "AVAILABLE" && (
+                  <div style={{overflow:'auto',height: "500px",minHeight:"75vh"}} className='content-white-admin'>
+                <Row className="content-white" span={24}>
+                  <Col span={24}>
+                    <Typography.Title
+                      className="content-center"
+                      style={{ color: "#829822" }}
+                      level={2}
+                    >
+                      Vị trí đang trống !!! vui lòng chọn yêu cầu sử lý
+                    </Typography.Title>
+                  </Col>
+                  <Col span={24}>
+                    <ModalSelectOrder
+                      onSelectOrder={(value) => {
+                        setOrderSelected(value);
+                        setShowConfimExecute(true);
+                      }}
+                    />
+                  </Col>
+                </Row>
+                </div>
+              )}
+            </div>
+          </div>
+        </Form>
+    
       <ModalCreateBill
         order={order}
         show={showCreateBill}

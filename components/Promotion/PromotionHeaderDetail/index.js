@@ -39,7 +39,8 @@ import {
   SearchOutlined,
   PlusOutlined,
   DeleteOutlined,
-  SaveOutlined
+  SaveOutlined,
+  RollbackOutlined
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { EditOutlined } from "@ant-design/icons";
@@ -454,9 +455,6 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Form

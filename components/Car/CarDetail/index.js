@@ -200,9 +200,6 @@ const CarDetail = ({ carId, onUpdateCar }) => {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
       <Row gutter={[4, 4]}>
         <Col span={6}>
           <Image width={300} height={250} src={carDetail.imageUrl} />

@@ -12,7 +12,9 @@ const CategoryPage = () => {
         </Breadcrumb.Item>
         <Breadcrumb.Item href=""> {" "}Danh mục dịch vụ</Breadcrumb.Item>
       </Breadcrumb>
+      <div className="content-white-admin">
       <CategoryTable />
+      </div>
     </>
   );
 };

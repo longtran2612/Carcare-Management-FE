@@ -111,7 +111,7 @@ const AdminPage = () => {
           <Content
             className="site-layout-background content"
             style={{
-              minHeight: "80vh",
+              minHeight: "78vh",
             }}
           >
             <MyContent keyMenu={key} />

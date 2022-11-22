@@ -26,6 +26,7 @@ import {
   PhoneOutlined,
   MailOutlined,
   UserOutlined,
+  SaveOutlined,
 } from "@ant-design/icons";
 import Loading from "components/Loading";
 import JsonData from "data/address-vn.json";
@@ -203,10 +204,6 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
-      <br />
       <Row gutter={[16, 16]}>
         <Col span={6}>
           <Image width={300} height={250} src={customerDetail.image} />
@@ -403,7 +400,7 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
                 style={{ bottom: "0", right: "20px", margin: "10px" }}
                 className="service-action"
               >
-                <div style={{ marginRight: "20px" }}>
+                {/* <div style={{ marginRight: "20px" }}>
                   <Button
                     onClick={() => {
                       fetchcustomerDetail();
@@ -411,7 +408,7 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
                   >
                     Đặt lại
                   </Button>
-                </div>
+                </div> */}
                 <div>
                   <Popconfirm
                     title="Xác nhận?"
@@ -429,7 +426,7 @@ function CustomerDetail({ customerId, onUpdateCustomer }) {
                         });
                     }}
                   >
-                    <Button type="primary">Cập nhật</Button>
+                    <Button icon={<SaveOutlined/>} type="primary">Cập nhật</Button>
                   </Popconfirm>
                 </div>
               </div>

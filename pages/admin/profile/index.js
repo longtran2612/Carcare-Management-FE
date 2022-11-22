@@ -13,6 +13,7 @@ import {
   Tabs,
   Popconfirm,
   Cascader,
+  Breadcrumb,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification, openNotificationWarning } from "utils/notification";
@@ -31,6 +32,8 @@ import {
   PhoneOutlined,
   MailOutlined,
   UserOutlined,
+  HomeOutlined,
+  RollbackOutlined,
 } from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "DD/MM/YYYY";
@@ -206,21 +209,33 @@ const UserProfile = () => {
     <>
       <Layout>
         <MyHeader />
-        <Layout.Content style={{minHeight:'87vh'}} className="content">
-          <Row
-            style={{ paddingLeft: "40px", paddingRight: "40px" }}
-            className="content-white"
-          >
-            <Col span={24}>
+        <Layout.Content style={{ minHeight: "87vh" }} className="content">
+          <Row style={{ paddingBottom: "10px" }}>
+            <Col span={12}>
+              <Breadcrumb style={{ margin: "5px", alignItems: "center" }}>
+                <Breadcrumb.Item href="/admin">
+                  <HomeOutlined />
+                </Breadcrumb.Item>
+                <Breadcrumb.Item href="">
+                  <UserOutlined /> Quản lý thông tin cá nhân
+                </Breadcrumb.Item>
+              </Breadcrumb>
+            </Col>
+            <Col span={12}>
               <Button
-                type="link"
-                size="small"
-                onClick={() => router.push("/admin")}
+                style={{ float: "right" }}
+                icon={<RollbackOutlined />}
+                onClick={() => router.push('/admin')}
               >
                 Trở lại
               </Button>
-              <br />
-              <br />
+            </Col>
+          </Row>
+          <Row
+            style={{ paddingLeft: "40px", paddingRight: "40px" }}
+            className="content-white-admin"
+          >
+            <Col span={24}>
               <Tabs>
                 <Tabs.items tab="Thông tin người dùng" key="1">
                   <Row gutter={[16, 16]}>
@@ -311,6 +326,7 @@ const UserProfile = () => {
                               label="Số điện thoại"
                             >
                               <Input
+                              disabled
                                 minLength={10}
                                 maxLength={10}
                                 prefix={
@@ -369,7 +385,7 @@ const UserProfile = () => {
                               label="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                             >
                               <Cascader
-                              changeOnSelect
+                                changeOnSelect
                                 options={addressData}
                                 onChange={onChange}
                                 placeholder="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"

@@ -25,6 +25,8 @@ import {
   PhoneOutlined,
   MailOutlined,
   UserOutlined,
+  SaveOutlined,
+  RollbackOutlined,
 } from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
@@ -198,11 +200,7 @@ function UserDetail({ userId, onUpdateUser }) {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
-      <br />
-      <br />
+      
       <Row gutter={[16, 16]}>
         <Col span={6}>
           <Image width={300} height={250} src={userDetail.image} />
@@ -394,7 +392,7 @@ function UserDetail({ userId, onUpdateUser }) {
                 style={{ bottom: "0", right: "20px", margin: "10px" }}
                 className="service-action"
               >
-                <div style={{ marginRight: "20px" }}>
+                {/* <div style={{ marginRight: "20px" }}>
                   <Button
                     onClick={() => {
                       fetchUserDetail();
@@ -402,7 +400,7 @@ function UserDetail({ userId, onUpdateUser }) {
                   >
                     Đặt lại
                   </Button>
-                </div>
+                </div> */}
                 <div>
                   <Popconfirm
                     title="Xác nhận?"
@@ -420,7 +418,9 @@ function UserDetail({ userId, onUpdateUser }) {
                         });
                     }}
                   >
-                    <Button type="primary">Cập nhật</Button>
+                    <Button icon={<SaveOutlined />} type="primary">
+                      Cập nhật
+                    </Button>
                   </Popconfirm>
                 </div>
               </div>

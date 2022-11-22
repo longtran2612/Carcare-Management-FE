@@ -36,6 +36,7 @@ import {
   EditFilled,
   EditOutlined,
   DeleteOutlined,
+  RollbackOutlined
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
@@ -358,9 +359,6 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
       <Row>
         <Col span={24}>
           <Form

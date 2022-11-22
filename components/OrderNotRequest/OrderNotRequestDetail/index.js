@@ -245,10 +245,6 @@ export const OrderNotRequestDetail = ({ orderId }) => {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
-
       <div className="carslot-content--header">
         <Title style={{ padding: "0px" }} level={3}>
           Thông tin đơn hàng{" "}
