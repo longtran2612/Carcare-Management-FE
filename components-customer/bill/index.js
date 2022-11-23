@@ -192,7 +192,10 @@ const BillCustomer = () => {
                 />
               </Col>
               <Col xs={24} sm={24} md={24} lg={8} xl={8}>
-                {convertOrderStatus(item.status)}
+                <DescriptionItem
+                  title="Trạng thái"
+                  content={convertOrderStatus(item.status)}
+                />
               </Col>
               <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
