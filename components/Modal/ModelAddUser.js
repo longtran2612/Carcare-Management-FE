@@ -219,12 +219,12 @@ function ModalAddUser({ show, onSuccess, handleCancel }) {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item name="addressvn" label="Tỉnh/Thành phố - Quận - Huyện">
+              <Form.Item name="addressvn" label="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã">
                 <Cascader
                   changeOnSelect
                   options={addressData}
                   onChange={onChange}
-                  placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                  placeholder="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                   showSearch={{
                     filter,
                   }}

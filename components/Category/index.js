@@ -10,7 +10,7 @@ const CategoryPage = () => {
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item href=""> {" "}Danh mục dịch vụ</Breadcrumb.Item>
+        <Breadcrumb.Item href=""> {" "}Quản lý danh mục dịch vụ</Breadcrumb.Item>
       </Breadcrumb>
       <div className="content-white-admin">
       <CategoryTable />

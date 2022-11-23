@@ -15,6 +15,7 @@ import {
   Tag,
   Input,
   List,
+  // Image
 } from "antd";
 import {
   getPromotionDetail,
@@ -388,7 +389,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                   </Col>
                   {showCardId && (
                     <Col span={6}>
-                      <Form.Item label="Thông tin chuyển khoản" name="cardNumber">
+                      <Form.Item label="Thông tin thanh toán" name="cardNumber">
                         <Input />
                       </Form.Item>
                     </Col>
@@ -420,6 +421,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                           height={100}
                           alt="Company logo"
                         />
+                        {/* <img src={logo}/> */}
                       </td>
                       <td>
                         Bill #: {billDetail?.billCode}
@@ -469,7 +471,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                 <td>
                   {billDetail?.paymentType == "CASH"
                     ? "Tiền mặt"
-                    : "Chuyển khoản"}
+                    : "Thẻ-CK"}
                 </td>
               </tr>
               <tr className="heading">

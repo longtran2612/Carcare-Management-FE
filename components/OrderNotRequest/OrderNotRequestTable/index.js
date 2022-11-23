@@ -250,7 +250,7 @@ function OrderNotRequestTable({}) {
           return (
             <>
               <Popconfirm
-                title="In hóa đơn?"
+                title="Thanh toán - In hóa đơn?"
                 placement="topLeft"
                 okText="Đồng ý"
                 cancelText="Hủy"

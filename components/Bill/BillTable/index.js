@@ -678,7 +678,7 @@ const BillTable = () => {
                 <td>
                   {billDetail?.paymentType == "CASH"
                     ? "Tiền mặt"
-                    : "Thẻ - Chuyển khoản"}
+                    : "Thẻ - CK"}
                 </td>
               </tr>
               <tr className="heading">
