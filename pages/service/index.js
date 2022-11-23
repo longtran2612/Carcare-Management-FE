@@ -140,12 +140,12 @@ const ServicePage = () => {
                 gutter: [16, 16],
                 xs: 1,
                 sm: 2,
-                md: 4,
+                md: 3,
                 lg: 4,
-                xl: 6,
-                xxl: 3,
+                xl: 4,
+                xxl: 4,
               }}
-              // style={{ overflow: "auto", padding: "5px", height: "520px" }}
+              style={{ overflow: "auto", padding: "5px", height: "520px" }}
               dataSource={services}
               renderItem={(item) => (
                 <List.Item>
