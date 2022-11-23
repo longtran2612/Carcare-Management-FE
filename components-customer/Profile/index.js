@@ -29,6 +29,7 @@ import {
   PhoneOutlined,
   MailOutlined,
   UserOutlined,
+  SaveOutlined,
 } from "@ant-design/icons";
 import Loading from "components/Loading";
 import Cookies from "js-cookie";
@@ -360,7 +361,7 @@ export const ProfileCustomer = () => {
                 style={{ bottom: "0", right: "20px", margin: "10px" }}
                 className="service-action"
               >
-                <div style={{ marginRight: "20px" }}>
+                {/* <div style={{ marginRight: "20px" }}>
                   <Button
                     onClick={() => {
                       fetchCustomerDetail();
@@ -368,7 +369,7 @@ export const ProfileCustomer = () => {
                   >
                     Đặt lại
                   </Button>
-                </div>
+                </div> */}
                 <div>
                   <Popconfirm
                     title="Xác nhận?"
@@ -386,7 +387,7 @@ export const ProfileCustomer = () => {
                         });
                     }}
                   >
-                    <Button type="primary">Cập nhật</Button>
+                    <Button icon={<SaveOutlined/>} type="primary">Cập nhật</Button>
                   </Popconfirm>
                 </div>
               </div>

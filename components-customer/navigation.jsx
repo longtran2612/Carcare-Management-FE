@@ -26,22 +26,10 @@ export const CustomerNavigation = () => {
   const { user } = useSelector((state) => state.authSlice);
   const accessToken = Cookies.get("accessToken");
   const router = useRouter();
-
+  
   const handleLogout = () => {
-    logout()
-      .then((res) => {
-        if (res.data.StatusCode == 200) {
-          dispatch(setLogout());
-          router.push("/login");
-        } else {
-          if (res.status == 422) {
-            message.error(res.data.message);
-          }
-        }
-      })
-      .catch((err) => {
-        message.error(err.message);
-      });
+    dispatch(setLogout());
+    router.push("/login");
   };
 
   const handleMenu = () => {
