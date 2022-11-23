@@ -217,13 +217,13 @@ const ServiceCustomer = ({ status }) => {
       case -100:
         return (
           <Row gutter={16}>
-            <Col span={8}>
+               <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Tiếp nhận yêu cầu"
                 content={moment(item.createDate).format(formatDate)}
               />
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Thời gian hủy"
                 content={moment(item.orderCanceledDate).format(formatDate)}
@@ -235,19 +235,19 @@ const ServiceCustomer = ({ status }) => {
         return (
           <Row gutter={16}>
             {" "}
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Tiếp nhận yêu cầu"
                 content={moment(item.createDate).format(formatDate)}
               />
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Bắt đầu xử lý"
                 content={moment(item.carExecutingDate).format(formatDate)}
               />
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Hoàn thành xử lý"
                 content={moment(item?.carExecutedDate).format(formatDate)}
@@ -259,19 +259,19 @@ const ServiceCustomer = ({ status }) => {
         return (
           <Row gutter={16}>
             {" "}
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Bắt đầu xử lý"
                 content={moment(item.carExecutingDate).format(formatDate)}
               />
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Hoàn thành"
                 content={moment(item?.carExecutedDate).format(formatDate)}
               />
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Thanh toán"
                 content={moment(item?.paymentDate).format(formatDate)}
@@ -283,7 +283,7 @@ const ServiceCustomer = ({ status }) => {
         return (
           <Row gutter={16}>
             {" "}
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Tiếp nhận yêu cầu"
                 content={moment(item.createDate).format(formatDate)}
@@ -294,19 +294,19 @@ const ServiceCustomer = ({ status }) => {
       case 2:
         return (
           <Row gutter={16}>
-            <Col span={8}>
+               <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Tiếp nhận yêu cầu"
                 content={moment(item.createDate).format(formatDate)}
               />
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Bắt đầu xử lý"
                 content={moment(item.carExecutingDate).format(formatDate)}
               />
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <DescriptionItem
                 title="Hoàn thành dự kiến"
                 content={moment(item?.carExecutingDate)
@@ -360,35 +360,35 @@ const ServiceCustomer = ({ status }) => {
               {/* <Col span={8}>
                 <DescriptionItem title="Mã xe" content={item.carCode} />
               </Col> */}
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem title="Tên xe" content={item.carName} />
               </Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
                   title="Biển số"
                   content={item.carLicensePlate}
                 />
               </Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
                   title="Trạng thái"
                   content={convertOrderStatus(item?.status)}
                 />
               </Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
                   title="Tổng tiền dịch vụ"
                   content={formatMoney(item.totalServicePrice)}
                 />
               </Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
                   title="Thời gian xử lý ước tính"
                   content={item.totalEstimateTime + " phút"}
                 />
               </Col>
               {(item.status === 10 || item.status === 100) && (
-                  <Col span={8}>
+                      <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                     <DescriptionItem
                       title="Thời gian xử lý thực tế"
                       content={item.totalExecuteTime + " phút"}
@@ -406,7 +406,7 @@ const ServiceCustomer = ({ status }) => {
         placement="right"
         onClose={() => setShowDetail(false)}
         visible={showDetail}
-        width={900}
+        width='70%'
         extra={convertOrderStatus(orderDetail?.status)}
       >
         <Divider>
@@ -424,10 +424,10 @@ const ServiceCustomer = ({ status }) => {
               />
             </Col>
           )}
-          <Col span={8}>
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
             <DescriptionItem title="Tên xe" content={orderDetail.carName} />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={24} lg={8} xl={8}>
             <DescriptionItem
               title="Biển số"
               content={orderDetail.carLicensePlate}

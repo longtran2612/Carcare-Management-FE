@@ -182,30 +182,32 @@ const BillCustomer = () => {
               }
             />
             <Row gutter={16}>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem title="Tên xe" content={item.carName} />
               </Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
                   title="Biển số"
                   content={item.carLicensePlate}
                 />
               </Col>
-              <Col span={8}>{convertOrderStatus(item.status)}</Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
+                {convertOrderStatus(item.status)}
+              </Col>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
                   title="Tổng tiền dịch vụ"
                   content={formatMoney(item.totalServicePrice)}
                 />
               </Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
                   title="Khuyến mãi"
                   content={formatMoney(item.totalPromotionAmount)}
                 />
               </Col>
-              
-              <Col span={8}>
+
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
                   title="Thanh toán"
                   content={formatMoney(item.paymentAmount)}
@@ -214,17 +216,22 @@ const BillCustomer = () => {
             </Row>
 
             <Row gutter={16}>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
                   title="Ngày thanh toán"
                   content={moment(item.totalServicePrice).format(formatDate)}
                 />
               </Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <DescriptionItem
                   title="Hình thức thanh toán"
-                  content=
-                  {item?.paymentType === "CASH" ? <Tag color="green">Tiền mặt</Tag> : <Tag color="cyan">Thẻ - Chuyển khoản</Tag>}
+                  content={
+                    item?.paymentType === "CASH" ? (
+                      <Tag color="green">Tiền mặt</Tag>
+                    ) : (
+                      <Tag color="cyan">Thẻ - Chuyển khoản</Tag>
+                    )
+                  }
                 />
               </Col>
             </Row>
@@ -236,7 +243,7 @@ const BillCustomer = () => {
         placement="right"
         onClose={() => setShowDetail(false)}
         visible={showDetail}
-        width={950}
+        width="70%"
       >
         <Divider>
           <Title level={5}>
@@ -254,10 +261,10 @@ const BillCustomer = () => {
           {/* <Col span={8}>
             <DescriptionItem title="Mã xe" content={billDetail.carCode} />
           </Col> */}
-          <Col span={8}>
+          <Col xs={24} sm={24} md={24} lg={8} xl={8}>
             <DescriptionItem title={billDetail.carName} />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={24} lg={8} xl={8}>
             <DescriptionItem
               title="Biển số"
               content={billDetail.carLicensePlate}
@@ -280,8 +287,8 @@ const BillCustomer = () => {
                   content={item?.serviceCode}
                 />
               </Col> */}
-            
-              <Col span={12}>
+
+              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                 <DescriptionItem title={item?.name} />
               </Col>
               {/* <Col span={8}>
@@ -290,7 +297,7 @@ const BillCustomer = () => {
                   content={item?.estimateTime + " phút"}
                 />
               </Col> */}
-              <Col span={10}>
+              <Col xs={24} sm={24} md={24} lg={10} xl={10}>
                 <DescriptionItem
                   title="Giá"
                   content={formatMoney(item?.servicePrice?.price)}
@@ -311,10 +318,10 @@ const BillCustomer = () => {
             {billDetail?.promotionDetails?.map((item, index) => (
               <>
                 <Row>
-                  <Col span={8}>
+                  <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                     <DescriptionItem title={item?.promotionDetailCode} />
                   </Col>
-                  <Col span={8}>
+                  <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                     <DescriptionItem
                       title="Mô tả"
                       content={item?.description}
@@ -326,12 +333,12 @@ const BillCustomer = () => {
                       content={handleType(item?.type)}
                     />
                   </Col> */}
-                  <Col span={8}>
+                  <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                     {/* {(item?.type == "PERCENTAGE" || item?.type == "MONEY") && ( */}
-                      <DescriptionItem
-                        title="Tiền giảm"
-                        content={formatMoney(item?.promotionUsedAmount)}
-                      />
+                    <DescriptionItem
+                      title="Tiền giảm"
+                      content={formatMoney(item?.promotionUsedAmount)}
+                    />
                     {/* )} */}
                   </Col>
                 </Row>
@@ -348,45 +355,49 @@ const BillCustomer = () => {
           Thông tin thanh toán
         </p>
         <Row>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={24} lg={8} xl={8}>
             <DescriptionItem
               title="Hình thức thanh toán"
-              content=
-              {billDetail.paymentType === "CASH" ? <Tag color="green">Tiền mặt</Tag> : <Tag color="cyan">Thẻ - Chuyển khoản</Tag>}
+              content={
+                billDetail.paymentType === "CASH" ? (
+                  <Tag color="green">Tiền mặt</Tag>
+                ) : (
+                  <Tag color="cyan">Thẻ - Chuyển khoản</Tag>
+                )
+              }
             />
           </Col>
-          {billDetail.paymentType != "CASH" &&(
-          <Col span={8}>
-         
-            <DescriptionItem
-              title="Thông tin thanh toán"
-              content= {billDetail?.cardNumber}
-            />
-          </Col>
-            )}
-          <Col span={8}>
+          {billDetail.paymentType != "CASH" && (
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}>
+              <DescriptionItem
+                title="Thông tin thanh toán"
+                content={billDetail?.cardNumber}
+              />
+            </Col>
+          )}
+          <Col xs={24} sm={24} md={24} lg={8} xl={8}>
             <DescriptionItem
               title="Ngày thanh toán"
               content={moment(billDetail.paymentDate).format(formatDate)}
             />
           </Col>
-          {billDetail.paymentType === "CASH" &&(
-                <Col span={8}></Col>
+          {billDetail.paymentType === "CASH" && (
+            <Col xs={24} sm={24} md={24} lg={8} xl={8}></Col>
           )}
 
-          <Col span={8}>
+          <Col xs={24} sm={24} md={24} lg={8} xl={8}>
             <DescriptionItem
               title="Tổng Tiền dịch vụ"
               content={formatMoney(billDetail?.totalServicePrice || 0)}
             />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={24} lg={8} xl={8}>
             <DescriptionItem
               title="Tổng tiền khuyến mãi"
               content={formatMoney(billDetail?.totalPromotionAmount || 0)}
             />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={24} lg={8} xl={8}>
             <DescriptionItem
               title="Tổng tiền thanh toán"
               content={

@@ -87,7 +87,7 @@ const ServicePage = () => {
           }}
         >
           <Form form={form}>
-            <Row gutter={16}>
+            <Row gutter={[16,16]}>
               <Col xs={24} sm={24} md={24} lg={4} xl={4}>
                 <Button
                   style={{ width: "100%" }}
@@ -100,7 +100,7 @@ const ServicePage = () => {
               </Col>
               <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <Form.Item name="keyword">
-                  <Input placeholder="Tìm kiếm" />
+                  <Input  placeholder="Tìm kiếm" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={24} lg={4} xl={4}>
@@ -116,7 +116,7 @@ const ServicePage = () => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={24} lg={4} xl={4}>
+              <Col xs={12} sm={12} md={12} lg={4} xl={4}>
                 <Button
                   style={{ width: "100%" }}
                   onClick={() => getService()}
@@ -125,7 +125,7 @@ const ServicePage = () => {
                   Tìm kiếm
                 </Button>
               </Col>
-              <Col xs={24} sm={24} md={24} lg={4} xl={4}>
+              <Col xs={12} sm={12} md={12} lg={4} xl={4}>
                 <Button
                   style={{ width: "100%" }}
                   onClick={() => handleReset()}

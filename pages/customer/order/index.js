@@ -30,7 +30,7 @@ export default function CustomerOrderPage() {
         }}
       >
         <Row style={{ borderRadius: "5px", backgroundColor: "white" }}>
-          <Col span={4}>
+          <Col xs={24} sm={24} md={24} lg={4} xl={4}>
             <Button
               type="dashed"
               style={{
@@ -44,8 +44,8 @@ export default function CustomerOrderPage() {
               Trở lại
             </Button>
           </Col>
-          <Col span={6}></Col>
-          <Col span={4}>
+          <Col xs={1} sm={1} md={1} lg={6} xl={6}></Col>
+          <Col xs={22} sm={22} md={22} lg={4} xl={4}>
             <Select
               placeholder="Trạng thái"
               style={{
