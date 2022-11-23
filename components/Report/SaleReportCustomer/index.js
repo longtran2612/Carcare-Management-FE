@@ -57,7 +57,6 @@ const SaleReportCustomer = () => {
     setTypeDate(value);
     handleDatePicker();
   };
-  
   const handleDatePicker = () => {
     switch (typeDate) {
       case "d":
@@ -408,6 +407,9 @@ const SaleReportCustomer = () => {
               scroll={{
                 y: 280,
               }}
+              pagination={{
+              pageSize: 20,
+            }}
             />
           </Col>
         </Row>

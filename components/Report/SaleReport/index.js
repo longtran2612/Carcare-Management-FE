@@ -336,7 +336,10 @@ const SaleReport = () => {
               columns={columns}
               dataSource={dataSaleReport}
               scroll={{
-                y: 280,
+                y: 370,
+              }}
+              pagination={{
+                pageSize: 20,
               }}
             />
           </Col>

@@ -390,6 +390,9 @@ const ReportPromotion = () => {
               scroll={{
                 y: 280,
               }}
+              pagination={{
+                pageSize: 20,
+              }}
             />
           </Col>
         </Row>
