@@ -416,6 +416,9 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                   ]}
                 >
                   <DatePicker
+                  disabled={
+                    moment().isAfter(priceHeaderDetail?.toDate)
+                  }
                     disabledDate={(d) =>
                       !d ||
                       d.isSameOrBefore(form.getFieldValue("fromDate")) ||

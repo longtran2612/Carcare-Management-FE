@@ -355,13 +355,12 @@ function UpDateServiceOrder({ order, show, onSuccess, handleCancel }) {
         <Table
           size="small"
           rowKey={(record) => record.id}
-          onChange={handleSearch}
           columns={columns}
           dataSource={services}
           bordered
           rowSelection={rowSelection}
           pagination={{
-            pageSize: 20,
+            pageSize: 30,
           }}
           scroll={{
             y: 200,

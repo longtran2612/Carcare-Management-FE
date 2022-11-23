@@ -38,7 +38,6 @@ const ModalAddPromotionLine = ({
     };
     console.log("dataCreate", dataCreate);
     try {
-    
       console.log(dataCreate);
       const res = await createPromotionLine(dataCreate);
       openNotification("Thành công", "tạo mới dòng khuyến mãi thành công");
@@ -149,6 +148,7 @@ const ModalAddPromotionLine = ({
                     required: true,
                   },
                 ]}
+                initialValue={moment(startDate).isAfter(moment()) ? moment(startDate, formatDate): moment()}
               >
                 <DatePicker
                   disabledDate={(d) =>
@@ -156,7 +156,8 @@ const ModalAddPromotionLine = ({
                     d.isBefore(moment()) ||
                     (form.getFieldValue("toDate") &&
                       d.isAfter(form.getFieldValue("toDate"))) ||
-                    d.isBefore(startDate)
+                    d.isBefore(startDate) ||
+                    d.isAfter(endDate)
                   }
                   placeholder="Ngày bắt đầu"
                   format={formatDate}
@@ -313,7 +314,7 @@ const ModalAddPromotionLine = ({
                 </Form.Item>
               </Col>
             )}
-      
+
             <Col span={12}>
               <Form.Item label="Nhóm người dùng áp dụng" name="customerType">
                 <Select>
@@ -365,7 +366,6 @@ const ModalAddPromotionLine = ({
                     />
                   </Form.Item>
                 </Col>
-                
               </>
             )}
           </Row>

@@ -10,7 +10,7 @@ import {
   Input,
   DatePicker,
   Table,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification, openNotificationWarning } from "utils/notification";
@@ -19,7 +19,7 @@ import {
   getPromotionLineByHeaderId,
   activePromotionLine,
   inActivePromotionLine,
-  updatePromotionLine
+  updatePromotionLine,
 } from "pages/api/promotionLineAPI";
 import {
   getPromotionHeaderById,
@@ -40,7 +40,7 @@ import {
   PlusOutlined,
   DeleteOutlined,
   SaveOutlined,
-  RollbackOutlined
+  RollbackOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { EditOutlined } from "@ant-design/icons";
@@ -435,7 +435,6 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
     }
   };
 
-  
   const handleDeletePromotion = async () => {
     setLoading(true);
     try {
@@ -488,10 +487,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
                   ]}
                 >
                   <DatePicker
-                    disabled={
-                      moment().isAfter(promotionHeaderDetail?.fromDate)
-                      
-                    }
+                    disabled={moment().isAfter(promotionHeaderDetail?.fromDate)}
                     disabledDate={(d) =>
                       !d ||
                       (form.getFieldValue("toDate") &&
@@ -512,6 +508,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
                   ]}
                 >
                   <DatePicker
+                    disabled={moment().isAfter(promotionHeaderDetail?.toDate)}
                     disabledDate={(d) =>
                       !d ||
                       d.isSameOrBefore(form.getFieldValue("fromDate")) ||
@@ -521,7 +518,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
                   />
                 </Form.Item>
               </Col>
-           
+
               <Col span={4}>
                 <Form.Item
                   label="Trạng thái"
@@ -611,7 +608,9 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
                         });
                     }}
                   >
-                    <Button icon={<SaveOutlined/>} type="primary">Cập nhật</Button>
+                    <Button icon={<SaveOutlined />} type="primary">
+                      Cập nhật
+                    </Button>
                   </Popconfirm>
                 </div>
               </div>
