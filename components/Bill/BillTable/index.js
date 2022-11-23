@@ -576,18 +576,24 @@ const BillTable = () => {
               content={billDetail.paymentType === "CASH" ? <Tag color="green">Tiền mặt</Tag> : <Tag color="cyan">Thẻ - Chuyển khoản</Tag>}
             />
           </Col>
+          {billDetail.paymentType != "CASH" &&(
           <Col span={8}>
-          <DescriptionItem
+         
+            <DescriptionItem
               title="Thông tin thanh toán"
               content= {billDetail?.cardNumber}
             />
           </Col>
+            )}
           <Col span={8}>
             <DescriptionItem
               title="Ngày thanh toán"
               content={moment(billDetail.paymentDate).format(formatDate)}
             />
           </Col>
+          {billDetail.paymentType === "CASH" &&(
+                <Col span={8}></Col>
+          )}
          
           <Col span={8}>
             <DescriptionItem
