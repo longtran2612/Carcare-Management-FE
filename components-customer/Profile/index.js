@@ -207,7 +207,7 @@ export const ProfileCustomer = () => {
   return (
     <>
       <Row gutter={[16]}>
-        <Col span={6}>
+        <Col xs={24} sm={24} md={24} lg={6} xl={6}>
           <Image width={300} height={250} src={customerDetail.image} />
           <div
             style={{
@@ -228,7 +228,7 @@ export const ProfileCustomer = () => {
             </Upload>
           </div>
         </Col>
-        <Col span={18}>
+        <Col xs={24} sm={24} md={24} lg={18} xl={18}>
           <Form
             form={form}
             layout="vertical"
@@ -236,7 +236,7 @@ export const ProfileCustomer = () => {
             validateMessages={validateMessages}
           >
             <Row gutter={[32]}>
-              <Col span={12}>
+              <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                 <Form.Item
                   label="Tên"
                   name="name"
@@ -256,7 +256,7 @@ export const ProfileCustomer = () => {
                 </Form.Item>
               </Col>
 
-              <Col span={6}>
+              <Col xs={24} sm={24} md={24} lg={6} xl={6}>
                 <Form.Item label="Ngày sinh" name="dateOfBirth">
                   <DatePicker
                     disabledDate={(d) => !d || d.isSameOrAfter(moment())}
@@ -265,7 +265,7 @@ export const ProfileCustomer = () => {
                 </Form.Item>
               </Col>
 
-              <Col span={6}>
+              <Col xs={24} sm={24} md={24} lg={6} xl={6}>
                 <Form.Item label="Giới tính" name="gender">
                   <Select>
                     <Select.Option value="Nam">Nam</Select.Option>
@@ -274,7 +274,7 @@ export const ProfileCustomer = () => {
                 </Form.Item>
               </Col>
 
-              <Col span={6}>
+              <Col xs={24} sm={24} md={24} lg={6} xl={6}>
                 <Form.Item
                   rules={[
                     {
@@ -295,7 +295,7 @@ export const ProfileCustomer = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col xs={24} sm={24} md={24} lg={6} xl={6}>
                 <Form.Item
                   rules={[
                     {
@@ -311,7 +311,7 @@ export const ProfileCustomer = () => {
                 </Form.Item>
               </Col>
 
-              <Col span={6}>
+              <Col xs={24} sm={24} md={24} lg={6} xl={6}>
                 <Form.Item
                   rules={[
                     {
@@ -329,12 +329,12 @@ export const ProfileCustomer = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={6}>
+              <Col xs={24} sm={24} md={24} lg={6} xl={6}>
                 <Form.Item label="Quốc tịch" name="nationality">
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={24}>
+              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <Form.Item
                   name="addressvn"
                   label="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
@@ -350,7 +350,7 @@ export const ProfileCustomer = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={24}>
+              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <Form.Item label="Số nhà / Tên đường" name="address">
                   <TextArea rows={2} />
                 </Form.Item>

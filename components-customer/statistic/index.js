@@ -54,7 +54,7 @@ function StatisticCustomer() {
         }}
         gutter={[16, 16]}
       >
-        <Col span={12}>
+        <Col xs={24} sm={24} md={24} lg={12} xl={12} >
           <Card style={cardStyle}>
             <Row gutter={16}>
               <Col span={12}>
@@ -69,7 +69,7 @@ function StatisticCustomer() {
             </Row>
           </Card>
         </Col>
-        <Col span={12}>
+        <Col  xs={24} sm={24} md={24} lg={12} xl={12}>
           <Card style={cardStyle}>
             <Row gutter={16}>
               <Col span={12}>
@@ -86,7 +86,7 @@ function StatisticCustomer() {
             </Row>
           </Card>
         </Col>
-        <Col span={12}>
+        <Col   xs={24} sm={24} md={24} lg={12} xl={12}>
           <Card style={cardStyle}>
             <Row gutter={16}>
               <Col span={12}>
@@ -101,7 +101,7 @@ function StatisticCustomer() {
             </Row>
           </Card>
         </Col>
-        <Col span={12}>
+        <Col  xs={24} sm={24} md={24} lg={12} xl={12}>
           <Card style={cardStyle}>
             <Row gutter={16}>
               <Col span={12}>
