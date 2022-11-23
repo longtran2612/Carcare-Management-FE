@@ -61,11 +61,11 @@ const ReportCancelBill = () => {
   const handleDatePicker = () => {
     switch (typeDate) {
       case "d":
-        return <RangePicker format={dateFormat} />;
+        return <RangePicker disabledDate={(d)=> !d || d.isAfter(moment())} format={dateFormat} />;
       case "m":
-        return <RangePicker picker="month" />;
+        return <RangePicker disabledDate={(d)=> !d || d.isAfter(moment())} picker="month" />;
       case "y":
-        return <RangePicker picker="year" />;
+        return <RangePicker disabledDate={(d)=> !d || d.isAfter(moment())} picker="year" />;
     }
   };
 
@@ -268,7 +268,7 @@ const ReportCancelBill = () => {
               name="rangerDate"
               initialValue={[
                 moment().startOf("month"),
-                moment().endOf("month"),
+                moment(),
               ]}
             >
               {handleDatePicker()}
