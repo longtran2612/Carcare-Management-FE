@@ -23,7 +23,7 @@ import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import moment from "moment";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
-import { UploadOutlined } from "@ant-design/icons";
+import { SaveOutlined, UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "YYYY/MM/DD";
 import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
@@ -152,9 +152,6 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
 
   return (
     <>
-      <Button type="link" size="small" onClick={() => router.push("/admin")}>
-        Trở lại
-      </Button>
       <Row gutter={16}>
         {/* <Col span={6}>
           <Image width={300} height={250} src={carModelDetail.imageUrl} />
@@ -276,7 +273,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                 style={{ bottom: "0", right: "20px", margin: "10px" }}
                 className="service-action"
               >
-                <div style={{ marginRight: "20px" }}>
+                {/* <div style={{ marginRight: "20px" }}>
                   <Button
                     onClick={() => {
                       fetchcarModelDetail();
@@ -284,7 +281,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                   >
                     Đặt lại
                   </Button>
-                </div>
+                </div> */}
                 <div>
                   <Popconfirm
                     title="Cập nhật?"
@@ -302,7 +299,7 @@ const CarModelDetail = ({ carModelId, onUpdateCarModel }) => {
                         });
                     }}
                   >
-                    <Button type="primary">Cập nhật</Button>
+                    <Button icon={<SaveOutlined/>} type="primary">Cập nhật</Button>
                   </Popconfirm>
                 </div>
               </div>

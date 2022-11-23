@@ -77,11 +77,18 @@ const ServicePage = () => {
           backgroundColor: "#EAE3E3",
         }}
       >
-
-        <div style={{backgroundColor:'white',borderRadius:'5px', padding: "20px" ,paddingLeft:'100px',paddingRight:'100px' }}>
+        <div
+          style={{
+            backgroundColor: "white",
+            borderRadius: "5px",
+            padding: "20px",
+            paddingLeft: "100px",
+            paddingRight: "100px",
+          }}
+        >
           <Form form={form}>
             <Row gutter={16}>
-              <Col span={4}>
+              <Col xs={24} sm={24} md={24} lg={4} xl={4}>
                 <Button
                   style={{ width: "100%" }}
                   type="dashed"
@@ -91,12 +98,12 @@ const ServicePage = () => {
                   Trở lại
                 </Button>
               </Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={24} lg={8} xl={8}>
                 <Form.Item name="keyword">
                   <Input placeholder="Tìm kiếm" />
                 </Form.Item>
               </Col>
-              <Col span={4}>
+              <Col xs={24} sm={24} md={24} lg={4} xl={4}>
                 <Form.Item name="categoryId">
                   <Select style={{ width: "100%" }} placeholder="Chọn danh mục">
                     {listCategory?.map((item) => {
@@ -109,7 +116,7 @@ const ServicePage = () => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={4}>
+              <Col xs={24} sm={24} md={24} lg={4} xl={4}>
                 <Button
                   style={{ width: "100%" }}
                   onClick={() => getService()}
@@ -118,7 +125,7 @@ const ServicePage = () => {
                   Tìm kiếm
                 </Button>
               </Col>
-              <Col span={4}>
+              <Col xs={24} sm={24} md={24} lg={4} xl={4}>
                 <Button
                   style={{ width: "100%" }}
                   onClick={() => handleReset()}
@@ -131,9 +138,14 @@ const ServicePage = () => {
             <List
               grid={{
                 gutter: [16, 16],
-                column: 4,
+                xs: 1,
+                sm: 2,
+                md: 4,
+                lg: 4,
+                xl: 6,
+                xxl: 3,
               }}
-              style={{ overflow: "auto",padding:'5px', height: "520px" }}
+              // style={{ overflow: "auto", padding: "5px", height: "520px" }}
               dataSource={services}
               renderItem={(item) => (
                 <List.Item>
@@ -147,11 +159,10 @@ const ServicePage = () => {
                     hoverable
                     cover={<Image layout="fill" src={item.imageUrl} />}
                   />
-                  <div style={{textAlign:'center',padding:"5px"}}>
-                  <h5 style={{font:'bold'}}>{item.name}</h5>
-                  <span>{formatMoney(item.servicePrice.price)}</span>
+                  <div style={{ textAlign: "center", padding: "5px" }}>
+                    <h5 style={{ font: "bold" }}>{item.name}</h5>
+                    <span>{formatMoney(item.servicePrice.price)}</span>
                   </div>
-                  
 
                   {/* <Card.Meta
                     style={{
