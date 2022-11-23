@@ -253,7 +253,7 @@ const BillTable = () => {
           case "CASH":
             return <Tag color="green">Tiền mặt</Tag>;
           case "DEBIT":
-            return <Tag color="cyan">Chuyển khoản</Tag>;
+            return <Tag color="cyan">Thẻ - Chuyển khoản</Tag>;
         }
       },
     },
@@ -320,6 +320,8 @@ const BillTable = () => {
     //   },
     // },
   ];
+
+
 
   const handleGetbills = async () => {
     setLoading(true);
@@ -547,12 +549,12 @@ const BillTable = () => {
                     />
                   </Col> */}
                   <Col span={8}>
-                    {(item?.type == "PERCENTAGE" || item?.type == "MONEY") && (
+                    {/* {(item?.type == "PERCENTAGE" || item?.type == "MONEY") && ( */}
                       <DescriptionItem
                         title="Tiền giảm"
                         content={formatMoney(item?.promotionUsedAmount)}
                       />
-                    )}
+                    {/* )} */}
                   </Col>
                 </Row>
               </>
@@ -571,7 +573,13 @@ const BillTable = () => {
           <Col span={8}>
             <DescriptionItem
               title="Hình thức thanh toán"
-              content={billDetail.paymentType === "CASH" ? "Tiền mặt" : "Thẻ"}
+              content={billDetail.paymentType === "CASH" ? <Tag color="green">Tiền mặt</Tag> : <Tag color="cyan">Thẻ - Chuyển khoản</Tag>}
+            />
+          </Col>
+          <Col span={8}>
+          <DescriptionItem
+              title="Thông tin thanh toán"
+              content= {billDetail?.cardNumber}
             />
           </Col>
           <Col span={8}>
@@ -580,7 +588,7 @@ const BillTable = () => {
               content={moment(billDetail.paymentDate).format(formatDate)}
             />
           </Col>
-          <Col span={8}></Col>
+         
           <Col span={8}>
             <DescriptionItem
               title="Tổng Tiền dịch vụ"
@@ -670,7 +678,7 @@ const BillTable = () => {
                 <td>
                   {billDetail?.paymentType == "CASH"
                     ? "Tiền mặt"
-                    : "Chuyển khoản"}
+                    : "Thẻ - Chuyển khoản"}
                 </td>
               </tr>
               <tr className="heading">

@@ -382,7 +382,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
                     >
                       <Select onChange={(value) => onchangePaymentType(value)}>
                         <Select.Option value="CASH">Tiền mặt</Select.Option>
-                        <Select.Option value="DEBIT">Thẻ</Select.Option>
+                        <Select.Option value="DEBIT">Thẻ - Chuyển khoản</Select.Option>
                       </Select>
                     </Form.Item>
                   </Col>

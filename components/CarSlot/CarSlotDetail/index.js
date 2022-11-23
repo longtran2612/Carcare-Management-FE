@@ -366,7 +366,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                   {carSlotDetail?.name}
                 </Title> */}
                 <div></div>
-                <div> {convertStatusCarSlot(carSlotDetail?.status)}</div>
+                <div style={{float:'right'}}> {convertStatusCarSlot(carSlotDetail?.status)}</div>
               </div>
               {carSlotDetail?.status == "IN_USE" && (
                 <Row>
@@ -375,6 +375,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                       style={{ marginRight: "10px" }}
                       className="carslot-customer content-white"
                     >
+                       
                       <Title level={4}>Nhân viên xử lý</Title>
                       <Timeline>
                         <span>{user?.name + " - " + user?.phone}</span>
@@ -661,7 +662,7 @@ const CarSlotDetail = ({ carSlotId }) => {
                       style={{ color: "#829822" }}
                       level={2}
                     >
-                      Vị trí đang trống !!! vui lòng chọn yêu cầu sử lý
+                      Vị trí đang trống !!! vui lòng chọn yêu cầu xử lý
                     </Typography.Title>
                   </Col>
                   <Col span={24}>

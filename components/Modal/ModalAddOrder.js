@@ -15,7 +15,7 @@ import {
   Table,
 } from "antd";
 import { PlusCircleOutlined, UserAddOutlined } from "@ant-design/icons";
-import { getUsers } from "pages/api/userAPI";
+import { getUsers ,getUserAvaliable } from "pages/api/userAPI";
 import { getAllPromotionUseAbleByServiceIds } from "pages/api/promotionDetail";
 import { getCustomers } from "pages/api/customerAPI";
 import { getCustomerById } from "pages/api/customerAPI";
@@ -65,7 +65,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   };
   const handleFetchUser = async () => {
     try {
-      const res = await getUsers();
+      const res = await getUserAvaliable();
       setUsers(res.data.Data);
     } catch (error) {
       console.log(error);

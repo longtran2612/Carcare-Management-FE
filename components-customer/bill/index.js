@@ -204,6 +204,7 @@ const BillCustomer = () => {
                   content={formatMoney(item.totalPromotionAmount)}
                 />
               </Col>
+              
               <Col span={8}>
                 <DescriptionItem
                   title="Thanh toán"
@@ -222,7 +223,8 @@ const BillCustomer = () => {
               <Col span={8}>
                 <DescriptionItem
                   title="Hình thức thanh toán"
-                  content={item.paymentType === "CASH" ? "Tiền mặt" : "Thẻ"}
+                  content=
+                  {item?.paymentType === "CASH" ? <Tag color="green">Tiền mặt</Tag> : <Tag color="cyan">Thẻ - Chuyển khoản</Tag>}
                 />
               </Col>
             </Row>
@@ -234,7 +236,7 @@ const BillCustomer = () => {
         placement="right"
         onClose={() => setShowDetail(false)}
         visible={showDetail}
-        width={900}
+        width={950}
       >
         <Divider>
           <Title level={5}>
@@ -278,7 +280,8 @@ const BillCustomer = () => {
                   content={item?.serviceCode}
                 />
               </Col> */}
-              <Col span={8}>
+            
+              <Col span={12}>
                 <DescriptionItem title={item?.name} />
               </Col>
               {/* <Col span={8}>
@@ -287,7 +290,7 @@ const BillCustomer = () => {
                   content={item?.estimateTime + " phút"}
                 />
               </Col> */}
-              <Col span={8}>
+              <Col span={10}>
                 <DescriptionItem
                   title="Giá"
                   content={formatMoney(item?.servicePrice?.price)}
@@ -324,12 +327,12 @@ const BillCustomer = () => {
                     />
                   </Col> */}
                   <Col span={8}>
-                    {(item?.type == "PERCENTAGE" || item?.type == "MONEY") && (
+                    {/* {(item?.type == "PERCENTAGE" || item?.type == "MONEY") && ( */}
                       <DescriptionItem
                         title="Tiền giảm"
                         content={formatMoney(item?.promotionUsedAmount)}
                       />
-                    )}
+                    {/* )} */}
                   </Col>
                 </Row>
               </>
@@ -348,16 +351,29 @@ const BillCustomer = () => {
           <Col span={8}>
             <DescriptionItem
               title="Hình thức thanh toán"
-              content={billDetail.paymentType === "CASH" ? "Tiền mặt" : "Thẻ"}
+              content=
+              {billDetail.paymentType === "CASH" ? <Tag color="green">Tiền mặt</Tag> : <Tag color="cyan">Thẻ - Chuyển khoản</Tag>}
             />
           </Col>
+          {billDetail.paymentType != "CASH" &&(
+          <Col span={8}>
+         
+            <DescriptionItem
+              title="Thông tin thanh toán"
+              content= {billDetail?.cardNumber}
+            />
+          </Col>
+            )}
           <Col span={8}>
             <DescriptionItem
               title="Ngày thanh toán"
               content={moment(billDetail.paymentDate).format(formatDate)}
             />
           </Col>
-          <Col span={8}></Col>
+          {billDetail.paymentType === "CASH" &&(
+                <Col span={8}></Col>
+          )}
+
           <Col span={8}>
             <DescriptionItem
               title="Tổng Tiền dịch vụ"

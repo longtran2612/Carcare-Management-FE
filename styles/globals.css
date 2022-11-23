@@ -110,19 +110,19 @@ ant-card-head-title{
   width: 100% !important;
 }
 .ant-drawer-header{
-  background: linear-gradient(to top right, #afa0d6, #84a5e4) !important;
+  background: linear-gradient(to top right, #5375b5, #7896ba) !important;
 }
 .ant-modal-header{
-  background: linear-gradient(to top right, #afa0d6, #84a5e4) !important;
+  background: linear-gradient(to top right, #5375b5, #7896ba) !important;
   font:bold !important;
 }
 .ant-modal-title{
   font:bold 1.2rem "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-  color: #444444 !important;
+  color: #ffff !important;
 }
 .ant-drawer-title{
   font:bold 1.2rem "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-  color: #444444 !important;
+  color: #ffff !important;
 }
 .ant-input-affix-wrapper{
  padding: 0 0 0 10px !important;
