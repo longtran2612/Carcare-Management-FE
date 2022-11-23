@@ -548,7 +548,7 @@ function DrawerPromorionDetail({
                 </Select>
               </Form.Item>
             </Col>
-            {promotionDetail?.type != "SERVICE" && (
+            {/* {promotionDetail?.type != "SERVICE" && (
               <Col span={12}>
                 <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
                   <Select disabled={canUpdate} mode="multiple">
@@ -560,7 +560,7 @@ function DrawerPromorionDetail({
                   </Select>
                 </Form.Item>
               </Col>
-            )}
+            )} */}
             <Col span={12}>
               <Form.Item label="Giới hạn ngân sách" name="limitUsedTime">
                 <Select disabled={canUpdate} onChange={onChange}>

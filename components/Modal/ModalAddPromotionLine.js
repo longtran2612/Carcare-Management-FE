@@ -316,14 +316,14 @@ const ModalAddPromotionLine = ({
             )}
 
             <Col span={12}>
-              <Form.Item label="Nhóm người dùng áp dụng" name="customerType">
+              <Form.Item initialValue={0} label="Nhóm người dùng áp dụng" name="customerType">
                 <Select>
                   <Select.Option value={0}>Tất cả</Select.Option>
-                  <Select.Option value={1}>Thân thiết</Select.Option>
+                  {/* <Select.Option value={1}>Thân thiết</Select.Option> */}
                 </Select>
               </Form.Item>
             </Col>
-            {type != "SERVICE" && (
+            {/* {type != "SERVICE" && (
               <Col span={12}>
                 <Form.Item label="Danh mục dịch vụ áp dụng" name="categoryIds">
                   <Select mode="multiple">
@@ -335,7 +335,7 @@ const ModalAddPromotionLine = ({
                   </Select>
                 </Form.Item>
               </Col>
-            )}
+            )} */}
             <Col span={12}>
               <Form.Item
                 initialValue={false}
