@@ -34,6 +34,7 @@ import {
   UserOutlined,
   HomeOutlined,
   RollbackOutlined,
+  SaveOutlined,
 } from "@ant-design/icons";
 import Loading from "components/Loading";
 const formatDate = "DD/MM/YYYY";
@@ -414,7 +415,7 @@ const UserProfile = () => {
                             }}
                             className="service-action"
                           >
-                            <div style={{ marginRight: "20px" }}>
+                            {/* <div style={{ marginRight: "20px" }}>
                               <Button
                                 onClick={() => {
                                   fetchUserDetail();
@@ -422,7 +423,7 @@ const UserProfile = () => {
                               >
                                 Đặt lại
                               </Button>
-                            </div>
+                            </div> */}
                             <div>
                               <Popconfirm
                                 title="Xác nhận?"
@@ -440,7 +441,7 @@ const UserProfile = () => {
                                     });
                                 }}
                               >
-                                <Button type="primary">Cập nhật</Button>
+                                <Button icon={<SaveOutlined/>} type="primary">Cập nhật</Button>
                               </Popconfirm>
                             </div>
                           </div>
