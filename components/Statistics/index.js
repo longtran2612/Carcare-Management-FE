@@ -144,15 +144,11 @@ const StatisticalPage = () => {
         <Breadcrumb.Item href="/admin">
           <HomeOutlined />
         </Breadcrumb.Item>
-        <Breadcrumb.Item href=""> Thống kê</Breadcrumb.Item>
+        <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
       </Breadcrumb>
       <Form form={form} autoComplete="off">
         <Row style={{ padding: "0 5rem 0 5rem" }} gutter={[16]}>
-          <Col span={24}>
-            <Typography.Title level={2} className="content-center">
-              Thống kê doanh số
-            </Typography.Title>
-          </Col>
+         
           <Col span={13}>
             <Form.Item
               rules={[
