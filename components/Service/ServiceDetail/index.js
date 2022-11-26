@@ -171,10 +171,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
 
   const handleActiveService = async () => {
     setLoading(true);
-
     try {
       const res = await activeService(serviceId);
-      openNotification("Thành công", "Kích hoạt bảng giá thành công!");
+      openNotification("Thành công", "Kích hoạt dịch vụ thành công!");
       fetchServiceDetail();
       setLoading(false);
     } catch (error) {
@@ -191,7 +190,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
     setLoading(true);
     try {
       const res = await inActiveService(serviceId);
-      openNotification("Thành công", "Vô hiệu bảng giá thành công!");
+      openNotification("Thành công", "Ngưng hoạt động dịch vụ thành công!");
       fetchServiceDetail();
       setLoading(false);
     } catch (error) {
@@ -259,7 +258,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                   ]}
                   name="status"
                 >
-                  {serviceDetail?.status === 100 && (
+                  {serviceDetail?.status === 100 ? (
                     <Popconfirm
                       title="Bạn có chắc chắn ngưng hoạt động dịch vụ này?"
                       placement="topLeft"
@@ -279,8 +278,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                         Hoạt dộng
                       </Button>
                     </Popconfirm>
-                  )}
-                  {serviceDetail?.status === -100 && (
+                  ) : (
                     <Popconfirm
                       title="Bạn có chắc chắn kích hoạt dịch vụ này này?"
                       placement="topLeft"
@@ -294,24 +292,6 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                         Không hoạt dộng
                       </Button>
                     </Popconfirm>
-                  )}
-                  {(serviceDetail?.status === 0 ||
-                    serviceDetail?.status === 10) && (
-                    <Button
-                      onClick={() => {
-                        openNotificationWarning(
-                          "Vui lòng đến bảng giá để thêm",
-                          "Dịch vụ chưa có giá"
-                        );
-                      }}
-                      style={{
-                        width: "100%",
-                        background: "#AA962F",
-                        color: "white",
-                      }}
-                    >
-                      Chưa có giá
-                    </Button>
                   )}
                 </Form.Item>
               </Col>
@@ -420,7 +400,9 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                         });
                     }}
                   >
-                    <Button icon={<SaveOutlined />} type="primary">Cập nhật</Button>
+                    <Button icon={<SaveOutlined />} type="primary">
+                      Cập nhật
+                    </Button>
                   </Popconfirm>
                 </div>
               </div>

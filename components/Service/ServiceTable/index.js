@@ -235,18 +235,26 @@ function ServiceTable({}) {
       },
     },
     {
+      title: "Danh mục dịch vụ",
+      dataIndex: "categoryName",
+      key: "categoryName",
+      render: (categoryName) => {
+        return  <Tag color={"purple"}>{categoryName}</Tag>
+      },
+    },
+    {
       title: "Trạng thái",
       key: "status",
       dataIndex: "status",
       render: (status) => {
         return (
           <>
-            {status === 0 && <Tag color={"orange"}>{"Chưa có giá"}</Tag>}
-            {status === 100 && (
+            {status === 100 ? (
               <Tag color={"green"}>{"Đang hoạt động"}</Tag>
-            )}
-             {status === 10 && <Tag color={"orange"}>{"Không hoạt động"}</Tag>}
-            {status === -100 && <Tag color={"red"}>{"Ngừng hoạt động"}</Tag>}
+            ):(
+              <Tag color={"red"}>{"Không hoạt động"}</Tag>
+            )
+            }
           </>
         );
       },
@@ -265,6 +273,8 @@ function ServiceTable({}) {
         break;
     }
   };
+
+  console.log(services)
 
   return (
     <>

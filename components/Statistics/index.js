@@ -27,6 +27,8 @@ const StatisticalPage = () => {
   const [users, setUsers] = useState([]);
   const [dataStatistic, setDataStatistic] = useState([]);
   const [adminStatistic, setAdminStatistic] = useState([]);
+  const [fromDate, setFromDate] = useState(moment().subtract(7, "days"));
+  const [toDate, setToDate] = useState(moment());
 
   const handleFetchUser = async () => {
     try {
@@ -147,9 +149,17 @@ const StatisticalPage = () => {
         <Breadcrumb.Item href="">Dashboard</Breadcrumb.Item>
       </Breadcrumb>
       <Form form={form} autoComplete="off">
+        <Row span={24}>
+          <Col span={24}>
+          <Typography.Title level={3}>Dashboard</Typography.Title>
+          </Col>
+          <Col span={24}>
+          <Typography.Title level={4}>(Từ ngày {moment(fromDate).format(dateFormat)} -  đến  {moment(toDate).format(dateFormat)})</Typography.Title>
+          </Col>
+        </Row>
+       
         <Row style={{ padding: "0 5rem 0 5rem" }} gutter={[16]}>
-         
-          <Col span={13}>
+          {/* <Col span={13}>
             <Form.Item
               rules={[
                 {
@@ -218,15 +228,14 @@ const StatisticalPage = () => {
             >
               Thống kê
             </Button>
-          </Col>
+          </Col> */}
         </Row>
         <Row gutter={32} style={{ marginBottom: "20px" }}>
-          <Col span={2}></Col>
-          <Col  span={4}>
+          {/* <Col  span={4}>
             <Card bodyStyle={{padding:'0'}} style={cardStyle}>
               <Row>
                 <Col style={{ textAlign: "center" }} span={24}>
-                  <span>Tổng tiền dịch vụ</span>
+                  <span>Tổng số bán hàng</span>
                 </Col>
                 <Col style={{ textAlign: "center" }} className="content-center" span={24}>
                   <span style={{ color: "green", fontSize: "17px" }}>
@@ -235,56 +244,72 @@ const StatisticalPage = () => {
                 </Col>
               </Row>
             </Card>
-          </Col>
-          <Col span={4}>
-            <Card  bodyStyle={{padding:'0'}} style={cardStyle}>
+          </Col> */}
+          <Col span={6}>
+            <Card bodyStyle={{ padding: "0" }} style={cardStyle}>
               <Row>
                 <Col style={{ textAlign: "center" }} span={24}>
                   <span>Tổng tiền khuyến mãi</span>
                 </Col>
-                <Col style={{ textAlign: "center" }} className="content-center" span={24}>
-                  <span  style={{ color: "green", fontSize: "17px" }}>
+                <Col
+                  style={{ textAlign: "center" }}
+                  className="content-center"
+                  span={24}
+                >
+                  <span style={{ color: "green", fontSize: "17px" }}>
                     {formatMoney(adminStatistic?.totalPromotionAmount || 0)}
                   </span>
                 </Col>
               </Row>
             </Card>
           </Col>
-          <Col span={4}>
-            <Card  bodyStyle={{padding:'0'}} style={cardStyle}>
+          <Col span={6}>
+            <Card bodyStyle={{ padding: "0" }} style={cardStyle}>
               <Row>
                 <Col style={{ textAlign: "center" }} span={24}>
                   <span>Doanh số</span>
                 </Col>
-                <Col style={{ textAlign: "center" }} className="content-center" span={24}>
-                  <span  style={{ color: "green", fontSize: "17px" }}>
+                <Col
+                  style={{ textAlign: "center" }}
+                  className="content-center"
+                  span={24}
+                >
+                  <span style={{ color: "green", fontSize: "17px" }}>
                     {formatMoney(adminStatistic?.totalPaymentAmount || 0)}
                   </span>
                 </Col>
               </Row>
             </Card>
           </Col>
-          <Col  span={4}>
-            <Card  bodyStyle={{padding:'0'}} style={cardStyle}>
+          <Col span={6}>
+            <Card bodyStyle={{ padding: "0" }} style={cardStyle}>
               <Row>
                 <Col style={{ textAlign: "center" }} span={24}>
                   <span>Hóa đơn</span>
                 </Col>
-                <Col style={{ textAlign: "center" }} className="content-center" span={24}>
-                  <span   style={{ color: "green", fontSize: "17px" }}>
+                <Col
+                  style={{ textAlign: "center" }}
+                  className="content-center"
+                  span={24}
+                >
+                  <span style={{ color: "green", fontSize: "17px" }}>
                     {adminStatistic?.totalBill || 0}
                   </span>
                 </Col>
               </Row>
             </Card>
           </Col>
-          <Col span={4}>
-            <Card  bodyStyle={{padding:'0'}} style={cardStyle}>
+          <Col span={6}>
+            <Card bodyStyle={{ padding: "0" }} style={cardStyle}>
               <Row>
                 <Col style={{ textAlign: "center" }} span={24}>
                   <span>Hóa đơn hủy</span>
                 </Col>
-                <Col style={{ textAlign: "center" }} className="content-center" span={24}>
+                <Col
+                  style={{ textAlign: "center" }}
+                  className="content-center"
+                  span={24}
+                >
                   <span style={{ color: "red", fontSize: "17px" }}>
                     {adminStatistic?.totalCancelBill || 0}
                   </span>
@@ -292,7 +317,6 @@ const StatisticalPage = () => {
               </Row>
             </Card>
           </Col>
-          <Col span={2}></Col>
         </Row>
         <Row>
           <Col span={24}>
