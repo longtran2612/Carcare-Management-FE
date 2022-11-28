@@ -37,6 +37,7 @@ import moment from "moment";
 const formatDate = "DD/MM/YYYY";
 
 function DrawerPromorionDetail({
+  headerStatus,
   canUpdate,
   promotionLine,
   show,
@@ -244,7 +245,7 @@ function DrawerPromorionDetail({
           <Space>
             {!canUpdate && (
               <Popconfirm
-                title="Bạn có chắc chắn dòng khuyến mãi này?"
+                title="Bạn có chắc chắn xóa dòng khuyến mãi này?"
                 placement="topLeft"
                 okText="Xóa"
                 cancelText="Hủy"
@@ -257,7 +258,8 @@ function DrawerPromorionDetail({
                 </Button>
               </Popconfirm>
             )}
-            {promotionLine?.status == "ACTIVE" ? (
+
+            {promotionLine?.status == "ACTIVE" && headerStatus == "ACTIVE" && (
               <Popconfirm
                 title="Bạn có chắc chắn ngưng hoạt động dòng khuyến mã này?"
                 placement="topLeft"
@@ -271,7 +273,8 @@ function DrawerPromorionDetail({
                   Hoạt dộng
                 </Button>
               </Popconfirm>
-            ) : (
+            )}
+            {promotionLine?.status == "INACTIVE" && headerStatus == "ACTIVE" && (
               <Popconfirm
                 title="Bạn có chắc chắn kích hoạt dòng khuyến mãi này?"
                 placement="topLeft"
@@ -284,6 +287,7 @@ function DrawerPromorionDetail({
                 <Button type="danger">Không hoạt dộng</Button>
               </Popconfirm>
             )}
+
             <Button
               icon={<SaveOutlined />}
               onClick={() => {
@@ -376,7 +380,7 @@ function DrawerPromorionDetail({
             </Col>
             <Col span={24}>
               <Form.Item label="Mô tả" name="description">
-                <TextArea  rows={2} />
+                <TextArea rows={2} />
               </Form.Item>
             </Col>
             <Divider />
@@ -588,7 +592,7 @@ function DrawerPromorionDetail({
                     />
                   </Form.Item>
                 </Col>
-                
+
                 <Col span={12}>
                   <Form.Item
                     label="Tổng tiền đã giảm"

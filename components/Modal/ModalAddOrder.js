@@ -29,6 +29,8 @@ import { formatMoney } from "utils/format";
 import ModalAddCustomer from "./ModalAddCustomer";
 import ModalAddCarWithCustomer from "./ModalAddCarWithCustomer";
 import moment from "moment";
+import Loading from "components/Loading";
+
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -52,6 +54,8 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
 
   const [modalCar, setModalCar] = useState(false);
   const [modalCustomer, setModalCustomer] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   const [current, setCurrent] = useState(0);
 
@@ -162,6 +166,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
   };
 
   const onFinish = async () => {
+    setLoading(true);
     const dataCreateOrder = {
       carId: form.getFieldValue("carId"),
       customerId: form.getFieldValue("customerId"),
@@ -178,12 +183,14 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
       handleReset();
       onSuccess(res?.data?.Data);
       form.resetFields();
+      setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
         openNotificationWarning(error?.response?.data?.message);
       } else {
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
+      setLoading(false);
     }
   };
 
@@ -646,6 +653,7 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
         handleCancel={() => setModalCar(false)}
         onSuccess={(value) => handleSuccessCreateCar(value)}
       />
+      <Loading loading={loading} />
     </>
   );
 };

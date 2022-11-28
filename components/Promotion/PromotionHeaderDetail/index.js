@@ -667,6 +667,7 @@ const PromotionHeaderDetail = ({ promotionHeaderId }) => {
         </Col>
       </Row>
       <DrawerPromorionDetail
+        headerStatus={promotionHeaderDetail?.status}
         canUpdate={moment().isAfter(form.getFieldValue("fromDate"))}
         show={showDrawer}
         handleCancel={() => setShowDrawer(false)}
