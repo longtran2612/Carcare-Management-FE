@@ -98,6 +98,31 @@ const getUserAvaliable = async () => {
     });
 };
 
+const activeUser = async (id) => {
+  return axiosClient()({
+    method: "POST",
+    url: API_URL + `/users/active/${id}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+const inactiveUser = async (id) => {
+  return axiosClient()({
+    method: "POST",
+    url: API_URL + `/users/inactive/${id}`,
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
 export {
   getUserAvaliable,
   getUsers,
@@ -106,4 +131,6 @@ export {
   getUserById,
   updateUserById,
   uploadImagesUser,
+  activeUser,
+  inactiveUser,
 };

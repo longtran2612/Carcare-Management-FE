@@ -16,6 +16,7 @@ import logo from "public/images/logo.png";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import { getCustomerByPhone } from "pages/api/customerAPI";
+import { openNotificationWarning } from "utils/notification";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -39,8 +40,12 @@ export default function LoginPage() {
         router.push("/admin");
       }
       setLoading(false);
-    }catch(err){
-      message.error("Tài khoản hoặc mật khẩu không chính xác");
+    }catch(error){
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
       setLoading(false);
     }
 

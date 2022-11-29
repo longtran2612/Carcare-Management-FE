@@ -14,7 +14,12 @@ import {
 } from "antd";
 import { useRouter } from "next/router";
 import { openNotification, openNotificationWarning } from "utils/notification";
-import { getUserById, updateUserById } from "pages/api/userAPI";
+import {
+  getUserById,
+  updateUserById,
+  activeUser,
+  inactiveUser,
+} from "pages/api/userAPI";
 import { uploadImage } from "pages/api/uploadAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalQuestion from "components/Modal/ModalQuestion";
@@ -198,9 +203,40 @@ function UserDetail({ userId, onUpdateUser }) {
         option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
     );
 
+  const handleActiveUser = async () => {
+    setLoading(true);
+    try {
+      const res = await activeUser(userId);
+      openNotification("Thành công!", "Kích hoạt tài khoản thành công");
+      fetchUserDetail();
+      setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+      setLoading(false);
+    }
+  };
+  const handleInActiveUser = async () => {
+    setLoading(true);
+    try {
+      const res = await inactiveUser(userId);
+      openNotification("Thành công!", "Vô hiệu hóa tài khoản thành công");
+      fetchUserDetail();
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        openNotificationWarning(error?.response?.data?.message);
+      } else {
+        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      }
+      setLoading(false);
+    }
+  };
+
   return (
     <>
-      
       <Row gutter={[16, 16]}>
         <Col span={6}>
           <Image width={300} height={250} src={userDetail.image} />
@@ -273,12 +309,41 @@ function UserDetail({ userId, onUpdateUser }) {
                   ]}
                   name="status"
                 >
-                  <Select>
-                    <Select.Option value="ACTIVE">Hoạt động</Select.Option>
-                    <Select.Option value="INACTIVE">
-                      Không hoạt động
-                    </Select.Option>
-                  </Select>
+                  {userDetail?.status === "ACTIVE" ? (
+                    <Popconfirm
+                      title="Bạn có chắc chắn vô hiệu hóa người dùng này?"
+                      placement="topLeft"
+                      okText="Đông ý"
+                      cancelText="Hủy"
+                      onConfirm={() => {
+                        handleInActiveUser();
+                      }}
+                    >
+                      <Button
+                        style={{
+                          backgroundColor: "#22C55E",
+                          width: "100%",
+                          color: "white",
+                        }}
+                      >
+                        Hoạt dộng
+                      </Button>
+                    </Popconfirm>
+                  ) : (
+                    <Popconfirm
+                      title="Bạn có chắc chắn kích hoạt hoạt động người dùng này?"
+                      placement="topLeft"
+                      okText="Đông ý"
+                      cancelText="Hủy"
+                      onConfirm={() => {
+                        handleActiveUser();
+                      }}
+                    >
+                      <Button style={{ width: "100%" }} type="danger">
+                        Không hoạt dộng
+                      </Button>
+                    </Popconfirm>
+                  )}
                 </Form.Item>
               </Col>
               <Col span={8}>

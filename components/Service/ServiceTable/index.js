@@ -1,4 +1,4 @@
-import { Table, Tag, Button, Input, Row, Col, Space, Select } from "antd";
+import { Table, Tag, Button, Input, Row, Col, Space, Select, Form } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { SearchOutlined, ClearOutlined, PlusOutlined } from "@ant-design/icons";
 import { getServices, searchService } from "pages/api/serviceAPI";
@@ -11,29 +11,27 @@ import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
 
 function ServiceTable({}) {
+  const [form] = Form.useForm();
   const [services, setServices] = useState([]);
   const [modalService, setModalService] = useState(false);
-  const [id, setId] = useState(null);
   const router = useRouter();
   const { serviceId } = router.query;
-  const { Option } = Select;
-  const [searchValue, setSearchValue] = useState({
-    category_id: null,
-  });
-  const [categoryServices, setCategoryServices] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [listCategory, setListCategory] = useState();
+  const [type, setType] = useState();
+  const [categoryId, setCategoryId] = useState();
   // search
   const [searchText, setSearchText] = useState("");
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
-  const [filteredInfo, setFilteredInfo] = useState({});
 
   const handleGetServices = async () => {
     setLoading(true);
     let body = {
       key: "",
+      categoryId: form.getFieldValue("categoryId"),
+      type: form.getFieldValue("type"),
     };
     try {
       const response = await searchService(body);
@@ -49,7 +47,7 @@ function ServiceTable({}) {
     setLoading(true);
     try {
       const response = await getCategories();
-      setCategoryServices(response.data.Data);
+      setListCategory(response.data.Data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -209,7 +207,6 @@ function ServiceTable({}) {
       render: (estimateTime) => {
         return <div>{estimateTime} phút</div>;
       },
-      
     },
     // {
     //   title: "Giá",
@@ -285,34 +282,76 @@ function ServiceTable({}) {
         />
       ) : (
         <div>
-          <Row style={{ margin: "5px" }}>
-            <Col span={8} style={{ marginRight: "10px" }}>
-              <Input.Search
-                placeholder="Tìm kiếm"
-                onChange={(e) => setSearchGlobal(e.target.value)}
-                onSearch={(value) => setSearchGlobal(value)}
-                value={searchGlobal}
-              />
-            </Col>
-            <Col span={4}>
-              <Button
-                onClick={() => setSearchGlobal("")}
-                icon={<ClearOutlined />}
-              >
-                Xóa bộ lọc
-              </Button>
-            </Col>
-            <Col span={11}>
-              <Button
-                style={{ float: "right" }}
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={() => setModalService(true)}
-              >
-                Thêm dịch vụ
-              </Button>
-            </Col>
-          </Row>
+          <Form form={form}>
+            <Row gutter={16} style={{ margin: "5px" }}>
+              <Col span={8} style={{ marginRight: "10px" }}>
+                <Input
+                  placeholder="Tìm kiếm"
+                  onChange={(e) => setSearchGlobal(e.target.value)}
+                  // onSearch={(value) => setSearchGlobal(value)}
+
+                  value={searchGlobal}
+                />
+              </Col>
+              <Col span={4}>
+                <Form.Item name="type">
+                  <Select
+                    style={{ width: "100%" }}
+                    placeholder="Loại dịch vụ"
+                  >
+                    <Option value="NORMAL">Thông thường</Option>
+                    <Option value="NEW">Mới</Option>
+                    <Option value="LIKE">Yêu thích</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Form.Item name="categoryId">
+                  <Select
+                    style={{ width: "100%" }}
+                    placeholder="Danh mục"
+                  >
+                    {listCategory?.map((item) => {
+                      return (
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.name}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={1}>
+                <Button
+                  onClick={() => {
+                    setSearchGlobal("");
+                    form.resetFields();
+                    handleGetServices();
+                  }}
+                  icon={<ClearOutlined />}
+                ></Button>
+              </Col>
+              <Col span={2}>
+                <Button
+                  onClick={() => {
+                    handleGetServices();
+                  }}
+                >
+                  Tìm kiếm
+                </Button>
+              </Col>
+              <Col span={3}>
+                <Button
+                  style={{ float: "right" }}
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={() => setModalService(true)}
+                >
+                  Thêm dịch vụ
+                </Button>
+              </Col>
+            </Row>
+          </Form>
           <Table
             // onChange={handleSearch}
             columns={columns}

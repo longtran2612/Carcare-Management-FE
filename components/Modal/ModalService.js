@@ -205,7 +205,6 @@ function ServiceOrder({ onSelected, selectedService }) {
       title: "Loại dịch vụ",
       dataIndex: "type",
       key: "type",
-      ...getColumnSearchProps("type"),
       render: (text, record) => {
         return handleTypeService(record.type);
       },
