@@ -58,11 +58,26 @@ const ReportPromotion = () => {
   const handleDatePicker = () => {
     switch (typeDate) {
       case "d":
-        return <RangePicker disabledDate={(d)=> !d || d.isAfter(moment())} format={dateFormat} />;
+        return (
+          <RangePicker
+            disabledDate={(d) => !d || d.isAfter(moment())}
+            format={dateFormat}
+          />
+        );
       case "m":
-        return <RangePicker disabledDate={(d)=> !d || d.isAfter(moment())} picker="month" />;
+        return (
+          <RangePicker
+            disabledDate={(d) => !d || d.isAfter(moment())}
+            picker="month"
+          />
+        );
       case "y":
-        return <RangePicker disabledDate={(d)=> !d || d.isAfter(moment())} picker="year" />;
+        return (
+          <RangePicker
+            disabledDate={(d) => !d || d.isAfter(moment())}
+            picker="year"
+          />
+        );
     }
   };
 
@@ -99,11 +114,7 @@ const ReportPromotion = () => {
       const response = await getReport(body);
       setLoading(false);
     } catch (error) {
-      if (error?.response?.data?.message) {
-        openNotificationWarning(error?.response?.data?.message);
-      } else {
-        openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
-      }
+      openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       setLoading(false);
     }
   };
@@ -135,7 +146,10 @@ const ReportPromotion = () => {
       const res = await getPromotionReport(body);
       setDataSaleReport(res.data.Data);
       setLoading(false);
-    } catch (error) {}
+    } catch (error) {
+      openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -285,22 +299,15 @@ const ReportPromotion = () => {
                 },
               ]}
               name="rangerDate"
-              initialValue={[
-                moment().startOf("month"),
-                moment(),
-              ]}
+              initialValue={[moment().startOf("month"), moment()]}
             >
               {handleDatePicker()}
             </Form.Item>
           </Col>
 
-         
           <Col span={7}>
-            <Form.Item
-              name="promotionType"
-             
-            >
-              <Select placeholder='Loại khuyến mãi'>
+            <Form.Item name="promotionType">
+              <Select placeholder="Loại khuyến mãi">
                 <Select.Option value="MONEY">Giảm tiền</Select.Option>
                 <Select.Option value="PERCENTAGE">
                   Giảm tiền theo %
@@ -375,7 +382,9 @@ const ReportPromotion = () => {
                 }
               >
                 {promotion.map((item) => (
-                  <Option value={item.id}>{item?.promotionHeaderCode+ " - "+ item?.description}</Option>
+                  <Option value={item.id}>
+                    {item?.promotionHeaderCode + " - " + item?.description}
+                  </Option>
                 ))}
               </Select>
             </Form.Item>
