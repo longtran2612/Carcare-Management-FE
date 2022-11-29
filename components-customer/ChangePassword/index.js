@@ -76,17 +76,18 @@ function ChangePassword() {
             </Form.Item>
             <Form.Item
               label="Mật khẩu mới"
+              dependencies={["oldPassword"]}
               name="password"
+              hasFeedback
               rules={[
                 {
                   pattern: new RegExp(
-                    "^([0-9a-zA-Z]*[.!@$%^&(){}[]:;<>,.?/~_+-=|]*).{6,32}$"
-                  ),
+                          "^([0-9a-zA-Z]*[.!@$%^&(){}[]:;<>,.?/~_+-=|]*).{6,32}$"
+                        ),
                   required: true,
                   message:
                     "Mật khẩu không hợp lệ! Mật khẩu bao gồm 6-32 ký tự bao gồm chữ, số và ký tự đặc biệt",
                 },
-                ,
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue("oldPassword") != value) {

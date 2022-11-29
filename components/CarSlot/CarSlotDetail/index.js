@@ -227,7 +227,7 @@ const CarSlotDetail = ({ carSlotId }) => {
     };
     try {
       const response = await executeCarSlot(dataExecute);
-      openNotification("Thành công!", "Bắt đầu sử lý yêu cầu");
+      openNotification("Thành công!", "Bắt đầu xử lý yêu cầu");
       fetchCarSlotDetail();
       setLoading(false);
     } catch (error) {
