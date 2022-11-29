@@ -10,7 +10,7 @@ import {
   Input,
 } from "antd";
 import React, { useState, useEffect, useRef } from "react";
-import { ClearOutlined,PlusOutlined } from "@ant-design/icons";
+import { ClearOutlined, PlusOutlined } from "@ant-design/icons";
 import { getCustomers } from "pages/api/customerAPI";
 import ModalQuestion from "components/Modal/ModalQuestion";
 import ModalAddCustomer from "components/Modal/ModalAddCustomer";
@@ -34,14 +34,12 @@ function CustomerTable() {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
-  const [filteredInfo, setFilteredInfo] = useState({});
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
     setSearchGlobal(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-
   const handleReset = () => {
     setSearchText("");
     setSearchGlobal("");
@@ -159,11 +157,9 @@ function CustomerTable() {
           String(record.phoneNumber)
             .toLowerCase()
             .includes(value.toLowerCase()) ||
-          String(record.address).toLowerCase().includes(value.toLowerCase()) ||
           String(record.identityNumber)
             .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.gender).toLowerCase().includes(value.toLowerCase())
+            .includes(value.toLowerCase())
         );
       },
     },
@@ -184,6 +180,10 @@ function CustomerTable() {
       dataIndex: "phoneNumber",
       key: "phoneNumber",
       width: 140,
+      sorter: {
+        compare: (a, b) => a.phoneNumber - b.phoneNumber,
+        multiple: 2,
+      },
       ...getColumnSearchProps("phoneNumber"),
       render: (phoneNumber) => (
         <Tooltip placement="topLeft" title={phoneNumber}>
@@ -192,10 +192,14 @@ function CustomerTable() {
       ),
     },
     {
-      title: "Số căn cước",
+      title: "CCCD/CMND",
       dataIndex: "identityNumber",
       key: "identityNumber",
       width: 140,
+      sorter: {
+        compare: (a, b) => a.identityNumber - b.identityNumber,
+        multiple: 2,
+      },
       ...getColumnSearchProps("identityNumber"),
     },
     {
@@ -222,7 +226,6 @@ function CustomerTable() {
       dataIndex: "gender",
       key: "gender",
       with: 100,
-      ...getColumnSearchProps("gender"),
       render: (gender) => (
         <>
           {gender === "Nam" ? (
@@ -233,25 +236,10 @@ function CustomerTable() {
         </>
       ),
     },
-
-    // {
-    //   title: "Địa chỉ",
-    //   dataIndex: "address",
-    //   key: "address",
-    //   ...getColumnSearchProps("address"),
-    //   sorter: (a, b) => a.address.length - b.address.length,
-    //   sortDirections: ["descend", "ascend"],
-    //   render: (address) => (
-    //     <Tooltip placement="topLeft" title={address}>
-    //       {address}
-    //     </Tooltip>
-    //   ),
-    // },
     {
       title: "Nhóm khách hàng",
       key: "statusName",
       dataIndex: "statusName",
-      ...getColumnSearchProps("statusName"),
       render: (statusName) => (
         <>
           <Tag color="green">{statusName}</Tag>
@@ -274,7 +262,7 @@ function CustomerTable() {
       setLoading(false);
     } catch (err) {
       setLoading(false);
-    console.log(err);
+      console.log(err);
     }
   };
   useEffect(() => {
@@ -320,6 +308,8 @@ function CustomerTable() {
             </Col>
           </Row>
           <Table
+            // onChange={handleSearch}
+            searchable
             columns={columns}
             dataSource={customers}
             bordered
@@ -328,15 +318,7 @@ function CustomerTable() {
             }}
             scroll={{
               y: 425,
-           
             }}
-            // onRow={(record, rowIndex) => {
-            //   return {
-            //     onClick: (event) => {
-            //       router.push(`/admin?customerId=${record.customerCode}`);
-            //     },
-            //   };
-            // }}
           />
           <ModalAddCustomer
             show={modalCustomer}

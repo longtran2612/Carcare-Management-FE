@@ -20,7 +20,7 @@ import { openNotification, openNotificationWarning } from "utils/notification";
 import { getCarByCode, updateCar } from "pages/api/carAPI";
 import { validateMessages } from "utils/messageForm";
 import ModalUploadImage from "components/Modal/ModalUploadImage";
-import { UploadOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, SaveOutlined, UploadOutlined } from "@ant-design/icons";
 import Loading from "components/Loading";
 const { Title } = Typography;
 
@@ -380,15 +380,6 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                 style={{ bottom: "0", right: "20px", margin: "10px" }}
                 className="service-action"
               >
-                <div style={{ marginRight: "20px" }}>
-                  <Button
-                    onClick={() => {
-                      fetchcarDetail();
-                    }}
-                  >
-                    Hủy
-                  </Button>
-                </div>
                 <div>
                   <Popconfirm
                     title="Cập nhật?"
@@ -406,7 +397,7 @@ const CarDetail = ({ carId, onUpdateCar }) => {
                         });
                     }}
                   >
-                    <Button type="primary">Cập nhật</Button>
+                    <Button icon={<SaveOutlined/>} type="primary">Cập nhật</Button>
                   </Popconfirm>
                 </div>
               </div>

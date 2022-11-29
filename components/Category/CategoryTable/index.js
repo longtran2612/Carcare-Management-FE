@@ -1,12 +1,8 @@
 import { Table, Tag, Space, Button, Row, Col, Input } from "antd";
 import React, { useState, useEffect, useRef } from "react";
-import ModalQuestion from "components/Modal/ModalQuestion";
-import { message } from "antd";
 import { ClearOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { getCategories } from "pages/api/categoryAPI";
 import ModalAddCategory from "components/Modal/ModalAddCategory";
-import CategoryDetail from "../CategoryDetail";
-import { useRouter } from "next/router";
 import Loading from "components/Loading";
 import Highlighter from "react-highlight-words";
 import DrawerCategory from "components/Drawer/DrawerCategory";
@@ -16,7 +12,6 @@ function CategoryTable({}) {
   const [modalCategory, setModalCategory] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const [categorySelected, setCategorySelected] = useState(null);
   const [showDrawer, setShowDrawer] = useState(false);
 
@@ -162,8 +157,7 @@ function CategoryTable({}) {
             .toLowerCase()
             .includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.type).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.status).toLowerCase().includes(value.toLowerCase())
+          String(record.type).toLowerCase().includes(value.toLowerCase())
         );
       },
     },
@@ -177,7 +171,6 @@ function CategoryTable({}) {
       title: "Loại",
       dataIndex: "type",
       key: "type",
-      ...getColumnSearchProps("type"),
       render: (text, record) => {
         return handleTypeService(record.type);
       },

@@ -22,21 +22,22 @@ function PromotionHeaderTable({}) {
   const { promotionHeaderId } = router.query;
   const [loading, setLoading] = useState(false);
 
-
-
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
 
   const handleSearch = (selectedKeys, dataIndex) => {
     setSearchText(selectedKeys[0]);
     setSearchGlobal(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
+
   const handleReset = () => {
     setSearchText("");
     setSearchGlobal("");
   };
+
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys }) => (
       <div
@@ -68,7 +69,7 @@ function PromotionHeaderTable({}) {
               width: 90,
             }}
           >
-            Tìm mã / tên 
+            Tìm
           </Button>
           <Button
             onClick={() => {
@@ -113,6 +114,9 @@ function PromotionHeaderTable({}) {
         text
       ),
   });
+
+
+
   const columns = [
     {
       title: "STT",
@@ -142,7 +146,7 @@ function PromotionHeaderTable({}) {
       onFilter: (value, record) => {
         return (
           String(record.promotionHeaderCode).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.name).toLowerCase().includes(value.toLowerCase()) ||
+          String(record.description).toLowerCase().includes(value.toLowerCase()) ||
           String(record.status).toLowerCase().includes(value.toLowerCase())
         );
       },
@@ -225,7 +229,6 @@ function PromotionHeaderTable({}) {
               <Input.Search
                 placeholder="Tìm kiếm"
                 onChange={(e) => setSearchGlobal(e.target.value)}
-                onSearch={(value) => setSearchGlobal(value)}
                 value={searchGlobal}
               />
             </Col>
@@ -253,13 +256,6 @@ function PromotionHeaderTable({}) {
             scroll={{
               y: 425,
             }}
-            // onRow={(record, rowIndex) => {
-            //   return {
-            //     onClick: (event) => {
-            //       router.push(`/admin?promotionHeaderId=${record.id}`);
-            //     },
-            //   };
-            // }}
           />
           <ModalAddPromotionHeader
             show={modalPromotionHeader}

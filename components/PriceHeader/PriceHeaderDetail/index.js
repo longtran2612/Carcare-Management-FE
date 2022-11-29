@@ -36,7 +36,7 @@ import {
   EditFilled,
   EditOutlined,
   DeleteOutlined,
-  RollbackOutlined
+  RollbackOutlined,
 } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { formatMoney } from "utils/format";
@@ -200,7 +200,11 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
       dataIndex: "serviceCode",
       key: "serviceCode",
       render: (text, record) => (
-        <a style={{ color: "blue", textDecorationLine: "underline" }}>
+        <a    onClick={() => {
+          setPriceSelected(record);
+          setModalPriceDetail(true);
+        }}
+        style={{ color: "blue", textDecorationLine: "underline" }}>
           {record?.serviceCode}
         </a>
       ),
@@ -249,24 +253,24 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
     //     );
     //   },
     // },
-    {
-      dataIndex: "action",
-      key: "action",
-      width: 90,
-      render: (text, record) => {
-        return (
-          <>
-            <EditOutlined
-              onClick={() => {
-                setPriceSelected(record);
-                setModalPriceDetail(true);
-              }}
-              style={{ fontSize: "20px", color: "blue" }}
-            />
-          </>
-        );
-      },
-    },
+    // {
+    //   dataIndex: "action",
+    //   key: "action",
+    //   width: 90,
+    //   render: (text, record) => {
+    //     return (
+    //       <>
+    //         <EditOutlined
+    //           onClick={() => {
+    //             setPriceSelected(record);
+    //             setModalPriceDetail(true);
+    //           }}
+    //           style={{ fontSize: "20px", color: "blue" }}
+    //         />
+    //       </>
+    //     );
+    //   },
+    // },
   ];
 
   const onFinish = async (values) => {
@@ -392,9 +396,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                   ]}
                 >
                   <DatePicker
-                    disabled={
-                      moment().isAfter(priceHeaderDetail?.fromDate)
-                    }
+                    disabled={moment().isAfter(priceHeaderDetail?.fromDate)}
                     disabledDate={(d) =>
                       d.isBefore(moment()) ||
                       !d ||
@@ -416,9 +418,7 @@ const PriceHeaderDetail = ({ priceHeaderId }) => {
                   ]}
                 >
                   <DatePicker
-                  disabled={
-                    moment().isAfter(priceHeaderDetail?.toDate)
-                  }
+                    disabled={moment().isAfter(priceHeaderDetail?.toDate)}
                     disabledDate={(d) =>
                       !d ||
                       d.isSameOrBefore(form.getFieldValue("fromDate")) ||

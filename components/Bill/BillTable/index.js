@@ -236,12 +236,22 @@ const BillTable = () => {
       ...getColumnSearchProps("carLicensePlate"),
     },
     {
-      title: "Tổng tiền dịch vụ",
-      dataIndex: "totalServicePrice",
-      key: "totalServicePrice",
-      render: (text, record) => (
-        <div>{formatMoney(record.totalServicePrice)}</div>
-      ),
+      title: "Tổng tiền thanh toán",
+      dataIndex: "paymentAmount",
+      key: "paymentAmount",
+      sorter: {
+        compare: (a, b) => a.paymentAmount - b.paymentAmount,
+        multiple: 2,
+      },
+      render: (text, record) => <div>{formatMoney(record.paymentAmount)}</div>,
+    },
+    {
+      title: "Ngày thanh toán",
+      dataIndex: "paymentDate",
+      key: "paymentDate",
+      render(paymentDate) {
+        return <div>{moment(paymentDate).format(formatDate)}</div>;
+      },
     },
     {
       title: "Loại thanh toán",
@@ -255,14 +265,6 @@ const BillTable = () => {
           case "DEBIT":
             return <Tag color="cyan">Thẻ - Chuyển khoản</Tag>;
         }
-      },
-    },
-    {
-      title: "Ngày thanh toán",
-      dataIndex: "paymentDate",
-      key: "paymentDate",
-      render(paymentDate) {
-        return <div>{moment(paymentDate).format(formatDate)}</div>;
       },
     },
     {
@@ -320,8 +322,6 @@ const BillTable = () => {
     //   },
     // },
   ];
-
-
 
   const handleGetbills = async () => {
     setLoading(true);
@@ -425,29 +425,36 @@ const BillTable = () => {
         visible={showDetail}
         width={1000}
         extra={
-          billDetail.status === 1 && (
-            <Space>
-              <Button
-                icon={<DeleteOutlined />}
-                type="danger"
-                onClick={() => handleCancelBill(billDetail.id)}
-              >
-                Hủy
-              </Button>
-              <Button
-                icon={<PrinterOutlined />}
-                onClick={() => handlePrintBill(billDetail)}
-                type="primary"
-              >
-                In hóa đơn
-              </Button>
-            </Space>
-          )
+          <Space>
+            {billDetail.status === 1 ? (
+              <>
+                <Button
+                  icon={<DeleteOutlined />}
+                  type="danger"
+                  onClick={() => handleCancelBill(billDetail.id)}
+                >
+                  Hủy
+                </Button>
+                <Button
+                  icon={<PrinterOutlined />}
+                  onClick={() => handlePrintBill(billDetail)}
+                  type="primary"
+                >
+                  In hóa đơn
+                </Button>
+                 <Button style={{ backgroundColor: "#22C55E", color: "white" }}>
+                 Đã thanh toán
+                </Button>
+              </>
+            ) : (
+              <Button type="danger">Đã hủy</Button>
+            )}
+          </Space>
         }
       >
         <Divider>
           <Title level={5}>
-            Hóa đơn mã:
+            Hóa đơn:
             <span style={{ color: "blue" }}> #{billDetail.billCode} </span>
           </Title>
         </Divider>
@@ -550,10 +557,10 @@ const BillTable = () => {
                   </Col> */}
                   <Col span={8}>
                     {/* {(item?.type == "PERCENTAGE" || item?.type == "MONEY") && ( */}
-                      <DescriptionItem
-                        title="Tiền giảm"
-                        content={formatMoney(item?.promotionUsedAmount)}
-                      />
+                    <DescriptionItem
+                      title="Tiền giảm"
+                      content={formatMoney(item?.promotionUsedAmount)}
+                    />
                     {/* )} */}
                   </Col>
                 </Row>
@@ -573,28 +580,31 @@ const BillTable = () => {
           <Col span={8}>
             <DescriptionItem
               title="Hình thức thanh toán"
-              content={billDetail.paymentType === "CASH" ? <Tag color="green">Tiền mặt</Tag> : <Tag color="cyan">Thẻ - Chuyển khoản</Tag>}
+              content={
+                billDetail.paymentType === "CASH" ? (
+                  <Tag color="green">Tiền mặt</Tag>
+                ) : (
+                  <Tag color="cyan">Thẻ - Chuyển khoản</Tag>
+                )
+              }
             />
           </Col>
-          {billDetail.paymentType != "CASH" &&(
-          <Col span={8}>
-         
-            <DescriptionItem
-              title="Thông tin thanh toán"
-              content= {billDetail?.cardNumber}
-            />
-          </Col>
-            )}
+          {billDetail.paymentType != "CASH" && (
+            <Col span={8}>
+              <DescriptionItem
+                title="Thông tin thanh toán"
+                content={billDetail?.cardNumber}
+              />
+            </Col>
+          )}
           <Col span={8}>
             <DescriptionItem
               title="Ngày thanh toán"
               content={moment(billDetail.paymentDate).format(formatDate)}
             />
           </Col>
-          {billDetail.paymentType === "CASH" &&(
-                <Col span={8}></Col>
-          )}
-         
+          {billDetail.paymentType === "CASH" && <Col span={8}></Col>}
+
           <Col span={8}>
             <DescriptionItem
               title="Tổng Tiền dịch vụ"
@@ -682,9 +692,7 @@ const BillTable = () => {
                 <td>Thanh Toán</td>
 
                 <td>
-                  {billDetail?.paymentType == "CASH"
-                    ? "Tiền mặt"
-                    : "Thẻ - CK"}
+                  {billDetail?.paymentType == "CASH" ? "Tiền mặt" : "Thẻ - CK"}
                 </td>
               </tr>
               <tr className="heading">

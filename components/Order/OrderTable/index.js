@@ -189,11 +189,7 @@ function OrderTable({}) {
             .includes(value.toLowerCase()) ||
           String(record.totalEstimateTime)
             .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.createDate)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.createDate).toLowerCase().includes(value.toLowerCase())
+            .includes(value.toLowerCase())
         );
       },
     },
@@ -213,6 +209,10 @@ function OrderTable({}) {
       title: "Thời gian xử lý",
       dataIndex: "totalEstimateTime",
       key: "totalEstimateTime",
+      sorter: {
+        compare: (a, b) => a.totalEstimateTime - b.totalEstimateTime,
+        multiple: 2,
+      },
       render: (totalEstimateTime) => {
         return (
           <div>
@@ -225,6 +225,10 @@ function OrderTable({}) {
       title: "Tổng tiền dịch vụ",
       dataIndex: "totalServicePrice",
       key: "totalServicePrice",
+      sorter: {
+        compare: (a, b) => a.totalServicePrice - b.totalServicePrice,
+        multiple: 2,
+      },
       render: (totalServicePrice) => {
         return formatMoney(totalServicePrice);
       },

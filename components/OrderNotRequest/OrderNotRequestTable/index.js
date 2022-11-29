@@ -176,11 +176,7 @@ function OrderNotRequestTable({}) {
             .includes(value.toLowerCase()) ||
           String(record.totalEstimateTime)
             .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.createDate)
-            .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.createDate).toLowerCase().includes(value.toLowerCase())
+            .includes(value.toLowerCase()) 
         );
       },
     },
@@ -200,6 +196,10 @@ function OrderNotRequestTable({}) {
       title: "Thời gian xử lý",
       dataIndex: "totalEstimateTime",
       key: "totalEstimateTime",
+      sorter: {
+        compare: (a, b) => a.totalEstimateTime - b.totalEstimateTime,
+        multiple: 2,
+      },
       render: (totalEstimateTime) => {
         return <div>{totalEstimateTime} phút</div>;
       },
@@ -208,6 +208,10 @@ function OrderNotRequestTable({}) {
       title: "Tổng tiền dịch vụ",
       dataIndex: "totalServicePrice",
       key: "totalServicePrice",
+      sorter: {
+        compare: (a, b) => a.totalServicePrice - b.totalServicePrice,
+        multiple: 2,
+      },
       render: (totalServicePrice) => {
         return formatMoney(totalServicePrice);
       },
@@ -225,7 +229,6 @@ function OrderNotRequestTable({}) {
       title: "Trạng thái",
       key: "statusName",
       dataIndex: "statusName",
-      ...getColumnSearchProps("statusName"),
       render: (text, record, dataIndex) => {
         switch (record.status) {
           case 0:
@@ -244,7 +247,7 @@ function OrderNotRequestTable({}) {
     {
       title: "Hành động",
       dataIndex: "action",
-      width: 130,
+      width: 80,
       render: (text, record, dataIndex) => {
         if (record.status === 10) {
           return (

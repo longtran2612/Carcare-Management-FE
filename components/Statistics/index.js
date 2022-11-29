@@ -150,11 +150,9 @@ const StatisticalPage = () => {
       </Breadcrumb>
       <Form form={form} autoComplete="off">
         <Row span={24}>
+         
           <Col span={24}>
-          <Typography.Title level={3}>Dashboard</Typography.Title>
-          </Col>
-          <Col span={24}>
-          <Typography.Title level={4}>(Từ ngày {moment(fromDate).format(dateFormat)} -  đến  {moment(toDate).format(dateFormat)})</Typography.Title>
+          <Typography.Title level={3}>(Từ ngày {moment(fromDate).format(dateFormat)} -  đến  {moment(toDate).format(dateFormat)})</Typography.Title>
           </Col>
         </Row>
        

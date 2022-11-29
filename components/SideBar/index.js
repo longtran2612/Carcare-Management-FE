@@ -7,6 +7,7 @@ import {
   CarOutlined,
   BookOutlined,
   ClearOutlined,
+  DashboardOutlined
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { Typography, Affix } from "antd";
@@ -42,7 +43,7 @@ const SideBar = ({ handleOpenKey }) => {
   const handleRole = (roles) => {
     if (roles === "ROLE_ADMIN") {
       setItems([
-        getItem("Dashboard", "1", <ShopOutlined />),
+        getItem("Dashboard", "1", <DashboardOutlined />),
         getItem("Đơn hàng", "2", <BookOutlined />, [
           getItem("Yêu cầu xử lý", "order"),
           getItem("Vị trí xử lý", "car-slot"),

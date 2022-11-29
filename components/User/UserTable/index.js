@@ -46,6 +46,7 @@ function UserTable() {
     setSearchText("");
     setSearchGlobal("");
   };
+
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys }) => (
       <div
@@ -154,7 +155,9 @@ function UserTable() {
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
           String(record.email).toLowerCase().includes(value.toLowerCase()) ||
           String(record.phone).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.address).toLowerCase().includes(value.toLowerCase())
+          String(record.identityNumber)
+            .toLowerCase()
+            .includes(value.toLowerCase())
         );
       },
     },
@@ -175,7 +178,7 @@ function UserTable() {
       key: "phone",
       ...getColumnSearchProps("phone"),
       sorter: {
-        compare: (a, b) => a.phone - b.phone,
+        compare: (a, b) => a.phoneNumber - b.phoneNumber,
         multiple: 2,
       },
       render: (phone) => (
@@ -185,10 +188,14 @@ function UserTable() {
       ),
     },
     {
-      title: "Số căn cước",
+      title: "CCCD/CMND",
       dataIndex: "identityNumber",
       key: "identityNumber",
       width: 140,
+      sorter: {
+        compare: (a, b) => a.identityNumber - b.identityNumber,
+        multiple: 2,
+      },
       ...getColumnSearchProps("identityNumber"),
     },
     {
@@ -215,7 +222,7 @@ function UserTable() {
       title: "Giới tính",
       dataIndex: "gender",
       key: "gender",
-      width: 90,
+      width: 120,
       // ...getColumnSearchProps("gender"),
       render: (gender) => (
         <>
@@ -226,24 +233,11 @@ function UserTable() {
           )}
         </>
       ),
-          },
+    },
     {
       title: "Trạng thái",
       key: "status",
       dataIndex: "status",
-      // filters: [
-      //   {
-      //     value: "ACTIVE",
-      //     text: "Hoạt động",
-      //   },
-      //   {
-      //     value: "INACTIVE",
-      //     text: "Không hoạt động",
-      //   },
-      // ],
-      // filteredValue: filteredInfo.status || null,
-      // onFilter: (value, record) => record.status.includes(value),
-      // ellipsis: true,
       render: (status) => {
         return (
           <>
@@ -276,7 +270,6 @@ function UserTable() {
   const handleSuccessCreteUser = () => {
     handleUsers();
   };
-
   return (
     <>
       {userId ? (
@@ -288,7 +281,7 @@ function UserTable() {
               <Input.Search
                 placeholder="Tìm kiếm"
                 onChange={(e) => setSearchGlobal(e.target.value)}
-                onSearch={(value) => setSearchGlobal(value)}
+                // onSearch={(value) => setSearchGlobal(value)}
                 value={searchGlobal}
               />
             </Col>
@@ -318,13 +311,6 @@ function UserTable() {
             scroll={{
               y: 425,
             }}
-            // onRow={(record, rowIndex) => {
-            //   return {
-            //     onClick: (event) => {
-            //       router.push(`/admin?userId=${record.id}`);
-            //     },
-            //   };
-            // }}
           />
           <ModalAddUser
             show={modalUser}

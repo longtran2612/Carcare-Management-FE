@@ -32,10 +32,8 @@ const SaleReport = () => {
   const [typeDate, setTypeDate] = useState("d");
   const [customers, setCustomers] = useState([]);
   const [users, setUsers] = useState([]);
-  const [status, setStatus] = useState(100);
   const [loading, setLoading] = useState(false);
   const [dataSaleReport, setDataSaleReport] = useState([]);
-  const [dataSaleReportCustomer, setDataSaleReportCustomer] = useState([]);
 
 
   const handleFetchCustomer = async () => {

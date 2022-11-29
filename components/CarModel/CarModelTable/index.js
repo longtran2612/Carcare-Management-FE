@@ -203,6 +203,10 @@ function CarModelTable({}) {
       dataIndex: "seats",
       key: "seats",
       width: 120,
+      sorter: {
+        compare: (a, b) => a.seats - b.seats,
+        multiple: 2,
+      },
     },
     {
       title: "Nhiên liệu",
@@ -215,6 +219,10 @@ function CarModelTable({}) {
       dataIndex: "year",
       key: "year",
       width: 120,
+      sorter: {
+        compare: (a, b) => a.year - b.year,
+        multiple: 2,
+      },
     },
   ];
 

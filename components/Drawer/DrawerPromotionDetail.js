@@ -259,7 +259,7 @@ function DrawerPromorionDetail({
               </Popconfirm>
             )}
 
-            {promotionLine?.status == "ACTIVE" && headerStatus == "ACTIVE" && (
+            {(promotionLine?.status == "ACTIVE" && headerStatus == "ACTIVE") && (
               <Popconfirm
                 title="Bạn có chắc chắn ngưng hoạt động dòng khuyến mã này?"
                 placement="topLeft"
@@ -274,7 +274,7 @@ function DrawerPromorionDetail({
                 </Button>
               </Popconfirm>
             )}
-            {promotionLine?.status == "INACTIVE" && headerStatus == "ACTIVE" && (
+            {(promotionLine?.status == "INACTIVE" && headerStatus == "ACTIVE") && (
               <Popconfirm
                 title="Bạn có chắc chắn kích hoạt dòng khuyến mãi này?"
                 placement="topLeft"

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Row, Col, Form, Input, Select, InputNumber } from "antd";
+import React, { useState, useEffect,useRef } from "react";
+import { Modal, Row, Col, Form, Input, Select, InputNumber,Divider,Space,Button  } from "antd";
 import { createCarModel } from "pages/api/carModel";
+import {PlusOutlined} from "@ant-design/icons";
 
 import { validateMessages } from "utils/messageForm";
 import { openNotification ,openNotificationWarning } from "utils/notification";
@@ -30,6 +31,21 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
     "Mercedes-Benz",
     "BMW",
   ]);
+
+  const [name, setName] = useState('');
+  const inputRef = useRef(null);
+  const onNameChange = (event) => {
+    setName(event.target.value);
+  };
+  const addItem = (e) => {
+    e.preventDefault();
+    setBrands([...brands, name || `New item ${index++}`]);
+    setName('');
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
+  };
+
   const onFinish = async (values) => {
     try {
       const res = await createCarModel(values);
@@ -117,6 +133,32 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
                       .toLowerCase()
                       .localeCompare(optionB.children.toLowerCase())
                   }
+
+                  dropdownRender={(menu) => (
+                    <>
+                      {menu}
+                      <Divider
+                        style={{
+                          margin: '8px 0',
+                        }}
+                      />
+                      <Space
+                        style={{
+                          padding: '0 8px 4px',
+                        }}
+                      >
+                        <Input
+                          placeholder="Tên thương hiệu"
+                          ref={inputRef}
+                          value={name}
+                          onChange={onNameChange}
+                        />
+                        <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
+                          Thêm
+                        </Button>
+                      </Space>
+                    </>
+                  )}
                   
                 >
                   {brands.map((brand) => (
@@ -131,16 +173,17 @@ const ModalAddCarModel = ({ brand ,show, onSuccess, handleCancel }) => {
                 name="seats"
                 initialValue={4}
               >
-                <InputNumber min={1} max={16} />
+                <InputNumber min={1} max={32} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 label="Năm sản xuất"
                 name="year"
+                initialValue={moment().year()}
                 
               >
-                <InputNumber min={1900} max={moment().year()} />
+                <InputNumber min={1700} max={moment().year()} />
               </Form.Item>
             </Col>
             <Col span={8}>

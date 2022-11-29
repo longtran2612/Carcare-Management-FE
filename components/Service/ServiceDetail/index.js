@@ -289,7 +289,7 @@ const ServiceDetail = ({ serviceId, onUpdateService }) => {
                       }}
                     >
                       <Button style={{ width: "100%" }} type="danger">
-                        Không hoạt dộng
+                        Ngưng hoạt dộng
                       </Button>
                     </Popconfirm>
                   )}

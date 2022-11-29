@@ -187,11 +187,7 @@ function ServiceTable({}) {
             .toLowerCase()
             .includes(value.toLowerCase()) ||
           String(record.name).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.type).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.status).toLowerCase().includes(value.toLowerCase()) ||
-          String(record.servicePrice?.price)
-            .toLowerCase()
-            .includes(value.toLowerCase())
+          String(record.type).toLowerCase().includes(value.toLowerCase())
         );
       },
     },
@@ -204,11 +200,16 @@ function ServiceTable({}) {
 
     {
       title: "Thời gian xử lí",
-      dataIndex: "estimateTime",
       key: "estimateTime",
+      dataIndex: "estimateTime",
+      sorter: {
+        compare: (a, b) => a.estimateTime - b.estimateTime,
+        multiple: 2,
+      },
       render: (estimateTime) => {
         return <div>{estimateTime} phút</div>;
       },
+      
     },
     // {
     //   title: "Giá",
@@ -239,7 +240,7 @@ function ServiceTable({}) {
       dataIndex: "categoryName",
       key: "categoryName",
       render: (categoryName) => {
-        return  <Tag color={"purple"}>{categoryName}</Tag>
+        return <Tag color={"purple"}>{categoryName}</Tag>;
       },
     },
     {
@@ -251,10 +252,9 @@ function ServiceTable({}) {
           <>
             {status === 100 ? (
               <Tag color={"green"}>{"Đang hoạt động"}</Tag>
-            ):(
-              <Tag color={"red"}>{"Không hoạt động"}</Tag>
-            )
-            }
+            ) : (
+              <Tag color={"red"}>{"Ngưng hoạt động"}</Tag>
+            )}
           </>
         );
       },
@@ -274,7 +274,7 @@ function ServiceTable({}) {
     }
   };
 
-  console.log(services)
+  console.log(services);
 
   return (
     <>

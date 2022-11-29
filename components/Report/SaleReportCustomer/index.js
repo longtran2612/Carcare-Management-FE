@@ -60,11 +60,26 @@ const SaleReportCustomer = () => {
   const handleDatePicker = () => {
     switch (typeDate) {
       case "d":
-        return <RangePicker disabledDate={(d)=> !d || d.isAfter(moment())} format={dateFormat} />;
+        return (
+          <RangePicker
+            disabledDate={(d) => !d || d.isAfter(moment())}
+            format={dateFormat}
+          />
+        );
       case "m":
-        return <RangePicker disabledDate={(d)=> !d || d.isAfter(moment())} picker="month" />;
+        return (
+          <RangePicker
+            disabledDate={(d) => !d || d.isAfter(moment())}
+            picker="month"
+          />
+        );
       case "y":
-        return <RangePicker disabledDate={(d)=> !d || d.isAfter(moment())} picker="year" />;
+        return (
+          <RangePicker
+            disabledDate={(d) => !d || d.isAfter(moment())}
+            picker="year"
+          />
+        );
     }
   };
 
@@ -174,10 +189,11 @@ const SaleReportCustomer = () => {
       dataIndex: "address",
       key: "address",
     },
+
     {
-      title: "Phường/Xã",
-      dataIndex: "ward",
-      key: "ward",
+      title: "Tỉnh/Thành",
+      dataIndex: "province",
+      key: "province",
     },
     {
       title: "Quận/Huyện",
@@ -185,10 +201,11 @@ const SaleReportCustomer = () => {
       key: "district",
     },
     {
-      title: "Tỉnh/Thành",
-      dataIndex: "province",
-      key: "province",
+      title: "Phường/Xã",
+      dataIndex: "ward",
+      key: "ward",
     },
+
     {
       title: "Nhóm khách hàng",
       dataIndex: "statusName",
@@ -300,10 +317,7 @@ const SaleReportCustomer = () => {
                 },
               ]}
               name="rangerDate"
-              initialValue={[
-                moment().startOf("month"),
-                moment(),
-              ]}
+              initialValue={[moment().startOf("month"), moment()]}
             >
               {handleDatePicker()}
             </Form.Item>
@@ -341,7 +355,14 @@ const SaleReportCustomer = () => {
                 form.setFieldsValue({
                   customer: undefined,
                   addressvn: undefined,
+
                 });
+                setProvinceSelected(undefined);
+                setDistrictSelected(undefined);
+                setWardSelected(undefined);
+                setProvinceSelectedCode(undefined);
+                setDistrictSelectedCode(undefined);
+                setWardSelectedCode(undefined);
               }}
               type="dashed"
             ></Button>
@@ -389,7 +410,7 @@ const SaleReportCustomer = () => {
                 changeOnSelect
                 options={addressData}
                 onChange={onChange}
-                placeholder="Tỉnh/Thành phố - Quận - Huyện"
+                placeholder="Tỉnh/Thành phố - Quận/Huyện - Phường/Xã"
                 showSearch={{
                   filter,
                 }}
@@ -408,8 +429,8 @@ const SaleReportCustomer = () => {
                 y: 280,
               }}
               pagination={{
-              pageSize: 20,
-            }}
+                pageSize: 20,
+              }}
             />
           </Col>
         </Row>

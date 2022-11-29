@@ -16,12 +16,11 @@ import Link from "next/link";
 function CarTable({}) {
   const [cars, setCars] = useState([]);
   const [modalCar, setModalCar] = useState(false);
-  const [id, setId] = useState(null);
-  const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { carId } = router.query;
 
+  const [searchText, setSearchText] = useState("");
   const [searchGlobal, setSearchGlobal] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
