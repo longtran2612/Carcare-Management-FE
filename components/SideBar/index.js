@@ -113,7 +113,7 @@ const SideBar = ({ handleOpenKey }) => {
   }, [roles]);
 
   const rootSubmenuKeys = ['1', '2', '3','4','5','6','7'];
-  const [openKeys, setOpenKeys] = useState(['car-slot']);
+  const [openKeys, setOpenKeys] = useState(['1']);
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
     if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
