@@ -12,7 +12,7 @@ const { Content, Sider, Footer } = Layout;
 
 const AdminPage = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [key, setKey] = useState("car-slot");
+  const [key, setKey] = useState("1");
   const [loading, setLoading] = useState(false);
 
   const [showModalChangePassword, setShowModalChangePassword] = useState(false);
