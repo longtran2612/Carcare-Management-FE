@@ -36,6 +36,7 @@ const { Title } = Typography;
 const { Option } = Select;
 const { Column, ColumnGroup } = Table;
 const formatDate = "HH:mm DD/MM/YYYY";
+import Loading from "components/Loading";
 
 const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
   const [form] = Form.useForm();
@@ -45,6 +46,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
   const [showPrint, setShowPrint] = useState(false);
   const [showCardId, setShowCardId] = useState(false);
   const [billDetail, setBillDetail] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const componentRef = useRef();
 
@@ -122,6 +124,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
 
 
   const onFinish = async (values) => {
+    setLoading(true);
     const dataCreateBill = {
       orderId: order.id,
       paymentAmount: finalTotalPrice(),
@@ -137,6 +140,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       dataCreateBill.cardNumber = values.cardNumber;
     }
     console.log(dataCreateBill);
+   
     try {
       const res = await createBill(dataCreateBill);
       openNotification("Thành công!", "Tạo hóa đơn thành công!");
@@ -147,12 +151,14 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
       setShowPrint(true);
       handlePrint();
       setShowPrint(false);
+      setLoading(false);
     } catch (error) {
       if (error?.response?.data?.message) {
         openNotificationWarning(error?.response?.data?.message);
       } else {
         openNotificationWarning("Có lỗi xảy ra, vui lòng thử lại sau");
       }
+      setLoading(false);
     }
   };
   const onchangePaymentType = (value) => {
@@ -515,6 +521,7 @@ const ModalCreateBill = ({ order, show, onSuccess, handleCancel }) => {
           </div>
         </div>
       )}
+      <Loading show={loading} />
     </>
   );
 };
