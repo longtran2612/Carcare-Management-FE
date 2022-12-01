@@ -80,7 +80,7 @@ const ModalAddPromotionLine = ({
   return (
     <>
       <Modal
-        title="Thêm chương trình khuyến mãi mới"
+        title="Thêm dòng khuyến mãi mới"
         centered
         visible={show}
         onOk={() => {
@@ -107,7 +107,7 @@ const ModalAddPromotionLine = ({
           <Row gutter={[16]}>
             <Col span={18}>
               <Form.Item
-                label="Tên chương trình khuyến mãi"
+                label="Tên dòng khuyến mãi"
                 name="description"
                 rules={[
                   {

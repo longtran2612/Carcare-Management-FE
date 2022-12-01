@@ -290,8 +290,8 @@ const ModalAddOrder = ({ show, onSuccess, handleCancel }) => {
               <div style={{ margin: "10px" }}>
                 <Steps current={current}>
                   <Steps.Step title="Chọn khách hàng" />
-                  <Steps.Step title="Chọn khách dịch vụ" />
-                  <Steps.Step title="Hoàn thành" />
+                  <Steps.Step title="Chọn dịch vụ" />
+                  <Steps.Step title="Hoàn thành yêu cầu" />
                 </Steps>
               </div>
             </Col>
