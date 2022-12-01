@@ -184,7 +184,7 @@ const ReportPage = () => {
               name="rangerDate"
              
               initialValue={[
-                moment().startOf("month"),
+                moment(moment().subtract(7, "days")),
                 moment(),
               ]}
             >

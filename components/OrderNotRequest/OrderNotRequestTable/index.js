@@ -173,10 +173,7 @@ function OrderNotRequestTable({}) {
             .includes(value.toLowerCase()) ||
           String(record.carLicensePlate)
             .toLowerCase()
-            .includes(value.toLowerCase()) ||
-          String(record.totalEstimateTime)
-            .toLowerCase()
-            .includes(value.toLowerCase()) 
+            .includes(value.toLowerCase())
         );
       },
     },
@@ -365,7 +362,7 @@ function OrderNotRequestTable({}) {
                 <Row gutter={8}>
                   <Col span={8} style={{ marginRight: "10px" }}>
                     <Input.Search
-                      placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
+                      placeholder="Tìm kiếm mã / khách hàng/ xe"
                       onChange={(e) => setSearchGlobal(e.target.value)}
                       onSearch={(value) => setSearchGlobal(value)}
                       value={searchGlobal}

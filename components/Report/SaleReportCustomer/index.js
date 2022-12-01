@@ -317,7 +317,7 @@ const SaleReportCustomer = () => {
                 },
               ]}
               name="rangerDate"
-              initialValue={[moment().startOf("month"), moment()]}
+              initialValue={[moment(moment().subtract(7, "days")), moment()]}
             >
               {handleDatePicker()}
             </Form.Item>
@@ -355,7 +355,6 @@ const SaleReportCustomer = () => {
                 form.setFieldsValue({
                   customer: undefined,
                   addressvn: undefined,
-
                 });
                 setProvinceSelected(undefined);
                 setDistrictSelected(undefined);

@@ -98,6 +98,7 @@ const SaleReport = () => {
       toDate: toDate,
     };
     try {
+      console.log(body);
       const response = await getReport(body);
       setLoading(false);
     } catch (error) {
@@ -244,7 +245,7 @@ const SaleReport = () => {
               ]}
               name="rangerDate"
               initialValue={[
-                moment().startOf("month"),
+                moment(moment().subtract(7, "days")),
                 moment(),
               ]}
             >

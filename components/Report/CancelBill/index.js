@@ -34,7 +34,6 @@ const ReportCancelBill = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dataSaleReport, setDataSaleReport] = useState([]);
-  const [dataSaleReportCustomer, setDataSaleReportCustomer] = useState([]);
 
   const handleFetchUser = async () => {
     try {
@@ -267,7 +266,7 @@ const ReportCancelBill = () => {
               ]}
               name="rangerDate"
               initialValue={[
-                moment().startOf("month"),
+                moment(moment().subtract(7, "days")),
                 moment(),
               ]}
             >

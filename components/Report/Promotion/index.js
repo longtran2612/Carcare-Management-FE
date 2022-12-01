@@ -299,7 +299,7 @@ const ReportPromotion = () => {
                 },
               ]}
               name="rangerDate"
-              initialValue={[moment().startOf("month"), moment()]}
+              initialValue={[moment(moment().subtract(7, "days")), moment()]}
             >
               {handleDatePicker()}
             </Form.Item>

@@ -393,7 +393,7 @@ function OrderTable({}) {
                 <Row>
                   <Col span={8} style={{ marginRight: "10px" }}>
                     <Input.Search
-                      placeholder="Tìm kiếm khách hàng/xe/dịch vụ"
+                      placeholder="Tìm kiếm mã / khách hàng / xe"
                       onChange={(e) => setSearchGlobal(e.target.value)}
                       onSearch={(value) => setSearchGlobal(value)}
                       value={searchGlobal}
