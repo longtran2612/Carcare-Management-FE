@@ -21,8 +21,8 @@ function MyApp({ Component, pageProps }) {
     <Fragment>
       <Head>
         <meta
-          name="viewport"
-          content="viewport-fit=cover width=device-width, initial-scale=1"
+        http-equiv="Content-Security-Policy"           name="viewport"
+          content="viewport-fit=cover width=device-width, initial-scale=1 upgrade-insecure-requests"
         />
         <link rel="icon" href="/images/favicon.ico" />
       </Head>
