@@ -18,7 +18,9 @@ function HomePage() {
     }
   };
   useEffect(() => {
-    handleAuthentication();
+    // handleAuthentication();
+    window.location.href = "http://lvcarcare.ddns.net:5004";
+
   }, []);
   return (
     <>
